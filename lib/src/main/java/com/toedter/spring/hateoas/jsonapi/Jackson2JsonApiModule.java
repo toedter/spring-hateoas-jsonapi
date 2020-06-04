@@ -197,22 +197,22 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
     }
 
-    static class JsonApiEntityModelDeserializer extends ContainerDeserializerBase<EntityModel<?>>
+    static abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
             implements ContextualDeserializer {
 
-        private final JavaType contentType;
+        protected final JavaType contentType;
 
-        JsonApiEntityModelDeserializer() {
+        AbstractJsonApiModelDeserializer() {
             this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
         }
 
-        private JsonApiEntityModelDeserializer(JavaType contentType) {
+        protected AbstractJsonApiModelDeserializer(JavaType contentType) {
             super(contentType);
             this.contentType = contentType;
         }
 
         @Override
-        public EntityModel<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
             Links links = doc.getLinks();
 
@@ -224,26 +224,11 @@ public class Jackson2JsonApiModule extends SimpleModule {
                             () -> new IllegalStateException("No data entry containing a 'value' was found in this document!"));
         }
 
-        private EntityModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
-            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
-            attributes.put("id", jsonApiData.getId());
-            JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            Object entity = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
-            return EntityModel.of(entity, links);
-        }
+        abstract protected T convertToResource(JsonApiData jsonApiData, Links links);
 
         @Override
         public JavaType getContentType() {
             return this.contentType;
-        }
-
-        @Override
-        @SuppressWarnings("null")
-        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-                throws JsonMappingException {
-
-            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-            return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
         }
 
         @Override
@@ -253,34 +238,18 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
     }
 
-    static class JsonApiRepresentationModelDeserializer extends ContainerDeserializerBase<RepresentationModel<?>>
+    static class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeserializer<RepresentationModel<?>>
             implements ContextualDeserializer {
 
-        private final JavaType contentType;
-
         JsonApiRepresentationModelDeserializer() {
-            this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
+            super();
         }
 
-        private JsonApiRepresentationModelDeserializer(JavaType contentType) {
+        protected JsonApiRepresentationModelDeserializer(JavaType contentType) {
             super(contentType);
-            this.contentType = contentType;
         }
 
-        @Override
-        public RepresentationModel<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
-            Links links = doc.getLinks();
-
-            return doc.getData().stream()
-                    .filter(data -> !StringUtils.isEmpty(data.getId()))
-                    .findFirst()
-                    .map(jsonApiData -> convertToResource(jsonApiData, links))
-                    .orElseThrow(
-                            () -> new IllegalStateException("No data entry containing a 'value' was found in this document!"));
-        }
-
-        private RepresentationModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+        protected RepresentationModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
             Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
             attributes.put("id", jsonApiData.getId());
             attributes.put("type", jsonApiData.getType());
@@ -292,8 +261,33 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
 
         @Override
-        public JavaType getContentType() {
-            return this.contentType;
+        @SuppressWarnings("null")
+        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+                throws JsonMappingException {
+
+            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+
+            return new Jackson2JsonApiModule.JsonApiRepresentationModelDeserializer(type);
+        }
+    }
+
+    static class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>>
+            implements ContextualDeserializer {
+
+        JsonApiEntityModelDeserializer() {
+            super();
+        }
+
+        protected JsonApiEntityModelDeserializer(JavaType contentType) {
+            super(contentType);
+        }
+
+        protected EntityModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
+            attributes.put("id", jsonApiData.getId());
+            JavaType rootType = JacksonHelper.findRootType(this.contentType);
+            Object entity = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+            return EntityModel.of(entity, links);
         }
 
         @Override
@@ -303,13 +297,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
             JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
 
-            return new Jackson2JsonApiModule.JsonApiRepresentationModelDeserializer(type);
-        }
-
-        @Override
-        @Nullable
-        public JsonDeserializer<Object> getContentDeserializer() {
-            return null;
+            return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
         }
     }
 
