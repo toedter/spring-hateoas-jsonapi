@@ -1,0 +1,48 @@
+image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", link="https://opensource.org/licenses/Apache-2.0"]
+
+= JSON:API for Spring HATEOAS
+
+This is an implementation of the media type `application/vnd.api+json` (JSON:API)
+to be integrated in Spring HATEOS. Goal is to use the existing Spring HATEOAS
+representation models to serialize/deserialize them according to the JSON:API spec (see https://jsonapi.org/)
+
+This project is at a very early stage and work in progress, please stay tuned.
+
+== Getting Started
+
+* Make sure Java 8 or later JDK is installed
+* Open a terminal and invoke `./gradlew build bootrun` (just `gradlew` under Windows)
+* Call endpoint http://localhost:8080/movies with header `accept application/vnd.api+json`
+
+The result should be:
+
+[source,json]
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "id": "1",
+      "type": "movie",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movie",
+      "attributes": {
+        "title": "Avengers"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost:8080/movies"
+  }
+}
+
+
+== License
+
+Apache 2.0, see https://opensource.org/licenses/Apache-2.0

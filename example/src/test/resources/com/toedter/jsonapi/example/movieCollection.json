@@ -1,0 +1,24 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "id": "1",
+      "type": "movie",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movie",
+      "attributes": {
+        "title": "Avengers"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost/movies"
+  }
+}

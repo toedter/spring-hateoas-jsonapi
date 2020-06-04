@@ -1,0 +1,10 @@
+include 'lib'
+include 'example'
+
+rootProject.name = 'spring-hateoas-jsonapi'
+rootProject.children.each { project ->
+    String fileBaseName = project.name
+    String projectDirName = "$fileBaseName"
+    project.projectDir = new File(settingsDir, projectDirName)
+    assert project.projectDir.isDirectory()
+}
