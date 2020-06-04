@@ -36,71 +36,90 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 class Jackson2JsonApiIntegrationTest {
 
-	private ObjectMapper mapper;
+    private ObjectMapper mapper;
 
-	@Getter
-	@Setter
-	public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
+    @Getter
+    @Setter
+    public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
 
-		private String id;
-		private String type;
-		private String name;
+        private String id;
+        private String type;
+        private String name;
 
-		public MovieRepresentationModel(Movie movie) {
-			this.id = movie.getId();
-			this.name = movie.getTitle();
-			this.type = "movie-type";
-			add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
-		}
-	}
+        public MovieRepresentationModel(Movie movie) {
+            this.id = movie.getId();
+            this.name = movie.getTitle();
+            this.type = "movie-type";
+            add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
+        }
+    }
 
-	@BeforeEach
-	void setUpModule() {
-		mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
-		mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-		this.mapper.registerModule(new Jackson2JsonApiModule());
-	}
+    @BeforeEach
+    void setUpModule() {
+        mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+        mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        this.mapper.registerModule(new Jackson2JsonApiModule());
+    }
 
-	@Test
-	void renderSingleMovieEntityModel() throws Exception {
-		Movie movie = new Movie("1", "Star Wars");
-		EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
-		String movieJson = mapper.writeValueAsString(entityModel);
+    @Test
+    void renderSingleMovieEntityModel() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
+        String movieJson = mapper.writeValueAsString(entityModel);
 
-		compareWithFile(movieJson, "movieEntityModel.json");
-	}
+        compareWithFile(movieJson, "movieEntityModel.json");
+    }
 
-	@Test
-	void renderSingleMovieRepresentationModel() throws Exception {
-		Movie movie = new Movie("1", "Star Wars");
-		MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
-		String movieJson = mapper.writeValueAsString(movieRepresentationModel);
+    @Test
+    void renderSingleMovieRepresentationModel() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
+        String movieJson = mapper.writeValueAsString(movieRepresentationModel);
 
-		compareWithFile(movieJson, "movieRepresentationModel.json");
-	}
+        compareWithFile(movieJson, "movieRepresentationModel.json");
+    }
 
-	@Test
-	void renderMovieCollection() throws Exception {
-		Movie movie1 = new Movie("1", "Star Wars");
-		Movie movie2 = new Movie("2", "Avengers");
-		List<Movie> movies = new ArrayList<>();
-		movies.add(movie1);
-		movies.add(movie2);
+    @Test
+    void renderMovieCollectionModel() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        Movie movie2 = new Movie("2", "Avengers");
+        List<Movie> movies = new ArrayList<>();
+        movies.add(movie1);
+        movies.add(movie2);
 
-		CollectionModel<Movie> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
-		String moviesJson = mapper.writeValueAsString(collectionModel);
+        CollectionModel<Movie> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        String moviesJson = mapper.writeValueAsString(collectionModel);
 
-		compareWithFile(moviesJson, "movieCollection.json");
-	}
+        compareWithFile(moviesJson, "moviesCollectionModel.json");
+    }
 
-	private void compareWithFile(String json, String fileName) throws Exception {
-		File file = new ClassPathResource(fileName, getClass()).getFile();
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-		JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
-		assertThat(json).isEqualTo(jsonNode.toString());
-	}
+    @Test
+    void renderMoviePagedModel() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        Movie movie2 = new Movie("2", "Avengers");
+        List<Movie> movies = new ArrayList<>();
+        movies.add(movie1);
+        movies.add(movie2);
+
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(2, 1, 2, 2);
+        final PagedModel<Movie> pagedModel = PagedModel.of(movies, pageMetadata);
+
+        Link nextLink = Link.of("http://localhost/movies?page[number]=2&page[size]=2").withRel(IanaLinkRelations.NEXT);
+        pagedModel.add(nextLink);
+
+        String moviesJson = mapper.writeValueAsString(pagedModel);
+        compareWithFile(moviesJson, "moviesPagedModel.json");
+    }
+
+    private void compareWithFile(String json, String fileName) throws Exception {
+        File file = new ClassPathResource(fileName, getClass()).getFile();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
+        assertThat(json).isEqualTo(jsonNode.toString());
+    }
 
 }

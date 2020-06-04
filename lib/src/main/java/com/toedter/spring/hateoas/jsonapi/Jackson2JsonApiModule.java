@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.ser.ContainerSerializer;
 import org.springframework.hateoas.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Jackson2JsonApiModule extends SimpleModule {
     public Jackson2JsonApiModule() {
@@ -40,6 +42,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
         addSerializer(new JsonApiEntityModelSerializer());
         addSerializer(new JsonApiRepresentationModelSerializer());
         addSerializer(new JsonApiCollectionModelSerializer());
+        addSerializer(new JsonApiPagedModelSerializer());
         addSerializer(new JsonApiLinksSerializer());
     }
 
@@ -121,6 +124,33 @@ public class Jackson2JsonApiModule extends SimpleModule {
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
                     .withLinks(value.getLinks());
+
+            provider
+                    .findValueSerializer(JsonApiDocument.class)
+                    .serialize(doc, gen, provider);
+        }
+    }
+
+    static class JsonApiPagedModelSerializer extends AbstractJsonApiSerializer<PagedModel<?>> {
+        public JsonApiPagedModelSerializer() {
+            super(PagedModel.class, false);
+        }
+
+        @Override
+        public void serialize(PagedModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            JsonApiDocument doc = new JsonApiDocument()
+                    .withJsonapi(new JsonApiJsonApi())
+                    .withData(JsonApiData.extractCollectionContent(value))
+                    .withLinks(value.getLinks());
+
+            if (value.getMetadata() != null) {
+                Map<String, Object> metaMap = new HashMap<>();
+                metaMap.put("page-number", value.getMetadata().getNumber());
+                metaMap.put("page-size", value.getMetadata().getSize());
+                metaMap.put("page-total-elements", value.getMetadata().getTotalElements());
+                metaMap.put("page-total-pages", value.getMetadata().getTotalPages());
+                doc = doc.withMeta(metaMap);
+            }
 
             provider
                     .findValueSerializer(JsonApiDocument.class)
