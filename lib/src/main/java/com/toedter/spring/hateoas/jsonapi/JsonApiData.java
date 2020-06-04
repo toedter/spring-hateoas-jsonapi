@@ -78,6 +78,9 @@ public class JsonApiData {
         } else if (representationModel instanceof EntityModel) {
             Optional<JsonApiData> jsonApiData = extractContent(((EntityModel<?>) representationModel).getContent());
             jsonApiData.ifPresent(dataList::add);
+        } else {
+            Optional<JsonApiData> jsonApiData = extractContent(representationModel);
+            jsonApiData.ifPresent(dataList::add);
         }
         return dataList;
     }
@@ -87,8 +90,16 @@ public class JsonApiData {
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
                         .withId(invokeGetter(it, "id"))
-                        .withType(StringUtils.uncapitalize(it.getClass().getSimpleName()))
+                        .withType(getType(it))
                         .withAttributes(extractAttributes(it)));
+    }
+
+    static String getType(Object content) {
+        Object type = invokeGetter(content, "type");
+        if (type == null) {
+            return StringUtils.uncapitalize(content.getClass().getSimpleName());
+        }
+        return type.toString();
     }
 
     private static Map<String, Object> extractAttributes(Object object) {
@@ -97,7 +108,7 @@ public class JsonApiData {
         for (Field field : clazz.getDeclaredFields()) {
             try {
                 String name = field.getName();
-                if (!"type".equals(name) && !"id".equals(name)) {
+                if (!"type".equals(name) && !"id".equals(name) && !(name.startsWith("this$"))) {
                     map.put(name, invokeGetter(object, name));
                 }
             } catch (Exception e) {
@@ -113,7 +124,7 @@ public class JsonApiData {
             Method getter = propertyDescriptor.getReadMethod();
             return getter.invoke(obj);
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            // ignore
         }
         return null;
     }

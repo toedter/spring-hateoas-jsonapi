@@ -25,10 +25,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
+import org.springframework.hateoas.*;
 
 import java.io.IOException;
 
@@ -41,6 +38,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
                         "jsonapi-spring-hateoas"));
 
         addSerializer(new JsonApiEntityModelSerializer());
+        addSerializer(new JsonApiRepresentationModelSerializer());
         addSerializer(new JsonApiCollectionModelSerializer());
         addSerializer(new JsonApiLinksSerializer());
     }
@@ -83,6 +81,24 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         @Override
         public void serialize(EntityModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            JsonApiDocument doc = new JsonApiDocument()
+                    .withJsonapi(new JsonApiJsonApi())
+                    .withData(JsonApiData.extractCollectionContent(value))
+                    .withLinks(value.getLinks());
+
+            provider
+                    .findValueSerializer(JsonApiDocument.class)
+                    .serialize(doc, gen, provider);
+        }
+    }
+
+    static class JsonApiRepresentationModelSerializer extends AbstractJsonApiSerializer<RepresentationModel<?>> {
+        public JsonApiRepresentationModelSerializer() {
+            super(RepresentationModel.class, false);
+        }
+
+        @Override
+        public void serialize(RepresentationModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))

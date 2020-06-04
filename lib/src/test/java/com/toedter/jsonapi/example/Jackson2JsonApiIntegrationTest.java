@@ -17,23 +17,42 @@ package com.toedter.jsonapi.example;
 
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
+import org.springframework.hateoas.*;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 class Jackson2JsonApiIntegrationTest {
 
 	private ObjectMapper mapper;
+
+	@Getter
+	@Setter
+	public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
+
+		private String id;
+		private String type;
+		private String name;
+
+		public MovieRepresentationModel(Movie movie) {
+			this.id = movie.getId();
+			this.name = movie.getTitle();
+			this.type = "movie-type";
+			add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
+		}
+	}
 
 	@BeforeEach
 	void setUpModule() {
@@ -45,12 +64,22 @@ class Jackson2JsonApiIntegrationTest {
 	}
 
 	@Test
-	void renderSingleMovie() throws Exception {
+	void renderSingleMovieEntityModel() throws Exception {
 		Movie movie = new Movie("1", "Star Wars");
 		EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
 		String movieJson = mapper.writeValueAsString(entityModel);
 
-		compareWithFile(movieJson, "movie.json");	}
+		compareWithFile(movieJson, "movieEntityModel.json");
+	}
+
+	@Test
+	void renderSingleMovieRepresentationModel() throws Exception {
+		Movie movie = new Movie("1", "Star Wars");
+		MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
+		String movieJson = mapper.writeValueAsString(movieRepresentationModel);
+
+		compareWithFile(movieJson, "movieRepresentationModel.json");
+	}
 
 	@Test
 	void renderMovieCollection() throws Exception {
