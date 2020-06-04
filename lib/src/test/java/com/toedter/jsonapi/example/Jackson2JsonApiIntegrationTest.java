@@ -20,6 +20,7 @@ import com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -112,6 +113,15 @@ class Jackson2JsonApiIntegrationTest {
 
         String moviesJson = mapper.writeValueAsString(pagedModel);
         compareWithFile(moviesJson, "moviesPagedModel.json");
+    }
+
+    @Test
+    void shouldNotSerializeMovieWithoutId() throws Exception {
+        Assertions.assertThrows(JsonMappingException.class, () -> {
+            Movie movie = new Movie(null, "Star Wars");
+            EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
+            mapper.writeValueAsString(entityModel);
+        });
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

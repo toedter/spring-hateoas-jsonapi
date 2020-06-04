@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
@@ -29,11 +30,6 @@ import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 @Value
@@ -44,15 +40,17 @@ import java.util.*;
 public class JsonApiData {
     Object id;
     String type;
-    Map<String, Object> attributes;
+    @JsonIgnoreProperties(value = {"id", "type"})
+    Object attributes;
     Links links;
 
     @JsonCreator
     public JsonApiData(
             @JsonProperty("id") Object id,
             @JsonProperty("type") String type,
-            @JsonProperty("attributes") Map<String, Object> attributes,
-            @JsonProperty("links") Links links) {
+            @JsonProperty("attributes") Object attributes,
+            @JsonProperty("links") Links links
+    ) {
         this.id = id;
         this.type = type;
         this.attributes = attributes;
@@ -86,47 +84,42 @@ public class JsonApiData {
     }
 
     static Optional<JsonApiData> extractContent(@Nullable Object content) {
+        Object contentObject = content;
+        ObjectMapper mapper = new ObjectMapper();
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> attributeMap = mapper.convertValue(contentObject, Map.class);
+
+        // if the content is a RepresentationModel itself,
+        // we have to convert it, otherwise and infinite recursion would happen,
+        // since this is part of the serialization of a RepresentationModel
+        if (contentObject instanceof RepresentationModel<?>) {
+            attributeMap.remove("links");
+            contentObject = attributeMap;
+        }
+        Object finalContentObject = contentObject;
         return Optional.ofNullable(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
-                        .withId(invokeGetter(it, "id"))
-                        .withType(getType(it))
-                        .withAttributes(extractAttributes(it)));
+                        .withId(getId(attributeMap))
+                        .withType(getType(attributeMap, it))
+                        .withAttributes(finalContentObject));
     }
 
-    static String getType(Object content) {
-        Object type = invokeGetter(content, "type");
+    static Object getId(Map<String, Object> attributeMap) {
+        Object id = attributeMap.get("id");
+        if (id == null) {
+            throw new RuntimeException("JSON:API resource must have property \"id\".");
+        }
+        return id;
+    }
+
+    static String getType(Map<String, Object> attributeMap, Object content) {
+        Object type = attributeMap.get("type");
         if (type == null) {
             return StringUtils.uncapitalize(content.getClass().getSimpleName());
         }
         return type.toString();
-    }
-
-    private static Map<String, Object> extractAttributes(Object object) {
-        Map<String, Object> map = new HashMap<>();
-        Class<?> clazz = object.getClass();
-        for (Field field : clazz.getDeclaredFields()) {
-            try {
-                String name = field.getName();
-                if (!"type".equals(name) && !"id".equals(name) && !(name.startsWith("this$"))) {
-                    map.put(name, invokeGetter(object, name));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return map;
-    }
-
-    private static Object invokeGetter(Object obj, String variableName) {
-        try {
-            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(variableName, obj.getClass());
-            Method getter = propertyDescriptor.getReadMethod();
-            return getter.invoke(obj);
-        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            // ignore
-        }
-        return null;
     }
 
     private static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(
