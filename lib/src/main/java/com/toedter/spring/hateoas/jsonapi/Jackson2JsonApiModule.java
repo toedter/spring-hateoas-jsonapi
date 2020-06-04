@@ -18,17 +18,25 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.mediatype.JacksonHelper;
+import org.springframework.hateoas.mediatype.PropertyUtils;
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Jackson2JsonApiModule extends SimpleModule {
@@ -44,6 +52,9 @@ public class Jackson2JsonApiModule extends SimpleModule {
         addSerializer(new JsonApiCollectionModelSerializer());
         addSerializer(new JsonApiPagedModelSerializer());
         addSerializer(new JsonApiLinksSerializer());
+
+        addDeserializer(Links.class, new JsonApiLinksDeserializer());
+        addDeserializer(EntityModel.class, new JsonApiEntityModelDeserializer());
     }
 
     static abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
@@ -170,6 +181,84 @@ public class Jackson2JsonApiModule extends SimpleModule {
                 gen.writeStringField(link.getRel().value(), link.getHref());
             }
             gen.writeEndObject();
+        }
+    }
+
+    static class JsonApiEntityModelDeserializer extends ContainerDeserializerBase<EntityModel<?>>
+            implements ContextualDeserializer {
+
+        private final JavaType contentType;
+
+        JsonApiEntityModelDeserializer() {
+            this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
+        }
+
+        private JsonApiEntityModelDeserializer(JavaType contentType) {
+            super(contentType);
+            this.contentType = contentType;
+        }
+
+        @Override
+        public EntityModel<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
+            Links links = doc.getLinks();
+
+            return doc.getData().stream()
+                    .filter(data -> !StringUtils.isEmpty(data.getId()))
+                    .findFirst()
+                    .map(jsonApiData -> convertToResource(jsonApiData, links))
+                    .orElseThrow(
+                            () -> new IllegalStateException("No data entry containing a 'value' was found in this document!"));
+        }
+
+        private EntityModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
+            attributes.put("id", jsonApiData.getId());
+            JavaType rootType = JacksonHelper.findRootType(this.contentType);
+            Object entity = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+            return EntityModel.of(entity, links);
+        }
+
+        @Override
+        public JavaType getContentType() {
+            return this.contentType;
+        }
+
+        @Override
+        @SuppressWarnings("null")
+        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+                throws JsonMappingException {
+
+            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+
+            return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
+        }
+
+        @Override
+        @Nullable
+        public JsonDeserializer<Object> getContentDeserializer() {
+            return null;
+        }
+    }
+
+    static class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
+
+        protected JsonApiLinksDeserializer() {
+            super(TypeFactory.defaultInstance().constructCollectionLikeType(List.class, Link.class));
+        }
+
+        @Override
+        public JsonDeserializer<Object> getContentDeserializer() {
+            return null;
+        }
+
+        @Override
+        public Links deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+            JavaType type = ctxt.getTypeFactory().constructMapType(HashMap.class, String.class, String.class);
+            List<Link> links = new ArrayList<>();
+            Map<String, String> jsonApiLinks = jp.getCodec().readValue(jp, type);
+            jsonApiLinks.forEach((rel, href) -> links.add(Link.of(href, rel)));
+            return Links.of(links);
         }
     }
 }

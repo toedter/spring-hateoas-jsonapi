@@ -17,6 +17,7 @@ package com.toedter.jsonapi.example;
 
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule;
+import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,15 +58,13 @@ class Jackson2JsonApiIntegrationTest {
 
     @BeforeEach
     void setUpModule() {
+        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
         mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
-        mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-        this.mapper.registerModule(new Jackson2JsonApiModule());
+        configuration.configureObjectMapper(mapper);
     }
 
     @Test
-    void renderSingleMovieEntityModel() throws Exception {
+    void shouldRenderSingleMovieEntityModel() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
         String movieJson = mapper.writeValueAsString(entityModel);
@@ -74,7 +73,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void renderSingleMovieRepresentationModel() throws Exception {
+    void shouldRenderSingleMovieRepresentationModel() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
         String movieJson = mapper.writeValueAsString(movieRepresentationModel);
@@ -83,7 +82,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void renderMovieCollectionModel() throws Exception {
+    void shouldRenderMovieCollectionModel() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         Movie movie2 = new Movie("2", "Avengers");
         List<Movie> movies = new ArrayList<>();
@@ -97,7 +96,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void renderMoviePagedModel() throws Exception {
+    void shouldRenderMoviePagedModel() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         Movie movie2 = new Movie("2", "Avengers");
         List<Movie> movies = new ArrayList<>();
@@ -124,6 +123,21 @@ class Jackson2JsonApiIntegrationTest {
         });
     }
 
+    @Test
+    void shouldDeserializeSingleMovieEntityModel() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        Movie movie = movieEntityModel.getContent();
+        assertThat(movie.getId()).isEqualTo("1");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -131,5 +145,4 @@ class Jackson2JsonApiIntegrationTest {
         JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
         assertThat(json).isEqualTo(jsonNode.toString());
     }
-
 }
