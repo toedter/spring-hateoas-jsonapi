@@ -42,11 +42,14 @@ class Jackson2JsonApiIntegrationTest {
 
     @Getter
     @Setter
-    public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
+    static public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
 
         private String id;
         private String type;
         private String name;
+
+        public MovieRepresentationModel() {
+        }
 
         public MovieRepresentationModel(Movie movie) {
             this.id = movie.getId();
@@ -136,6 +139,22 @@ class Jackson2JsonApiIntegrationTest {
         Links links = movieEntityModel.getLinks();
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+    }
+
+    @Test
+    void shouldDeserializeSingleMovieRepresentationModel() throws Exception {
+        JavaType movieRepresentationModelType =
+                mapper.getTypeFactory().constructParametricType(RepresentationModel.class, MovieRepresentationModel.class);
+        File file = new ClassPathResource("movieRepresentationModel.json", getClass()).getFile();
+        MovieRepresentationModel movieRepresentationModel = mapper.readValue(file, movieRepresentationModelType);
+
+        assertThat(movieRepresentationModel.getId()).isEqualTo("1");
+        assertThat(movieRepresentationModel.getName()).isEqualTo("Star Wars");
+        assertThat(movieRepresentationModel.getType()).isEqualTo("movie-type");
+
+        Links links = movieRepresentationModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/7");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
@@ -54,7 +55,19 @@ public class Jackson2JsonApiModule extends SimpleModule {
         addSerializer(new JsonApiLinksSerializer());
 
         addDeserializer(Links.class, new JsonApiLinksDeserializer());
-        addDeserializer(EntityModel.class, new JsonApiEntityModelDeserializer());
+
+        setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
+        setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
+//        addDeserializer(EntityModel.class, new JsonApiEntityModelDeserializer());
+//        addDeserializer(RepresentationModel.class, new JsonApiRepresentationModelDeserializer());
+    }
+
+    @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
+    abstract class EntityModelMixin<T> extends EntityModel<T> {
+    }
+
+    @JsonDeserialize(using = JsonApiRepresentationModelDeserializer.class)
+    abstract class RepresentationModelMixin extends RepresentationModel<RepresentationModelMixin> {
     }
 
     static abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
@@ -230,8 +243,67 @@ public class Jackson2JsonApiModule extends SimpleModule {
                 throws JsonMappingException {
 
             JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-
             return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
+        }
+
+        @Override
+        @Nullable
+        public JsonDeserializer<Object> getContentDeserializer() {
+            return null;
+        }
+    }
+
+    static class JsonApiRepresentationModelDeserializer extends ContainerDeserializerBase<RepresentationModel<?>>
+            implements ContextualDeserializer {
+
+        private final JavaType contentType;
+
+        JsonApiRepresentationModelDeserializer() {
+            this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
+        }
+
+        private JsonApiRepresentationModelDeserializer(JavaType contentType) {
+            super(contentType);
+            this.contentType = contentType;
+        }
+
+        @Override
+        public RepresentationModel<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
+            Links links = doc.getLinks();
+
+            return doc.getData().stream()
+                    .filter(data -> !StringUtils.isEmpty(data.getId()))
+                    .findFirst()
+                    .map(jsonApiData -> convertToResource(jsonApiData, links))
+                    .orElseThrow(
+                            () -> new IllegalStateException("No data entry containing a 'value' was found in this document!"));
+        }
+
+        private RepresentationModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
+            attributes.put("id", jsonApiData.getId());
+            attributes.put("type", jsonApiData.getType());
+            JavaType rootType = JacksonHelper.findRootType(this.contentType);
+            RepresentationModel<?> entity =
+                    (RepresentationModel<?>) PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+            entity.add(links);
+            return entity;
+        }
+
+        @Override
+        public JavaType getContentType() {
+            return this.contentType;
+        }
+
+        @Override
+        @SuppressWarnings("null")
+        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+                throws JsonMappingException {
+
+            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+
+            return new Jackson2JsonApiModule.JsonApiRepresentationModelDeserializer(type);
         }
 
         @Override
