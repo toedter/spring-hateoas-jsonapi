@@ -245,6 +245,17 @@ public class Jackson2JsonApiModule extends SimpleModule {
         public JsonDeserializer<Object> getContentDeserializer() {
             return null;
         }
+
+        @Override
+        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+                throws JsonMappingException {
+
+            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+
+            return createJsonDeserializer(type);
+        }
+
+        abstract protected JsonDeserializer<?> createJsonDeserializer(JavaType type);
     }
 
     static class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeserializer<RepresentationModel<?>>
@@ -268,14 +279,8 @@ public class Jackson2JsonApiModule extends SimpleModule {
             throw new RuntimeException("Cannot deserialize input to RepresentationModel");
         }
 
-        @Override
-        @SuppressWarnings("null")
-        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-                throws JsonMappingException {
-
-            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-
-            return new Jackson2JsonApiModule.JsonApiRepresentationModelDeserializer(type);
+        protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+            return new JsonApiRepresentationModelDeserializer(type);
         }
     }
 
@@ -298,13 +303,8 @@ public class Jackson2JsonApiModule extends SimpleModule {
             throw new RuntimeException("Cannot deserialize input to EntityModel");
         }
 
-        @Override
-        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-                throws JsonMappingException {
-
-            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-
-            return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
+        protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+            return new JsonApiEntityModelDeserializer(type);
         }
     }
 
@@ -324,13 +324,8 @@ public class Jackson2JsonApiModule extends SimpleModule {
             return CollectionModel.of(resources, links);
         }
 
-        @Override
-        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-                throws JsonMappingException {
-
-            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-
-            return new Jackson2JsonApiModule.JsonApiCollectionModelDeserializer(type);
+        protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+            return new JsonApiCollectionModelDeserializer(type);
         }
     }
 
