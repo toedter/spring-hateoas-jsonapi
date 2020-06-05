@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +95,22 @@ class Jackson2JsonApiIntegrationTest {
         movies.add(movie2);
 
         CollectionModel<Movie> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        String moviesJson = mapper.writeValueAsString(collectionModel);
+
+        compareWithFile(moviesJson, "moviesCollectionModel.json");
+    }
+
+    @Test
+    void shouldRenderMovieCollectionModelWithEntityModels() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        EntityModel<Movie> movie1Model = EntityModel.of(movie1);
+        Movie movie2 = new Movie("2", "Avengers");
+        EntityModel<Movie> movie2Model = EntityModel.of(movie2);
+        List<EntityModel<Movie>> movies = new ArrayList<>();
+        movies.add(movie1Model);
+        movies.add(movie2Model);
+
+        CollectionModel<EntityModel<Movie>> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");

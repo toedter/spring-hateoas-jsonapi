@@ -5,14 +5,13 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.toedter.spring.hateoas.jsonapi;
@@ -70,21 +69,28 @@ public class JsonApiData {
 
         if (representationModel instanceof CollectionModel) {
             for (Object entity : ((CollectionModel<?>) representationModel).getContent()) {
-                Optional<JsonApiData> jsonApiData = extractContent(entity);
+                Optional<JsonApiData> jsonApiData = extractContent(entity, false);
                 jsonApiData.ifPresent(dataList::add);
             }
-        } else if (representationModel instanceof EntityModel) {
-            Optional<JsonApiData> jsonApiData = extractContent(((EntityModel<?>) representationModel).getContent());
-            jsonApiData.ifPresent(dataList::add);
         } else {
-            Optional<JsonApiData> jsonApiData = extractContent(representationModel);
+            Optional<JsonApiData> jsonApiData = extractContent(representationModel, true);
             jsonApiData.ifPresent(dataList::add);
         }
         return dataList;
     }
 
-    static Optional<JsonApiData> extractContent(@Nullable Object content) {
+    static Optional<JsonApiData> extractContent(@Nullable Object content, boolean isSingleEntity) {
         Object contentObject = content;
+        Links links = null;
+        if (!isSingleEntity && (content instanceof EntityModel || content instanceof RepresentationModel)) {
+            links = ((RepresentationModel) content).getLinks();
+        }
+        if (content instanceof EntityModel) {
+            content = ((EntityModel) content).getContent();
+        }
+        if (links != null && links.isEmpty()) {
+            links = null;
+        }
         ObjectMapper mapper = new ObjectMapper();
 
         @SuppressWarnings("unchecked")
@@ -98,12 +104,14 @@ public class JsonApiData {
             contentObject = attributeMap;
         }
         Object finalContentObject = contentObject;
+        Links finalLinks = links;
         return Optional.ofNullable(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
                         .withId(getId(attributeMap))
                         .withType(getType(attributeMap, it))
-                        .withAttributes(finalContentObject));
+                        .withAttributes(finalContentObject)
+                        .withLinks(finalLinks));
     }
 
     static Object getId(Map<String, Object> attributeMap) {
