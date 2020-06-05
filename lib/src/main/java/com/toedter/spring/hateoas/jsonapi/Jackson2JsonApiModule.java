@@ -32,7 +32,6 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.hateoas.mediatype.PropertyUtils;
 import org.springframework.lang.Nullable;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +41,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Jackson2JsonApiModule extends SimpleModule {
+
+    public static final String PAGE_NUMBER = "page-number";
+    public static final String PAGE_SIZE = "page-size";
+    public static final String PAGE_TOTAL_ELEMENTS = "page-total-elements";
+    public static final String PAGE_TOTAL_PAGES = "page-total-pages";
+
     public Jackson2JsonApiModule() {
 
         super("json-api-module",
@@ -60,18 +65,23 @@ public class Jackson2JsonApiModule extends SimpleModule {
         setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
         setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
         setMixInAnnotation(CollectionModel.class, CollectionModelMixin.class);
+        setMixInAnnotation(PagedModel.class, PagedModelMixin.class);
     }
 
     @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
-    abstract class EntityModelMixin<T> extends EntityModel<T> {
+    abstract static class EntityModelMixin<T> extends EntityModel<T> {
     }
 
     @JsonDeserialize(using = JsonApiRepresentationModelDeserializer.class)
-    abstract class RepresentationModelMixin extends RepresentationModel<RepresentationModelMixin> {
+    abstract static class RepresentationModelMixin extends RepresentationModel<RepresentationModelMixin> {
     }
 
     @JsonDeserialize(using = JsonApiCollectionModelDeserializer.class)
-    abstract class CollectionModelMixin<T> extends CollectionModel<T> {
+    abstract static class CollectionModelMixin<T> extends CollectionModel<T> {
+    }
+
+    @JsonDeserialize(using = JsonApiPagedModelDeserializer.class)
+    abstract static class PagedModelMixin<T> extends PagedModel<T> {
     }
 
     static abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
@@ -173,10 +183,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
             if (value.getMetadata() != null) {
                 Map<String, Object> metaMap = new HashMap<>();
-                metaMap.put("page-number", value.getMetadata().getNumber());
-                metaMap.put("page-size", value.getMetadata().getSize());
-                metaMap.put("page-total-elements", value.getMetadata().getTotalElements());
-                metaMap.put("page-total-pages", value.getMetadata().getTotalPages());
+                metaMap.put(PAGE_NUMBER, value.getMetadata().getNumber());
+                metaMap.put(PAGE_SIZE, value.getMetadata().getSize());
+                metaMap.put(PAGE_TOTAL_ELEMENTS, value.getMetadata().getTotalElements());
+                metaMap.put(PAGE_TOTAL_PAGES, value.getMetadata().getTotalPages());
                 doc = doc.withMeta(metaMap);
             }
 
@@ -218,11 +228,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
         @Override
         public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
-            Links links = doc.getLinks();
             List<Object> resources = doc.getData().stream()
                     .map(jsonApiData -> convertToResource(jsonApiData))
                     .collect(Collectors.toList());
-            return convertToRepresentationModel(resources, links);
+            return convertToRepresentationModel(resources, doc);
         }
 
         protected Object convertToResource(JsonApiData jsonApiData) {
@@ -233,7 +242,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         }
 
-        abstract protected T convertToRepresentationModel(List<Object> resources, Links links);
+        abstract protected T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
 
         @Override
         public JavaType getContentType() {
@@ -270,7 +279,8 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
 
         @Override
-        protected RepresentationModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+        protected RepresentationModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+            Links links = doc.getLinks();
             if (resources.size() == 1 && resources.get(0) instanceof RepresentationModel<?>) {
                 RepresentationModel<?> representationModel = (RepresentationModel<?>) resources.get(0);
                 representationModel.add(links);
@@ -296,9 +306,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
 
         @Override
-        protected EntityModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+        protected EntityModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+            Links links = doc.getLinks();
             if (resources.size() == 1) {
-                 return EntityModel.of(resources.get(0), links);
+                return EntityModel.of(resources.get(0), links);
             }
             throw new RuntimeException("Cannot deserialize input to EntityModel");
         }
@@ -320,12 +331,44 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
 
         @Override
-        protected CollectionModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+        protected CollectionModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+            Links links = doc.getLinks();
             return CollectionModel.of(resources, links);
         }
 
         protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
             return new JsonApiCollectionModelDeserializer(type);
+        }
+    }
+
+    static class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
+            implements ContextualDeserializer {
+
+        JsonApiPagedModelDeserializer() {
+            super();
+        }
+
+        protected JsonApiPagedModelDeserializer(JavaType contentType) {
+            super(contentType);
+        }
+
+        @Override
+        protected PagedModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+            Links links = doc.getLinks();
+
+            Map<String, Object> metaMap = doc.getMeta();
+            long size = new Long(metaMap.get(PAGE_SIZE).toString());
+            long number = new Long(metaMap.get(PAGE_NUMBER).toString());
+            long totalElements = new Long(metaMap.get(PAGE_TOTAL_ELEMENTS).toString());
+            long totalPages = new Long(metaMap.get(PAGE_TOTAL_PAGES).toString());
+
+            PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(size, number, totalElements, totalPages);
+
+            return PagedModel.of(resources, pageMetadata, links);
+        }
+
+        protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+            return new JsonApiPagedModelDeserializer(type);
         }
     }
 

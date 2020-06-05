@@ -110,10 +110,8 @@ class Jackson2JsonApiIntegrationTest {
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(2, 1, 2, 2);
-        final PagedModel<Movie> pagedModel = PagedModel.of(movies, pageMetadata);
-
         Link nextLink = Link.of("http://localhost/movies?page[number]=2&page[size]=2").withRel(IanaLinkRelations.NEXT);
-        pagedModel.add(nextLink);
+        final PagedModel<Movie> pagedModel = PagedModel.of(movies, pageMetadata, nextLink);
 
         String moviesJson = mapper.writeValueAsString(pagedModel);
         compareWithFile(moviesJson, "moviesPagedModel.json");
@@ -178,6 +176,29 @@ class Jackson2JsonApiIntegrationTest {
         Links links = movieCollectionModel.getLinks();
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies");
+    }
+
+    @Test
+    void shouldDeserializeMoviesPagedModel() throws Exception {
+        JavaType moviesPagedModelType =
+                mapper.getTypeFactory().constructParametricType(PagedModel.class, Movie.class);
+        File file = new ClassPathResource("moviesPagedModel.json", getClass()).getFile();
+        PagedModel<Movie> moviePagedModel = mapper.readValue(file, moviesPagedModelType);
+        Collection<Movie> movieCollection = moviePagedModel.getContent();
+
+        final Iterator<Movie> iterator = movieCollection.iterator();
+        Movie movie1 = iterator.next();
+        assertThat(movie1.getId()).isEqualTo("1");
+        assertThat(movie1.getTitle()).isEqualTo("Star Wars");
+        Movie movie2 = iterator.next();
+        assertThat(movie2.getId()).isEqualTo("2");
+        assertThat(movie2.getTitle()).isEqualTo("Avengers");
+
+        PagedModel.PageMetadata pageMetadata = moviePagedModel.getMetadata();
+        assertThat(pageMetadata.getSize()).isEqualTo(2);
+        assertThat(pageMetadata.getNumber()).isEqualTo(1);
+        assertThat(pageMetadata.getTotalPages()).isEqualTo(2);
+        assertThat(pageMetadata.getTotalElements()).isEqualTo(2);
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
