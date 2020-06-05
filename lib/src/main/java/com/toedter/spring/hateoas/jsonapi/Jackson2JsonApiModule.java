@@ -225,7 +225,13 @@ public class Jackson2JsonApiModule extends SimpleModule {
             return convertToRepresentationModel(resources, links);
         }
 
-        abstract protected Object convertToResource(JsonApiData jsonApiData);
+        protected Object convertToResource(JsonApiData jsonApiData) {
+            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
+            attributes.put("id", jsonApiData.getId());
+            attributes.put("type", jsonApiData.getType());
+            JavaType rootType = JacksonHelper.findRootType(this.contentType);
+            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        }
 
         abstract protected T convertToRepresentationModel(List<Object> resources, Links links);
 
@@ -250,15 +256,6 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         protected JsonApiRepresentationModelDeserializer(JavaType contentType) {
             super(contentType);
-        }
-
-        @Override
-        protected Object convertToResource(JsonApiData jsonApiData) {
-            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
-            attributes.put("id", jsonApiData.getId());
-            attributes.put("type", jsonApiData.getType());
-            JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         }
 
         @Override
@@ -294,14 +291,6 @@ public class Jackson2JsonApiModule extends SimpleModule {
         }
 
         @Override
-        protected Object convertToResource(JsonApiData jsonApiData) {
-            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
-            attributes.put("id", jsonApiData.getId());
-            JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
-        }
-
-        @Override
         protected EntityModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
             if (resources.size() == 1) {
                  return EntityModel.of(resources.get(0), links);
@@ -328,14 +317,6 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         protected JsonApiCollectionModelDeserializer(JavaType contentType) {
             super(contentType);
-        }
-
-        @Override
-        protected Object convertToResource(JsonApiData jsonApiData) {
-            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
-            attributes.put("id", jsonApiData.getId());
-            JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         }
 
         @Override
