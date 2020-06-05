@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Jackson2JsonApiModule extends SimpleModule {
     public Jackson2JsonApiModule() {
@@ -58,8 +59,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
         setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
-//        addDeserializer(EntityModel.class, new JsonApiEntityModelDeserializer());
-//        addDeserializer(RepresentationModel.class, new JsonApiRepresentationModelDeserializer());
+        setMixInAnnotation(CollectionModel.class, CollectionModelMixin.class);
     }
 
     @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
@@ -68,6 +68,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
     @JsonDeserialize(using = JsonApiRepresentationModelDeserializer.class)
     abstract class RepresentationModelMixin extends RepresentationModel<RepresentationModelMixin> {
+    }
+
+    @JsonDeserialize(using = JsonApiCollectionModelDeserializer.class)
+    abstract class CollectionModelMixin<T> extends CollectionModel<T> {
     }
 
     static abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
@@ -215,16 +219,15 @@ public class Jackson2JsonApiModule extends SimpleModule {
         public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
             Links links = doc.getLinks();
-
-            return doc.getData().stream()
-                    .filter(data -> !StringUtils.isEmpty(data.getId()))
-                    .findFirst()
-                    .map(jsonApiData -> convertToResource(jsonApiData, links))
-                    .orElseThrow(
-                            () -> new IllegalStateException("No data entry containing a 'value' was found in this document!"));
+            List<Object> resources = doc.getData().stream()
+                    .map(jsonApiData -> convertToResource(jsonApiData))
+                    .collect(Collectors.toList());
+            return convertToRepresentationModel(resources, links);
         }
 
-        abstract protected T convertToResource(JsonApiData jsonApiData, Links links);
+        abstract protected Object convertToResource(JsonApiData jsonApiData);
+
+        abstract protected T convertToRepresentationModel(List<Object> resources, Links links);
 
         @Override
         public JavaType getContentType() {
@@ -249,15 +252,23 @@ public class Jackson2JsonApiModule extends SimpleModule {
             super(contentType);
         }
 
-        protected RepresentationModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+        @Override
+        protected Object convertToResource(JsonApiData jsonApiData) {
             Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
             attributes.put("id", jsonApiData.getId());
             attributes.put("type", jsonApiData.getType());
             JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            RepresentationModel<?> entity =
-                    (RepresentationModel<?>) PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
-            entity.add(links);
-            return entity;
+            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        }
+
+        @Override
+        protected RepresentationModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+            if (resources.size() == 1 && resources.get(0) instanceof RepresentationModel<?>) {
+                RepresentationModel<?> representationModel = (RepresentationModel<?>) resources.get(0);
+                representationModel.add(links);
+                return representationModel;
+            }
+            throw new RuntimeException("Cannot deserialize input to RepresentationModel");
         }
 
         @Override
@@ -282,22 +293,63 @@ public class Jackson2JsonApiModule extends SimpleModule {
             super(contentType);
         }
 
-        protected EntityModel<?> convertToResource(JsonApiData jsonApiData, Links links) {
+        @Override
+        protected Object convertToResource(JsonApiData jsonApiData) {
             Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
             attributes.put("id", jsonApiData.getId());
             JavaType rootType = JacksonHelper.findRootType(this.contentType);
-            Object entity = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
-            return EntityModel.of(entity, links);
+            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         }
 
         @Override
-        @SuppressWarnings("null")
+        protected EntityModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+            if (resources.size() == 1) {
+                 return EntityModel.of(resources.get(0), links);
+            }
+            throw new RuntimeException("Cannot deserialize input to EntityModel");
+        }
+
+        @Override
         public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
                 throws JsonMappingException {
 
             JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
 
             return new Jackson2JsonApiModule.JsonApiEntityModelDeserializer(type);
+        }
+    }
+
+    static class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserializer<CollectionModel<?>>
+            implements ContextualDeserializer {
+
+        JsonApiCollectionModelDeserializer() {
+            super();
+        }
+
+        protected JsonApiCollectionModelDeserializer(JavaType contentType) {
+            super(contentType);
+        }
+
+        @Override
+        protected Object convertToResource(JsonApiData jsonApiData) {
+            Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
+            attributes.put("id", jsonApiData.getId());
+            JavaType rootType = JacksonHelper.findRootType(this.contentType);
+            return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        }
+
+        @Override
+        protected CollectionModel<?> convertToRepresentationModel(List<Object> resources, Links links) {
+            return CollectionModel.of(resources, links);
+        }
+
+        @Override
+        public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+                throws JsonMappingException {
+
+            JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+
+            return new Jackson2JsonApiModule.JsonApiCollectionModelDeserializer(type);
         }
     }
 

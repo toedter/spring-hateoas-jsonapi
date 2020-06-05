@@ -30,6 +30,8 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -155,6 +157,27 @@ class Jackson2JsonApiIntegrationTest {
         Links links = movieRepresentationModel.getLinks();
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/7");
+    }
+
+    @Test
+    void shouldDeserializeMoviesCollectionionModel() throws Exception {
+        JavaType moviesCollectionModelType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, Movie.class);
+        File file = new ClassPathResource("moviesCollectionModel.json", getClass()).getFile();
+        CollectionModel<Movie> movieCollectionModel = mapper.readValue(file, moviesCollectionModelType);
+        Collection<Movie> movieCollection = movieCollectionModel.getContent();
+
+        final Iterator<Movie> iterator = movieCollection.iterator();
+        Movie movie1 = iterator.next();
+        assertThat(movie1.getId()).isEqualTo("1");
+        assertThat(movie1.getTitle()).isEqualTo("Star Wars");
+        Movie movie2 = iterator.next();
+        assertThat(movie2.getId()).isEqualTo("2");
+        assertThat(movie2.getTitle()).isEqualTo("Avengers");
+
+        Links links = movieCollectionModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
