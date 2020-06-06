@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.springframework.hateoas:spring-hateoas:1.1.0.RELEASE'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    implementation 'org.atteo:evo-inflector:1.2.2'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testImplementation 'org.assertj:assertj-core:3.11.1'

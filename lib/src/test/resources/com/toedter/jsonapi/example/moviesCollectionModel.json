@@ -5,14 +5,14 @@
   "data": [
     {
       "id": "1",
-      "type": "movie",
+      "type": "movies",
       "attributes": {
         "title": "Star Wars"
       }
     },
     {
       "id": "2",
-      "type": "movie",
+      "type": "movies",
       "attributes": {
         "title": "Avengers"
       }

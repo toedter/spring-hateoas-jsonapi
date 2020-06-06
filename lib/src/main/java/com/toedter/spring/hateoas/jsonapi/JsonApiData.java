@@ -25,6 +25,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
+import org.atteo.evo.inflector.English;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
@@ -125,7 +126,8 @@ public class JsonApiData {
     static String getType(Map<String, Object> attributeMap, Object content) {
         Object type = attributeMap.get("type");
         if (type == null) {
-            return StringUtils.uncapitalize(content.getClass().getSimpleName());
+            String singleType = content.getClass().getSimpleName().toLowerCase();
+            return English.plural(singleType, 2);
         }
         return type.toString();
     }
