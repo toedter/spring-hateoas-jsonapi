@@ -24,16 +24,22 @@ The result should be:
   "data": [
     {
       "id": "1",
-      "type": "movie",
+      "type": "movies",
       "attributes": {
         "title": "Star Wars"
+      },
+      "links": {
+         "self": "http://movie-db/movies/1"
       }
     },
     {
       "id": "2",
-      "type": "movie",
+      "type": "movies",
       "attributes": {
         "title": "Avengers"
+      },
+      "links": {
+         "self": "http://movie-db/movies/2"
       }
     }
   ],
