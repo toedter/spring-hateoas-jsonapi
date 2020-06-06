@@ -20,13 +20,16 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.hateoas.config.MediaTypeConfigurationProvider;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNullApi;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 class JsonApiMediaTypeConfigurationProvider
   implements MediaTypeConfigurationProvider {
 
   @Override
+  @Nonnull
   public Class<? extends HypermediaMappingInformation> getConfiguration() {
     return JsonApiMediaTypeConfiguration.class;
   }
