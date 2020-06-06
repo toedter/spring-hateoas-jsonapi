@@ -8,6 +8,9 @@
       "type": "movies",
       "attributes": {
         "title": "Star Wars"
+      },
+      "links": {
+        "self": "http://localhost/movies/1"
       }
     },
     {
@@ -15,6 +18,9 @@
       "type": "movies",
       "attributes": {
         "title": "Avengers"
+      },
+      "links": {
+        "self": "http://localhost/movies/2"
       }
     }
   ],

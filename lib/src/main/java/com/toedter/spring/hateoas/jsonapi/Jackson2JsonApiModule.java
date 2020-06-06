@@ -308,7 +308,11 @@ public class Jackson2JsonApiModule extends SimpleModule {
         protected EntityModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
             Links links = doc.getLinks();
             if (resources.size() == 1) {
-                return EntityModel.of(resources.get(0), links);
+                EntityModel<Object> entityModel = EntityModel.of(resources.get(0));
+                if(links != null) {
+                    entityModel.add(links);
+                }
+                return entityModel;
             }
             throw new RuntimeException("Cannot deserialize input to EntityModel");
         }

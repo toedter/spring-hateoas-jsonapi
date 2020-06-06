@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.toedter.jsonapi.example;
+package com.toedter.jsonapi;
 
 import com.fasterxml.jackson.databind.*;
-import com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule;
+import com.toedter.jsonapi.support.Movie;
+import com.toedter.jsonapi.support.MovieRepresentationModel;
 import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
-import org.springframework.hateoas.server.core.Relation;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,30 +37,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 class Jackson2JsonApiIntegrationTest {
 
     private ObjectMapper mapper;
 
-    @Getter
-    @Setter
-    static public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
-
-        private String id;
-        private String type;
-        private String name;
-
-        public MovieRepresentationModel() {
-        }
-
-        public MovieRepresentationModel(Movie movie) {
-            this.id = movie.getId();
-            this.name = movie.getTitle();
-            this.type = "movie-type";
-            add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
-        }
-    }
 
     @BeforeEach
     void setUpModule() {
@@ -97,15 +79,17 @@ class Jackson2JsonApiIntegrationTest {
         CollectionModel<Movie> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
-        compareWithFile(moviesJson, "moviesCollectionModel.json");
+        compareWithFile(moviesJson, "moviesCollectionModelFromResources.json");
     }
 
     @Test
     void shouldRenderMovieCollectionModelWithEntityModels() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         EntityModel<Movie> movie1Model = EntityModel.of(movie1);
+        movie1Model.add(Link.of("http://localhost/movies/1").withSelfRel());
         Movie movie2 = new Movie("2", "Avengers");
         EntityModel<Movie> movie2Model = EntityModel.of(movie2);
+        movie2Model.add(Link.of("http://localhost/movies/2").withSelfRel());
         List<EntityModel<Movie>> movies = new ArrayList<>();
         movies.add(movie1Model);
         movies.add(movie2Model);

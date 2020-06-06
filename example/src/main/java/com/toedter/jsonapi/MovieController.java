@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.toedter.jsonapi.example;
+package com.toedter.jsonapi;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

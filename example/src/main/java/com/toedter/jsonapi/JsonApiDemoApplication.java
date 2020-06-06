@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.toedter.jsonapi.example;
+package com.toedter.jsonapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 @SpringBootApplication
-@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
 public class JsonApiDemoApplication {
-
 
     public static void main(String[] args) {
         SpringApplication.run(JsonApiDemoApplication.class, args);

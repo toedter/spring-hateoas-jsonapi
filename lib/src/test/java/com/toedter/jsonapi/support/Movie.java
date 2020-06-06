@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.toedter.jsonapi.example;
+package com.toedter.jsonapi.support;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@With
 public class Movie {
     private String id;
     private String title;
