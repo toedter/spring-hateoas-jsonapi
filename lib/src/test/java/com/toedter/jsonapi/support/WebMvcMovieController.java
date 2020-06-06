@@ -25,12 +25,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.springframework.hateoas.mediatype.PropertyUtils.getExposedProperties;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Kai Toedter
@@ -67,10 +68,9 @@ public class WebMvcMovieController {
         // Link moviesLink = linkTo(controller.all()).withRel("movies");
 
         Movie movie = MOVIES.get(id);
-        EntityModel<Movie> movieEntityModel = EntityModel.of(
+        return EntityModel.of(
                 movie,
                 selfLink);
-        return movieEntityModel;
     }
 
     @PostMapping("/movies")
@@ -78,6 +78,7 @@ public class WebMvcMovieController {
         int newMovieId = MOVIES.size() + 1;
         String newMovieIdString = "" + newMovieId;
         Movie movieContent = movie.getContent();
+        assert movieContent != null;
         movieContent.setId(newMovieIdString);
         MOVIES.put(newMovieId, movieContent);
 
@@ -103,6 +104,8 @@ public class WebMvcMovieController {
                                                   @PathVariable Integer id) {
 
         Movie newMovie = MOVIES.get(id);
+
+        assert movie.getContent() != null;
 
         if (movie.getContent().getTitle() != null) {
             newMovie = newMovie.withTitle(movie.getContent().getTitle());

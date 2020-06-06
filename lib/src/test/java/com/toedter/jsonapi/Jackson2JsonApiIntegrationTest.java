@@ -19,15 +19,11 @@ import com.fasterxml.jackson.databind.*;
 import com.toedter.jsonapi.support.Movie;
 import com.toedter.jsonapi.support.MovieRepresentationModel;
 import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 class Jackson2JsonApiIntegrationTest {
 
@@ -118,7 +113,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldNotSerializeMovieWithoutId() throws Exception {
+    void shouldNotSerializeMovieWithoutId() {
         Assertions.assertThrows(JsonMappingException.class, () -> {
             Movie movie = new Movie(null, "Star Wars");
             EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
@@ -133,6 +128,7 @@ class Jackson2JsonApiIntegrationTest {
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
         Movie movie = movieEntityModel.getContent();
+        assert movie != null;
         assertThat(movie.getId()).isEqualTo("1");
         assertThat(movie.getTitle()).isEqualTo("Star Wars");
 
@@ -195,6 +191,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie2.getTitle()).isEqualTo("Avengers");
 
         PagedModel.PageMetadata pageMetadata = moviePagedModel.getMetadata();
+        assert pageMetadata != null;
         assertThat(pageMetadata.getSize()).isEqualTo(2);
         assertThat(pageMetadata.getNumber()).isEqualTo(1);
         assertThat(pageMetadata.getTotalPages()).isEqualTo(2);

@@ -22,12 +22,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNullApi;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
 public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     @Override
+    @Nonnull
     public List<MediaType> getMediaTypes() {
         return Collections.singletonList(MediaTypes.JSON_API);
     }
@@ -38,6 +41,7 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
     }
 
     @Override
+    @Nonnull
     public ObjectMapper configureObjectMapper(ObjectMapper mapper) {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);

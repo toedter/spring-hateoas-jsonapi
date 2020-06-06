@@ -28,7 +28,6 @@ import lombok.With;
 import org.atteo.evo.inflector.English;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -83,11 +82,11 @@ public class JsonApiData {
     static Optional<JsonApiData> extractContent(@Nullable Object content, boolean isSingleEntity) {
         Object contentObject = content;
         Links links = null;
-        if (!isSingleEntity && (content instanceof EntityModel || content instanceof RepresentationModel)) {
-            links = ((RepresentationModel) content).getLinks();
+        if (!isSingleEntity && content instanceof RepresentationModel<?>) {
+            links = ((RepresentationModel<?>) content).getLinks();
         }
         if (content instanceof EntityModel) {
-            content = ((EntityModel) content).getContent();
+            content = ((EntityModel<?>) content).getContent();
         }
         if (links != null && links.isEmpty()) {
             links = null;

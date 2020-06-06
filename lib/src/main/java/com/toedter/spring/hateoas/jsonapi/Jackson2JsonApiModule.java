@@ -228,12 +228,13 @@ public class Jackson2JsonApiModule extends SimpleModule {
         public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
             List<Object> resources = doc.getData().stream()
-                    .map(jsonApiData -> convertToResource(jsonApiData))
+                    .map(this::convertToResource)
                     .collect(Collectors.toList());
             return convertToRepresentationModel(resources, doc);
         }
 
         protected Object convertToResource(JsonApiData jsonApiData) {
+            @SuppressWarnings("unchecked")
             Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
             attributes.put("id", jsonApiData.getId());
             attributes.put("type", jsonApiData.getType());
