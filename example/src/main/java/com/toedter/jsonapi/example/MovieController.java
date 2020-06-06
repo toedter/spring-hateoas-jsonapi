@@ -17,6 +17,7 @@
 package com.toedter.jsonapi.example;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,21 @@ import java.util.List;
 @RestController
 public class MovieController {
     @GetMapping("/movies")
-    ResponseEntity<CollectionModel<Movie>> findAll() {
+    ResponseEntity<CollectionModel<EntityModel<Movie>>> findAll() {
         Movie movie1 = new Movie("1", "Star Wars");
+        EntityModel<Movie> movie1Model = EntityModel.of(movie1);
+        movie1Model.add(Links.of(Link.of("http://localhost:8080/movies/1").withSelfRel()));
         Movie movie2 = new Movie("2", "Avengers");
-        List<Movie> movies = new ArrayList<>();
-        movies.add(movie1);
-        movies.add(movie2);
+        EntityModel<Movie> movie2Model = EntityModel.of(movie2).add();
+        movie2Model.add(Links.of(Link.of("http://localhost:8080/movies/2").withSelfRel()));
 
-        CollectionModel<Movie> collectionModel =
-                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost:8080/movies").withSelfRel()));
+        List<EntityModel<Movie>> movies = new ArrayList<>();
+        movies.add(movie1Model);
+        movies.add(movie2Model);
+
+        CollectionModel<EntityModel<Movie>> collectionModel =
+                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+
         return ResponseEntity.ok(collectionModel);
     }
 }

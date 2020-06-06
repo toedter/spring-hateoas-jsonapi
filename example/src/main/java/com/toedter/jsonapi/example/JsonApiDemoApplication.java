@@ -26,7 +26,6 @@ public class JsonApiDemoApplication {
 
 
     public static void main(String[] args) {
-        WebMvcEmployeeController.reset();
         SpringApplication.run(JsonApiDemoApplication.class, args);
     }
 
