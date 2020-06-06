@@ -29,7 +29,7 @@ The result should be:
         "title": "Star Wars"
       },
       "links": {
-         "self": "http://movie-db/movies/1"
+         "self": "https://movie-db.com/movies/1"
       }
     },
     {
@@ -39,12 +39,12 @@ The result should be:
         "title": "Avengers"
       },
       "links": {
-         "self": "http://movie-db/movies/2"
+         "self": "https://movie-db.com/movies/2"
       }
     }
   ],
   "links": {
-    "self": "http://localhost:8080/movies"
+    "self": "https://movie-db.com/movies"
   }
 }
 
