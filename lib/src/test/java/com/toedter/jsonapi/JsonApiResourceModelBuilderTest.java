@@ -67,4 +67,22 @@ public class JsonApiResourceModelBuilderTest extends AbstractJsonApiTest {
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithRelationship.json");
     }
+
+    @Test
+    void shouldBuildSingleMovieModelWithManyRelationships() throws Exception {
+        Movie movie = new Movie("4", "The Matrix");
+        Movie relatedMovie = new Movie("2", "The Matrix 2");
+        Director director1 = new Director("1", "Lana Wachowski");
+        Director director2 = new Director("2", "Lilly Wachowski");
+
+        final RepresentationModel<?> jsonApiModel =
+                builder.entity(movie)
+                        .relationship("directors", EntityModel.of(director1))
+                        .relationship("directors", EntityModel.of(director2))
+                        .relationship("relatedMovies", EntityModel.of(relatedMovie))
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithManyRelationships.json");
+    }
 }
