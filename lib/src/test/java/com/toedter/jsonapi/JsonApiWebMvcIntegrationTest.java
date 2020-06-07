@@ -93,7 +93,7 @@ public class JsonApiWebMvcIntegrationTest {
     @Test
     void shouldCreateNewMovie() throws Exception {
 
-        String input = readFile("create-movie.json");
+        String input = readFile("postMovie.json");
 
         this.mockMvc.perform(post("/movies")
                 .content(input)
@@ -101,8 +101,14 @@ public class JsonApiWebMvcIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
 
-        this.mockMvc.perform(get("/movies/3").accept(JSON_API))
-                .andExpect(status().isOk());
+        String movieJson = this.mockMvc.perform(get("/movies/3")
+                .accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "movieCreated.json");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
