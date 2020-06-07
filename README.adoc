@@ -28,6 +28,14 @@ The result should be:
             "attributes": {
                 "title": "Star Wars"
             },
+            "relationships": {
+                "directors": {
+                    "data": {
+                        "id": "1",
+                        "type": "directors"
+                    }
+                }
+            },
             "links": {
                 "self": "http://localhost:8080/movies/1"
             }
@@ -36,7 +44,23 @@ The result should be:
             "id": "2",
             "type": "movies",
             "attributes": {
-                "title": "Avengers"
+                "title": "The Matrix"
+            },
+            "relationships": {
+                "directors": [
+                    {
+                        "data": {
+                            "id": "2",
+                            "type": "directors"
+                        }
+                    },
+                    {
+                        "data": {
+                            "id": "3",
+                            "type": "directors"
+                        }
+                    }
+                ]
             },
             "links": {
                 "self": "http://localhost:8080/movies/2"

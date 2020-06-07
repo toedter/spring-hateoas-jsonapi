@@ -18,6 +18,8 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -31,7 +33,6 @@ import java.util.List;
  *
  * @author Kai Toedter
  */
-
 public class JsonApiResourceModelBuilder {
     private Object model;
     private Links links = Links.NONE;
@@ -62,6 +63,8 @@ public class JsonApiResourceModelBuilder {
             return relationships;
         }
     }
+
+    private JsonApiResourceModelBuilder() {}
 
     public JsonApiResourceModelBuilder entity(Object entity) {
 
@@ -99,5 +102,9 @@ public class JsonApiResourceModelBuilder {
 
     public RepresentationModel<?> build() {
         return new JsonApiRepresentationModel<>(model, relationships, links);
+    }
+
+    public static JsonApiResourceModelBuilder jsonApiModel() {
+        return new JsonApiResourceModelBuilder();
     }
 }

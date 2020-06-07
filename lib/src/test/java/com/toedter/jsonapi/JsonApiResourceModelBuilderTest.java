@@ -27,13 +27,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
+
 public class JsonApiResourceModelBuilderTest extends AbstractJsonApiTest {
     private JsonApiResourceModelBuilder builder;
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUpModule() {
-        builder = new JsonApiResourceModelBuilder();
+        builder = jsonApiModel();
         JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
         mapper = new ObjectMapper();
         configuration.configureObjectMapper(mapper);

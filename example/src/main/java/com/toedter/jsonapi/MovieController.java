@@ -16,10 +16,8 @@
 
 package com.toedter.jsonapi;
 
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
+import com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder;
+import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,22 +25,36 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
+
 @RestController
 public class MovieController {
     @GetMapping("/movies")
-    ResponseEntity<CollectionModel<EntityModel<Movie>>> findAll() {
+    ResponseEntity<CollectionModel<RepresentationModel<?>>> findAll() {
         Movie movie1 = new Movie("1", "Star Wars");
-        EntityModel<Movie> movie1Model = EntityModel.of(movie1);
-        movie1Model.add(Links.of(Link.of("http://localhost:8080/movies/1").withSelfRel()));
-        Movie movie2 = new Movie("2", "Avengers");
-        EntityModel<Movie> movie2Model = EntityModel.of(movie2).add();
-        movie2Model.add(Links.of(Link.of("http://localhost:8080/movies/2").withSelfRel()));
+        Director director1 = new Director("1", "George Lucas");
+        RepresentationModel<?> movie1Model = jsonApiModel()
+                .entity(movie1)
+                .link(Link.of("http://localhost:8080/movies/1").withSelfRel())
+                .relationship("directors", EntityModel.of(director1))
+                .build();
 
-        List<EntityModel<Movie>> movies = new ArrayList<>();
+        Movie movie2 = new Movie("2", "The Matrix");
+        Director director2 = new Director("2", "Lana Wachowski");
+        Director director3 = new Director("3", "Lilly Wachowski");
+
+        RepresentationModel<?> movie2Model = jsonApiModel()
+                .entity(movie2)
+                .link(Link.of("http://localhost:8080/movies/2").withSelfRel())
+                .relationship("directors", EntityModel.of(director2))
+                .relationship("directors", EntityModel.of(director3))
+                .build();
+
+        List<RepresentationModel<?>> movies = new ArrayList<>();
         movies.add(movie1Model);
         movies.add(movie2Model);
 
-        CollectionModel<EntityModel<Movie>> collectionModel =
+        CollectionModel<RepresentationModel<?>> collectionModel =
                 CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
 
         return ResponseEntity.ok(collectionModel);
