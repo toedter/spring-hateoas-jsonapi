@@ -38,7 +38,6 @@ class Jackson2JsonApiIntegrationTest {
 
     private ObjectMapper mapper;
 
-
     @BeforeEach
     void setUpModule() {
         JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
@@ -47,7 +46,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldRenderSingleMovieEntityModel() throws Exception {
+    void shouldSerializeSingleMovieEntityModel() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
         String movieJson = mapper.writeValueAsString(entityModel);
@@ -56,7 +55,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldRenderSingleMovieRepresentationModel() throws Exception {
+    void shouldSerializeSingleMovieRepresentationModel() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
         String movieJson = mapper.writeValueAsString(movieRepresentationModel);
@@ -65,7 +64,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldRenderMovieCollectionModel() throws Exception {
+    void shouldSerializeMovieCollectionModel() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         Movie movie2 = new Movie("2", "Avengers");
         List<Movie> movies = new ArrayList<>();
@@ -79,7 +78,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldRenderMovieCollectionModelWithEntityModels() throws Exception {
+    void shouldSerializeMovieCollectionModelWithEntityModels() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         EntityModel<Movie> movie1Model = EntityModel.of(movie1);
         movie1Model.add(Link.of("http://localhost/movies/1").withSelfRel());
@@ -97,7 +96,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldRenderMoviePagedModel() throws Exception {
+    void shouldSerializeMoviePagedModel() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         Movie movie2 = new Movie("2", "Avengers");
         List<Movie> movies = new ArrayList<>();
