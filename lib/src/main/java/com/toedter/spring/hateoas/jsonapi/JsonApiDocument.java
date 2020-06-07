@@ -41,8 +41,8 @@ public class JsonApiDocument {
     JsonApiJsonApi jsonapi;
 
     @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
+    // if ne JSON:API primary data is present, we render it as "data":[], which is conform with the spec
     List<JsonApiData> data;
 
     @Getter

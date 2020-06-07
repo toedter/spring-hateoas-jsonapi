@@ -124,7 +124,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(value.getLinks());
+                    .withLinks(getLinksOrNull(value));
 
             provider
                     .findValueSerializer(JsonApiDocument.class)
@@ -142,7 +142,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(value.getLinks());
+                    .withLinks(getLinksOrNull(value));
 
             provider
                     .findValueSerializer(JsonApiDocument.class)
@@ -160,7 +160,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(value.getLinks());
+                    .withLinks(getLinksOrNull(value));
 
             provider
                     .findValueSerializer(JsonApiDocument.class)
@@ -178,7 +178,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(value.getLinks());
+                    .withLinks(getLinksOrNull(value));
 
             if (value.getMetadata() != null) {
                 Map<String, Object> metaMap = new HashMap<>();
@@ -193,6 +193,14 @@ public class Jackson2JsonApiModule extends SimpleModule {
                     .findValueSerializer(JsonApiDocument.class)
                     .serialize(doc, gen, provider);
         }
+    }
+
+    static Links getLinksOrNull(RepresentationModel<?> representationModel) {
+        Links links = representationModel.getLinks();
+        if(links != null && links.isEmpty()) {
+            links = null;
+        }
+        return links;
     }
 
     static class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
