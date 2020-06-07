@@ -7,6 +7,14 @@
     "type": "movies",
     "attributes": {
       "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "1",
+          "type": "directors"
+        }
+      }
     }
   }
 }

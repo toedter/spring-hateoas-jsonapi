@@ -25,7 +25,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
-import org.atteo.evo.inflector.English;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 
@@ -41,6 +40,8 @@ public class JsonApiData {
     String type;
     @JsonIgnoreProperties(value = {"id", "_type"})
     Object attributes;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    Object relationships;
     Links links;
 
     @JsonCreator
@@ -48,16 +49,18 @@ public class JsonApiData {
             @JsonProperty("id") Object id,
             @JsonProperty("type") String type,
             @JsonProperty("attributes") Object attributes,
+            @JsonProperty("relationships") Object relationships,
             @JsonProperty("links") Links links
     ) {
         this.id = id;
         this.type = type;
         this.attributes = attributes;
+        this.relationships = relationships;
         this.links = links;
     }
 
     public JsonApiData() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     static List<JsonApiData> extractCollectionContent(@Nullable RepresentationModel<?> representationModel) {
@@ -80,55 +83,63 @@ public class JsonApiData {
     }
 
     static Optional<JsonApiData> extractContent(@Nullable Object content, boolean isSingleEntity) {
-        Object contentObject = content;
+
         Links links = null;
-        if (!isSingleEntity && content instanceof RepresentationModel<?>) {
+        Object relationships = null;
+
+        if (content instanceof RepresentationModel<?>) {
             links = ((RepresentationModel<?>) content).getLinks();
         }
+
         if (content instanceof EntityModel) {
+            if (content instanceof JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) {
+                relationships = ((JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) content).getRelationships();
+            }
             content = ((EntityModel<?>) content).getContent();
         }
-        if (links != null && links.isEmpty()) {
+
+        Object id = null;
+        try {
+            id = JsonApiResource.getId(content);
+        } catch (Exception e) {
+            // will lead to "data":[], which is ok with the spec
+            if (content == null
+                    || content.getClass().getDeclaredFields().length == 0
+                    || (links != null && content.getClass().getDeclaredFields().length == 1)) {
+                return Optional.empty();
+            }
+            // we have fields, but no id field
+            throw e;
+        }
+
+        if (isSingleEntity || (links != null && links.isEmpty())) {
             links = null;
         }
-        ObjectMapper mapper = new ObjectMapper();
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> attributeMap = mapper.convertValue(contentObject, Map.class);
+        String jsonApiType = JsonApiResource.getType(content);
 
         // if the content is a RepresentationModel itself,
         // we have to convert it, otherwise and infinite recursion would happen,
         // since this is part of the serialization of a RepresentationModel
-        if (contentObject instanceof RepresentationModel<?>) {
+        if (content instanceof RepresentationModel<?>) {
+            ObjectMapper mapper = new ObjectMapper();
+            @SuppressWarnings("unchecked")
+            Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
             attributeMap.remove("links");
-            contentObject = attributeMap;
+            content = attributeMap;
         }
-        Object finalContentObject = contentObject;
+
+        Object finalContentObject = content;
         Links finalLinks = links;
+        Object finalId = id;
+        Object finalRelationships = relationships;
         return Optional.ofNullable(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
-                        .withId(getId(attributeMap))
-                        .withType(getType(attributeMap, it))
+                        .withId(finalId)
+                        .withType(jsonApiType)
                         .withAttributes(finalContentObject)
+                        .withRelationships(finalRelationships)
                         .withLinks(finalLinks));
-    }
-
-    static Object getId(Map<String, Object> attributeMap) {
-        Object id = attributeMap.get("id");
-        if (id == null) {
-            throw new RuntimeException("JSON:API resource must have property \"id\".");
-        }
-        return id;
-    }
-
-    static String getType(Map<String, Object> attributeMap, Object content) {
-        Object type = attributeMap.get("_type");
-        if (type == null) {
-            String singleType = content.getClass().getSimpleName().toLowerCase();
-            return English.plural(singleType, 2);
-        }
-        return type.toString();
     }
 
     private static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(

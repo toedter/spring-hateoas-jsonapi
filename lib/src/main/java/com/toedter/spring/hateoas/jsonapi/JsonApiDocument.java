@@ -42,7 +42,7 @@ public class JsonApiDocument {
 
     @Getter
     @With(AccessLevel.PACKAGE)
-    // if ne JSON:API primary data is present, we render it as "data":[], which is conform with the spec
+    // if no JSON:API primary data is present, we render it as "data":[], which is conform with the spec
     List<JsonApiData> data;
 
     @Getter

@@ -8,5 +8,8 @@
     "attributes": {
       "title": "Star Wars"
     }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
   }
 }

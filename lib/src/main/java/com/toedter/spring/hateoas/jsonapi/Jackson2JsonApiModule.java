@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -121,6 +122,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         @Override
         public void serialize(EntityModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            final JsonStreamContext outputContext = gen.getOutputContext();
+            final boolean b = outputContext.inRoot();
+            final int currentIndex = outputContext.getCurrentIndex();
+
             JsonApiDocument doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
@@ -157,10 +162,18 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
         @Override
         public void serialize(CollectionModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            JsonApiDocument doc = new JsonApiDocument()
-                    .withJsonapi(new JsonApiJsonApi())
-                    .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(getLinksOrNull(value));
+            JsonApiDocument doc = null;
+            final JsonStreamContext outputContext = gen.getOutputContext();
+            if (outputContext.inRoot()) {
+                doc = new JsonApiDocument()
+                        .withJsonapi(new JsonApiJsonApi())
+                        .withData(JsonApiData.extractCollectionContent(value))
+                        .withLinks(getLinksOrNull(value));
+
+            } else {
+                doc = new JsonApiDocument()
+                        .withData(JsonApiData.extractCollectionContent(value));
+            }
 
             provider
                     .findValueSerializer(JsonApiDocument.class)
@@ -197,7 +210,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
     static Links getLinksOrNull(RepresentationModel<?> representationModel) {
         Links links = representationModel.getLinks();
-        if(links != null && links.isEmpty()) {
+        if (links != null && links.isEmpty()) {
             links = null;
         }
         return links;
@@ -318,7 +331,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             Links links = doc.getLinks();
             if (resources.size() == 1) {
                 EntityModel<Object> entityModel = EntityModel.of(resources.get(0));
-                if(links != null) {
+                if (links != null) {
                     entityModel.add(links);
                 }
                 return entityModel;

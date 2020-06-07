@@ -59,7 +59,7 @@ class Jackson2JsonApiIntegrationTest {
         EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
         String movieJson = mapper.writeValueAsString(entityModel);
 
-        compareWithFile(movieJson, "movieEntityModel.json");
+        compareWithFile(movieJson, "movieEntityModelWithLinks.json");
     }
 
     @Test
@@ -132,7 +132,7 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void shouldDeserializeSingleMovieEntityModel() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
-        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
         Movie movie = movieEntityModel.getContent();

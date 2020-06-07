@@ -50,87 +50,16 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 /**
  * @author Kai Toedter
  */
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration
-public class JsonApiWebMvcIntegrationTest {
-    @Autowired
-    WebApplicationContext context;
-
-    MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        this.mockMvc = webAppContextSetup(this.context).build();
-        WebMvcMovieController.reset();
-    }
-
-    @Test
-    void shouldGetsingleMovie() throws Exception {
-        String movieJson = this.mockMvc
-                .perform(get("/movies/1").accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieEntityModelWithLinks.json");
-    }
-
-    @Test
-    void shouldGetcollectionOfMovies() throws Exception {
-
-        String moviesJson = this.mockMvc
-                .perform(get("/movies").accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(moviesJson, "moviesCollectionModel.json");
-    }
-
-    @Test
-    void shouldCreateNewMovie() throws Exception {
-
-        String input = readFile("postMovie.json");
-
-        this.mockMvc.perform(post("/movies")
-                .content(input)
-                .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/movies/3")
-                .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieCreated.json");
-    }
-
-    private void compareWithFile(String json, String fileName) throws Exception {
+abstract class AbstractJsonApiTest {
+    void compareWithFile(String json, String fileName) throws Exception {
         String fileContent = readFile(fileName);
         assertThat(json).isEqualTo(fileContent);
     }
 
-    private String readFile(String fileName) throws IOException {
+    String readFile(String fileName) throws IOException {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         return objectMapper.readValue(file, JsonNode.class).toString();
-    }
-
-    @Configuration
-    @WebAppConfiguration
-    @EnableWebMvc
-    @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
-    static class TestConfig {
-        @Bean
-        WebMvcMovieController movieController() {
-            return new WebMvcMovieController();
-        }
     }
 }
