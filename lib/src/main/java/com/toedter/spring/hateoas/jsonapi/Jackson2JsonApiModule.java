@@ -237,7 +237,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
             @SuppressWarnings("unchecked")
             Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
             attributes.put("id", jsonApiData.getId());
-            attributes.put("type", jsonApiData.getType());
+            attributes.put("_type", jsonApiData.getType());
             JavaType rootType = JacksonHelper.findRootType(this.contentType);
             return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         }

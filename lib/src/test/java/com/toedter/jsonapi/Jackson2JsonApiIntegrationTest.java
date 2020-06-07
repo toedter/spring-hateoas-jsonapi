@@ -18,6 +18,7 @@ package com.toedter.jsonapi;
 import com.fasterxml.jackson.databind.*;
 import com.toedter.jsonapi.support.Movie;
 import com.toedter.jsonapi.support.MovieRepresentationModel;
+import com.toedter.jsonapi.support.MovieWithLongId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -140,13 +141,14 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void shouldDeserializeSingleMovieRepresentationModel() throws Exception {
         JavaType movieRepresentationModelType =
-                mapper.getTypeFactory().constructParametricType(RepresentationModel.class, MovieRepresentationModel.class);
+                mapper.getTypeFactory()
+                        .constructParametricType(RepresentationModel.class, MovieRepresentationModel.class);
         File file = new ClassPathResource("movieRepresentationModel.json", getClass()).getFile();
         MovieRepresentationModel movieRepresentationModel = mapper.readValue(file, movieRepresentationModelType);
 
         assertThat(movieRepresentationModel.getId()).isEqualTo("1");
         assertThat(movieRepresentationModel.getName()).isEqualTo("Star Wars");
-        assertThat(movieRepresentationModel.getType()).isEqualTo("movie-type");
+        assertThat(movieRepresentationModel.get_type()).isEqualTo("movie-type");
 
         Links links = movieRepresentationModel.getLinks();
         assertThat(links.hasSingleLink()).isTrue();
@@ -196,6 +198,16 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(pageMetadata.getNumber()).isEqualTo(1);
         assertThat(pageMetadata.getTotalPages()).isEqualTo(2);
         assertThat(pageMetadata.getTotalElements()).isEqualTo(2);
+    }
+
+    @Test
+    void shouldSerializeMoviesWithLongId() throws Exception {
+        MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
+        EntityModel<MovieWithLongId> entityModel =
+                EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
+        String movieJson = mapper.writeValueAsString(entityModel);
+
+        compareWithFile(movieJson, "movieEntityModelWithLongId.json");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

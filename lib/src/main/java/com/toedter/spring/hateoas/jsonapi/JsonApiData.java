@@ -39,7 +39,7 @@ import java.util.*;
 public class JsonApiData {
     Object id;
     String type;
-    @JsonIgnoreProperties(value = {"id", "type"})
+    @JsonIgnoreProperties(value = {"id", "_type"})
     Object attributes;
     Links links;
 
@@ -123,7 +123,7 @@ public class JsonApiData {
     }
 
     static String getType(Map<String, Object> attributeMap, Object content) {
-        Object type = attributeMap.get("type");
+        Object type = attributeMap.get("_type");
         if (type == null) {
             String singleType = content.getClass().getSimpleName().toLowerCase();
             return English.plural(singleType, 2);

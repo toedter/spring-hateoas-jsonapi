@@ -16,27 +16,17 @@
 
 package com.toedter.jsonapi.support;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.RepresentationModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
-@Getter
-@Setter
-public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
-
-    private String id;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithLongId {
+    private long id;
+    private String title;
     private String _type;
-    private String name;
-
-    public MovieRepresentationModel() {
-    }
-
-    public MovieRepresentationModel(Movie movie) {
-        this.id = movie.getId();
-        this.name = movie.getTitle();
-        this._type = "movie-type";
-        add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
-    }
 }
