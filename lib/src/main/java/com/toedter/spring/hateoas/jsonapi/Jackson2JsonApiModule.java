@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.hateoas.*;
 
@@ -35,32 +36,32 @@ public class Jackson2JsonApiModule extends SimpleModule {
                         "com.toedter",
                         "jsonapi-spring-hateoas"));
 
-        addSerializer(new JsonApiEntityModelSerializer());
-        addSerializer(new JsonApiRepresentationModelSerializer());
-        addSerializer(new JsonApiCollectionModelSerializer());
-        addSerializer(new JsonApiPagedModelSerializer());
-        addSerializer(new JsonApiLinksSerializer());
-
-        addDeserializer(Links.class, new JsonApiLinksDeserializer());
-
         setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
         setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
         setMixInAnnotation(CollectionModel.class, CollectionModelMixin.class);
         setMixInAnnotation(PagedModel.class, PagedModelMixin.class);
+
+        // Links has no default constructor so we cannot use a Mixin
+        addSerializer(Links.class, new JsonApiLinksSerializer());
+        addDeserializer(Links.class, new JsonApiLinksDeserializer());
     }
 
+    @JsonSerialize(using = JsonApiEntityModelSerializer.class)
     @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
     abstract static class EntityModelMixin<T> extends EntityModel<T> {
     }
 
+    @JsonSerialize(using = JsonApiRepresentationModelSerializer.class)
     @JsonDeserialize(using = JsonApiRepresentationModelDeserializer.class)
     abstract static class RepresentationModelMixin extends RepresentationModel<RepresentationModelMixin> {
     }
 
+    @JsonSerialize(using = JsonApiCollectionModelSerializer.class)
     @JsonDeserialize(using = JsonApiCollectionModelDeserializer.class)
     abstract static class CollectionModelMixin<T> extends CollectionModel<T> {
     }
 
+    @JsonSerialize(using = JsonApiPagedModelSerializer.class)
     @JsonDeserialize(using = JsonApiPagedModelDeserializer.class)
     abstract static class PagedModelMixin<T> extends PagedModel<T> {
     }
