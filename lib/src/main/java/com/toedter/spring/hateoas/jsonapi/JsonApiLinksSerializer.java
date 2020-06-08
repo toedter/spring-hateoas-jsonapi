@@ -51,13 +51,14 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     }
 
     private Map<String, Object> getAttributes(Link link) {
-        @SuppressWarnings("unchecked")
-        final Map<String, Object> attributeMap = new ObjectMapper().convertValue(link, Map.class);
+        @SuppressWarnings("unchecked") final Map<String, Object> attributeMap = new ObjectMapper().convertValue(link, Map.class);
         attributeMap.remove("rel");
         attributeMap.remove("href");
         attributeMap.remove("template");
         attributeMap.remove("affordances");
-
+        if (link.isTemplated()) {
+            attributeMap.put("isTemplated", true);
+        }
         return attributeMap;
     }
 }
