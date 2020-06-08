@@ -12,7 +12,10 @@ This project is at a very early stage and work in progress, please stay tuned.
 
 * Make sure Java 8 or later JDK is installed
 * Open a terminal and invoke `./gradlew build bootrun` (just `gradlew` under Windows)
-* Call endpoint http://localhost:8080/movies with header `accept application/vnd.api+json`
+* Call endpoint link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1++]
+ with header `accept application/vnd.api+json`
+
+
 
 The result should be:
 
@@ -21,54 +24,36 @@ The result should be:
     "jsonapi": {
         "version": "1.0"
     },
-    "data": [
-        {
-            "id": "1",
-            "type": "movies",
-            "attributes": {
-                "title": "Star Wars"
-            },
-            "relationships": {
-                "directors": {
-                    "data": {
-                        "id": "1",
-                        "type": "directors"
-                    }
-                }
-            },
-            "links": {
-                "self": "http://localhost:8080/movies/1"
-            }
+    "data": {
+        "id": "1",
+        "type": "movies",
+        "attributes": {
+            "title": "The Shawshank Redemption",
+            "year": 1994,
+            "imdbId": "tt0111161",
+            "rating": 9.3,
+            "rank": 1
         },
-        {
-            "id": "2",
-            "type": "movies",
-            "attributes": {
-                "title": "The Matrix"
-            },
-            "relationships": {
-                "directors": [
-                    {
-                        "data": {
-                            "id": "2",
-                            "type": "directors"
-                        }
-                    },
-                    {
-                        "data": {
-                            "id": "3",
-                            "type": "directors"
-                        }
-                    }
-                ]
-            },
-            "links": {
-                "self": "http://localhost:8080/movies/2"
+        "links": {
+            "self": "http://localhost:8080/api/movies/1",
+            "directors": {
+                "href": "http://localhost:8080/api/directors/2",
+                "meta": {
+                    "name": "Frank Darabont"
+                }
             }
         }
-    ],
+    },
     "links": {
-        "self": "http://localhost/movies"
+        "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=1",
+        "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",
+        "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
+    },
+    "meta": {
+        "page-total-pages": 250,
+        "page-size": 1,
+        "page-number": 0,
+        "page-total-elements": 250
     }
 }
 

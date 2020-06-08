@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -33,12 +34,12 @@ public class MovieController {
 
     @GetMapping("/movies")
     ResponseEntity<CollectionModel<MovieRepresentationModel>> findAll(
-            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
-        final int finalSize = size;
-        final int finalPage = page;
-        final PageRequest pageRequest = PageRequest.of(finalPage, finalSize);
+        final int size = pageSize;
+        final int page = pageNumber;
+        final PageRequest pageRequest = PageRequest.of(page, size);
 
         final Page<Movie> pagedResult = repository.findAll(pageRequest);
 
@@ -48,7 +49,7 @@ public class MovieController {
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
-        Link templatedLink = new Link(selfLink.getHref() + "{?size,page}").withSelfRel();
+        Link templatedLink = new Link(selfLink.getHref() + "?page[number]=" + page +",page[size]=" + size).withSelfRel();
 
         final Affordance newMovieAffordance =
                 afford(methodOn(MovieController.class).newMovie(null));
@@ -60,23 +61,23 @@ public class MovieController {
 
         final Pageable prev = pageRequest.previous();
         if (prev.getPageNumber() < page) {
-            Link prevLink = new Link(selfLink.getHref() + "?page=" + prev.getPageNumber() + "&size=" + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
+            Link prevLink = new Link(selfLink.getHref() + "?page[number]=" + prev.getPageNumber() + "&page[size]=" + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
             entityModels.add(prevLink);
         }
 
         final Pageable next = pageRequest.next();
         if (next.getPageNumber() > page && next.getPageNumber() < pagedResult.getTotalPages()) {
-            Link nextLink = new Link(selfLink.getHref() + "?page=" + next.getPageNumber() + "&size=" + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
+            Link nextLink = new Link(selfLink.getHref() + "?page[number]=" + next.getPageNumber() + "&page[size]=" + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
             entityModels.add(nextLink);
         }
 
         if (page > 0) {
-            Link firstLink = new Link(selfLink.getHref() + "?page=0&size=" + size).withRel(IanaLinkRelations.FIRST);
+            Link firstLink = new Link(selfLink.getHref() + "?page[number]=0&page[size]=" + size).withRel(IanaLinkRelations.FIRST);
             entityModels.add(firstLink);
         }
 
         if (page < pagedResult.getTotalPages() - 1) {
-            Link lastLink = new Link(selfLink.getHref() + "?page=" + (pagedResult.getTotalPages() - 1) + "&size=" + size).withRel(IanaLinkRelations.LAST);
+            Link lastLink = new Link(selfLink.getHref() + "?page[number]=" + (pagedResult.getTotalPages() - 1) + "&page[size]=" + size).withRel(IanaLinkRelations.LAST);
             entityModels.add(lastLink);
         }
 
@@ -112,7 +113,7 @@ public class MovieController {
 
     private Link getMoviesLink() {
         Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-        return new Link(moviesLink.getHref() + "{?size,page}").withRel("movies");
+        return new Link(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
     }
 
     @PutMapping("/movies/{id}")
