@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNullApi;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;

@@ -20,8 +20,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.RepresentationModel;
 
 abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
 
@@ -51,13 +49,5 @@ abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
     @Override
     protected ContainerSerializer<?> _withValueTypeSerializer(TypeSerializer vts) {
         return null;
-    }
-
-    Links getLinksOrNull(RepresentationModel<?> representationModel) {
-        Links links = representationModel.getLinks();
-        if (links.isEmpty()) {
-            links = null;
-        }
-        return links;
     }
 }

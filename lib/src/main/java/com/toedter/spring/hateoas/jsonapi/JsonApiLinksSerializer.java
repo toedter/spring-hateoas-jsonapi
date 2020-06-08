@@ -51,6 +51,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     }
 
     private Map<String, Object> getAttributes(Link link) {
+        @SuppressWarnings("unchecked")
         final Map<String, Object> attributeMap = new ObjectMapper().convertValue(link, Map.class);
         attributeMap.remove("rel");
         attributeMap.remove("href");

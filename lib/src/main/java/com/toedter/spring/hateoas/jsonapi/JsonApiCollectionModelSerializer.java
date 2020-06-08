@@ -16,35 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonStreamContext;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
 
-import java.io.IOException;
-
-class JsonApiCollectionModelSerializer extends AbstractJsonApiSerializer<CollectionModel<?>> {
+class JsonApiCollectionModelSerializer extends AbstractJsonApiRepresentationModelSerializer<CollectionModel<?>> {
     public JsonApiCollectionModelSerializer() {
         super(CollectionModel.class, false);
-    }
-
-    @Override
-    public void serialize(CollectionModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        JsonApiDocument doc = null;
-        final JsonStreamContext outputContext = gen.getOutputContext();
-        if (outputContext.inRoot()) {
-            doc = new JsonApiDocument()
-                    .withJsonapi(new JsonApiJsonApi())
-                    .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(getLinksOrNull(value));
-
-        } else {
-            doc = new JsonApiDocument()
-                    .withData(JsonApiData.extractCollectionContent(value));
-        }
-
-        provider
-                .findValueSerializer(JsonApiDocument.class)
-                .serialize(doc, gen, provider);
     }
 }

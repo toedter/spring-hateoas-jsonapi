@@ -16,29 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonStreamContext;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.EntityModel;
 
-import java.io.IOException;
-
-class JsonApiEntityModelSerializer extends AbstractJsonApiSerializer<EntityModel<?>> {
+class JsonApiEntityModelSerializer extends AbstractJsonApiRepresentationModelSerializer<EntityModel<?>> {
     public JsonApiEntityModelSerializer() {
         super(EntityModel.class, false);
-    }
-
-    @Override
-    public void serialize(EntityModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        final JsonStreamContext outputContext = gen.getOutputContext();
-
-        JsonApiDocument doc = new JsonApiDocument()
-                .withJsonapi(new JsonApiJsonApi())
-                .withData(JsonApiData.extractCollectionContent(value))
-                .withLinks(getLinksOrNull(value));
-
-        provider
-                .findValueSerializer(JsonApiDocument.class)
-                .serialize(doc, gen, provider);
     }
 }

@@ -16,26 +16,18 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.PagedModel;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-class JsonApiPagedModelSerializer extends AbstractJsonApiSerializer<PagedModel<?>> {
+class JsonApiPagedModelSerializer extends AbstractJsonApiRepresentationModelSerializer<PagedModel<?>> {
     public JsonApiPagedModelSerializer() {
         super(PagedModel.class, false);
     }
 
     @Override
-    public void serialize(PagedModel<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        JsonApiDocument doc = new JsonApiDocument()
-                .withJsonapi(new JsonApiJsonApi())
-                .withData(JsonApiData.extractCollectionContent(value))
-                .withLinks(getLinksOrNull(value));
-
+    protected JsonApiDocument postProcess(PagedModel<?> value, JsonApiDocument doc) {
         if (value.getMetadata() != null) {
             Map<String, Object> metaMap = new HashMap<>();
             metaMap.put(Jackson2JsonApiModule.PAGE_NUMBER, value.getMetadata().getNumber());
@@ -44,9 +36,6 @@ class JsonApiPagedModelSerializer extends AbstractJsonApiSerializer<PagedModel<?
             metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_PAGES, value.getMetadata().getTotalPages());
             doc = doc.withMeta(metaMap);
         }
-
-        provider
-                .findValueSerializer(JsonApiDocument.class)
-                .serialize(doc, gen, provider);
+        return doc;
     }
 }

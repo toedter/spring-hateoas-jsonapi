@@ -20,7 +20,6 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.hateoas.config.MediaTypeConfigurationProvider;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNullApi;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

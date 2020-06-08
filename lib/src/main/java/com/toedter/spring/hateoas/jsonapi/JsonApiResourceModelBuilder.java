@@ -18,8 +18,6 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.*;
-import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
-import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
