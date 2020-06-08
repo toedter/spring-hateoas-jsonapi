@@ -55,7 +55,7 @@ abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
 
     Links getLinksOrNull(RepresentationModel<?> representationModel) {
         Links links = representationModel.getLinks();
-        if (links != null && links.isEmpty()) {
+        if (links.isEmpty()) {
             links = null;
         }
         return links;
