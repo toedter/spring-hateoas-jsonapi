@@ -36,7 +36,7 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonApiData {
-    Object id;
+    String id;
     String type;
     @JsonIgnoreProperties(value = {"id", "_type"})
     Object attributes;
@@ -46,7 +46,7 @@ public class JsonApiData {
 
     @JsonCreator
     public JsonApiData(
-            @JsonProperty("id") Object id,
+            @JsonProperty("id") String id,
             @JsonProperty("type") String type,
             @JsonProperty("attributes") Object attributes,
             @JsonProperty("relationships") Object relationships,
@@ -99,7 +99,7 @@ public class JsonApiData {
             content = ((EntityModel<?>) content).getContent();
         }
 
-        Object id = null;
+        String id = null;
         try {
             id = JsonApiResource.getId(content);
         } catch (Exception e) {
@@ -131,7 +131,7 @@ public class JsonApiData {
 
         Object finalContentObject = content;
         Links finalLinks = links;
-        Object finalId = id;
+        String finalId = id;
         Object finalRelationships = relationships;
         return Optional.ofNullable(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))

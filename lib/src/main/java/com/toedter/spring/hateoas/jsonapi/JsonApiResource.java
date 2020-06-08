@@ -50,7 +50,7 @@ public class JsonApiResource {
         this(null, null);
     }
 
-    static Object getId(Object object) {
+    static String getId(Object object) {
         try {
             Field field = object.getClass().getDeclaredField("id");
             field.setAccessible(true);
@@ -58,7 +58,7 @@ public class JsonApiResource {
             if (id == null) {
                 throw new RuntimeException("JSON:API resource object must have property \"id\".");
             }
-            return id;
+            return id.toString();
         } catch (Exception e) {
             throw new RuntimeException("JSON:API resource object must have property \"id\".");
         }
