@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
@@ -40,6 +42,8 @@ public class JsonApiResourceModelBuilder {
     static class JsonApiRepresentationModel<T> extends EntityModel<T> {
 
         private final T entity;
+        @JsonIgnore
+        @Getter
         private final HashMap<String, List<JsonApiRelationship>> relationships;
 
         public JsonApiRepresentationModel(
