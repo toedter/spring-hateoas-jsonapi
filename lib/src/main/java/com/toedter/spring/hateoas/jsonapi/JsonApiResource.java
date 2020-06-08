@@ -34,6 +34,9 @@ import java.lang.reflect.Field;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonApiResource {
+    public static final String JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID =
+            "JSON:API resource object must have property \"id\".";
+
     Object id;
     String type;
 
@@ -56,11 +59,11 @@ public class JsonApiResource {
             field.setAccessible(true);
             final Object id = field.get(object);
             if (id == null) {
-                throw new RuntimeException("JSON:API resource object must have property \"id\".");
+                throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
             }
             return id.toString();
         } catch (Exception e) {
-            throw new RuntimeException("JSON:API resource object must have property \"id\".");
+            throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
     }
 
@@ -70,10 +73,9 @@ public class JsonApiResource {
             field.setAccessible(true);
             return field.get(object).toString();
         } catch (Exception e) {
-            // ignore and use default conversion
+            // pluralize class name
+            String singleType = object.getClass().getSimpleName().toLowerCase();
+            return English.plural(singleType, 2);
         }
-
-        String singleType = object.getClass().getSimpleName().toLowerCase();
-        return English.plural(singleType, 2);
     }
 }
