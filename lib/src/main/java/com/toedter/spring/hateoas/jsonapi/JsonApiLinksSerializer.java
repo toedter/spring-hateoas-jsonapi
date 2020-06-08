@@ -17,11 +17,13 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 
 import java.io.IOException;
+import java.util.Map;
 
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     public JsonApiLinksSerializer() {
@@ -32,8 +34,29 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     public void serialize(Links value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartObject();
         for (Link link : value) {
-            gen.writeStringField(link.getRel().value(), link.getHref());
+            if (isSimpleLink(link)) {
+                gen.writeStringField(link.getRel().value(), link.getHref());
+            } else {
+                gen.writeObjectFieldStart(link.getRel().value());
+                gen.writeStringField("href", link.getHref());
+                gen.writeObjectField("meta", getAttributes(link));
+                gen.writeEndObject();
+            }
         }
         gen.writeEndObject();
+    }
+
+    private boolean isSimpleLink(Link link) {
+        return "self".equals(link.getRel().value()) || getAttributes(link).size() == 0;
+    }
+
+    private Map<String, Object> getAttributes(Link link) {
+        final Map<String, Object> attributeMap = new ObjectMapper().convertValue(link, Map.class);
+        attributeMap.remove("rel");
+        attributeMap.remove("href");
+        attributeMap.remove("template");
+        attributeMap.remove("affordances");
+
+        return attributeMap;
     }
 }

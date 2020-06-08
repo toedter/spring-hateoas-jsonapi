@@ -1,0 +1,21 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "id": "1",
+    "type": "long-movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "related": {
+      "href": "http://localhost/movies/1",
+      "meta": {
+        "title": "link title",
+        "name": "link name"
+      }
+    }
+  }
+}

@@ -217,6 +217,19 @@ class Jackson2JsonApiIntegrationTest {
         compareWithFile(movieJson, "movieEntityModelWithLongId.json");
     }
 
+    @Test
+    void shouldSerializeMovieWithComplexLink() throws Exception {
+        MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
+        EntityModel<MovieWithLongId> entityModel =
+                EntityModel.of(movie)
+                        .add(Links.of(Link.of("http://localhost/movies/1")
+                                .withRel("related")
+                        .withName("link name")
+                        .withTitle("link title")));
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
