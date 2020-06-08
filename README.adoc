@@ -32,10 +32,20 @@ The result should be:
             "year": 1994,
             "imdbId": "tt0111161",
             "rating": 9.3,
-            "rank": 1
+            "rank": 1,
+            "thumb": "/static/movie-data/thumbs/tt0111161.jpg"
+        },
+        "relationships": {
+            "directors": {
+                "data": {
+                    "id": "2",
+                    "type": "directors"
+                }
+            }
         },
         "links": {
             "self": "http://localhost:8080/api/movies/1",
+            "movies": "http://localhost:8080/api/movies{?page[number],page[size]}",
             "directors": {
                 "href": "http://localhost:8080/api/directors/2",
                 "meta": {

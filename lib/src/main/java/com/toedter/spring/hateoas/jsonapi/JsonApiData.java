@@ -94,7 +94,6 @@ public class JsonApiData {
         if (content instanceof EntityModel) {
             if (content instanceof JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) {
                 relationships = ((JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) content).getRelationships();
-                // content = ((JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) content).getContent();
             }
             content = ((EntityModel<?>) content).getContent();
         }

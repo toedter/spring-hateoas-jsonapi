@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
@@ -33,7 +34,7 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    ResponseEntity<CollectionModel<MovieRepresentationModel>> findAll(
+    ResponseEntity<CollectionModel<? extends RepresentationModel<?>>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
@@ -43,9 +44,8 @@ public class MovieController {
 
         final Page<Movie> pagedResult = repository.findAll(pageRequest);
 
-        List<MovieRepresentationModel> movieResources = StreamSupport.stream(pagedResult.spliterator(), false)
-                .map(movie -> new MovieRepresentationModel(movie,
-                        linkTo(methodOn(MovieController.class).findOne(movie.getId())).withSelfRel()))
+        List<? extends RepresentationModel<?>> movieResources = StreamSupport.stream(pagedResult.spliterator(), false)
+                .map(movieModelAssembler::toJsonApiModel)
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
@@ -56,8 +56,8 @@ public class MovieController {
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(pagedResult.getSize(), pagedResult.getNumber(), pagedResult.getTotalElements(), pagedResult.getTotalPages());
-        final PagedModel<MovieRepresentationModel> entityModels =
-                new PagedModel<>(movieResources, pageMetadata, templatedLink.andAffordance(newMovieAffordance));
+        final PagedModel<? extends RepresentationModel<?>> entityModels =
+                PagedModel.of(movieResources, pageMetadata, templatedLink.andAffordance(newMovieAffordance));
 
         final Pageable prev = pageRequest.previous();
         if (prev.getPageNumber() < page) {
@@ -104,16 +104,17 @@ public class MovieController {
     }
 
     @GetMapping("/movies/{id}")
-    public ResponseEntity<MovieRepresentationModel> findOne(@PathVariable Long id) {
+    public ResponseEntity<? extends RepresentationModel<?>> findOne(@PathVariable Long id) {
+
         return repository.findById(id)
-                .map(movie -> movieModelAssembler.toModel(movie))
-                .map(ResponseEntity::ok) //
+                .map(movie -> movieModelAssembler.toJsonApiModel(movie))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     private Link getMoviesLink() {
         Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-        return new Link(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
+        return Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
     }
 
     @PutMapping("/movies/{id}")
