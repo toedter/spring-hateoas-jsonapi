@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.toedter.jsonapi.example.movie;
 
 import com.toedter.jsonapi.example.RootController;
@@ -49,45 +65,42 @@ public class MovieController {
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
-        Link templatedLink = new Link(selfLink.getHref() + "?page[number]=" + page +",page[size]=" + size).withSelfRel();
-
-        final Affordance newMovieAffordance =
-                afford(methodOn(MovieController.class).newMovie(null));
+        Link templatedLink = Link.of(selfLink.getHref() + "?page[number]=" + page +",page[size]=" + size).withSelfRel();
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(pagedResult.getSize(), pagedResult.getNumber(), pagedResult.getTotalElements(), pagedResult.getTotalPages());
-        final PagedModel<? extends RepresentationModel<?>> entityModels =
-                PagedModel.of(movieResources, pageMetadata, templatedLink.andAffordance(newMovieAffordance));
+        final PagedModel<? extends RepresentationModel<?>> pagedModel =
+                PagedModel.of(movieResources, pageMetadata, templatedLink);
 
         final Pageable prev = pageRequest.previous();
         if (prev.getPageNumber() < page) {
-            Link prevLink = new Link(selfLink.getHref() + "?page[number]=" + prev.getPageNumber() + "&page[size]=" + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
-            entityModels.add(prevLink);
+            Link prevLink = Link.of(selfLink.getHref() + "?page[number]=" + prev.getPageNumber() + "&page[size]=" + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
+            pagedModel.add(prevLink);
         }
 
         final Pageable next = pageRequest.next();
         if (next.getPageNumber() > page && next.getPageNumber() < pagedResult.getTotalPages()) {
-            Link nextLink = new Link(selfLink.getHref() + "?page[number]=" + next.getPageNumber() + "&page[size]=" + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
-            entityModels.add(nextLink);
+            Link nextLink = Link.of(selfLink.getHref() + "?page[number]=" + next.getPageNumber() + "&page[size]=" + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
+            pagedModel.add(nextLink);
         }
 
         if (page > 0) {
-            Link firstLink = new Link(selfLink.getHref() + "?page[number]=0&page[size]=" + size).withRel(IanaLinkRelations.FIRST);
-            entityModels.add(firstLink);
+            Link firstLink = Link.of(selfLink.getHref() + "?page[number]=0&page[size]=" + size).withRel(IanaLinkRelations.FIRST);
+            pagedModel.add(firstLink);
         }
 
         if (page < pagedResult.getTotalPages() - 1) {
-            Link lastLink = new Link(selfLink.getHref() + "?page[number]=" + (pagedResult.getTotalPages() - 1) + "&page[size]=" + size).withRel(IanaLinkRelations.LAST);
-            entityModels.add(lastLink);
+            Link lastLink = Link.of(selfLink.getHref() + "?page[number]=" + (pagedResult.getTotalPages() - 1) + "&page[size]=" + size).withRel(IanaLinkRelations.LAST);
+            pagedModel.add(lastLink);
         }
 
-        return ResponseEntity.ok(entityModels);
+        return ResponseEntity.ok(pagedModel);
     }
 
     @PostMapping("/movies")
     ResponseEntity<?> newMovie(@RequestBody Movie movie) {
         Movie savedMovie = repository.save(movie);
-        MovieRepresentationModel movieRepresentationModel = movieModelAssembler.toModel(movie);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)
@@ -107,24 +120,18 @@ public class MovieController {
     public ResponseEntity<? extends RepresentationModel<?>> findOne(@PathVariable Long id) {
 
         return repository.findById(id)
-                .map(movie -> movieModelAssembler.toJsonApiModel(movie))
+                .map(movieModelAssembler::toJsonApiModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    private Link getMoviesLink() {
-        Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-        return Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
     }
 
     @PutMapping("/movies/{id}")
     ResponseEntity<?> updateMovie(@RequestBody Movie movie, @PathVariable Long id) {
 
-        Movie movieToUpdate = movie;
-        movieToUpdate.setId(id);
+        movie.setId(id);
 
-        repository.save(movieToUpdate);
-        MovieRepresentationModel movieRepresentationModel = movieModelAssembler.toModel(movie);
+        final Movie savedMovie = repository.save(movie);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(savedMovie);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)
@@ -136,7 +143,7 @@ public class MovieController {
                     }
                 }) //
                 .map(uri -> ResponseEntity.noContent().location(uri).build()) //
-                .orElse(ResponseEntity.badRequest().body("Unable to update " + movieToUpdate));
+                .orElse(ResponseEntity.badRequest().body("Unable to update " + movie));
     }
 
     @PatchMapping("/movies/{id}")
@@ -146,7 +153,7 @@ public class MovieController {
         existingMovie.update(movie);
 
         repository.save(existingMovie);
-        MovieRepresentationModel movieRepresentationModel = movieModelAssembler.toModel(existingMovie);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)

@@ -15,9 +15,7 @@ This project is at a very early stage and work in progress, please stay tuned.
 * Call endpoint link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1++]
  with header `accept application/vnd.api+json`
 
-
-
-The result should be:
+The rendered result is (WIP):
 
 [source,json]
 {
@@ -45,13 +43,7 @@ The result should be:
         },
         "links": {
             "self": "http://localhost:8080/api/movies/1",
-            "movies": "http://localhost:8080/api/movies{?page[number],page[size]}",
-            "directors": {
-                "href": "http://localhost:8080/api/directors/2",
-                "meta": {
-                    "name": "Frank Darabont"
-                }
-            }
+            "movies": "http://localhost:8080/api/movies{?page[number],page[size]}"
         }
     },
     "links": {

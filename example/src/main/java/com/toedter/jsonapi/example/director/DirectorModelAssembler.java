@@ -14,39 +14,40 @@
  * limitations under the License.
  */
 
-package com.toedter.jsonapi.example.movie;
+package com.toedter.jsonapi.example.director;
 
 import com.toedter.jsonapi.example.director.Director;
+import com.toedter.jsonapi.example.director.DirectorController;
+import com.toedter.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.Affordance;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 @Slf4j
-class MovieModelAssembler {
-    public RepresentationModel<?> toJsonApiModel(Movie movie) {
-        Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId())).withSelfRel();
+class DirectorModelAssembler {
+    public RepresentationModel<?> toJsonApiModel(Director director) {
+        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId())).withSelfRel();
 
-        Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-        Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
-
+        Link directorsLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
+        Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel("directors");
+        
         JsonApiResourceModelBuilder builder = jsonApiModel()
-                .entity(movie)
+                .entity(director)
                 .link(selfLink)
-                .link(templatedMoviesLink);
-        for (Director director : movie.getDirectors()) {
-            EntityModel<Director> directorEntityModel = EntityModel.of(director);
-            builder = builder.relationship("directors", directorEntityModel);
+                .link(templatedDirectorsLink);
+        for (Movie movie : director.getMovies()) {
+            EntityModel<Movie> movieEntityModel = EntityModel.of(movie);
+            builder = builder.relationship("movies", movieEntityModel);
         }
 
         return builder.build();
     }
-
 }
