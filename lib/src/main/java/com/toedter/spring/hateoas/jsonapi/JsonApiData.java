@@ -71,8 +71,8 @@ public class JsonApiData {
             return dataList;
         }
 
-        if (representationModel instanceof JsonApiRepresentationModel) {
-            RepresentationModel<?> content = ((JsonApiRepresentationModel) representationModel).getContent();
+        if (representationModel instanceof JsonApiModel) {
+            RepresentationModel<?> content = ((JsonApiModel) representationModel).getContent();
             if (content instanceof CollectionModel) {
                 representationModel = content;
             }
@@ -99,8 +99,8 @@ public class JsonApiData {
             links = ((RepresentationModel<?>) content).getLinks();
         }
 
-        if (content instanceof JsonApiRepresentationModel) {
-            JsonApiRepresentationModel jsonApiRepresentationModel = (JsonApiRepresentationModel) content;
+        if (content instanceof JsonApiModel) {
+            JsonApiModel jsonApiRepresentationModel = (JsonApiModel) content;
             relationships = jsonApiRepresentationModel.getRelationships();
             content = jsonApiRepresentationModel.getContent();
         }

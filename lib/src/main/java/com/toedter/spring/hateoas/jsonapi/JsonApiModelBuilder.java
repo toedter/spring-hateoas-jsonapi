@@ -82,7 +82,7 @@ public class JsonApiModelBuilder {
     }
 
     public RepresentationModel<?> build() {
-        return new JsonApiRepresentationModel(model, relationships, included, links);
+        return new JsonApiModel(model, relationships, included, links);
     }
 
     public static JsonApiModelBuilder jsonApiModel() {

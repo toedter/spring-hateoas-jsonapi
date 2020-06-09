@@ -17,6 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Links;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
-class JsonApiRepresentationModel extends RepresentationModel<JsonApiRepresentationModel> {
+class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     private final RepresentationModel<?> entity;
     @JsonIgnore
@@ -37,18 +38,21 @@ class JsonApiRepresentationModel extends RepresentationModel<JsonApiRepresentati
     @Getter
     private final List<RepresentationModel<?>> includedEntities;
 
-    JsonApiRepresentationModel(
+    JsonApiModel(
             @Nullable RepresentationModel<?> entity,
-            HashMap<String, List<JsonApiRelationship>> relationships,
-            List<RepresentationModel<?>> includedEntities,
-            Links links) {
+            @Nullable HashMap<String, List<JsonApiRelationship>> relationships,
+            @Nullable List<RepresentationModel<?>> includedEntities,
+            @Nullable Links links) {
         this.entity = entity;
         this.relationships = relationships;
         this.includedEntities = includedEntities;
-        add(links);
+        if (links != null) {
+            add(links);
+        }
     }
 
     @Nullable
+    @JsonUnwrapped
     public RepresentationModel<?> getContent() {
         return entity;
     }
