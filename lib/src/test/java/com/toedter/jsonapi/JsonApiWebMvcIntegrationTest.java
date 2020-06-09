@@ -20,8 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.jsonapi.support.WebMvcMovieController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -53,7 +52,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration
-public class JsonApiWebMvcIntegrationTest {
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayName("JsonApi WebMvc Integration Test")
+public class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     @Autowired
     WebApplicationContext context;
 
@@ -66,7 +67,7 @@ public class JsonApiWebMvcIntegrationTest {
     }
 
     @Test
-    void shouldGetsingleMovie() throws Exception {
+    void should_get_single_movie() throws Exception {
         String movieJson = this.mockMvc
                 .perform(get("/movies/1").accept(JSON_API))
                 .andExpect(status().isOk())
@@ -78,7 +79,7 @@ public class JsonApiWebMvcIntegrationTest {
     }
 
     @Test
-    void shouldGetcollectionOfMovies() throws Exception {
+    void should_get_collection_of_movies() throws Exception {
 
         String moviesJson = this.mockMvc
                 .perform(get("/movies").accept(JSON_API))
@@ -91,7 +92,7 @@ public class JsonApiWebMvcIntegrationTest {
     }
 
     @Test
-    void shouldCreateNewMovie() throws Exception {
+    void should_create_new_movie() throws Exception {
 
         String input = readFile("postMovie.json");
 
@@ -109,18 +110,6 @@ public class JsonApiWebMvcIntegrationTest {
                 .getContentAsString();
 
         compareWithFile(movieJson, "movieCreated.json");
-    }
-
-    private void compareWithFile(String json, String fileName) throws Exception {
-        String fileContent = readFile(fileName);
-        assertThat(json).isEqualTo(fileContent);
-    }
-
-    private String readFile(String fileName) throws IOException {
-        File file = new ClassPathResource(fileName, getClass()).getFile();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        return objectMapper.readValue(file, JsonNode.class).toString();
     }
 
     @Configuration

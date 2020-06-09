@@ -36,5 +36,6 @@ test {
 }
 
 jar {
-    baseName "spring-hateoas-jsonapi"
+    archiveBaseName = 'spring-hateoas-jsonapi'
 }
+

@@ -16,9 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.*;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -31,39 +29,16 @@ import java.util.List;
  *
  * @author Kai Toedter
  */
-public class JsonApiDocumentBuilder {
-    private RepresentationModel model;
+public class JsonApiModelBuilder {
+    private RepresentationModel<?> model;
     private Links links = Links.NONE;
     private final HashMap<String, List<JsonApiRelationship>> relationships = new HashMap<>();
+    private final List<RepresentationModel<?>> included = new ArrayList<>();
 
-    @RequiredArgsConstructor
-    static class JsonApiRepresentationModel extends RepresentationModel<JsonApiRepresentationModel> {
-
-        private final RepresentationModel entity;
-        private final HashMap<String, List<JsonApiRelationship>> relationships;
-
-        public JsonApiRepresentationModel(
-                @Nullable RepresentationModel entity,
-                HashMap<String, List<JsonApiRelationship>> relationships,
-                Links links) {
-            this.entity = entity;
-            this.relationships = relationships;
-            add(links);
-        }
-
-        @Nullable
-        public RepresentationModel getContent() {
-            return entity;
-        }
-
-        public HashMap<String, List<JsonApiRelationship>> getRelationships() {
-            return relationships;
-        }
+    private JsonApiModelBuilder() {
     }
 
-    private JsonApiDocumentBuilder() {}
-
-    public JsonApiDocumentBuilder entity(RepresentationModel entity) {
+    public JsonApiModelBuilder entity(RepresentationModel<?> entity) {
 
         Assert.notNull(entity, "Entity must not be null!");
 
@@ -76,32 +51,41 @@ public class JsonApiDocumentBuilder {
         return this;
     }
 
-    public JsonApiDocumentBuilder link(Link link) {
+    public JsonApiModelBuilder entity(Object object) {
+        return this.entity(EntityModel.of(object));
+    }
+
+    public JsonApiModelBuilder link(Link link) {
         this.links = links.and(link);
         return this;
     }
 
-    public JsonApiDocumentBuilder link(String href, LinkRelation relation) {
+    public JsonApiModelBuilder link(String href, LinkRelation relation) {
         return link(Link.of(href, relation));
     }
 
-    public JsonApiDocumentBuilder links(Iterable<Link> links) {
+    public JsonApiModelBuilder links(Iterable<Link> links) {
         this.links = this.links.and(links);
 
         return this;
     }
 
-    public JsonApiDocumentBuilder relationship(String name, EntityModel<?> entityModel) {
+    public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
         List<JsonApiRelationship> relationships = this.relationships.computeIfAbsent(name, k -> new ArrayList<>());
         relationships.add(JsonApiRelationship.of(entityModel));
         return this;
     }
 
-    public RepresentationModel<?> build() {
-        return new JsonApiRepresentationModel(model, relationships, links);
+    public JsonApiModelBuilder included(EntityModel<?> entityModel) {
+        included.add(entityModel);
+        return this;
     }
 
-    public static JsonApiDocumentBuilder jsonApiModel() {
-        return new JsonApiDocumentBuilder();
+    public RepresentationModel<?> build() {
+        return new JsonApiRepresentationModel(model, relationships, included, links);
+    }
+
+    public static JsonApiModelBuilder jsonApiModel() {
+        return new JsonApiModelBuilder();
     }
 }

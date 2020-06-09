@@ -16,17 +16,15 @@
 
 package com.toedter.jsonapi.example.director;
 
-import com.toedter.jsonapi.example.director.Director;
-import com.toedter.jsonapi.example.director.DirectorController;
 import com.toedter.jsonapi.example.movie.Movie;
-import com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
-import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -39,7 +37,7 @@ class DirectorModelAssembler {
         Link directorsLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
         Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel("directors");
         
-        JsonApiResourceModelBuilder builder = jsonApiModel()
+        JsonApiModelBuilder builder = jsonApiModel()
                 .entity(director)
                 .link(selfLink)
                 .link(templatedDirectorsLink);

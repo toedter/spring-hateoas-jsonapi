@@ -19,10 +19,12 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.IOException;
+import java.util.List;
 
 public abstract class AbstractJsonApiRepresentationModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
@@ -43,7 +45,9 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
             doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
                     .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(getLinksOrNull(value));
+                    .withLinks(getLinksOrNull(value))
+                    .withIncluded(getIncluded(value));
+
             doc = postProcess(value, doc);
         } else {
             doc = new JsonApiDocument()
@@ -65,5 +69,14 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
             links = null;
         }
         return links;
+    }
+
+    private List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
+        if(representationModel instanceof JsonApiRepresentationModel) {
+            final List<RepresentationModel<?>> includedEntities = ((JsonApiRepresentationModel) representationModel).getIncludedEntities();
+            final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
+            return JsonApiData.extractCollectionContent(collectionModel);
+        }
+        return null;
     }
 }

@@ -91,10 +91,13 @@ public class JsonApiData {
             links = ((RepresentationModel<?>) content).getLinks();
         }
 
+        if (content instanceof JsonApiRepresentationModel) {
+            JsonApiRepresentationModel jsonApiRepresentationModel = (JsonApiRepresentationModel) content;
+            relationships = jsonApiRepresentationModel.getRelationships();
+            content = jsonApiRepresentationModel.getContent();
+        }
+
         if (content instanceof EntityModel) {
-            if (content instanceof JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) {
-                relationships = ((JsonApiResourceModelBuilder.JsonApiRepresentationModel<?>) content).getRelationships();
-            }
             content = ((EntityModel<?>) content).getContent();
         }
 

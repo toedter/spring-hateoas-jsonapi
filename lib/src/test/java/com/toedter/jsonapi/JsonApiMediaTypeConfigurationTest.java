@@ -22,14 +22,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule;
 import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayName("JsonApiMediaTypeConfiguration Test")
 public class JsonApiMediaTypeConfigurationTest {
     private JsonApiMediaTypeConfiguration configuration;
 
@@ -39,20 +40,20 @@ public class JsonApiMediaTypeConfigurationTest {
     }
 
     @Test
-    public void shouldReturnJsonApiMediaType() {
+    public void should_return_json_api_media_type() {
         List<MediaType> mediaTypes = configuration.getMediaTypes();
         assertThat(mediaTypes.size()).isEqualTo(1);
         assertThat(mediaTypes.get(0).toString()).isEqualTo("application/vnd.api+json");
     }
 
     @Test
-    public void shouldReturnJsonApiJacksonModule() {
+    public void should_return_json_api_jackson_module() {
         Module jacksonModule = configuration.getJacksonModule();
         assertThat(jacksonModule).isInstanceOf(Jackson2JsonApiModule.class);
     }
 
     @Test
-    public void shouldReturnConfiguredObjectMapper() {
+    public void should_return_configured_object_mapper() {
         ObjectMapper objectMapper = configuration.configureObjectMapper(new ObjectMapper());
         assertThat(objectMapper.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)).isTrue();
         assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)).isTrue();

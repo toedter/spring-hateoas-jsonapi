@@ -17,15 +17,14 @@
 package com.toedter.jsonapi.example.movie;
 
 import com.toedter.jsonapi.example.director.Director;
-import com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.Affordance;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
-import static com.toedter.spring.hateoas.jsonapi.JsonApiResourceModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
@@ -37,7 +36,7 @@ class MovieModelAssembler {
         Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
         Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
-        JsonApiResourceModelBuilder builder = jsonApiModel()
+        JsonApiModelBuilder builder = jsonApiModel()
                 .entity(movie)
                 .link(selfLink)
                 .link(templatedMoviesLink);

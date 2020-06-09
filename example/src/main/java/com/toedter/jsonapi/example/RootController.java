@@ -40,12 +40,12 @@ public class RootController {
 		resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
 
 		Link selfLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-		Link templatedLink = new Link(selfLink.getHref() + "{?size,page}").withRel("movies");
+		Link templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
 		resourceSupport.add(templatedLink);
 
 		selfLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
-		templatedLink = new Link(selfLink.getHref() + "{?size,page}").withRel("directors");
+		templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel("directors");
 
 		resourceSupport.add(templatedLink);
 
