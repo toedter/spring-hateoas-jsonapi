@@ -18,6 +18,7 @@ package com.toedter.jsonapi.example.movie;
 
 import com.toedter.jsonapi.example.RootController;
 import com.toedter.jsonapi.example.director.Director;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
@@ -48,7 +51,7 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    ResponseEntity<CollectionModel<? extends RepresentationModel<?>>> findAll(
+    ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
@@ -63,7 +66,7 @@ public class MovieController {
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
-        Link templatedLink = Link.of(selfLink.getHref() + "?page[number]=" + page +",page[size]=" + size).withSelfRel();
+        Link templatedLink = Link.of(selfLink.getHref() + "?page[number]=" + page + ",page[size]=" + size).withSelfRel();
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(pagedResult.getSize(), pagedResult.getNumber(), pagedResult.getTotalElements(), pagedResult.getTotalPages());
@@ -92,7 +95,18 @@ public class MovieController {
             pagedModel.add(lastLink);
         }
 
-        return ResponseEntity.ok(pagedModel);
+        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().entity(pagedModel);
+        HashMap<Long, Director> directors = new HashMap<>();
+        for (Movie movie : pagedResult.getContent()) {
+            for (Director director : movie.getDirectors()) {
+                directors.put(director.getId(), director);
+            }
+        }
+
+        directors.values().stream().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
+
+        final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
+        return ResponseEntity.ok(pagedJsonApiModel);
     }
 
     @PostMapping("/movies")
@@ -169,9 +183,9 @@ public class MovieController {
     @DeleteMapping("/movies/{id}")
     ResponseEntity<?> deleteMovie(@PathVariable Long id) {
         Optional<Movie> optional = repository.findById(id);
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             Movie movie = optional.get();
-            for(Director director: movie.getDirectors()) {
+            for (Director director : movie.getDirectors()) {
                 director.deleteMovie(movie);
             }
             repository.deleteById(id);

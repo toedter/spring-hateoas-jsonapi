@@ -36,9 +36,12 @@ public class Movie {
 
     private String title;
     private long year;
+    @JsonIgnore
     private String imdbId;
     private double rating;
+    @JsonIgnore
     private int rank;
+    @JsonIgnore
     private String thumb;
 
     @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)

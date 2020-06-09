@@ -17,7 +17,9 @@
 package com.toedter.jsonapi.example.director;
 
 import com.toedter.jsonapi.example.RootController;
+import com.toedter.jsonapi.example.movie.Movie;
 import com.toedter.jsonapi.example.movie.MovieController;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +27,12 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
@@ -44,7 +48,7 @@ public class DirectorController {
     }
 
     @GetMapping("/directors")
-    ResponseEntity<CollectionModel<? extends RepresentationModel<?>>> findAll(
+    ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
@@ -88,7 +92,19 @@ public class DirectorController {
             pagedModel.add(lastLink);
         }
 
-        return ResponseEntity.ok(pagedModel);
+        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().entity(pagedModel);
+        HashMap<Long, Movie> directors = new HashMap<>();
+        for (Director director : pagedResult.getContent()) {
+            for (Movie movie : director.getMovies()) {
+                directors.put(movie.getId(), movie);
+            }
+        }
+
+        directors.values().stream().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
+
+        final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
+        return ResponseEntity.ok(pagedJsonApiModel);
+
     }
 
     @GetMapping("/directors/{id}")
