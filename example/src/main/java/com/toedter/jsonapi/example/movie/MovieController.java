@@ -105,7 +105,8 @@ public class MovieController {
 
         directors.values().stream().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
 
-        final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
+        final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.link(templatedLink).build();
+
         return ResponseEntity.ok(pagedJsonApiModel);
     }
 

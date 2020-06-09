@@ -12,7 +12,7 @@ This project is at a very early stage and work in progress, please stay tuned.
 
 * Make sure Java 8 or later JDK is installed
 * Open a terminal and invoke `./gradlew build bootrun` (just `gradlew` under Windows)
-* Call endpoint link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1++]
+* Call endpoint link:++http://localhost:8080/api/movies?page[number]=0&page[size]=3++[++http://localhost:8080/api/movies?page[number]=0&page[size]=3++]
  with header `accept application/vnd.api+json`
 
 The rendered result is (WIP):
@@ -103,6 +103,9 @@ The rendered result is (WIP):
             }
         }
     ],
+    "links": {
+        "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=3"
+    },
     "meta": {
         "page-total-pages": 84,
         "page-size": 3,
