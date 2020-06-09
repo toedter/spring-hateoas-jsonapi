@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.IOException;
@@ -41,6 +42,8 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         JsonApiDocument doc;
         final JsonStreamContext outputContext = gen.getOutputContext();
+
+
         if (outputContext.inRoot()) {
             doc = new JsonApiDocument()
                     .withJsonapi(new JsonApiJsonApi())
@@ -48,7 +51,17 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
                     .withLinks(getLinksOrNull(value))
                     .withIncluded(getIncluded(value));
 
-            doc = postProcess(value, doc);
+            if (value instanceof JsonApiRepresentationModel) {
+                // In case the content of an JsonApiRepresentationModel is a PagedModel,
+                // we want to add the page metadata to the top level JSON:API document
+                final RepresentationModel<?> subcontent = ((JsonApiRepresentationModel) value).getContent();
+                if (subcontent instanceof PagedModel) {
+                    JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer();
+                    doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc);
+                }
+            } else {
+                doc = postProcess(value, doc);
+            }
         } else {
             doc = new JsonApiDocument()
                     .withData(JsonApiData.extractCollectionContent(value));

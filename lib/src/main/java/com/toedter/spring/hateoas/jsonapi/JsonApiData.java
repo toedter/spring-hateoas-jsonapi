@@ -64,10 +64,18 @@ public class JsonApiData {
     }
 
     static List<JsonApiData> extractCollectionContent(@Nullable RepresentationModel<?> representationModel) {
+
         List<JsonApiData> dataList = new ArrayList<>();
 
         if (representationModel == null) {
             return dataList;
+        }
+
+        if (representationModel instanceof JsonApiRepresentationModel) {
+            RepresentationModel<?> content = ((JsonApiRepresentationModel) representationModel).getContent();
+            if (content instanceof CollectionModel) {
+                representationModel = content;
+            }
         }
 
         if (representationModel instanceof CollectionModel) {

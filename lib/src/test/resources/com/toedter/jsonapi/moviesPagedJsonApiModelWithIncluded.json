@@ -1,0 +1,67 @@
+{
+  "jsonapi" : {
+    "version" : "1.0"
+  },
+  "data" : [ {
+    "id" : "1",
+    "type" : "movies",
+    "attributes" : {
+      "title" : "The Matrix"
+    },
+    "relationships" : {
+      "relatedMovies" : {
+        "data" : {
+          "id" : "2",
+          "type" : "movies"
+        }
+      },
+      "directors" : [ {
+        "data" : {
+          "id" : "1",
+          "type" : "directors"
+        }
+      }, {
+        "data" : {
+          "id" : "2",
+          "type" : "directors"
+        }
+      } ]
+    }
+  }, {
+    "id" : "3",
+    "type" : "movies",
+    "attributes" : {
+      "title" : "Star Wars"
+    },
+    "relationships" : {
+      "directors" : {
+        "data" : {
+          "id" : "3",
+          "type" : "directors"
+        }
+      }
+    }
+  } ],
+  "included" : [ {
+    "id" : "1",
+    "type" : "directors",
+    "attributes" : {
+      "name" : "Lana Wachowski"
+    }
+  }, {
+    "id" : "2",
+    "type" : "directors",
+    "attributes" : {
+      "name" : "Lilly Wachowski"
+    }
+  } ],
+  "links" : {
+    "next" : "http://localhost/movies?page[number]=2&page[size]=2"
+  },
+  "meta" : {
+    "page-total-pages" : 2,
+    "page-size" : 2,
+    "page-number" : 1,
+    "page-total-elements" : 2
+  }
+}

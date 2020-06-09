@@ -208,7 +208,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldSerializeMoviesWithLongId() throws Exception {
+    void should_serialize_movies_with_long_id() throws Exception {
         MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
         EntityModel<MovieWithLongId> entityModel =
                 EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
@@ -218,7 +218,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void shouldSerializeMovieWithComplexLink() throws Exception {
+    void should_serialize_movie_with_complex_link() throws Exception {
         MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
         EntityModel<MovieWithLongId> entityModel =
                 EntityModel.of(movie)

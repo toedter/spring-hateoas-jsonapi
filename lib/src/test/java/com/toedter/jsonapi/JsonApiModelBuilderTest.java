@@ -22,20 +22,20 @@ import com.toedter.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import org.junit.jupiter.api.*;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Test")
 public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
-    private JsonApiModelBuilder builder;
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUpModule() {
-        builder = jsonApiModel();
         JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
         mapper = new ObjectMapper();
         configuration.configureObjectMapper(mapper);
@@ -43,7 +43,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_empty_model() throws Exception {
-        final RepresentationModel<?> jsonApiModel = builder.build();
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().build();
         final String emptyDoc = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(emptyDoc, "emptyDoc.json");
     }
@@ -51,7 +51,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
     @Test
     void should_build_single_movie_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        final RepresentationModel<?> jsonApiModel = builder.entity(movie).build();
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(movie).build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModel.json");
@@ -62,7 +62,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
-                builder.entity(movie)
+                jsonApiModel().entity(movie)
                         .relationship("directors", EntityModel.of(director))
                         .build();
 
@@ -78,7 +78,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
         Director director2 = new Director("2", "Lilly Wachowski");
 
         final RepresentationModel<?> jsonApiModel =
-                builder.entity(movie)
+                jsonApiModel().entity(movie)
                         .relationship("directors", EntityModel.of(director1))
                         .relationship("directors", EntityModel.of(director2))
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -90,15 +90,18 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_single_movie_model_with_many_relationships_and_included() throws Exception {
-        Movie movie = new Movie("4", "The Matrix");
+        Movie movie = new Movie("1", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
         Director director1 = new Director("1", "Lana Wachowski");
         final EntityModel<Director> director1EntityModel = EntityModel.of(director1);
         Director director2 = new Director("2", "Lilly Wachowski");
 
+        Movie movie2 = new Movie("2", "Star Wars");
+        Director director3 = new Director("3", "George Lucas");
+
         final EntityModel<Director> director2EntityModel = EntityModel.of(director2);
         final RepresentationModel<?> jsonApiModel =
-                builder.entity(movie)
+                jsonApiModel().entity(movie)
                         .relationship("directors", director1EntityModel)
                         .relationship("directors", director2EntityModel)
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -108,5 +111,53 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
+    }
+
+    @Test
+    void should_build_paged_movie_model_with_many_relationships_and_included() throws Exception {
+        Movie movie = new Movie("1", "The Matrix");
+        Movie relatedMovie = new Movie("2", "The Matrix 2");
+        Director director1 = new Director("1", "Lana Wachowski");
+        final EntityModel<Director> director1EntityModel = EntityModel.of(director1);
+        Director director2 = new Director("2", "Lilly Wachowski");
+        final EntityModel<Director> director2EntityModel = EntityModel.of(director2);
+
+        final RepresentationModel<?> jsonApiModel1 =
+                jsonApiModel()
+                        .entity(movie)
+                        .relationship("directors", director1EntityModel)
+                        .relationship("directors", director2EntityModel)
+                        .relationship("relatedMovies", EntityModel.of(relatedMovie))
+                        .build();
+
+        Movie movie2 = new Movie("3", "Star Wars");
+        Director director3 = new Director("3", "George Lucas");
+        final EntityModel<Director> director3EntityModel = EntityModel.of(director3);
+
+        final RepresentationModel<?> jsonApiModel2 =
+                jsonApiModel()
+                        .entity(movie2)
+                        .relationship("directors", director3EntityModel)
+                        .build();
+
+        List<RepresentationModel<?>> movies = new ArrayList<>();
+        movies.add(jsonApiModel1);
+        movies.add(jsonApiModel2);
+
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(2, 1, 2, 2);
+        Link nextLink = Link.of("http://localhost/movies?page[number]=2&page[size]=2").withRel(IanaLinkRelations.NEXT);
+        final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(movies, pageMetadata);
+
+        RepresentationModel<?> pagedJasonApiModel =
+                jsonApiModel()
+                        .entity(pagedModel)
+                        .included(director1EntityModel)
+                        .included(director2EntityModel)
+                        .link(nextLink)
+                        .build();
+
+        final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
+        compareWithFile(pagedModelJson, "moviesPagedJsonApiModelWithIncluded.json");
     }
 }
