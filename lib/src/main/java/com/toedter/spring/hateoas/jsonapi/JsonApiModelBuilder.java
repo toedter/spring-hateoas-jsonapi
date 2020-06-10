@@ -78,9 +78,17 @@ public class JsonApiModelBuilder {
         return this;
     }
 
+    public JsonApiModelBuilder relationship(String name, Object object) {
+        return this.relationship(name, EntityModel.of(object));
+    }
+
     public JsonApiModelBuilder included(EntityModel<?> entityModel) {
         included.add(entityModel);
         return this;
+    }
+
+    public JsonApiModelBuilder included(Object object) {
+        return this.included(EntityModel.of(object));
     }
 
     public RepresentationModel<?> build() {

@@ -53,6 +53,14 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_empty_entity_model() throws Exception {
+        final EntityModel<Object> representationModel = EntityModel.of(new Object());
+        String emptyDoc = mapper.writeValueAsString(representationModel);
+
+        compareWithFile(emptyDoc, "emptyDoc.json");
+    }
+
+    @Test
     void should_serialize_single_movie_entity_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));

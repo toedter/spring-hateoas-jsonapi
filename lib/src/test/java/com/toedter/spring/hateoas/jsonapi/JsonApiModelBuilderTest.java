@@ -47,9 +47,25 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_empty_entity_model() throws Exception {
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(new Object()).build();
+        final String emptyDoc = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(emptyDoc, "emptyDoc.json");
+    }
+
+    @Test
     void should_build_single_movie_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(movie).build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_build_single_movie_entity_model() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(EntityModel.of(movie)).build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModel.json");
@@ -77,7 +93,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().entity(movie)
-                        .relationship("directors", EntityModel.of(director1))
+                        .relationship("directors", director1)
                         .relationship("directors", EntityModel.of(director2))
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
                         .build();
@@ -91,20 +107,17 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
         Director director1 = new Director("1", "Lana Wachowski");
-        final EntityModel<Director> director1EntityModel = EntityModel.of(director1);
         Director director2 = new Director("2", "Lilly Wachowski");
 
         Movie movie2 = new Movie("2", "Star Wars");
-        Director director3 = new Director("3", "George Lucas");
 
-        final EntityModel<Director> director2EntityModel = EntityModel.of(director2);
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().entity(movie)
-                        .relationship("directors", director1EntityModel)
-                        .relationship("directors", director2EntityModel)
+                        .relationship("directors", director1)
+                        .relationship("directors", director2)
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
-                        .included(director1EntityModel)
-                        .included(director2EntityModel)
+                        .included(director1)
+                        .included(director2)
                         .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);

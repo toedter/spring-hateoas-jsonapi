@@ -42,10 +42,16 @@ jar {
     archiveBaseName = 'spring-hateoas-jsonapi'
 }
 
+
 jacocoTestReport {
     dependsOn test
     reports {
         xml.enabled true
     }
+    afterEvaluate {
+        getClassDirectories().setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/Jackson2JsonApiModule\$**Mixin*')
+        }))
+    };
 }
 

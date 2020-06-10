@@ -68,10 +68,6 @@ class JsonApiData {
 
         List<JsonApiData> dataList = new ArrayList<>();
 
-        if (representationModel == null) {
-            return dataList;
-        }
-
         if (representationModel instanceof JsonApiModel) {
             RepresentationModel<?> content = ((JsonApiModel) representationModel).getContent();
             if (content instanceof CollectionModel) {
