@@ -1,5 +1,5 @@
-image:https://github.com/toedter/spring-hateoas-jsonapi/workflows/Build/badge.svg[https://github.com/ingogriebsch/spring-hateoas-siren/actions]
-image:https://codecov.io/gh/toedter/spring-hateoas-jsonapi/branch/master/graph/badge.svg[https://codecov.io/gh/ingogriebsch/spring-hateoas-siren]
+image:https://github.com/toedter/spring-hateoas-jsonapi/workflows/Build/badge.svg["build", link="https://github.com/toedter/spring-hateoas-jsonapi/actions"]
+image:https://codecov.io/gh/toedter/spring-hateoas-jsonapi/branch/master/graph/badge.svg["coverage", link="https://codecov.io/gh/toedter/spring-hateoas-jsonapi"]
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", link="https://opensource.org/licenses/Apache-2.0"]
 
 = JSON:API for Spring HATEOAS
