@@ -28,6 +28,7 @@ import lombok.With;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @Value
@@ -91,7 +92,6 @@ public class JsonApiData {
     }
 
     static Optional<JsonApiData> extractContent(@Nullable Object content, boolean isSingleEntity) {
-
         Links links = null;
         Object relationships = null;
 
@@ -109,14 +109,19 @@ public class JsonApiData {
             content = ((EntityModel<?>) content).getContent();
         }
 
+        if (content == null) {
+            return Optional.empty();
+        }
         String id = null;
         try {
             id = JsonApiResource.getId(content);
         } catch (Exception e) {
             // will lead to "data":[], which is ok with the spec
-            if (content == null
-                    || content.getClass().getDeclaredFields().length == 0
-                    || (links != null && content.getClass().getDeclaredFields().length == 1)) {
+            final Field[] fields = content.getClass().getDeclaredFields();
+            if (fields.length == 0
+                    || (links != null && fields.length == 1)
+                    || (links != null && fields.length == 2
+                    && ("$jacocoData".equals(fields[0].getName()) || "$jacocoData".equals(fields[1].getName())))) {
                 return Optional.empty();
             }
             // we have fields, but no id field

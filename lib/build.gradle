@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'war'
+    id 'jacoco'
     id 'io.freefair.lombok' version '5.1.0'
 }
 
@@ -33,9 +34,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging.showStandardStreams = true
+    finalizedBy jacocoTestReport
 }
 
 jar {
     archiveBaseName = 'spring-hateoas-jsonapi'
+}
+
+jacocoTestReport {
+    dependsOn test
 }
 
