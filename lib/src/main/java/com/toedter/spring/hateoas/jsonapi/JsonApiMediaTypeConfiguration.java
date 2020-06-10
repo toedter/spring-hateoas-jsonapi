@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
-public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     @Override
     @Nonnull
     public List<MediaType> getMediaTypes() {

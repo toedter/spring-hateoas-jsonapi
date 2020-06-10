@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi;
+package com.toedter.spring.hateoas.jsonapi.support;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.With;
 
-@Value
-@Getter(onMethod = @__(@JsonProperty))
-@With(AccessLevel.PACKAGE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-class JsonApiJsonApi {
-    String version = "1.0";
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class Movie {
+    private String id;
+    private String title;
 }

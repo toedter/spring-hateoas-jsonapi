@@ -33,21 +33,18 @@ import java.util.List;
 import java.util.Map;
 
 @Value
-@With
+@With(AccessLevel.PACKAGE)
 @JsonPropertyOrder({"data", "links", "meta"})
-public class JsonApiRelationship {
+class JsonApiRelationship {
     @Getter
-    @With(AccessLevel.PACKAGE)
     List<JsonApiResource> data;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
     Links links;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
     Map<String, Object> meta;
 
     @JsonCreator

@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi;
+package com.toedter.spring.hateoas.jsonapi.example.movie;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Value;
-import lombok.With;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-@Value
-@Getter(onMethod = @__(@JsonProperty))
-@With(AccessLevel.PACKAGE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-class JsonApiJsonApi {
-    String version = "1.0";
+public interface MovieRepository extends PagingAndSortingRepository<Movie, Long> {
 }

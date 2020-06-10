@@ -33,7 +33,7 @@ import java.lang.reflect.Field;
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JsonApiResource {
+class JsonApiResource {
     public static final String JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID =
             "JSON:API resource object must have property \"id\".";
 
@@ -47,10 +47,6 @@ public class JsonApiResource {
     ) {
         this.id = id;
         this.type = type;
-    }
-
-    public JsonApiResource() {
-        this(null, null);
     }
 
     static String getId(Object object) {

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class JsonApiPagedModelSerializer extends AbstractJsonApiRepresentationModelSerializer<PagedModel<?>> {
+
     public JsonApiPagedModelSerializer() {
         super(PagedModel.class, false);
     }

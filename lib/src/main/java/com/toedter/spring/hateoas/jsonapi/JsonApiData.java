@@ -36,7 +36,7 @@ import java.util.*;
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JsonApiData {
+class JsonApiData {
     String id;
     String type;
     @JsonIgnoreProperties(value = {"id", "_type"})

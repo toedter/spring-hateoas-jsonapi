@@ -33,7 +33,7 @@ import java.util.Map;
 @Value
 @With
 @JsonPropertyOrder({"jsonapi", "data", "included", "links", "meta"})
-public class JsonApiDocument {
+class JsonApiDocument {
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

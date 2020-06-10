@@ -16,5 +16,5 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-public class JsonApiErrors {
+class JsonApiErrors {
 }
