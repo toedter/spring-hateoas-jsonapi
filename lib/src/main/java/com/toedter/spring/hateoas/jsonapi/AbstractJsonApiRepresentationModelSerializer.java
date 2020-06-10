@@ -40,31 +40,23 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
 
     @Override
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        JsonApiDocument doc;
-        final JsonStreamContext outputContext = gen.getOutputContext();
 
+        JsonApiDocument doc = new JsonApiDocument()
+                .withJsonapi(new JsonApiJsonApi())
+                .withData(JsonApiData.extractCollectionContent(value))
+                .withLinks(getLinksOrNull(value))
+                .withIncluded(getIncluded(value));
 
-        if (outputContext.inRoot()) {
-            doc = new JsonApiDocument()
-                    .withJsonapi(new JsonApiJsonApi())
-                    .withData(JsonApiData.extractCollectionContent(value))
-                    .withLinks(getLinksOrNull(value))
-                    .withIncluded(getIncluded(value));
-
-            if (value instanceof JsonApiModel) {
-                // In case the content of an JsonApiRepresentationModel is a PagedModel,
-                // we want to add the page metadata to the top level JSON:API document
-                final RepresentationModel<?> subcontent = ((JsonApiModel) value).getContent();
-                if (subcontent instanceof PagedModel) {
-                    JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer();
-                    doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc);
-                }
-            } else {
-                doc = postProcess(value, doc);
+        if (value instanceof JsonApiModel) {
+            // In case the content of an JsonApiRepresentationModel is a PagedModel,
+            // we want to add the page metadata to the top level JSON:API document
+            final RepresentationModel<?> subcontent = ((JsonApiModel) value).getContent();
+            if (subcontent instanceof PagedModel) {
+                JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer();
+                doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc);
             }
         } else {
-            doc = new JsonApiDocument()
-                    .withData(JsonApiData.extractCollectionContent(value));
+            doc = postProcess(value, doc);
         }
 
         provider
@@ -85,7 +77,7 @@ public abstract class AbstractJsonApiRepresentationModelSerializer<T extends Rep
     }
 
     private List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
-        if(representationModel instanceof JsonApiModel) {
+        if (representationModel instanceof JsonApiModel) {
             final List<RepresentationModel<?>> includedEntities = ((JsonApiModel) representationModel).getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
             return JsonApiData.extractCollectionContent(collectionModel);

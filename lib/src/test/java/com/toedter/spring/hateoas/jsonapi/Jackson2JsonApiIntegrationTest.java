@@ -123,9 +123,28 @@ class Jackson2JsonApiIntegrationTest {
     void should_not_serialize_movie_without_id() {
         Assertions.assertThrows(JsonMappingException.class, () -> {
             Movie movie = new Movie(null, "Star Wars");
+            EntityModel<Movie> entityModel = EntityModel.of(movie);
+            mapper.writeValueAsString(entityModel);
+        });
+    }
+
+    @Test
+    void should_not_serialize_movie_without_id_and_link() {
+        Assertions.assertThrows(JsonMappingException.class, () -> {
+            Movie movie = new Movie(null, "Star Wars");
             EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
             mapper.writeValueAsString(entityModel);
         });
+    }
+
+    @Test
+    void should_serialize_movie_with_templated_link() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel =
+                EntityModel.of(movie).add(
+                        Links.of(Link.of("http://localhost/directors?{page,size}").withRel("directors")));
+        final String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithTemplatedLink.json");
     }
 
     @Test
@@ -223,8 +242,8 @@ class Jackson2JsonApiIntegrationTest {
                 EntityModel.of(movie)
                         .add(Links.of(Link.of("http://localhost/movies/1")
                                 .withRel("related")
-                        .withName("link name")
-                        .withTitle("link title")));
+                                .withName("link name")
+                                .withTitle("link title")));
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
     }

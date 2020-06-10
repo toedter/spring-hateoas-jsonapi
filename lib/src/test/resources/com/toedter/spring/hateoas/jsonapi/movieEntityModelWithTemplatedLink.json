@@ -1,0 +1,20 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "directors": {
+      "href": "http://localhost/directors?{page,size}",
+      "meta": {
+        "isTemplated": true
+      }
+    }
+  }
+}
