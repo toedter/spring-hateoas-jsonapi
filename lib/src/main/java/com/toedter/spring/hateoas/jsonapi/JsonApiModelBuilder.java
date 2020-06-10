@@ -48,6 +48,8 @@ public class JsonApiModelBuilder {
 
         this.model = entity;
 
+        this.links(entity.getLinks());
+
         return this;
     }
 
