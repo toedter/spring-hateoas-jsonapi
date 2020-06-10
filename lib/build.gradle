@@ -50,7 +50,7 @@ jacocoTestReport {
     }
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**/Jackson2JsonApiModule\$**Mixin*')
+            fileTree(dir: it, exclude: ['**/Jackson2JsonApiModule\$**Mixin*','**/AbstractJsonApiSerializer**'])
         }))
     };
 }
