@@ -39,8 +39,7 @@ import java.util.*;
 class JsonApiData {
     String id;
     String type;
-    @JsonIgnoreProperties(value = {"id", "_type"})
-    Object attributes;
+    Map<String, Object> attributes;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Object relationships;
     Links links;
@@ -49,7 +48,7 @@ class JsonApiData {
     public JsonApiData(
             @JsonProperty("id") String id,
             @JsonProperty("type") String type,
-            @JsonProperty("attributes") Object attributes,
+            @JsonProperty("attributes") Map<String, Object> attributes,
             @JsonProperty("relationships") Object relationships,
             @JsonProperty("links") Links links
     ) {
@@ -108,9 +107,9 @@ class JsonApiData {
         if (content == null) {
             return Optional.empty();
         }
-        String id = null;
+        JsonApiResource.IdField idField;
         try {
-            id = JsonApiResource.getId(content);
+            idField = JsonApiResource.getId(content);
         } catch (Exception e) {
             // will lead to "data":[], which is ok with the spec
             final Field[] fields = content.getClass().getDeclaredFields();
@@ -129,22 +128,18 @@ class JsonApiData {
         }
         String jsonApiType = JsonApiResource.getType(content);
 
-        // if the content is a RepresentationModel itself,
-        // we have to convert it, otherwise and infinite recursion would happen,
-        // since this is part of the serialization of a RepresentationModel
-        if (content instanceof RepresentationModel<?>) {
-            ObjectMapper mapper = new ObjectMapper();
-            @SuppressWarnings("unchecked")
-            Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
-            attributeMap.remove("links");
-            content = attributeMap;
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
+        attributeMap.remove("links");
+        attributeMap.remove("_type"); // TODO provide annotation
+        attributeMap.remove(idField.name);
 
-        Object finalContentObject = content;
+        final Map<String, Object> finalContentObject = attributeMap;
         Links finalLinks = links;
-        String finalId = id;
+        String finalId = idField.value;
         Object finalRelationships = relationships;
-        return Optional.ofNullable(content)
+        return Optional.of(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
                         .withId(finalId)

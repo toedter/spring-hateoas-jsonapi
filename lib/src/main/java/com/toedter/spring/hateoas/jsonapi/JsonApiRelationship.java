@@ -64,7 +64,7 @@ class JsonApiRelationship {
 
     public static JsonApiRelationship of(EntityModel<?> entityModel) {
         final Object content = entityModel.getContent();
-        Object id = JsonApiResource.getId(content);
+        Object id = JsonApiResource.getId(content).value;
         String type = JsonApiResource.getType(content);
         return new JsonApiRelationship(Collections.singletonList(new JsonApiResource(id, type)), null, null);
     }

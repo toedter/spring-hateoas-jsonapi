@@ -19,10 +19,12 @@ import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModel;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
+import lombok.Getter;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
 
+import javax.persistence.Id;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +52,32 @@ class Jackson2JsonApiIntegrationTest {
         String emptyDoc = mapper.writeValueAsString(representationModel);
 
         compareWithFile(emptyDoc, "emptyDoc.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jpa_id() throws Exception {
+        @Getter
+        class Movie {
+            @Id
+            private String myId = "1";
+            private String title = "Star Wars";
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id() throws Exception {
+        @Getter
+        class Movie {
+            @JsonApiId
+            private String myId = "1";
+            private String title = "Star Wars";
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
     }
 
     @Test

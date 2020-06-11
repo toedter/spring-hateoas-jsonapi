@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi.support;
+package com.toedter.spring.hateoas.jsonapi;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import javax.persistence.Id;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@With
-public class Movie {
-    private String id;
-    private String title;
-}
+/**
+ * This is a marker interface to indicate which field will be rendered as JSON:API resource object id.
+ *
+ * @author Kai Toedter
+ */
+@Target({METHOD, FIELD})
+@Retention(RUNTIME)
+public @interface JsonApiId {}
+

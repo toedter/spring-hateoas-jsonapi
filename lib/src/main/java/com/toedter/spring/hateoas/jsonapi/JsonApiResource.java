@@ -26,6 +26,7 @@ import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 @Value
@@ -49,15 +50,40 @@ class JsonApiResource {
         this.type = type;
     }
 
-    static String getId(Object object) {
+    static class IdField {
+        String name;
+        String value;
+
+        public IdField(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
+
+    static IdField getId(Object object) {
         try {
+            // first search for Annotation @Id
+            final Field[] declaredFields = object.getClass().getDeclaredFields();
+            for (Field field : declaredFields) {
+                final Annotation[] annotations = field.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    final String annotationName = annotation.annotationType().getCanonicalName();
+                    if ("javax.persistence.Id".equals(annotationName)
+                            || "com.toedter.spring.hateoas.jsonapi.JsonApiId".equals(annotationName)) {
+                        field.setAccessible(true);
+                        return new IdField(field.getName(), field.get(object).toString());
+                    }
+                }
+            }
+
+            // then try field "id"
             Field field = object.getClass().getDeclaredField("id");
             field.setAccessible(true);
             final Object id = field.get(object);
             if (id == null) {
                 throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
             }
-            return id.toString();
+            return new IdField("id", id.toString());
         } catch (Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
