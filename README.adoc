@@ -1,4 +1,10 @@
+ifdef::env-github[]
+:resources-dir: https://raw.githubusercontent.com/toedter/spring-hateoas-jsonapi/master/lib/src/main/asciidoc
+endif::[]
+ifndef::env-github[]
 :resources-dir: lib/src/main/asciidoc
+endif::[]
+
 image:https://github.com/toedter/spring-hateoas-jsonapi/workflows/Build/badge.svg["build", link="https://github.com/toedter/spring-hateoas-jsonapi/actions"]
 image:https://codecov.io/gh/toedter/spring-hateoas-jsonapi/branch/master/graph/badge.svg["coverage", link="https://codecov.io/gh/toedter/spring-hateoas-jsonapi"]
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", link="https://opensource.org/licenses/Apache-2.0"]
