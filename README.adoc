@@ -1,9 +1,9 @@
+:resources-dir: lib/src/main/asciidoc
 image:https://github.com/toedter/spring-hateoas-jsonapi/workflows/Build/badge.svg["build", link="https://github.com/toedter/spring-hateoas-jsonapi/actions"]
 image:https://codecov.io/gh/toedter/spring-hateoas-jsonapi/branch/master/graph/badge.svg["coverage", link="https://codecov.io/gh/toedter/spring-hateoas-jsonapi"]
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", link="https://opensource.org/licenses/Apache-2.0"]
 
 = JSON:API for Spring HATEOAS
-:resources-dir: lib/src/main/asciidoc/
 
 This is an implementation of the media type `application/vnd.api+json` (JSON:API)
 to be integrated in Spring HATEOAS. Goal is to use the existing Spring HATEOAS
