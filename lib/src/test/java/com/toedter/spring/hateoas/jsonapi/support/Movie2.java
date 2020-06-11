@@ -17,15 +17,18 @@
 package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Id;
 
+// tag::Movie[]
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Movie2 {
     @Id
     private String myId;
@@ -33,3 +36,4 @@ public class Movie2 {
     @JsonApiType
     private String type;
 }
+// end::Movie[]

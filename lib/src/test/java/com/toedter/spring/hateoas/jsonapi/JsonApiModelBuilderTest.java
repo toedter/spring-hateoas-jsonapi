@@ -109,8 +109,6 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
         Director director1 = new Director("1", "Lana Wachowski");
         Director director2 = new Director("2", "Lilly Wachowski");
 
-        Movie movie2 = new Movie("2", "Star Wars");
-
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().entity(movie)
                         .relationship("directors", director1)
@@ -126,6 +124,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_paged_movie_model_with_many_relationships_and_included() throws Exception {
+        // tag::complex-paged-model[]
         Movie movie = new Movie("1", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
         Director director1 = new Director("1", "Lana Wachowski");
@@ -167,6 +166,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
                         .included(director2EntityModel)
                         .link(nextLink)
                         .build();
+        // end::complex-paged-model[]
 
         final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
         compareWithFile(pagedModelJson, "moviesPagedJsonApiModelWithIncluded.json");

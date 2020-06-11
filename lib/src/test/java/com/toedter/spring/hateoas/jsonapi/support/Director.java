@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+// tag::Director[]
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,3 +30,4 @@ public class Director {
     private String id;
     private String name;
 }
+// end::Director[]

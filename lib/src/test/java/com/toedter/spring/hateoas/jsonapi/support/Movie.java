@@ -23,6 +23,7 @@ import lombok.With;
 
 import javax.persistence.Id;
 
+// tag::Movie[]
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,3 +32,4 @@ public class Movie {
     private String id;
     private String title;
 }
+// end::Movie[]

@@ -133,6 +133,13 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type() throws Exception {
+        String jsonMovie = mapper.writeValueAsString(
+                EntityModel.of(new Movie2("1", "Star Wars", "my-movies")));
+        compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
+    }
+
+    @Test
     void should_serialize_empty_entity_model() throws Exception {
         final EntityModel<Object> representationModel = EntityModel.of(new Object());
         String emptyDoc = mapper.writeValueAsString(representationModel);
