@@ -1,9 +1,10 @@
-= JSON:API for Spring HATEOAS - Reference Documentation
-Kai Toedter
+= JSON:API for Spring HATEOAS
+Kai Tödter
 :revnumber: {version}
 :revdate: {localdate}
 :toc: left
 :hide-uri-scheme:
+:source-highlighter: highlightjs
 
 This project provides some APIs to ease creating REST representations that follow the https://en.wikipedia.org/wiki/HATEOAS[HATEOAS] principle when working with Spring and especially Spring MVC. The core problem it tries to address is link creation and representation assembly.
 

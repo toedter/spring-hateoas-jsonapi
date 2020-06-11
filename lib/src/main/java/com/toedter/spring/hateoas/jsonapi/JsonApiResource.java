@@ -175,7 +175,6 @@ class JsonApiResource {
                     // if the method is a setter find the corresponding field if there is one
                     final String methodName = method.getName();
                     if (isAnnotatedMethod && methodName.startsWith("set")) {
-                        String typeFieldName = StringUtils.uncapitalize(methodName.substring(3));
                         method.invoke(object, jsonApiTypeValue);
                         return;
                     }
@@ -183,11 +182,13 @@ class JsonApiResource {
             }
 
             // then try field directly
-            Field field = object.getClass().getDeclaredField(jsonApiTypeKey.name());
-            field.setAccessible(true);
-            field.set(object, jsonApiTypeValue);
+            if(jsonApiTypeKey == JsonApiResourceField.id) {
+                Field field = object.getClass().getDeclaredField(jsonApiTypeKey.name());
+                field.setAccessible(true);
+                field.set(object, jsonApiTypeValue);
+            }
         } catch (Exception e) {
-            System.out.println("Cannot set JSON:API " + jsonApiTypeKey + " on Object of type " + object.getClass().getSimpleName());
+            System.out.println("Cannot set JSON:API " + jsonApiTypeKey + " on object of type " + object.getClass().getSimpleName());
         }
     }
 }
