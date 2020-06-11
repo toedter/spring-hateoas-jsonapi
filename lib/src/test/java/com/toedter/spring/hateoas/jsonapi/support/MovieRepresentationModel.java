@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.Link;
@@ -27,7 +28,8 @@ import org.springframework.hateoas.RepresentationModel;
 public class MovieRepresentationModel extends RepresentationModel<MovieRepresentationModel> {
 
     private String id;
-    private String _type;
+    @JsonApiType
+    private String type;
     private String name;
 
     public MovieRepresentationModel() {
@@ -36,7 +38,7 @@ public class MovieRepresentationModel extends RepresentationModel<MovieRepresent
     public MovieRepresentationModel(Movie movie) {
         this.id = movie.getId();
         this.name = movie.getTitle();
-        this._type = "movie-type";
+        this.type = "movie-type";
         add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
     }
 }

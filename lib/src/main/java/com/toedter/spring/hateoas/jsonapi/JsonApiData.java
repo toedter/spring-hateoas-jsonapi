@@ -107,7 +107,7 @@ class JsonApiData {
         if (content == null) {
             return Optional.empty();
         }
-        JsonApiResource.IdField idField;
+        JsonApiResource.ResourceField idField;
         try {
             idField = JsonApiResource.getId(content);
         } catch (Exception e) {
@@ -126,24 +126,25 @@ class JsonApiData {
         if (isSingleEntity || (links != null && links.isEmpty())) {
             links = null;
         }
-        String jsonApiType = JsonApiResource.getType(content);
+        JsonApiResource.ResourceField typeField = JsonApiResource.getType(content);
 
         ObjectMapper mapper = new ObjectMapper();
         @SuppressWarnings("unchecked")
         Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
         attributeMap.remove("links");
-        attributeMap.remove("_type"); // TODO provide annotation
         attributeMap.remove(idField.name);
+        attributeMap.remove(typeField.name);
 
         final Map<String, Object> finalContentObject = attributeMap;
         Links finalLinks = links;
         String finalId = idField.value;
+        String finalType = typeField.value;
         Object finalRelationships = relationships;
         return Optional.of(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()
                         .withId(finalId)
-                        .withType(jsonApiType)
+                        .withType(finalType)
                         .withAttributes(finalContentObject)
                         .withRelationships(finalRelationships)
                         .withLinks(finalLinks));

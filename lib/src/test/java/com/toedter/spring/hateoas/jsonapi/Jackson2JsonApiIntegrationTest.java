@@ -16,10 +16,10 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.*;
-import com.toedter.spring.hateoas.jsonapi.support.Movie;
-import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModel;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
+import com.toedter.spring.hateoas.jsonapi.support.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -68,12 +68,64 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_entity_model_with_annotated_jpa_id_method() throws Exception {
+        class Movie {
+            private String myId = "1";
+
+            @Getter
+            private String title = "Star Wars";
+
+            @Id
+            public String getMyId() {
+                return myId;
+            }
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id_method() throws Exception {
+        class Movie {
+            private String myId = "1";
+
+            @Getter
+            private String title = "Star Wars";
+
+            @JsonApiId
+            public String getMyId() {
+                return myId;
+            }
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id_method_and_no_field() throws Exception {
+        class Movie {
+            @Getter
+            private final String title = "Star Wars";
+
+            @JsonApiId
+            public String getId() {
+                return "1";
+            }
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id() throws Exception {
         @Getter
         class Movie {
             @JsonApiId
-            private String myId = "1";
-            private String title = "Star Wars";
+            private final String myId = "1";
+            private final String title = "Star Wars";
         }
 
         String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
@@ -200,6 +252,40 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_single_movie_entity_model_with_field_annotation() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie2.class);
+        File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
+        EntityModel<Movie2> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        Movie2 movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getMyId()).isEqualTo("1");
+        assertThat(movie.getType()).isEqualTo("movies");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_method_annotation() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie3.class);
+        File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
+        EntityModel<Movie3> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        Movie3 movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getMyId()).isEqualTo("1");
+        assertThat(movie.getType()).isEqualTo("movies");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+    }
+
+    @Test
     void should_deserialize_single_movie_representation_model() throws Exception {
         JavaType movieRepresentationModelType =
                 mapper.getTypeFactory()
@@ -209,7 +295,7 @@ class Jackson2JsonApiIntegrationTest {
 
         assertThat(movieRepresentationModel.getId()).isEqualTo("1");
         assertThat(movieRepresentationModel.getName()).isEqualTo("Star Wars");
-        assertThat(movieRepresentationModel.get_type()).isEqualTo("movie-type");
+        assertThat(movieRepresentationModel.getType()).isEqualTo("movie-type");
 
         Links links = movieRepresentationModel.getLinks();
         assertThat(links.hasSingleLink()).isTrue();

@@ -54,12 +54,12 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     }
 
     protected Object convertToResource(JsonApiData jsonApiData) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> attributes = (Map<String, Object>) jsonApiData.getAttributes();
-        attributes.put("id", jsonApiData.getId());
-        attributes.put("_type", jsonApiData.getType());
+        Map<String, Object> attributes = jsonApiData.getAttributes();
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
-        return PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        final Object objectFromProperties = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.id, jsonApiData.getId());
+        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.type, jsonApiData.getType());
+        return objectFromProperties;
     }
 
     abstract protected T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
@@ -76,8 +76,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-            throws JsonMappingException {
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) {
 
         JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
 

@@ -25,9 +25,12 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
+import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 
 @Value
 @Getter(onMethod = @__(@JsonProperty))
@@ -37,6 +40,9 @@ import java.lang.reflect.Field;
 class JsonApiResource {
     public static final String JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID =
             "JSON:API resource object must have property \"id\".";
+    public static final String JSONAPI_ID_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiId";
+    public static final String JSONAPI_TYPE_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiType";
+    public static final String JPA_ID_ANNOTATION = "javax.persistence.Id";
 
     Object id;
     String type;
@@ -50,54 +56,138 @@ class JsonApiResource {
         this.type = type;
     }
 
-    static class IdField {
+    static class ResourceField {
         String name;
         String value;
 
-        public IdField(String name, String value) {
+        public ResourceField(String name, String value) {
             this.name = name;
             this.value = value;
         }
     }
 
-    static IdField getId(Object object) {
+    static ResourceField getId(Object object) {
+        return getResourceField(JsonApiResourceField.id, object);
+    }
+
+    static ResourceField getType(Object object) {
+        return getResourceField(JsonApiResourceField.type, object);
+    }
+
+    enum JsonApiResourceField {id, type}
+
+    static private ResourceField getResourceField(JsonApiResourceField resourceField, Object object) {
+
         try {
-            // first search for Annotation @Id
+            // first search for field annotation
             final Field[] declaredFields = object.getClass().getDeclaredFields();
             for (Field field : declaredFields) {
+                field.setAccessible(true);
                 final Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if ("javax.persistence.Id".equals(annotationName)
-                            || "com.toedter.spring.hateoas.jsonapi.JsonApiId".equals(annotationName)) {
-                        field.setAccessible(true);
-                        return new IdField(field.getName(), field.get(object).toString());
+                    if (resourceField == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                            || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
+                        return new ResourceField(field.getName(), field.get(object).toString());
+                    } else if (resourceField == JsonApiResourceField.type
+                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
+                        return new ResourceField(field.getName(), field.get(object).toString());
                     }
                 }
             }
 
-            // then try field "id"
-            Field field = object.getClass().getDeclaredField("id");
-            field.setAccessible(true);
-            final Object id = field.get(object);
-            if (id == null) {
-                throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+            // first search for method annotation
+            final Method[] declaredMethods = object.getClass().getDeclaredMethods();
+            for (Method method : declaredMethods) {
+                final Annotation[] annotations = method.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    final String annotationName = annotation.annotationType().getCanonicalName();
+                    boolean isAnnotatedMethod = false;
+                    if (resourceField == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                            || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
+                        isAnnotatedMethod = true;
+                    } else if (resourceField == JsonApiResourceField.type
+                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
+                        isAnnotatedMethod = true;
+                    }
+                    // if the method is a getter find the corresponding field if there is one
+                    final String methodName = method.getName();
+                    if (isAnnotatedMethod && methodName.startsWith("get")) {
+                        String typeFieldName = StringUtils.uncapitalize(methodName.substring(3));
+                        return new ResourceField(typeFieldName, method.invoke(object).toString());
+                    }
+                }
             }
-            return new IdField("id", id.toString());
-        } catch (Exception e) {
+
+            if (resourceField == JsonApiResourceField.id) {
+                // then try field "id"
+                Field field = object.getClass().getDeclaredField("id");
+                field.setAccessible(true);
+                final Object id = field.get(object);
+                if (id == null) {
+                    throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+                }
+                return new ResourceField("id", id.toString());
+            }
+
+            String singleType = object.getClass().getSimpleName().toLowerCase();
+            String pluralType = English.plural(singleType, 2);
+            return new ResourceField(null, pluralType);
+        } catch (
+                Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
     }
 
-    static String getType(Object object) {
+    static void setTypeForObject(Object object, JsonApiResourceField jsonApiTypeKey, String jsonApiTypeValue) {
+        final Field[] declaredFields = object.getClass().getDeclaredFields();
         try {
-            Field field = object.getClass().getDeclaredField("_type");
+            // first try annotation on fields
+            for (Field field : declaredFields) {
+                field.setAccessible(true);
+                final Annotation[] annotations = field.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    final String annotationName = annotation.annotationType().getCanonicalName();
+                    if (jsonApiTypeKey == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                            || JSONAPI_ID_ANNOTATION.equals(annotationName))
+                            || (jsonApiTypeKey == JsonApiResourceField.type
+                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName))) {
+                        field.set(object, jsonApiTypeValue);
+                        return;
+                    }
+                }
+            }
+
+            // first try annotation on methods
+            final Method[] declaredMethods = object.getClass().getDeclaredMethods();
+            for (Method method : declaredMethods) {
+                final Annotation[] annotations = method.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    final String annotationName = annotation.annotationType().getCanonicalName();
+                    boolean isAnnotatedMethod = false;
+                    if (jsonApiTypeKey == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                            || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
+                        isAnnotatedMethod = true;
+                    } else if (jsonApiTypeKey == JsonApiResourceField.type
+                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
+                        isAnnotatedMethod = true;
+                    }
+                    // if the method is a setter find the corresponding field if there is one
+                    final String methodName = method.getName();
+                    if (isAnnotatedMethod && methodName.startsWith("set")) {
+                        String typeFieldName = StringUtils.uncapitalize(methodName.substring(3));
+                        method.invoke(object, jsonApiTypeValue);
+                        return;
+                    }
+                }
+            }
+
+            // then try field directly
+            Field field = object.getClass().getDeclaredField(jsonApiTypeKey.name());
             field.setAccessible(true);
-            return field.get(object).toString();
+            field.set(object, jsonApiTypeValue);
         } catch (Exception e) {
-            // pluralize class name
-            String singleType = object.getClass().getSimpleName().toLowerCase();
-            return English.plural(singleType, 2);
+            System.out.println("Cannot set JSON:API " + jsonApiTypeKey + " on Object of type " + object.getClass().getSimpleName());
         }
     }
 }
