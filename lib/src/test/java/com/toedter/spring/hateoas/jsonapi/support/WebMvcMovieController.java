@@ -65,7 +65,6 @@ public class WebMvcMovieController {
         WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
 
         Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
-        // Link moviesLink = linkTo(controller.all()).withRel("movies");
 
         Movie movie = MOVIES.get(id);
         return EntityModel.of(

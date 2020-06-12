@@ -63,7 +63,8 @@ class JsonApiData {
         this(null, null, null, null, null);
     }
 
-    static List<JsonApiData> extractCollectionContent(@Nullable RepresentationModel<?> representationModel) {
+    static List<JsonApiData> extractCollectionContent(
+            @Nullable RepresentationModel<?> representationModel, JsonApiConfiguration jsonApiConfiguration) {
 
         List<JsonApiData> dataList = new ArrayList<>();
 
@@ -76,17 +77,19 @@ class JsonApiData {
 
         if (representationModel instanceof CollectionModel) {
             for (Object entity : ((CollectionModel<?>) representationModel).getContent()) {
-                Optional<JsonApiData> jsonApiData = extractContent(entity, false);
+                Optional<JsonApiData> jsonApiData = extractContent(entity, false, jsonApiConfiguration);
                 jsonApiData.ifPresent(dataList::add);
             }
         } else {
-            Optional<JsonApiData> jsonApiData = extractContent(representationModel, true);
+            Optional<JsonApiData> jsonApiData = extractContent(representationModel, true, jsonApiConfiguration);
             jsonApiData.ifPresent(dataList::add);
         }
         return dataList;
     }
 
-    static Optional<JsonApiData> extractContent(@Nullable Object content, boolean isSingleEntity) {
+    static Optional<JsonApiData> extractContent(
+            @Nullable Object content, boolean isSingleEntity, JsonApiConfiguration jsonApiConfiguration) {
+
         Links links = null;
         Object relationships = null;
 
@@ -109,7 +112,7 @@ class JsonApiData {
         }
         JsonApiResource.ResourceField idField;
         try {
-            idField = JsonApiResource.getId(content);
+            idField = JsonApiResource.getId(content, jsonApiConfiguration);
         } catch (Exception e) {
             // will lead to "data":[], which is ok with the spec
             final Field[] fields = content.getClass().getDeclaredFields();
@@ -126,7 +129,7 @@ class JsonApiData {
         if (isSingleEntity || (links != null && links.isEmpty())) {
             links = null;
         }
-        JsonApiResource.ResourceField typeField = JsonApiResource.getType(content);
+        JsonApiResource.ResourceField typeField = JsonApiResource.getType(content, jsonApiConfiguration);
 
         ObjectMapper mapper = new ObjectMapper();
         @SuppressWarnings("unchecked")

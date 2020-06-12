@@ -42,7 +42,7 @@ The JSON:API `type` is automtically generated of the pluralized, lower case, sim
 This is best practice, since then most likely the type matches the URL (end)
 of the corresponding REST collection resource.
 
-NOTE: It is planned to make this configurable in the future
+NOTE: You can configure if you want to use non-pluralized class names, see <<configuration>>
 
 == Annotations ==
 
@@ -69,7 +69,7 @@ following rules apply in order:
 * the annotation `@JsonApiType` is used on a field
 * if no annotation is present, the pluralized, lower case, simple class name of the entity will be used
 
-NOTE: It is planned to make this configurable in the future
+NOTE: You can configure if you want to use non-pluralized class names, see <<configuration>>
 
 As an example, consider the class
 
@@ -133,18 +133,31 @@ JSON:API specific representation model, a paged model with a paging link:
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=complex-paged-model]
 ----
 
-This model will be renderd as
+This model will be rendered as
 
 [source, json]
 ----
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
+[[configuration]]
 == Configuration ==
 
 There are several options how to change the output of the JSON:API rendering.
 
-NOTE: This will be added soon.
+For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
+Currently, you can configure
+
+* if the JSON:API version should be rendered automatically, the default is `false`.
+* if JSON:API types should be rendered as non pluralized class names.
+
+Here is an example how you would implement a JSON:API configuration:
+
+[source, json, indent=0]
+----
+include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
+----
+
 
 
 

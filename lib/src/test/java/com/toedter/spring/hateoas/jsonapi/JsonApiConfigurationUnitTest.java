@@ -28,19 +28,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JsonApiConfigurationUnitTest {
     @Test
     void should_initialize_defaults() {
-        assertThat(new JsonApiConfiguration().isUsePluralizedType()).isTrue();
-        assertThat(new JsonApiConfiguration().isRenderJsonApiVersion()).isFalse();
+        assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
+        assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
     }
 
     @Test
     void should_set_pluralized_type() {
-        new JsonApiConfiguration().withUsePluralizedType(false);
-        assertThat(new JsonApiConfiguration().withUsePluralizedType(false).isUsePluralizedType()).isFalse();
+        new JsonApiConfiguration().withPluralizedTypeRendered(false);
+        assertThat(new JsonApiConfiguration().withPluralizedTypeRendered(false).isPluralizedTypeRendered()).isFalse();
     }
 
     @Test
     void should_set_render_version() {
-        new JsonApiConfiguration().withUsePluralizedType(false);
-        assertThat(new JsonApiConfiguration().withRenderJsonApiVersion(true).isRenderJsonApiVersion()).isTrue();
+        new JsonApiConfiguration().withPluralizedTypeRendered(false);
+        assertThat(new JsonApiConfiguration().withJsonApiVersionRendered(true).isJsonApiVersionRendered()).isTrue();
     }
 }

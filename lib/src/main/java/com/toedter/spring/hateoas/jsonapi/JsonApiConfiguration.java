@@ -22,8 +22,6 @@ import lombok.Getter;
 import lombok.With;
 import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 
-import java.util.LinkedHashMap;
-
 /**
  * JSON:API specific configuration.
  *
@@ -40,7 +38,7 @@ public class JsonApiConfiguration {
      * <p>
      * Precondition: At runtime, evo-inflector must be in the classpath
      */
-    private final boolean usePluralizedType;
+    private final boolean pluralizedTypeRendered;
 
     /**
      * Configures how to render JSON:API document.
@@ -54,14 +52,14 @@ public class JsonApiConfiguration {
      * }
      * </pre>
      */
-    private final boolean renderJsonApiVersion;
+    private final boolean jsonApiVersionRendered;
 
     /**
      * Creates a new default {@link HalConfiguration} rendering single links as immediate sub-document.
      */
     public JsonApiConfiguration() {
 
-        this.usePluralizedType = true;
-        this.renderJsonApiVersion = false;
+        this.pluralizedTypeRendered = true;
+        this.jsonApiVersionRendered = false;
     }
 }

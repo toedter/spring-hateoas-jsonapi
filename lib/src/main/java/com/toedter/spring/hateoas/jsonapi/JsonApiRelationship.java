@@ -32,6 +32,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is used to build a JSON:API presentation model that uses relationships.
+ *
+ * @author Kai Toedter
+ */
 @Value
 @With(AccessLevel.PACKAGE)
 @JsonPropertyOrder({"data", "links", "meta"})
@@ -62,10 +67,17 @@ class JsonApiRelationship {
         this(null, null, null);
     }
 
+    /**
+     * Creates a JSON:API relationship from an entity model
+     *
+     * @param entityModel the base for the relationship
+     * @return the JSON:API relationship
+     */
     public static JsonApiRelationship of(EntityModel<?> entityModel) {
         final Object content = entityModel.getContent();
-        Object id = JsonApiResource.getId(content).value;
-        String type = JsonApiResource.getType(content).value;
+        final JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
+        Object id = JsonApiResource.getId(content, jsonApiConfiguration).value;
+        String type = JsonApiResource.getType(content, jsonApiConfiguration).value;
         return new JsonApiRelationship(Collections.singletonList(new JsonApiResource(id, type)), null, null);
     }
 }

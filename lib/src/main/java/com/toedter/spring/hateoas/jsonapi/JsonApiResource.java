@@ -66,17 +66,18 @@ class JsonApiResource {
         }
     }
 
-    static ResourceField getId(Object object) {
-        return getResourceField(JsonApiResourceField.id, object);
+    static ResourceField getId(Object object, JsonApiConfiguration jsonApiConfiguration) {
+        return getResourceField(JsonApiResourceField.id, object, jsonApiConfiguration);
     }
 
-    static ResourceField getType(Object object) {
-        return getResourceField(JsonApiResourceField.type, object);
+    static ResourceField getType(Object object, JsonApiConfiguration jsonApiConfiguration) {
+        return getResourceField(JsonApiResourceField.type, object, jsonApiConfiguration);
     }
 
     enum JsonApiResourceField {id, type}
 
-    static private ResourceField getResourceField(JsonApiResourceField resourceField, Object object) {
+    static private ResourceField getResourceField(
+            JsonApiResourceField resourceField, Object object, JsonApiConfiguration jsonApiConfiguration) {
 
         try {
             // first search for field annotation
@@ -130,9 +131,11 @@ class JsonApiResource {
                 return new ResourceField("id", id.toString());
             }
 
-            String singleType = object.getClass().getSimpleName().toLowerCase();
-            String pluralType = English.plural(singleType, 2);
-            return new ResourceField(null, pluralType);
+            String jsonApiType = object.getClass().getSimpleName().toLowerCase();
+            if (jsonApiConfiguration.isPluralizedTypeRendered()) {
+                jsonApiType = English.plural(jsonApiType, 2);
+            }
+            return new ResourceField(null, jsonApiType);
         } catch (
                 Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
@@ -182,7 +185,7 @@ class JsonApiResource {
             }
 
             // then try field directly
-            if(jsonApiTypeKey == JsonApiResourceField.id) {
+            if (jsonApiTypeKey == JsonApiResourceField.id) {
                 Field field = object.getClass().getDeclaredField(jsonApiTypeKey.name());
                 field.setAccessible(true);
                 field.set(object, jsonApiTypeValue);

@@ -16,9 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,13 +52,16 @@ public class MovieController {
         this.movieModelAssembler = movieModelAssembler;
     }
 
+    @Bean
+    JsonApiConfiguration getConfig() {
+        return new JsonApiConfiguration().withJsonApiVersionRendered(true);
+    }
+
     @GetMapping("/movies")
     ResponseEntity<RepresentationModel<?>> findAll(
-            @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
+            @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size) {
 
-        final int size = pageSize;
-        final int page = pageNumber;
         final PageRequest pageRequest = PageRequest.of(page, size);
 
         final Page<Movie> pagedResult = repository.findAll(pageRequest);
@@ -113,7 +118,7 @@ public class MovieController {
             }
         }
 
-        directors.values().stream().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
+        directors.values().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
 
         final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
 
