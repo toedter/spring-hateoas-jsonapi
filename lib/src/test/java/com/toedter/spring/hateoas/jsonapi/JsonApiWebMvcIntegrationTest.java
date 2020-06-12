@@ -32,7 +32,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -47,7 +46,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ContextConfiguration
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApi WebMvc Integration Test")
-public class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
+class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     @Autowired
     WebApplicationContext context;
 

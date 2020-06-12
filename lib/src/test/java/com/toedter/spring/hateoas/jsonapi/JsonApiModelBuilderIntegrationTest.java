@@ -24,20 +24,22 @@ import org.springframework.hateoas.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 // tag::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 // end::import-builder[]
 
+
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Test")
-public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
+class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUpModule() {
-        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
+        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
         mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper);
+        configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
     }
 
     @Test

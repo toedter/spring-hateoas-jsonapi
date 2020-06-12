@@ -20,14 +20,27 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
+import org.springframework.hateoas.mediatype.hal.CurieProvider;
+import org.springframework.hateoas.mediatype.hal.HalConfiguration;
+import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.http.MediaType;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
+@RequiredArgsConstructor
 class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+
+    private final ObjectProvider<JsonApiConfiguration> configuration;
+    private final AutowireCapableBeanFactory beanFactory;
+
     @Override
     @Nonnull
     public List<MediaType> getMediaTypes() {
@@ -41,11 +54,22 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
     @Override
     @Nonnull
-    public ObjectMapper configureObjectMapper(ObjectMapper mapper) {
+    public ObjectMapper configureObjectMapper(@Nonnull ObjectMapper mapper) {
+        return this.configureObjectMapper(
+                mapper, configuration.getIfAvailable(JsonApiConfiguration::new));
+    }
+
+    @Nonnull
+    ObjectMapper configureObjectMapper(
+            @Nonnull ObjectMapper mapper,
+            JsonApiConfiguration configuration) {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         mapper.registerModule(new Jackson2JsonApiModule());
+        mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
+                configuration, beanFactory));
+
         return mapper;
     }
 }

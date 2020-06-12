@@ -18,8 +18,6 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.support.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -41,9 +39,9 @@ class Jackson2JsonApiIntegrationTest {
 
     @BeforeEach
     void setUpModule() {
-        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration();
+        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
         mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper);
+        configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
     }
 
     @Test

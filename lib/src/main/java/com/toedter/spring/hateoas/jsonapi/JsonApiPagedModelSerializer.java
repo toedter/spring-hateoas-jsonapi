@@ -23,8 +23,8 @@ import java.util.Map;
 
 class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedModel<?>> {
 
-    public JsonApiPagedModelSerializer() {
-        super(PagedModel.class, false);
+    public JsonApiPagedModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
+        super(PagedModel.class, false, jsonApiConfiguration);
     }
 
     @Override

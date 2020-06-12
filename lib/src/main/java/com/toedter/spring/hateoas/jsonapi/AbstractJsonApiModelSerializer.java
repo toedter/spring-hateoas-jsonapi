@@ -30,12 +30,12 @@ import java.util.List;
 public abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
-    protected AbstractJsonApiModelSerializer(Class<T> t) {
-        super(t);
-    }
 
-    protected AbstractJsonApiModelSerializer(Class<?> t, boolean dummy) {
+    private final JsonApiConfiguration jsonApiConfiguration;
+
+    protected AbstractJsonApiModelSerializer(Class<?> t, boolean dummy, JsonApiConfiguration jsonApiConfiguration) {
         super(t, dummy);
+        this.jsonApiConfiguration = jsonApiConfiguration;
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class AbstractJsonApiModelSerializer<T extends RepresentationMod
             // we want to add the page metadata to the top level JSON:API document
             final RepresentationModel<?> subcontent = ((JsonApiModel) value).getContent();
             if (subcontent instanceof PagedModel) {
-                JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer();
+                JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer(jsonApiConfiguration);
                 doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc);
             }
         } else {

@@ -44,10 +44,17 @@ of the corresponding REST collection resource.
 
 NOTE: It is planned to make this configurable in the future
 
-== Use of Annotations ==
+== Annotations ==
 
 The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible for the developer. For the mapping of the `id`, the
+as convenient as possible for the developer.
+
+There are two new Annotations provided by this project:
+
+* `@JsonApiId` to mark a JSON:API `id`
+* `@JsonApiType` to mark a JSON:API `type`
+
+The use of these annotations is optional. For the mapping of the `id`, the
 following rules apply in order:
 
 * the annotation `@JsonApiId` is used on a field
@@ -60,7 +67,7 @@ For the mapping of the `type`, the
 following rules apply in order:
 
 * the annotation `@JsonApiType` is used on a field
-* if no annotation is present, the pluralized, uncapitalized simple class name of the entity will be used
+* if no annotation is present, the pluralized, lower case, simple class name of the entity will be used
 
 NOTE: It is planned to make this configurable in the future
 

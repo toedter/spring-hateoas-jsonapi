@@ -21,8 +21,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-import javax.persistence.Id;
-
 // tag::Movie[]
 @Data
 @NoArgsConstructor
