@@ -296,6 +296,30 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 </div>
 <div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "1",
+          "type": "directors"
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>If you want to include the related resources in the JSON:API output,
 you can build included director resources like</p>
 </div>
@@ -314,6 +338,60 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
                 .included(director1)
                 .included(director2)
                 .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "The Matrix"
+    },
+    "relationships": {
+      "relatedMovies": {
+        "data": {
+          "id": "2",
+          "type": "movies"
+        }
+      },
+      "directors": [
+        {
+          "data": {
+            "id": "1",
+            "type": "directors"
+          }
+        },
+        {
+          "data": {
+            "id": "2",
+            "type": "directors"
+          }
+        }
+      ]
+    }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      }
+    },
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Lilly Wachowski"
+      }
+    }
+  ]
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -478,7 +556,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-12 18:50:15 UTC
+Last updated 2020-06-12 19:03:27 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
