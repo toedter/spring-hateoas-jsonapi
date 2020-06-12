@@ -87,7 +87,22 @@ Answers to a few questions, e.g. related to HAL, you can find
 <a href="https://jsonapi.org/faq/#why-not-use-the-hal-specification">here</a>.</p>
 </div>
 <div class="paragraph">
-<p>To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jspnapi.0.0.1-SNAPSHOT.jar in your classpath.</p>
+<p>To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jsonapi.0.0.1-SNAPSHOT.jar in your classpath.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The jar is not published to Maven Central yet. I will wait until the API keeps being more stable.
+(Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
+For now, you have to clone the Gitbub project <a href="https://github.com/toedter/spring-hateoas-jsonapi" class="bare">github.com/toedter/spring-hateoas-jsonapi</a>
+and build the jar locally.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Anytime a client supplies an <code>Accept</code> header with <code>application/vnd.api+json</code>, you can expect something like this:</p>
@@ -609,7 +624,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-12 19:03:27 UTC
+Last updated 2020-06-12 19:29:43 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
