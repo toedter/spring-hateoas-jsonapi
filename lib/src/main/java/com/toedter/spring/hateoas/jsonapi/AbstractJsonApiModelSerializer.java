@@ -42,10 +42,13 @@ public abstract class AbstractJsonApiModelSerializer<T extends RepresentationMod
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
         JsonApiDocument doc = new JsonApiDocument()
-                .withJsonapi(new JsonApiJsonApi())
                 .withData(JsonApiData.extractCollectionContent(value))
                 .withLinks(getLinksOrNull(value))
                 .withIncluded(getIncluded(value));
+
+        if(jsonApiConfiguration.isRenderJsonApiVersion()) {
+            doc = doc.withJsonapi(new JsonApiJsonApi());
+        }
 
         if (value instanceof JsonApiModel) {
             // In case the content of an JsonApiRepresentationModel is a PagedModel,

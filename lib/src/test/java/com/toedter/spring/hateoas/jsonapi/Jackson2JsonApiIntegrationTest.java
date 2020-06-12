@@ -39,9 +39,7 @@ class Jackson2JsonApiIntegrationTest {
 
     @BeforeEach
     void setUpModule() {
-        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
-        mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
+        mapper = createObjectMapper(new JsonApiConfiguration());
     }
 
     @Test
@@ -375,11 +373,30 @@ class Jackson2JsonApiIntegrationTest {
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
     }
 
+    @Test
+    void should_render_jsonapi_version() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+
+        mapper = createObjectMapper(new JsonApiConfiguration().withRenderJsonApiVersion(true));
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithJsonApiVersion.json");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
         assertThat(json).isEqualTo(jsonNode.toString());
+    }
+
+    private ObjectMapper createObjectMapper(JsonApiConfiguration jsonApiConfiguration) {
+        JsonApiMediaTypeConfiguration configuration =
+                new JsonApiMediaTypeConfiguration(null, null);
+        mapper = new ObjectMapper();
+        configuration.configureObjectMapper(mapper, jsonApiConfiguration);
+        return mapper;
     }
 }

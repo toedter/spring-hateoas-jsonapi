@@ -94,12 +94,12 @@ representation model.
 The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
 [source, java]
 ----
-include::{test-dir}/JsonApiModelBuilderTest.java[tags=import-builder]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=import-builder]
 ----
 
 [source, java,indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-movie-model]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-movie-model]
 ----
 
 Consider that you want to express the relationships of movies to their directors.
@@ -114,7 +114,7 @@ You can build a relationship from a movie to a director like
 
 [source, java,indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-relationship]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-relationship]
 ----
 
 If you want to include the related resources in the JSON:API output,
@@ -122,7 +122,7 @@ you can build included director resources like
 
 [source, java,indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-included]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-included]
 ----
 
 The following example shows the creation of a more complex
@@ -130,7 +130,7 @@ JSON:API specific representation model, a paged model with a paging link:
 
 [source, java,indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderTest.java[tags=complex-paged-model]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=complex-paged-model]
 ----
 
 This model will be renderd as
