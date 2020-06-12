@@ -551,8 +551,9 @@ public class Movie {
 But in your model you can use any Class and <code>toString()</code> is used for conversion.
 So, if the <code>id</code> attribute of <code>Movie</code> would be of type <code>long</code>,
 the rendered JSON:API would be the same.
-The JSON:API <code>type</code> is automtically generated of the pluralized, uncapitalized simple class name.
-This is best practice, since then most likely the type matches the URL (end) of the corresponding REST collection resource.</p>
+The JSON:API <code>type</code> is automtically generated of the pluralized, lower case, simple class name.
+This is best practice, since then most likely the type matches the URL (end)
+of the corresponding REST collection resource.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -882,7 +883,7 @@ This will be added soon.
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-12 07:59:28 UTC
+Last updated 2020-06-12 08:10:14 UTC
 </div>
 </div>
 </body>
