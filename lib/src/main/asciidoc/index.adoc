@@ -5,6 +5,7 @@ Kai Tödter
 :toc: left
 :hide-uri-scheme:
 :source-highlighter: highlightjs
+:stylesheet: spring.css
 
 This project provides JSON:API media type support for Spring HATEOAS.
 
