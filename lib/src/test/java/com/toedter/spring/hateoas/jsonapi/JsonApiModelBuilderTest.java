@@ -24,8 +24,9 @@ import org.springframework.hateoas.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+// tag::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+// end::import-builder[]
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Test")
@@ -55,8 +56,10 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_single_movie_model() throws Exception {
+        // tag::build-movie-model[]
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(movie).build();
+        // end::build-movie-model[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModel.json");
@@ -73,12 +76,14 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_single_movie_model_with_relationship() throws Exception {
+        // tag::build-relationship[]
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().entity(movie)
                         .relationship("directors", EntityModel.of(director))
                         .build();
+        // end::build-relationship[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithRelationship.json");
@@ -104,6 +109,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_single_movie_model_with_many_relationships_and_included() throws Exception {
+        // tag::build-included[]
         Movie movie = new Movie("1", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
         Director director1 = new Director("1", "Lana Wachowski");
@@ -117,6 +123,7 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
                         .included(director1)
                         .included(director2)
                         .build();
+        // end::build-included[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
@@ -154,9 +161,10 @@ public class JsonApiModelBuilderTest extends AbstractJsonApiTest {
         movies.add(jsonApiModel1);
         movies.add(jsonApiModel2);
 
-        PagedModel.PageMetadata pageMetadata =
-                new PagedModel.PageMetadata(2, 1, 2, 2);
-        Link nextLink = Link.of("http://localhost/movies?page[number]=2&page[size]=2").withRel(IanaLinkRelations.NEXT);
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 2, 2);
+        Link nextLink =
+                Link.of("http://localhost/movies?page[number]=2&page[size]=2")
+                        .withRel(IanaLinkRelations.NEXT);
         final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(movies, pageMetadata);
 
         RepresentationModel<?> pagedJasonApiModel =

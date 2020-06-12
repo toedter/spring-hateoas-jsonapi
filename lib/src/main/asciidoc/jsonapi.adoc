@@ -4,29 +4,30 @@
 :resource-dir: json
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 :test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
-:linkattrs:
-:tabsize: 2
-
 
 https://jsonapi.org/[JSON:API] is a widely adapted hypermedia format.
 You can find a list of implementations and tools https://jsonapi.org/implementations/[here].
 Answers to a few questions, e.g. related to HAL, you can find
 https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
 
-To enable JSON:API to Spring Hateoas, just put com.toedter.spring.hateoas.jspnapi.{version}.jar in your classpath.
+To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jspnapi.{version}.jar in your classpath.
 
 Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
 
 [source, json]
+----
 include::{resource-dir}/jsonapi-sample.json[]
+----
 
-== Spring HATEOAS Representation Models
+== Representation Models
 
 All Spring HATEOAS representation models are rendered as JSON:API.
-Consider a simple Movie Class as base for Spring HATEOAS representation model.:
+Consider a simple Movie Class as base for a Spring HATEOAS entity model:
 
 [source, java]
+----
 include::{test-dir}/support/Movie.java[tags=Movie]
+----
 
 An `EnitiyModel.of(new Movie("1", "Star Wars"))` is then rendered as
 
@@ -38,15 +39,15 @@ But in your model you can use any Class and `toString()` is used for conversion.
 So, if the `id` attribute of `Movie` would be of type `long`,
 the rendered JSON:API would be the same.
 The JSON:API `type` is automtically generated of the pluralized, uncapitalized simple class name.
-This is best practice, since then most likely the type matches the URL (end) of a REST collection resource.
+This is best practice, since then most likely the type matches the URL (end) of the corresponding REST collection resource.
 
 NOTE: It is planned to make this configurable in the future
 
 == Use of Annotations ==
 
 The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible for the developer. For the mapping of the ´id´, the
-following rules apply in the following order:
+as convenient as possible for the developer. For the mapping of the `id`, the
+following rules apply in order:
 
 * the annotation `@JsonApiId` is used on a field
 * the annotation `@JsonApiId` is used on a method
@@ -54,8 +55,8 @@ following rules apply in the following order:
 * the annotation `@Id` (javax.persistence.Id) is used on a method
 * the entity (base for representation models) provides an attribute `id`
 
-For the mapping of the ´type´, the
-following rules apply in the following order:
+For the mapping of the `type`, the
+following rules apply in order:
 
 * the annotation `@JsonApiType` is used on a field
 * if no annotation is present, the pluralized, uncapitalized simple class name of the entity will be used
@@ -65,12 +66,16 @@ NOTE: It is planned to make this configurable in the future
 As an example, consider the class
 
 [source, java]
+----
 include::{test-dir}/support/Movie2.java[tags=Movie]
+----
 
 Then, `EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))` will be rendered as
 
 [source, json]
+----
 include::{test-resources-dir}/movieEntityModelWithAnnotations.json[]
+----
 
 == JSON:API Builder ==
 
@@ -78,22 +83,54 @@ If you want to use JSON:API `relationships` or `included` data, you can use the
 `JsonApiModelBuilder`. The following example shows the creation of a more complex
 representation model.
 
+The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
+[source, java]
+----
+include::{test-dir}/JsonApiModelBuilderTest.java[tags=import-builder]
+----
+
+[source, java,indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-movie-model]
+----
+
 Consider that you want to express the relationships of movies to their directors.
 A simple `Director` class could look like:
 
 [source, java]
+----
 include::{test-dir}/support/Director.java[tags=Director]
+----
+
+You can build a relationship from a movie to a director like
+
+[source, java,indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-relationship]
+----
+
+If you want to include the related resources in the JSON:API output,
+you can build included director resources like
+
+[source, java,indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderTest.java[tags=build-included]
+----
 
 The following example shows the creation of a more complex
-JSON:API specific representation model:
+JSON:API specific representation model, a paged model with a paging link:
 
-[source, java]
+[source, java,indent=0]
+----
 include::{test-dir}/JsonApiModelBuilderTest.java[tags=complex-paged-model]
+----
 
 This model will be renderd as
 
 [source, json]
+----
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
+----
 
 == Configuration ==
 

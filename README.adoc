@@ -10,6 +10,10 @@ representation models to serialize/deserialize them according to the JSON:API sp
 
 This project is in an early stage and work in progress, please stay tuned.
 
+== Documentation
+
+you can find a detailed documentation at https://toedter.github.io/spring-hateoas-jsonapi/
+
 == Running the Example
 
 * Make sure Java 8 or later JDK is installed
