@@ -25,7 +25,7 @@
 <li><a href="#mediatypes.jsonapi">JSON:API</a>
 <ul class="sectlevel2">
 <li><a href="#_representation_models">Representation Models</a></li>
-<li><a href="#_use_of_annotations">Use of Annotations</a></li>
+<li><a href="#_annotations">Annotations</a></li>
 <li><a href="#_jsonapi_builder">JSON:API Builder</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 </ul>
@@ -200,10 +200,26 @@ It is planned to make this configurable in the future
 </div>
 </div>
 <div class="sect2">
-<h3 id="_use_of_annotations">Use of Annotations</h3>
+<h3 id="_annotations">Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible for the developer. For the mapping of the <code>id</code>, the
+as convenient as possible for the developer.</p>
+</div>
+<div class="paragraph">
+<p>There are two new Annotations provided by this project:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@JsonApiId</code> to mark a JSON:API <code>id</code></p>
+</li>
+<li>
+<p><code>@JsonApiType</code> to mark a JSON:API <code>type</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The use of these annotations is optional. For the mapping of the <code>id</code>, the
 following rules apply in order:</p>
 </div>
 <div class="ulist">
@@ -235,7 +251,7 @@ following rules apply in order:</p>
 <p>the annotation <code>@JsonApiType</code> is used on a field</p>
 </li>
 <li>
-<p>if no annotation is present, the pluralized, uncapitalized simple class name of the entity will be used</p>
+<p>if no annotation is present, the pluralized, lower case, simple class name of the entity will be used</p>
 </li>
 </ul>
 </div>
@@ -301,13 +317,12 @@ representation model.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in jsonapi.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilderTest.java[tags=import-builder]</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
-final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().entity(movie).build();</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in jsonapi.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilderTest.java[tags=build-movie-model]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -331,12 +346,7 @@ public class Director {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
-Director director = new Director("1", "George Lucas");
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().entity(movie)
-                .relationship("directors", EntityModel.of(director))
-                .build();</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in jsonapi.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilderTest.java[tags=build-relationship]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -345,19 +355,7 @@ you can build included director resources like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
-Movie relatedMovie = new Movie("2", "The Matrix 2");
-Director director1 = new Director("1", "Lana Wachowski");
-Director director2 = new Director("2", "Lilly Wachowski");
-
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().entity(movie)
-                .relationship("directors", director1)
-                .relationship("directors", director2)
-                .relationship("relatedMovies", EntityModel.of(relatedMovie))
-                .included(director1)
-                .included(director2)
-                .build();</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in jsonapi.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilderTest.java[tags=build-included]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -366,48 +364,7 @@ JSON:API specific representation model, a paged model with a paging link:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
-Movie relatedMovie = new Movie("2", "The Matrix 2");
-Director director1 = new Director("1", "Lana Wachowski");
-final EntityModel&lt;Director&gt; director1EntityModel = EntityModel.of(director1);
-Director director2 = new Director("2", "Lilly Wachowski");
-final EntityModel&lt;Director&gt; director2EntityModel = EntityModel.of(director2);
-
-final RepresentationModel&lt;?&gt; jsonApiModel1 =
-        jsonApiModel()
-                .entity(movie)
-                .relationship("directors", director1EntityModel)
-                .relationship("directors", director2EntityModel)
-                .relationship("relatedMovies", EntityModel.of(relatedMovie))
-                .build();
-
-Movie movie2 = new Movie("3", "Star Wars");
-Director director3 = new Director("3", "George Lucas");
-final EntityModel&lt;Director&gt; director3EntityModel = EntityModel.of(director3);
-
-final RepresentationModel&lt;?&gt; jsonApiModel2 =
-        jsonApiModel()
-                .entity(movie2)
-                .relationship("directors", director3EntityModel)
-                .build();
-
-List&lt;RepresentationModel&lt;?&gt;&gt; movies = new ArrayList&lt;&gt;();
-movies.add(jsonApiModel1);
-movies.add(jsonApiModel2);
-
-PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 2, 2);
-Link nextLink =
-        Link.of("http://localhost/movies?page[number]=2&amp;page[size]=2")
-                .withRel(IanaLinkRelations.NEXT);
-final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(movies, pageMetadata);
-
-RepresentationModel&lt;?&gt; pagedJasonApiModel =
-        jsonApiModel()
-                .entity(pagedModel)
-                .included(director1EntityModel)
-                .included(director2EntityModel)
-                .link(nextLink)
-                .build();</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in jsonapi.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilderTest.java[tags=complex-paged-model]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -509,7 +466,7 @@ This will be added soon.
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-12 11:16:33 UTC
+Last updated 2020-06-12 15:07:01 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
