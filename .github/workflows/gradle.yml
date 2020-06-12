@@ -23,8 +23,13 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build asciidoctor
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Deploy doc to Github pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        publish_dir: ./lib/build/docs/asciidoc
+        publish_branch: gh-pages  # deploying branch
