@@ -10,7 +10,12 @@ You can find a list of implementations and tools https://jsonapi.org/implementat
 Answers to a few questions, e.g. related to HAL, you can find
 https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
 
-To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jspnapi.{version}.jar in your classpath.
+To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jsonapi.{version}.jar in your classpath.
+
+NOTE: The jar is not published to Maven Central yet. I will wait until the API keeps being more stable.
+(Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
+For now, you have to clone the Gitbub project https://github.com/toedter/spring-hateoas-jsonapi
+and build the jar locally.
 
 Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
 
