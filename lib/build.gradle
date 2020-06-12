@@ -12,6 +12,11 @@ sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/release' }
+}
+
+configurations {
+    docs
 }
 
 dependencies {
@@ -32,6 +37,8 @@ dependencies {
     testImplementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    docs "io.spring.docresources:spring-doc-resources:0.2.2.RELEASE@zip"
 }
 
 test {
@@ -51,14 +58,40 @@ jacocoTestReport {
     }
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/Jackson2JsonApiModule\$**Mixin*','**/AbstractJsonApiSerializer**'])
+            fileTree(dir: it, exclude: ['**/Jackson2JsonApiModule\$**Mixin*', '**/AbstractJsonApiSerializer**'])
         }))
     }
 }
 
-asciidoctor {
-    sourceDir = file("src/main/asciidoc")
-    baseDirFollowsSourceFile()
-    attributes  'version': "${version}"
+task prepareAsciidocBuild(type: Sync) {
+    dependsOn configurations.docs
+    from {
+        configurations.docs.collect { zipTree(it) }
+    }
+    from "src/main/asciidoc/"
+    into "$buildDir/asciidoc/build"
 }
 
+asciidoctor {
+    sourceDir "$buildDir/asciidoc/build"
+    baseDirFollowsSourceFile()
+
+    sources {
+        include '*.adoc'
+    }
+
+    resources {
+        from(sourceDir) {
+            include 'images/*', 'css/**', 'js/**'
+        }
+    }
+
+    attributes 'version': "${project.version}",
+            'docinfo': 'shared',
+            'stylesdir': 'css/',
+            'stylesheet': 'spring.css',
+            'linkcss': true,
+            'icons': 'font'
+}
+
+asciidoctor.dependsOn prepareAsciidocBuild
