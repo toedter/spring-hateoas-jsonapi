@@ -95,7 +95,11 @@ This model will be renderd as
 [source, json]
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 
+== Configuration ==
 
+There are several options how to change the output of the JSON:API rendering.
+
+NOTE: This will be added soon.
 
 
 
