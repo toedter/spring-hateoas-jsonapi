@@ -12,7 +12,7 @@ This project is in an early stage and work in progress, please stay tuned.
 
 == Documentation
 
-you can find a detailed documentation at https://toedter.github.io/spring-hateoas-jsonapi/
+Detailed documentation is available at https://toedter.github.io/spring-hateoas-jsonapi/
 
 == Running the Example
 

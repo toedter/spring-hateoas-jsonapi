@@ -6,7 +6,7 @@ Kai Tödter
 :hide-uri-scheme:
 :source-highlighter: highlightjs
 
-This project provides some APIs to ease creating REST representations that follow the https://en.wikipedia.org/wiki/HATEOAS[HATEOAS] principle when working with Spring and especially Spring MVC. The core problem it tries to address is link creation and representation assembly.
+This project provides JSON:API media type support for Spring HATEOAS.
 
 (C) 2020 The original authors.
 

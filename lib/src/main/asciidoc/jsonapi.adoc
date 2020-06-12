@@ -38,8 +38,9 @@ In JSON:API, the `id` field must be of type `String`.
 But in your model you can use any Class and `toString()` is used for conversion.
 So, if the `id` attribute of `Movie` would be of type `long`,
 the rendered JSON:API would be the same.
-The JSON:API `type` is automtically generated of the pluralized, uncapitalized simple class name.
-This is best practice, since then most likely the type matches the URL (end) of the corresponding REST collection resource.
+The JSON:API `type` is automtically generated of the pluralized, lower case, simple class name.
+This is best practice, since then most likely the type matches the URL (end)
+of the corresponding REST collection resource.
 
 NOTE: It is planned to make this configurable in the future
 
