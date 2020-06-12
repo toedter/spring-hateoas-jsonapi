@@ -117,12 +117,25 @@ You can build a relationship from a movie to a director like
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-relationship]
 ----
 
+The representation model will be rendered as
+[source, java,indent=0]
+----
+include::{test-resources-dir}/movieJsonApiModelWithRelationship.json[]
+----
+
+
 If you want to include the related resources in the JSON:API output,
 you can build included director resources like
 
 [source, java,indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-included]
+----
+
+The representation model will be rendered as
+[source, java,indent=0]
+----
+include::{test-resources-dir}/movieJsonApiModelWithManyRelationshipsAndIncluded.json[]
 ----
 
 The following example shows the creation of a more complex
