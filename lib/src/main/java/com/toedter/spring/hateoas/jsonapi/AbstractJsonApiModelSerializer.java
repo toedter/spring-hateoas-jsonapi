@@ -27,14 +27,14 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class AbstractJsonApiRepresentationModelSerializer<T extends RepresentationModel<?>>
+public abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
-    protected AbstractJsonApiRepresentationModelSerializer(Class<T> t) {
+    protected AbstractJsonApiModelSerializer(Class<T> t) {
         super(t);
     }
 
-    protected AbstractJsonApiRepresentationModelSerializer(Class<?> t, boolean dummy) {
+    protected AbstractJsonApiModelSerializer(Class<?> t, boolean dummy) {
         super(t, dummy);
     }
 

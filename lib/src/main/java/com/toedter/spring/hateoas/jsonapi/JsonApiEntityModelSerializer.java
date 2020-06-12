@@ -18,7 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import org.springframework.hateoas.EntityModel;
 
-class JsonApiEntityModelSerializer extends AbstractJsonApiRepresentationModelSerializer<EntityModel<?>> {
+class JsonApiEntityModelSerializer extends AbstractJsonApiModelSerializer<EntityModel<?>> {
     public JsonApiEntityModelSerializer() {
         super(EntityModel.class, false);
     }
