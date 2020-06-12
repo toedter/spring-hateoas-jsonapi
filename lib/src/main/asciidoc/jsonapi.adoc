@@ -93,10 +93,7 @@ include::{test-resources-dir}/movieEntityModelWithAnnotations.json[]
 == JSON:API Builder ==
 
 If you want to use JSON:API `relationships` or `included` data, you can use the
-`JsonApiModelBuilder`. The following example shows the creation of a more complex
-representation model.
-
-The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
+`JsonApiModelBuilder`. The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
 [source, java]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=import-builder]
