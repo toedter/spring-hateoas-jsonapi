@@ -56,6 +56,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_empty_model_with_link() throws Exception {
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().entity(new Object()).link(Link.of("http://localhost/items").withSelfRel()).build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "emptyModelWithSelfLink.json");
+    }
+
+    @Test
     void should_build_single_movie_model() throws Exception {
         // tag::build-movie-model[]
         Movie movie = new Movie("1", "Star Wars");
@@ -65,6 +74,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModel.json");
     }
+
 
     @Test
     void should_build_single_movie_entity_model() throws Exception {
@@ -174,18 +184,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         movies.add(jsonApiModel1);
         movies.add(jsonApiModel2);
 
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 2, 2);
-        Link nextLink =
-                Link.of("http://localhost/movies?page[number]=2&page[size]=2")
-                        .withRel(IanaLinkRelations.NEXT);
-        final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(movies, pageMetadata);
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+        Link selfLink = Link.of("http://localhost/movies").withSelfRel();
+        final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(movies, pageMetadata, selfLink);
 
         RepresentationModel<?> pagedJasonApiModel =
                 jsonApiModel()
                         .entity(pagedModel)
                         .included(director1EntityModel)
                         .included(director2EntityModel)
-                        .link(nextLink)
                         .build();
         // end::complex-paged-model[]
 

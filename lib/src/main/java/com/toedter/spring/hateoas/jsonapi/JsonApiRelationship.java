@@ -63,10 +63,6 @@ class JsonApiRelationship {
         this.meta = meta;
     }
 
-    public JsonApiRelationship() {
-        this(null, null, null);
-    }
-
     /**
      * Creates a JSON:API relationship from an entity model
      *

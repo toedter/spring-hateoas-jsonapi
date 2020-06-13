@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies",
+    "first": "http://localhost/movies?page[number]=0&page[size]=1",
+    "prev": "http://localhost/movies?page[number]=0&page[size]=1",
+    "next": "http://localhost/movies?page[number]=2&page[size]=2",
+    "last": "http://localhost/movies?page[number]=99&page[size]=1"
+  },
+  "meta": {
+    "page-total-pages": 100,
+    "page-size": 1,
+    "page-number": 1,
+    "page-total-elements": 100
+  }
+}

@@ -16,10 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedModel<?>> {
 
@@ -28,14 +30,59 @@ class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedMo
     }
 
     @Override
-    protected JsonApiDocument postProcess(PagedModel<?> value, JsonApiDocument doc) {
-        if (value.getMetadata() != null) {
+    protected JsonApiDocument postProcess(
+            PagedModel<?> pagedModel, JsonApiDocument doc, JsonApiConfiguration jsonApiConfiguration) {
+
+        final PagedModel.PageMetadata metadata = pagedModel.getMetadata();
+        if (metadata != null) {
             Map<String, Object> metaMap = new HashMap<>();
-            metaMap.put(Jackson2JsonApiModule.PAGE_NUMBER, value.getMetadata().getNumber());
-            metaMap.put(Jackson2JsonApiModule.PAGE_SIZE, value.getMetadata().getSize());
-            metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_ELEMENTS, value.getMetadata().getTotalElements());
-            metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_PAGES, value.getMetadata().getTotalPages());
+
+            final long pageNumber = metadata.getNumber();
+            final long pageSize = metadata.getSize();
+            final long totalElements = metadata.getTotalElements();
+            final long totalPages = metadata.getTotalPages();
+
+            metaMap.put(Jackson2JsonApiModule.PAGE_NUMBER, pageNumber);
+            metaMap.put(Jackson2JsonApiModule.PAGE_SIZE, pageSize);
+            metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_ELEMENTS, totalElements);
+            metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_PAGES, totalPages);
             doc = doc.withMeta(metaMap);
+
+            final Optional<Link> selfLinkOptional = pagedModel.getLink(IanaLinkRelations.SELF);
+
+            if (selfLinkOptional.isPresent()) {
+                final String pageNumberReqestParam = jsonApiConfiguration.getPageNumberRequestParameter();
+                final String pageSizeRequestParam = jsonApiConfiguration.getPageSizeRequestParameter();
+
+                final Link selfLink = selfLinkOptional.get();
+                List<Link> paginationLinks = new ArrayList<>();
+
+                if (pageNumber > 0) {
+                    Link firstLink = Link.of(selfLink.getHref() + "?" + pageNumberReqestParam + "=0&"
+                            + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.FIRST);
+                    paginationLinks.add(firstLink);
+                }
+
+                if (pageNumber > 0) {
+                    Link prevLink = Link.of(selfLink.getHref() + "?" + pageNumberReqestParam + "=" + (pageNumber - 1)
+                            + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.PREV);
+                    paginationLinks.add(prevLink);
+                }
+
+                if (pageNumber < totalPages - 1) {
+                    Link nextLink = Link.of(selfLink.getHref() + "?" + pageNumberReqestParam + "=" + (pageNumber + 1)
+                            + "&" + pageSizeRequestParam + "=" + (pageNumber + 1)).withRel(IanaLinkRelations.NEXT);
+                    paginationLinks.add(nextLink);
+                }
+
+                if (pageNumber < totalPages - 1) {
+                    Link lastLink = Link.of(selfLink.getHref() + "?" + pageNumberReqestParam + "=" + (totalPages - 1)
+                            + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.LAST);
+                    paginationLinks.add(lastLink);
+                }
+
+                doc = doc.withLinks(pagedModel.getLinks().merge(paginationLinks));
+            }
         }
         return doc;
     }

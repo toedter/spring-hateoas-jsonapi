@@ -33,16 +33,16 @@ import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 public class JsonApiConfiguration {
 
     /**
-     * Configures how to render JSON:API type attributes.
-     * By default, JSON:API type attributes will be rendered pluralized.
+     * Indicates how to render JSON:API type attributes.
+     * The default is {@literal true}.
      * <p>
      * Precondition: At runtime, evo-inflector must be in the classpath
      */
     private final boolean pluralizedTypeRendered;
 
     /**
-     * Configures how to render JSON:API document.
-     * By default, the JSON:API will not be rendered.
+     * Indicates how to render JSON:API document.
+     * The default is {@literal false}.
      * <p>
      * If set to true, each rendered JSON:API document will start with
      *
@@ -55,11 +55,32 @@ public class JsonApiConfiguration {
     private final boolean jsonApiVersionRendered;
 
     /**
-     * Creates a new default {@link HalConfiguration} rendering single links as immediate sub-document.
+     * Indicates if pagination links for a paged model are created automatically.
+     * The default is {@literal true}.
+     */
+    private final boolean paginationLinksAutomaticallyCreated;
+
+    /**
+     * The request parameter used to indicate page number in pagination links.
+     * The default is {@literal page[number]}.
+     */
+    private final String pageNumberRequestParameter;
+
+    /**
+     * The request parameter used to indicate page number in pagination links.
+     * The default is {@literal page[size]}.
+     */
+    private final String pageSizeRequestParameter;
+
+    /**
+     * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
 
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
+        this.paginationLinksAutomaticallyCreated = true;
+        this.pageNumberRequestParameter = "page[number]";
+        this.pageSizeRequestParameter = "page[size]";
     }
 }

@@ -54,11 +54,12 @@ public abstract class AbstractJsonApiModelSerializer<T extends RepresentationMod
             // we want to add the page metadata to the top level JSON:API document
             final RepresentationModel<?> subcontent = ((JsonApiModel) value).getContent();
             if (subcontent instanceof PagedModel) {
-                JsonApiPagedModelSerializer jsonApiPagedModelSerializer = new JsonApiPagedModelSerializer(jsonApiConfiguration);
-                doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc);
+                JsonApiPagedModelSerializer jsonApiPagedModelSerializer =
+                        new JsonApiPagedModelSerializer(jsonApiConfiguration);
+                doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc, jsonApiConfiguration);
             }
         } else {
-            doc = postProcess(value, doc);
+            doc = postProcess(value, doc, jsonApiConfiguration);
         }
 
         provider
@@ -66,7 +67,7 @@ public abstract class AbstractJsonApiModelSerializer<T extends RepresentationMod
                 .serialize(doc, gen, provider);
     }
 
-    protected JsonApiDocument postProcess(T value, JsonApiDocument doc) {
+    protected JsonApiDocument postProcess(T value, JsonApiDocument doc, JsonApiConfiguration jsonApiConfiguration) {
         return doc;
     }
 
