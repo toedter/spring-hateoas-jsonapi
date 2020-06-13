@@ -32,8 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -102,6 +101,27 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
                 .getContentAsString();
 
         compareWithFile(movieJson, "movieCreated.json");
+    }
+
+    @Test
+    void should_patch_movie() throws Exception {
+
+        String input = readFile("patchMovie.json");
+
+        this.mockMvc.perform(patch("/movies/1")
+                .content(input)
+                .contentType(JSON_API))
+                .andExpect(status().isNoContent())
+                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/1"));
+
+        String movieJson = this.mockMvc.perform(get("/movies/1")
+                .accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "patchedMovie.json");
     }
 
     @Configuration

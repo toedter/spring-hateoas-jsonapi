@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id" : "1",
+    "type" : "movies",
+    "attributes": {
+      "title": "new title"
+    }
+  }
+}
