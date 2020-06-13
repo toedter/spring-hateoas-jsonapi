@@ -147,10 +147,12 @@ and build the jar locally.
     "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
   },
   "meta": {
-    "page-total-pages": 250,
-    "page-size": 1,
-    "page-number": 0,
-    "page-total-elements": 250
+    "page": {
+      "number": 0,
+      "size": 1,
+      "totalPages": 250,
+      "totalElements": 250
+    }
   }
 }</code></pre>
 </div>
@@ -582,10 +584,12 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
     "last": "http://localhost/movies?page[number]=49&amp;page[size]=2"
   },
   "meta": {
-    "page-total-pages": 50,
-    "page-size": 2,
-    "page-number": 1,
-    "page-total-elements": 100
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 50,
+      "totalElements": 100
+    }
   }
 }</code></pre>
 </div>
@@ -667,7 +671,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-13 18:45:21 UTC
+Last updated 2020-06-13 19:16:21 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
