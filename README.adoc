@@ -13,7 +13,7 @@ This project is in an early stage and work in progress, please stay tuned.
 == Documentation
 
 * A detailed documentation is available at https://toedter.github.io/spring-hateoas-jsonapi/
-* The Javadoc API documentation is available at https://toedter.github.io/spring-hateoas-jsonapi/javadoc/
+* The Javadoc API documentation is available at https://toedter.github.io/spring-hateoas-jsonapi/javadoc/index.html
 
 == Running the Example
 

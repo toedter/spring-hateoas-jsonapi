@@ -39,7 +39,7 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Sets the  {@link RepresentationModel} as the base of
+     * Sets the  {@link RepresentationModel} as the base for
      * the {@literal RepresentationModel} to be built.
      * <p>
      * NOTE: If the model is already set, an {@literal IllegalStateException} will be thrown.
@@ -63,7 +63,7 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Creates an {@link EntityModel} from the {@literal object} as the base of
+     * Creates an {@link EntityModel} from the {@literal object} as the base for
      * the {@literal RepresentationModel} to be built.
      * <p>
      * NOTE: If the model is already set, an {@literal IllegalStateException} will be thrown.
