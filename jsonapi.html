@@ -274,7 +274,7 @@ public class Movie2 {
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
-final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().entity(movie).build();</code></pre>
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -301,7 +301,7 @@ public class Director {
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 Director director = new Director("1", "George Lucas");
 final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().entity(movie)
+        jsonApiModel().model(movie)
                 .relationship("directors", EntityModel.of(director))
                 .build();</code></pre>
 </div>
@@ -342,7 +342,7 @@ Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
 
 final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().entity(movie)
+        jsonApiModel().model(movie)
                 .relationship("directors", director1)
                 .relationship("directors", director2)
                 .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -420,7 +420,7 @@ final EntityModel&lt;Director&gt; director2EntityModel = EntityModel.of(director
 
 final RepresentationModel&lt;?&gt; jsonApiModel1 =
         jsonApiModel()
-                .entity(movie)
+                .model(movie)
                 .relationship("directors", director1EntityModel)
                 .relationship("directors", director2EntityModel)
                 .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -432,7 +432,7 @@ final EntityModel&lt;Director&gt; director3EntityModel = EntityModel.of(director
 
 final RepresentationModel&lt;?&gt; jsonApiModel2 =
         jsonApiModel()
-                .entity(movie2)
+                .model(movie2)
                 .relationship("directors", director3EntityModel)
                 .build();
 
@@ -446,7 +446,7 @@ final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(
 
 RepresentationModel&lt;?&gt; pagedJasonApiModel =
         jsonApiModel()
-                .entity(pagedModel)
+                .model(pagedModel)
                 .included(director1EntityModel)
                 .included(director2EntityModel)
                 .build();</code></pre>
@@ -611,7 +611,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-13 07:27:42 UTC
+Last updated 2020-06-13 12:44:28 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
