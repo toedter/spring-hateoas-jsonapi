@@ -68,7 +68,7 @@ task doc(type: Sync) {
     dependsOn javadoc
 
     from "$buildDir/docs/javadoc"
-    into "$buildDir/asciidoc/build/javadoc"
+    into "$buildDir/docs/asciidoc/javadoc"
 }
 
 task prepareAsciidocBuild(type: Sync) {
