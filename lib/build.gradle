@@ -63,6 +63,14 @@ jacocoTestReport {
     }
 }
 
+task doc(type: Sync) {
+    dependsOn asciidoctor
+    dependsOn javadoc
+
+    from "$buildDir/docs/javadoc"
+    into "$buildDir/asciidoc/build/javadoc"
+}
+
 task prepareAsciidocBuild(type: Sync) {
     dependsOn configurations.docs
     from {

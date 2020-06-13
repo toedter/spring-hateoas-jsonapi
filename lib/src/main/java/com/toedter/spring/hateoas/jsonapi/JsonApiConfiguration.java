@@ -16,10 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.With;
+import lombok.*;
 
 /**
  * JSON:API specific configuration.
@@ -31,41 +28,50 @@ public class JsonApiConfiguration {
 
     /**
      * Indicates how to render JSON:API type attributes.
-     * The default is {@literal true}.
-     * <p>
-     * Precondition: At runtime, evo-inflector must be in the classpath
+     * The can be rendered in singular or pluralized form.
+     *
+     * @param pluralizedTypeRendered The new value of this configuration's pluralizedTypeRendered
+     * @return The default is {@literal true}.
      */
     @With @Getter private final boolean pluralizedTypeRendered;
 
     /**
      * Indicates how to render JSON:API document.
-     * The default is {@literal false}.
      * <p>
      * If set to true, each rendered JSON:API document will start with
      *
-     * <pre>
+     * <code>
      * "jsonapi": {
      *     "version": "1.0"
      * }
-     * </pre>
+     * </code>
+     *
+     * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
+     * @return The default is {@literal false}.
      */
     private final @With @Getter boolean jsonApiVersionRendered;
 
     /**
      * Indicates if pagination links for a paged model are created automatically.
-     * The default is {@literal true}.
+     *
+     * @param paginationLinksAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
+     * @return The default is {@literal true}.
      */
     private final @With @Getter boolean paginationLinksAutomaticallyCreated;
 
     /**
      * The request parameter used to indicate page number in pagination links.
-     * The default is {@literal page[number]}.
+     *
+     * @param pageNumberRequestParameter The new value of this configuration's pageNumberRequestParameter
+     * @return The default is {@literal page[number]}.
      */
     private final @With @Getter String pageNumberRequestParameter;
 
     /**
      * The request parameter used to indicate page number in pagination links.
-     * The default is {@literal page[size]}.
+     *
+     * @param pageSizeRequestParameter The new value of this configuration's pageSizeRequestParameter
+     * @return The default is {@literal page[size]}.
      */
     private final @With @Getter String pageSizeRequestParameter;
 
