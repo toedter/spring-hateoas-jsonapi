@@ -23,7 +23,7 @@ import lombok.*;
  *
  * @author Kai Toedter
  */
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonApiConfiguration {
 
     /**
