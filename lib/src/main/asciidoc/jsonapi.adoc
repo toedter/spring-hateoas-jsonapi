@@ -165,7 +165,8 @@ Currently, you can configure
 
 * if the JSON:API version should be rendered automatically, the default is `false`.
 * if JSON:API types should be rendered as non pluralized class names.
-* if pagination links should be automatically created, the default is `true`
+* if page metadata should be automatically created for a `PagedModel`, the default is `true`
+* if pagination links should be automatically created for a `PagedModel`, the default is `true`
 ** precondition is that the paged model has a self link
 ** the request parameter names for page number and page size can also be configured
 *** the defaults are `page[number]` and `page[size]`, which is recommended by the JSON:API specification.
