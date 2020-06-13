@@ -50,15 +50,28 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_empty_entity_model() throws Exception {
-        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(new Object()).build();
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().model(new Object()).build();
         final String emptyDoc = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(emptyDoc, "emptyDoc.json");
     }
 
     @Test
+    void should_build_empty_model_with_link_object() throws Exception {
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(new Object())
+                        .link(Link.of("http://localhost/items").withSelfRel())
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "emptyModelWithSelfLink.json");
+    }
+
+    @Test
     void should_build_empty_model_with_link() throws Exception {
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().entity(new Object()).link(Link.of("http://localhost/items").withSelfRel()).build();
+                jsonApiModel().model(new Object())
+                        .link("http://localhost/items", IanaLinkRelations.SELF)
+                        .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "emptyModelWithSelfLink.json");
@@ -68,7 +81,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     void should_build_single_movie_model() throws Exception {
         // tag::build-movie-model[]
         Movie movie = new Movie("1", "Star Wars");
-        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(movie).build();
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().model(movie).build();
         // end::build-movie-model[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -79,7 +92,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     @Test
     void should_build_single_movie_entity_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        final RepresentationModel<?> jsonApiModel = jsonApiModel().entity(EntityModel.of(movie)).build();
+        final RepresentationModel<?> jsonApiModel = jsonApiModel().model(EntityModel.of(movie)).build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModel.json");
@@ -91,7 +104,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().entity(movie)
+                jsonApiModel().model(movie)
                         .relationship("directors", EntityModel.of(director))
                         .build();
         // end::build-relationship[]
@@ -108,7 +121,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Director director2 = new Director("2", "Lilly Wachowski");
 
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().entity(movie)
+                jsonApiModel().model(movie)
                         .relationship("directors", director1)
                         .relationship("directors", EntityModel.of(director2))
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -124,8 +137,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         Assertions.assertThrows(IllegalStateException.class, () -> {
             final RepresentationModel<?> jsonApiModel =
-                    jsonApiModel().entity(movie)
-                            .entity(movie)
+                    jsonApiModel().model(movie)
+                            .model(movie)
                             .build();
         });
     }
@@ -139,7 +152,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Director director2 = new Director("2", "Lilly Wachowski");
 
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().entity(movie)
+                jsonApiModel().model(movie)
                         .relationship("directors", director1)
                         .relationship("directors", director2)
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -164,7 +177,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final RepresentationModel<?> jsonApiModel1 =
                 jsonApiModel()
-                        .entity(movie)
+                        .model(movie)
                         .relationship("directors", director1EntityModel)
                         .relationship("directors", director2EntityModel)
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -176,7 +189,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final RepresentationModel<?> jsonApiModel2 =
                 jsonApiModel()
-                        .entity(movie2)
+                        .model(movie2)
                         .relationship("directors", director3EntityModel)
                         .build();
 
@@ -190,7 +203,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         RepresentationModel<?> pagedJasonApiModel =
                 jsonApiModel()
-                        .entity(pagedModel)
+                        .model(pagedModel)
                         .included(director1EntityModel)
                         .included(director2EntityModel)
                         .build();

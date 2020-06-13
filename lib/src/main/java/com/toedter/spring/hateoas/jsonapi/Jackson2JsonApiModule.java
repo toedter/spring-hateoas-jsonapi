@@ -22,6 +22,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.hateoas.*;
 
+/**
+ * Jackson {@link SimpleModule} for {@literal JSON:API} serializers and deserializers.
+ *
+ * @author Kai Toedter
+ */
 public class Jackson2JsonApiModule extends SimpleModule {
 
     public static final String PAGE_NUMBER = "page-number";

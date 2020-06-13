@@ -18,6 +18,9 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import org.springframework.http.MediaType;
 
+/**
+ * Provides the {@literal JSON:API} media type {@code application/vnd.api+json}.
+ */
 public class MediaTypes {
 
 	/**

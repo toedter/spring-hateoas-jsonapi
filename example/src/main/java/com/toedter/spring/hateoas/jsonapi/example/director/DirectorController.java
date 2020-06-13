@@ -92,7 +92,7 @@ public class DirectorController {
             pagedModel.add(lastLink);
         }
 
-        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().entity(pagedModel);
+        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().model(pagedModel);
         HashMap<Long, Movie> directors = new HashMap<>();
         for (Director director : pagedResult.getContent()) {
             for (Movie movie : director.getMovies()) {

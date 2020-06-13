@@ -23,7 +23,6 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +71,6 @@ public class MovieController {
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
-        Link templatedLink = Link.of(selfLink.getHref() + "?page[number]=" + page + ",page[size]=" + size).withSelfRel();
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(
@@ -82,35 +80,9 @@ public class MovieController {
                         pagedResult.getTotalPages());
 
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
-                PagedModel.of(movieResources, pageMetadata, templatedLink);
+                PagedModel.of(movieResources, pageMetadata, selfLink);
 
-        final Pageable prev = pageRequest.previous();
-        if (prev.getPageNumber() < page) {
-            Link prevLink = Link.of(selfLink.getHref() + "?page[number]=" + prev.getPageNumber() + "&page[size]="
-                    + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
-            pagedModel.add(prevLink);
-        }
-
-        final Pageable next = pageRequest.next();
-        if (next.getPageNumber() > page && next.getPageNumber() < pagedResult.getTotalPages()) {
-            Link nextLink = Link.of(selfLink.getHref() + "?page[number]=" + next.getPageNumber() + "&page[size]="
-                    + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
-            pagedModel.add(nextLink);
-        }
-
-        if (page > 0) {
-            Link firstLink = Link.of(selfLink.getHref() + "?page[number]=0&page[size]=" + size)
-                    .withRel(IanaLinkRelations.FIRST);
-            pagedModel.add(firstLink);
-        }
-
-        if (page < pagedResult.getTotalPages() - 1) {
-            Link lastLink = Link.of(selfLink.getHref() + "?page[number]=" + (pagedResult.getTotalPages() - 1)
-                    + "&page[size]=" + size).withRel(IanaLinkRelations.LAST);
-            pagedModel.add(lastLink);
-        }
-
-        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().entity(pagedModel);
+        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().model(pagedModel);
         HashMap<Long, Director> directors = new HashMap<>();
         for (Movie movie : pagedResult.getContent()) {
             for (Director director : movie.getDirectors()) {

@@ -38,7 +38,7 @@ class MovieModelAssembler {
         Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
         JsonApiModelBuilder builder = jsonApiModel()
-                .entity(movie)
+                .model(movie)
                 .link(selfLink)
                 .link(templatedMoviesLink);
         for (Director director : movie.getDirectors()) {

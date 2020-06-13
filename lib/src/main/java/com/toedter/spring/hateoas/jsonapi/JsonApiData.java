@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 @Value
-@Getter(onMethod = @__(@JsonProperty))
+@Getter(onMethod_={@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)

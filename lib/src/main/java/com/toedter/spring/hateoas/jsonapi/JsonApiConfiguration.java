@@ -20,16 +20,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
-import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 
 /**
  * JSON:API specific configuration.
  *
  * @author Kai Toedter
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@With
-@Getter
+@AllArgsConstructor
 public class JsonApiConfiguration {
 
     /**
@@ -38,7 +35,7 @@ public class JsonApiConfiguration {
      * <p>
      * Precondition: At runtime, evo-inflector must be in the classpath
      */
-    private final boolean pluralizedTypeRendered;
+    @With @Getter private final boolean pluralizedTypeRendered;
 
     /**
      * Indicates how to render JSON:API document.
@@ -52,31 +49,30 @@ public class JsonApiConfiguration {
      * }
      * </pre>
      */
-    private final boolean jsonApiVersionRendered;
+    private final @With @Getter boolean jsonApiVersionRendered;
 
     /**
      * Indicates if pagination links for a paged model are created automatically.
      * The default is {@literal true}.
      */
-    private final boolean paginationLinksAutomaticallyCreated;
+    private final @With @Getter boolean paginationLinksAutomaticallyCreated;
 
     /**
      * The request parameter used to indicate page number in pagination links.
      * The default is {@literal page[number]}.
      */
-    private final String pageNumberRequestParameter;
+    private final @With @Getter String pageNumberRequestParameter;
 
     /**
      * The request parameter used to indicate page number in pagination links.
      * The default is {@literal page[size]}.
      */
-    private final String pageSizeRequestParameter;
+    private final @With @Getter String pageSizeRequestParameter;
 
     /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
-
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
         this.paginationLinksAutomaticallyCreated = true;

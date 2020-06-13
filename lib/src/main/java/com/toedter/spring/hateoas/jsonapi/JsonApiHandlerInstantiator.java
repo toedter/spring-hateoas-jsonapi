@@ -29,7 +29,7 @@ import org.springframework.lang.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonApiHandlerInstantiator extends HandlerInstantiator {
+class JsonApiHandlerInstantiator extends HandlerInstantiator {
     private final Map<Class<?>, Object> serializers = new HashMap<>();
     private final @Nullable
     AutowireCapableBeanFactory beanFactory;
