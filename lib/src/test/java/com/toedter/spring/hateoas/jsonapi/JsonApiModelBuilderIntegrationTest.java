@@ -29,7 +29,6 @@ import java.util.List;
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 // end::import-builder[]
 
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Test")
 class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
@@ -107,6 +106,18 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithManyRelationships.json");
+    }
+
+    @Test
+    void should_not_build_with_second_entity() {
+        Movie movie = new Movie("1", "Star Wars");
+
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            final RepresentationModel<?> jsonApiModel =
+                    jsonApiModel().entity(movie)
+                            .entity(movie)
+                            .build();
+        });
     }
 
     @Test
