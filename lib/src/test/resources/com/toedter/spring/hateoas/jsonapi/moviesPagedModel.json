@@ -19,9 +19,12 @@
     "next": "http://localhost/movies?page[number]=2&page[size]=2"
   },
   "meta": {
-    "page-total-pages": 2,
-    "page-size": 2,
-    "page-number": 1,
-    "page-total-elements": 2
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 2,
+      "totalElements": 2
+    }
   }
 }
+

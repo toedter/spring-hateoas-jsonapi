@@ -47,7 +47,11 @@ class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedMo
                 metaMap.put(Jackson2JsonApiModule.PAGE_SIZE, pageSize);
                 metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_ELEMENTS, totalElements);
                 metaMap.put(Jackson2JsonApiModule.PAGE_TOTAL_PAGES, totalPages);
-                doc = doc.withMeta(metaMap);
+
+                Map<String, Object> metaObject = new HashMap<>();
+                metaObject.put("page", metaMap);
+
+                doc = doc.withMeta(metaObject);
             }
 
             final Optional<Link> selfLinkOptional = pagedModel.getLink(IanaLinkRelations.SELF);

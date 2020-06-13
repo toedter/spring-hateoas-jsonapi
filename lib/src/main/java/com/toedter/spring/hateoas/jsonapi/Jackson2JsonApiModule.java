@@ -29,10 +29,10 @@ import org.springframework.hateoas.*;
  */
 public class Jackson2JsonApiModule extends SimpleModule {
 
-    public static final String PAGE_NUMBER = "page-number";
-    public static final String PAGE_SIZE = "page-size";
-    public static final String PAGE_TOTAL_ELEMENTS = "page-total-elements";
-    public static final String PAGE_TOTAL_PAGES = "page-total-pages";
+    public static final String PAGE_NUMBER = "number";
+    public static final String PAGE_SIZE = "size";
+    public static final String PAGE_TOTAL_ELEMENTS = "totalElements";
+    public static final String PAGE_TOTAL_PAGES = "totalPages";
 
     public Jackson2JsonApiModule() {
 

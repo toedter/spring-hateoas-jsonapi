@@ -69,9 +69,11 @@
     "last": "http://localhost/movies?page[number]=49&page[size]=2"
   },
   "meta": {
-    "page-total-pages": 50,
-    "page-size": 2,
-    "page-number": 1,
-    "page-total-elements": 100
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 50,
+      "totalElements": 100
+    }
   }
 }

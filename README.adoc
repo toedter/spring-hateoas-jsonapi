@@ -64,13 +64,14 @@ The rendered result is:
     "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
   },
   "meta": {
-    "page-total-pages": 250,
-    "page-size": 1,
-    "page-number": 0,
-    "page-total-elements": 250
+    "page": {
+      "number": 0,
+      "size": 1,
+      "totalPages": 250,
+      "totalElements": 250
+    }
   }
 }
-
 
 == License
 

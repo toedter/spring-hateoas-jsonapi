@@ -41,10 +41,12 @@ class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<Pag
         Links links = doc.getLinks();
 
         Map<String, Object> metaMap = doc.getMeta();
-        long size = new Long(metaMap.get(Jackson2JsonApiModule.PAGE_SIZE).toString());
-        long number = new Long(metaMap.get(Jackson2JsonApiModule.PAGE_NUMBER).toString());
-        long totalElements = new Long(metaMap.get(Jackson2JsonApiModule.PAGE_TOTAL_ELEMENTS).toString());
-        long totalPages = new Long(metaMap.get(Jackson2JsonApiModule.PAGE_TOTAL_PAGES).toString());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> page = (Map<String, Object>) metaMap.get("page");
+        long size = new Long(page.get(Jackson2JsonApiModule.PAGE_SIZE).toString());
+        long number = new Long(page.get(Jackson2JsonApiModule.PAGE_NUMBER).toString());
+        long totalElements = new Long(page.get(Jackson2JsonApiModule.PAGE_TOTAL_ELEMENTS).toString());
+        long totalPages = new Long(page.get(Jackson2JsonApiModule.PAGE_TOTAL_PAGES).toString());
 
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(size, number, totalElements, totalPages);
 
