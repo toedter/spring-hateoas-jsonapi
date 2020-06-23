@@ -410,7 +410,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="paragraph">
 <p>The following example shows the creation of a more complex
-JSON:API specific representation model, a paged model with automatically created paging links:</p>
+JSON:API specific representation model with a paged model as base.
+The builder supports adding both pagination metadata and pagination links.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -563,29 +564,6 @@ Currently, you can configure</p>
 <li>
 <p>if JSON:API types should be rendered as non pluralized class names.</p>
 </li>
-<li>
-<p>if page metadata should be automatically created for a <code>PagedModel</code>, the default is <code>true</code></p>
-</li>
-<li>
-<p>if pagination links should be automatically created for a <code>PagedModel</code>, the default is <code>true</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>precondition is that the paged model has a self link</p>
-</li>
-<li>
-<p>the request parameter names for page number and page size can also be configured</p>
-<div class="ulist">
-<ul>
-<li>
-<p>the defaults are <code>page[number]</code> and <code>page[size]</code>, which is recommended by the JSON:API specification.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -621,7 +599,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-23 16:44:15 UTC
+Last updated 2020-06-23 16:53:06 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
