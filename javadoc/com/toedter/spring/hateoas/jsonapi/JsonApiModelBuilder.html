@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,19 +177,47 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#meta-java.lang.String-java.lang.Object-">meta</a></span>(java.lang.String&nbsp;key,
+    java.lang.Object&nbsp;value)</code>
+<div class="block">Adds the given key/value pair to the JSON:API meta</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#model-java.lang.Object-">model</a></span>(java.lang.Object&nbsp;object)</code>
 <div class="block">Creates an <code>EntityModel</code> from the object as the base for
  the RepresentationModel to be built.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#model-org.springframework.hateoas.RepresentationModel-">model</a></span>(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;model)</code>
 <div class="block">Sets the  <code>RepresentationModel</code> as the base for
  the RepresentationModel to be built.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#pageLinks-java.lang.String-">pageLinks</a></span>(java.lang.String&nbsp;linkBase)</code>
+<div class="block">Creates all pagination links with JSON:API default request parameters for
+ page number page[number] and page size page[size].</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#pageLinks-java.lang.String-java.lang.String-java.lang.String-">pageLinks</a></span>(java.lang.String&nbsp;linkBase,
+         java.lang.String&nbsp;pageNumberRequestParam,
+         java.lang.String&nbsp;pageSizeRequestParam)</code>
+<div class="block">Creates all pagination links.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#pageMeta--">pageMeta</a></span>()</code>
+<div class="block">Adds the paging information to the JSON:API meta.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-org.springframework.hateoas.EntityModel-">relationship</a></span>(java.lang.String&nbsp;name,
             org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</code>
@@ -197,7 +225,7 @@ extends java.lang.Object</pre>
  to the <code>RepresentationModel</code> to be built.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.Object-">relationship</a></span>(java.lang.String&nbsp;name,
             java.lang.Object&nbsp;object)</code>
@@ -391,6 +419,87 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>object</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="meta-java.lang.String-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>meta</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;meta(java.lang.String&nbsp;key,
+                                java.lang.Object&nbsp;value)</pre>
+<div class="block">Adds the given key/value pair to the JSON:API meta</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>key</code> - the json key</dd>
+<dd><code>value</code> - the json value</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="pageMeta--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pageMeta</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;pageMeta()</pre>
+<div class="block">Adds the paging information to the JSON:API meta.
+ Preconditions are:
+ - the model has been added before
+ - the model is a paged model
+ - the model contains a Pageable</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="pageLinks-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pageLinks</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;pageLinks(java.lang.String&nbsp;linkBase)</pre>
+<div class="block">Creates all pagination links with JSON:API default request parameters for
+ page number page[number] and page size page[size].
+ <p>
+ Preconditions are:
+ - the model has been added before
+ - the model is a paged model
+ - the model contains a Pageable*</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>linkBase</code> - the prefix of all pagination links, e.g. the base URL of the collection resource</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="pageLinks-java.lang.String-java.lang.String-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pageLinks</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;pageLinks(java.lang.String&nbsp;linkBase,
+                                     java.lang.String&nbsp;pageNumberRequestParam,
+                                     java.lang.String&nbsp;pageSizeRequestParam)</pre>
+<div class="block">Creates all pagination links.
+ <p>
+ Preconditions are:
+ - the model has been added before
+ - the model is a paged model
+ - the model contains a Pageable*</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>linkBase</code> - the prefix of all pagination links, e.g. the base URL of the collection resource</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
 </dl>

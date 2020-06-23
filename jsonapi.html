@@ -270,7 +270,8 @@ public class Movie2 {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static org.junit.jupiter.api.Assertions.assertThrows;</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -451,6 +452,8 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
                 .model(pagedModel)
                 .included(director1EntityModel)
                 .included(director2EntityModel)
+                .pageMeta()
+                .pageLinks("http://localhost/movies")
                 .build();</code></pre>
 </div>
 </div>
@@ -618,7 +621,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-13 19:16:21 UTC
+Last updated 2020-06-23 16:44:15 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
