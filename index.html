@@ -28,6 +28,7 @@
 <li><a href="#_annotations">Annotations</a></li>
 <li><a href="#_jsonapi_builder">JSON:API Builder</a></li>
 <li><a href="#configuration">Configuration</a></li>
+<li><a href="#errors">Error Handling</a></li>
 </ul>
 </li>
 </ul>
@@ -646,13 +647,52 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="errors">Error Handling</h3>
+<div class="paragraph">
+<p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
+</div>
+<div class="paragraph">
+<p>Here is an example how to produce an error response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">return ResponseEntity.badRequest().body(
+        JsonApiErrors.create().withError(
+                JsonApiError.create()
+                        .withAboutLink("http://movie-db.com/problem")
+                        .withTitle("Movie-based problem")
+                        .withStatus(HttpStatus.BAD_REQUEST.toString())
+                        .withDetail("This is a test case")));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result would be rendered as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "errors": [
+    {
+      "links": {
+        "about": "http://movie-db.com/problem"
+      },
+      "status": "400 BAD_REQUEST",
+      "title": "Movie-based problem",
+      "detail": "This is a test case"
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-23 17:59:49 UTC
+Last updated 2020-06-23 20:46:27 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

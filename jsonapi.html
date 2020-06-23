@@ -595,11 +595,52 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="errors">Error Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
+</div>
+<div class="paragraph">
+<p>Here is an example how to produce an error response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">return ResponseEntity.badRequest().body(
+        JsonApiErrors.create().withError(
+                JsonApiError.create()
+                        .withAboutLink("http://movie-db.com/problem")
+                        .withTitle("Movie-based problem")
+                        .withStatus(HttpStatus.BAD_REQUEST.toString())
+                        .withDetail("This is a test case")));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result would be rendered as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "errors": [
+    {
+      "links": {
+        "about": "http://movie-db.com/problem"
+      },
+      "status": "400 BAD_REQUEST",
+      "title": "Movie-based problem",
+      "detail": "This is a test case"
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-23 17:59:49 UTC
+Last updated 2020-06-23 20:46:27 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
