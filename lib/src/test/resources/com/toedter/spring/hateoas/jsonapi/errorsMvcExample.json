@@ -1,0 +1,12 @@
+{
+  "errors": [
+    {
+      "links": {
+        "about": "http://movie-db.com/problem"
+      },
+      "status": "400 BAD_REQUEST",
+      "title": "Movie-based problem",
+      "detail": "This is a test case"
+    }
+  ]
+}

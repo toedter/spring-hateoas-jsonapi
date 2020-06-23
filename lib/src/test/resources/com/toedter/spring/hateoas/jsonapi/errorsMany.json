@@ -1,0 +1,12 @@
+{
+  "errors": [
+    {
+      "id": "123",
+      "code": "456"
+    },
+    {
+      "id": "345",
+      "detail": "error details"
+    }
+  ]
+}

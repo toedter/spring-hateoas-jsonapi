@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.IOException;

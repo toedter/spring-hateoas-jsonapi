@@ -15,16 +15,16 @@
  */
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiError;
+import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -120,12 +120,16 @@ public class WebMvcMovieController {
                 .build();
     }
 
-    @GetMapping("/movies/problem")
-    public ResponseEntity<?> problem() {
-        return ResponseEntity.badRequest().body(Problem.create()
-                .withType(URI.create("http://movie-db.com/problem"))
-                .withTitle("Movie-based problem")
-                .withStatus(HttpStatus.BAD_REQUEST)
-                .withDetail("This is a test case"));
+    @GetMapping("/error")
+    public ResponseEntity<?> error() {
+        // tag::errors-builder[]
+        return ResponseEntity.badRequest().body(
+                JsonApiErrors.create().withError(
+                        JsonApiError.create()
+                                .withAboutLink("http://movie-db.com/problem")
+                                .withTitle("Movie-based problem")
+                                .withStatus(HttpStatus.BAD_REQUEST.toString())
+                                .withDetail("This is a test case")));
+        // end::errors-builder[]
     }
 }

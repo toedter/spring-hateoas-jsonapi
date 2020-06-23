@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.*;
@@ -55,8 +56,8 @@ class Jackson2JsonApiIntegrationTest {
         @Getter
         class Movie {
             @Id
-            private String myId = "1";
-            private String title = "Star Wars";
+            private final String myId = "1";
+            private final String title = "Star Wars";
         }
 
         String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
@@ -66,14 +67,12 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jpa_id_method() throws Exception {
         class Movie {
-            private String myId = "1";
-
             @Getter
-            private String title = "Star Wars";
+            private final String title = "Star Wars";
 
             @Id
             public String getMyId() {
-                return myId;
+                return "1";
             }
         }
 
@@ -84,14 +83,12 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_method() throws Exception {
         class Movie {
-            private String myId = "1";
-
             @Getter
-            private String title = "Star Wars";
+            private final String title = "Star Wars";
 
             @JsonApiId
             public String getMyId() {
-                return myId;
+                return "1";
             }
         }
 

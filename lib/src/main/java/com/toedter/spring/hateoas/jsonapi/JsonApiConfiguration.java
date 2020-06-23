@@ -16,7 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.With;
 
 /**
  * JSON:API specific configuration.

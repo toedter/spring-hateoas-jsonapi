@@ -19,7 +19,10 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API.

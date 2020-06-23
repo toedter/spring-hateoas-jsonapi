@@ -20,15 +20,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
-import org.springframework.hateoas.mediatype.hal.CurieProvider;
-import org.springframework.hateoas.mediatype.hal.HalConfiguration;
-import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.http.MediaType;
 
 import javax.annotation.Nonnull;

@@ -124,6 +124,19 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "patchedMovie.json");
     }
 
+    @Test
+    void should_return_error() throws Exception {
+
+        String errorJson = this.mockMvc
+                .perform(get("/error").accept(JSON_API))
+                .andExpect(status().isBadRequest())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(errorJson, "errorsMvcExample.json");
+    }
+
     @Configuration
     @WebAppConfiguration
     @EnableWebMvc

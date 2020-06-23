@@ -16,12 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
-
-import java.util.*;
 
 class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedModel<?>> {
 

@@ -178,6 +178,27 @@ Here is an example how you would implement a JSON:API configuration:
 include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
 ----
 
+[[errors]]
+== Error Handling ==
+
+To create `JSON:API` compliant error messages, you can use `JsonApiErrors` and `JsonApiError`
+
+Here is an example how to produce an error response:
+
+[source, json, indent=0]
+----
+include::{test-dir}/support/WebMvcMovieController.java[tags=errors-builder]
+----
+
+The result would be rendered as:
+
+[source, json]
+----
+include::{test-resources-dir}/errorsMvcExample.json[]
+----
+
+
+
 
 
 

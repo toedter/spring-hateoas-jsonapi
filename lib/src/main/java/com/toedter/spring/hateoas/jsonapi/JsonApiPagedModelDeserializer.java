@@ -23,7 +23,6 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 
 import java.util.List;
-import java.util.Map;
 
 class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
         implements ContextualDeserializer {

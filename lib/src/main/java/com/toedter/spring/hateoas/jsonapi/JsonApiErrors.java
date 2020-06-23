@@ -16,5 +16,36 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-class JsonApiErrors {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class to build {@literal JSON:API} compliant error messages
+ *
+ * @author Kai Toedter
+ */
+@ToString
+@NoArgsConstructor
+public class JsonApiErrors {
+    private static final JsonApiErrors EMPTY = new JsonApiErrors();
+
+    @Getter
+    List<JsonApiError> errors = new ArrayList<>();
+
+    public JsonApiErrors(JsonApiError jsonApiError) {
+        errors.add(jsonApiError);
+    }
+
+    public JsonApiErrors withError(JsonApiError jsonApiError) {
+        errors.add(jsonApiError);
+        return this;
+    }
+
+    public static JsonApiErrors create() {
+        return EMPTY;
+    }
 }

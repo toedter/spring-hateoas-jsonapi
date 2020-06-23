@@ -54,18 +54,16 @@ class MovieLoader {
 
             JsonNode movies = rootNode.get("movies");
             int rating = 1;
-            Iterator<JsonNode> iterator = movies.iterator();
-            while (iterator.hasNext()) {
-                JsonNode movieNode = iterator.next();
+            for (JsonNode movieNode : movies) {
                 Movie movie = createMovie(rating++, movieNode);
                 movieRepository.save(movie);
 
                 String directors = movieNode.get("Director").asText();
-                List<String> directorList = Arrays.asList(directors.split(","));
+                String[] directorList = directors.split(",");
 
-                for(String directorName: directorList) {
+                for (String directorName : directorList) {
                     Director director = directorRepository.findByName(directorName.trim());
-                    if(director == null) {
+                    if (director == null) {
                         director = new Director(directorName.trim());
                     }
                     log.info("adding movie: " + movie.getTitle() + " to " + directorName.trim());
@@ -86,10 +84,8 @@ class MovieLoader {
         double imdbRating = rootNode.get("imdbRating").asDouble();
 
         String movieImage = "/static/movie-data/thumbs/" + imdbId + ".jpg";
-        Movie movie = new Movie(imdbId, title, year, imdbRating, rank, movieImage);
 
-        // log.info("found movie: " + rank + ": " + title + " (" + year + ") " + imdbRating);
-        return movie;
+        return new Movie(imdbId, title, year, imdbRating, rank, movieImage);
     }
 
     private String readFile(String path, Charset encoding)

@@ -33,9 +33,9 @@ public class RootController {
 	public static final String API_BASE_PATH = "/api";
 
 	@GetMapping(API_BASE_PATH)
-    ResponseEntity<RepresentationModel> root() {
+    ResponseEntity<RepresentationModel<?>> root() {
 
-		RepresentationModel resourceSupport = new RepresentationModel();
+		RepresentationModel<?> resourceSupport = new RepresentationModel<>();
 
 		resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
 

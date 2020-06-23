@@ -186,4 +186,13 @@ public class MovieController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/error")
+    public ResponseEntity<? extends RepresentationModel<?>> error() {
+
+        @SuppressWarnings("NumericOverflow")
+        int i = 1 / 0;
+        return null;
+    }
+
 }

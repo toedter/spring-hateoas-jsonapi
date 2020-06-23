@@ -1,0 +1,21 @@
+{
+  "errors": [
+    {
+      "id": "1",
+      "links": {
+        "about": "http://example-error/about"
+      },
+      "status": "500",
+      "code": "404",
+      "title": "error title",
+      "detail": "error detail",
+      "source": {
+        "pointer": "to infinity and beyond",
+        "parameter": "...but always with towel."
+      },
+      "meta": {
+        "foo": "bar"
+      }
+    }
+  ]
+}
