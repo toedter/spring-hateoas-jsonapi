@@ -24,28 +24,38 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     private final RepresentationModel<?> entity;
+
     @JsonIgnore
     @Getter
-    private final HashMap<String, List<JsonApiRelationship>> relationships;
+    private final Map<String, List<JsonApiRelationship>> relationships;
+
     @JsonIgnore
     @Getter
     private final List<RepresentationModel<?>> includedEntities;
 
+    @JsonIgnore
+    @Getter
+    private final Map<String, Object> metaData;
+
     JsonApiModel(
             @Nullable RepresentationModel<?> entity,
-            @Nullable HashMap<String, List<JsonApiRelationship>> relationships,
+            @Nullable Map<String, List<JsonApiRelationship>> relationships,
             @Nullable List<RepresentationModel<?>> includedEntities,
+            @Nullable Map<String, Object> metadata,
             @Nullable Links links) {
+
         this.entity = entity;
         this.relationships = relationships;
         this.includedEntities = includedEntities;
+        this.metaData = metadata;
+
         if (links != null) {
             add(links);
         }

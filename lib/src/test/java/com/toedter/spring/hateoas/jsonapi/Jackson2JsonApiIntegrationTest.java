@@ -211,21 +211,6 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_movie_paged_model_with_generatred_pagination_links() throws Exception {
-        Movie movie1 = new Movie("1", "Star Wars");
-        List<Movie> movies = new ArrayList<>();
-        movies.add(movie1);
-
-        PagedModel.PageMetadata pageMetadata =
-                new PagedModel.PageMetadata(1, 1, 100, 100);
-        Link selflink = Link.of("http://localhost/movies").withSelfRel();
-        final PagedModel<Movie> pagedModel = PagedModel.of(movies, pageMetadata, selflink);
-
-        String moviesJson = mapper.writeValueAsString(pagedModel);
-        compareWithFile(moviesJson, "moviesPagedModelWithAllPaginationLinks.json");
-    }
-
-    @Test
     void should_not_serialize_movie_without_id() {
         Assertions.assertThrows(JsonMappingException.class, () -> {
             Movie movie = new Movie(null, "Star Wars");
@@ -356,13 +341,6 @@ class Jackson2JsonApiIntegrationTest {
         Movie movie2 = iterator.next();
         assertThat(movie2.getId()).isEqualTo("2");
         assertThat(movie2.getTitle()).isEqualTo("Avengers");
-
-        PagedModel.PageMetadata pageMetadata = moviePagedModel.getMetadata();
-        assert pageMetadata != null;
-        assertThat(pageMetadata.getSize()).isEqualTo(2);
-        assertThat(pageMetadata.getNumber()).isEqualTo(1);
-        assertThat(pageMetadata.getTotalPages()).isEqualTo(2);
-        assertThat(pageMetadata.getTotalElements()).isEqualTo(2);
     }
 
     @Test

@@ -52,47 +52,10 @@ public class JsonApiConfiguration {
     private final @With @Getter boolean jsonApiVersionRendered;
 
     /**
-     * Indicates if pagination links for a paged model are created automatically.
-     *
-     * @param paginationLinksAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
-     * @return The default is {@literal true}.
-     */
-    private final @With @Getter boolean paginationLinksAutomaticallyCreated;
-
-    /**
-     * Indicates if page metadata (rendered as top level JSON:API meta)
-     * for a paged model are created automatically.
-     *
-     * @param paginationMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
-     * @return The default is {@literal true}.
-     */
-    private final @With @Getter boolean paginationMetaAutomaticallyCreated;
-
-    /**
-     * The request parameter used to indicate page number in pagination links.
-     *
-     * @param pageNumberRequestParameter The new value of this configuration's pageNumberRequestParameter
-     * @return The default is {@literal page[number]}.
-     */
-    private final @With @Getter String pageNumberRequestParameter;
-
-    /**
-     * The request parameter used to indicate page number in pagination links.
-     *
-     * @param pageSizeRequestParameter The new value of this configuration's pageSizeRequestParameter
-     * @return The default is {@literal page[size]}.
-     */
-    private final @With @Getter String pageSizeRequestParameter;
-
-    /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
-        this.paginationLinksAutomaticallyCreated = true;
-        this.paginationMetaAutomaticallyCreated = true;
-        this.pageNumberRequestParameter = "page[number]";
-        this.pageSizeRequestParameter = "page[size]";
     }
 }

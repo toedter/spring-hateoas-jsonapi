@@ -25,6 +25,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
@@ -45,30 +46,19 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                 .withLinks(getLinksOrNull(value))
                 .withIncluded(getIncluded(value));
 
-        if(jsonApiConfiguration.isJsonApiVersionRendered()) {
+        if (jsonApiConfiguration.isJsonApiVersionRendered()) {
             doc = doc.withJsonapi(new JsonApiJsonApi());
         }
 
         if (value instanceof JsonApiModel) {
-            // In case the content of an JsonApiRepresentationModel is a PagedModel,
-            // we want to add the page metadata to the top level JSON:API document
-            final RepresentationModel<?> subcontent = ((JsonApiModel) value).getContent();
-            if (subcontent instanceof PagedModel) {
-                JsonApiPagedModelSerializer jsonApiPagedModelSerializer =
-                        new JsonApiPagedModelSerializer(jsonApiConfiguration);
-                doc = jsonApiPagedModelSerializer.postProcess((PagedModel<?>) subcontent, doc, jsonApiConfiguration);
-            }
-        } else {
-            doc = postProcess(value, doc, jsonApiConfiguration);
+            // we want to add the metadata to the top level JSON:API document
+            Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
+            doc = doc.withMeta(metaData);
         }
 
         provider
                 .findValueSerializer(JsonApiDocument.class)
                 .serialize(doc, gen, provider);
-    }
-
-    protected JsonApiDocument postProcess(T value, JsonApiDocument doc, JsonApiConfiguration jsonApiConfiguration) {
-        return doc;
     }
 
     Links getLinksOrNull(RepresentationModel<?> representationModel) {

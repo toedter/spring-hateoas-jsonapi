@@ -27,6 +27,7 @@ import java.util.List;
 
 // tag::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 // end::import-builder[]
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -132,18 +133,6 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
-    void should_not_build_with_second_entity() {
-        Movie movie = new Movie("1", "Star Wars");
-
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            final RepresentationModel<?> jsonApiModel =
-                    jsonApiModel().model(movie)
-                            .model(movie)
-                            .build();
-        });
-    }
-
-    @Test
     void should_build_single_movie_model_with_many_relationships_and_included() throws Exception {
         // tag::build-included[]
         Movie movie = new Movie("1", "The Matrix");
@@ -206,10 +195,60 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .model(pagedModel)
                         .included(director1EntityModel)
                         .included(director2EntityModel)
+                        .pageMeta()
+                        .pageLinks("http://localhost/movies")
                         .build();
         // end::complex-paged-model[]
 
         final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
         compareWithFile(pagedModelJson, "moviesPagedJsonApiModelWithIncluded.json");
+    }
+
+    @Test
+    void should_build_single_movie_entity_model_with_meta() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(EntityModel.of(movie)).meta("x","y").build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieEntityModelWithMeta.json");
+    }
+
+
+    @Test
+    void should_not_build_with_second_entity() {
+        Movie movie = new Movie("1", "Star Wars");
+
+        assertThrows(IllegalStateException.class, () -> {
+            final RepresentationModel<?> jsonApiModel =
+                    jsonApiModel().model(movie)
+                            .model(movie)
+                            .build();
+        });
+    }
+
+    @Test
+    void should_not_build_pagination_meta_with_entity_model_set() {
+        Movie movie = new Movie("1", "Star Wars");
+
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+               .model(movie)
+               .pageMeta()
+               .build());
+    }
+
+    @Test
+    void should_not_build_pagination_meta_with_no_paged_model_set() {
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+                .pageMeta()
+                .build());
+    }
+
+    @Test
+    void should_not_build_pagination_meta_with_no_page_meta_data_set() {
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+                .model(PagedModel.empty())
+                .pageMeta()
+                .build());
     }
 }

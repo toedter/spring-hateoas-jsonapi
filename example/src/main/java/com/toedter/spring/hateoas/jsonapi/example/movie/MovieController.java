@@ -67,10 +67,12 @@ public class MovieController {
 
         List<? extends RepresentationModel<?>> movieResources =
                 StreamSupport.stream(pagedResult.spliterator(), false)
-                .map(movieModelAssembler::toJsonApiModel)
-                .collect(Collectors.toList());
+                        .map(movieModelAssembler::toJsonApiModel)
+                        .collect(Collectors.toList());
 
-        Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
+        Link selfLink = linkTo(MovieController.class).slash(
+                "movies?page[number]=" + pagedResult.getNumber()
+                        + "&page[size]=" + pagedResult.getSize()).withSelfRel();
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(
@@ -82,7 +84,10 @@ public class MovieController {
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
                 PagedModel.of(movieResources, pageMetadata, selfLink);
 
-        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().model(pagedModel);
+        String pageLinksBase = linkTo(MovieController.class).slash("movies").withSelfRel().getHref();
+        final JsonApiModelBuilder jsonApiModelBuilder =
+                jsonApiModel().model(pagedModel).pageMeta().pageLinks(pageLinksBase);
+
         HashMap<Long, Director> directors = new HashMap<>();
         for (Movie movie : pagedResult.getContent()) {
             for (Director director : movie.getDirectors()) {

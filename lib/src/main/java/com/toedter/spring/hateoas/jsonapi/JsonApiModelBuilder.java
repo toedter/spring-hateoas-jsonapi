@@ -19,9 +19,7 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API.
@@ -34,6 +32,13 @@ public class JsonApiModelBuilder {
     private Links links = Links.NONE;
     private final HashMap<String, List<JsonApiRelationship>> relationships = new HashMap<>();
     private final List<RepresentationModel<?>> included = new ArrayList<>();
+    private final Map<String, Object> meta = new HashMap<>();
+
+    private static final String PAGE = "page";
+    private static final String PAGE_NUMBER = "number";
+    private static final String PAGE_SIZE = "size";
+    private static final String PAGE_TOTAL_ELEMENTS = "totalElements";
+    private static final String PAGE_TOTAL_PAGES = "totalPages";
 
     private JsonApiModelBuilder() {
     }
@@ -171,13 +176,125 @@ public class JsonApiModelBuilder {
     }
 
     /**
+     * Adds the given key/value pair to the {@literal JSON:API} meta
+     *
+     * @param key   the json key
+     * @param value the json value
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder meta(String key, Object value) {
+        this.meta.put(key, value);
+        return this;
+    }
+
+    /**
+     * Adds the paging information to the {@literal JSON:API} meta.
+     * Preconditions are:
+     * - the model has been added before
+     * - the model is a paged model
+     * - the model contains a Pageable
+     *
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder pageMeta() {
+        final PagedModel.PageMetadata metadata = getPageMetadata();
+
+        final long pageNumber = metadata.getNumber();
+        final long pageSize = metadata.getSize();
+        final long totalElements = metadata.getTotalElements();
+        final long totalPages = metadata.getTotalPages();
+
+        Map<String, Object> metaObject = new HashMap<>();
+        metaObject.put(PAGE_NUMBER, pageNumber);
+        metaObject.put(PAGE_SIZE, pageSize);
+        metaObject.put(PAGE_TOTAL_ELEMENTS, totalElements);
+        metaObject.put(PAGE_TOTAL_PAGES, totalPages);
+
+        meta.put(PAGE, metaObject);
+
+        return this;
+    }
+
+    /**
+     * Creates all pagination links with {@literal JSON:API} default request parameters for
+     * page number {@literal page[number]} and page size {@literal page[size]}.
+     * <p>
+     * Preconditions are:
+     * - the model has been added before
+     * - the model is a paged model
+     * - the model contains a Pageable*
+     *
+     * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder pageLinks(String linkBase) {
+        return this.pageLinks(linkBase, "page[number]", "page[size]");
+    }
+
+
+    /**
+     * Creates all pagination links.
+     * <p>
+     * Preconditions are:
+     * - the model has been added before
+     * - the model is a paged model
+     * - the model contains a Pageable*
+     *
+     * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder pageLinks(String linkBase,
+                                         String pageNumberRequestParam,
+                                         String pageSizeRequestParam) {
+        Assert.notNull(linkBase, "link base for paging must not be null!");
+        Assert.notNull(pageNumberRequestParam, "page number request parameter must not be null!");
+        Assert.notNull(pageSizeRequestParam, "page size request parameter must not be null!");
+
+        final PagedModel.PageMetadata metadata = getPageMetadata();
+
+        final long pageNumber = metadata.getNumber();
+        final long pageSize = metadata.getSize();
+        final long totalPages = metadata.getTotalPages();
+
+        List<Link> paginationLinks = new ArrayList<>();
+
+        if (pageNumber > 0) {
+            Link firstLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=0&"
+                    + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.FIRST);
+            paginationLinks.add(firstLink);
+        }
+
+        if (pageNumber > 0) {
+            Link prevLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (pageNumber - 1)
+                    + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.PREV);
+            paginationLinks.add(prevLink);
+        }
+
+        if (pageNumber < totalPages - 1) {
+            Link nextLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (pageNumber + 1)
+                    + "&" + pageSizeRequestParam + "=" + (pageNumber + 1)).withRel(IanaLinkRelations.NEXT);
+            paginationLinks.add(nextLink);
+        }
+
+        if (pageNumber < totalPages - 1) {
+            Link lastLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (totalPages - 1)
+                    + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.LAST);
+            paginationLinks.add(lastLink);
+        }
+
+        this.links = this.links.and(paginationLinks);
+
+        return this;
+    }
+
+    /**
      * Transform the entities, Links, relationships and included
      * into a {@link RepresentationModel}.
      *
      * @return will never be {@literal null}.
      */
     public RepresentationModel<?> build() {
-        return new JsonApiModel(model, relationships, included, links);
+        return new JsonApiModel(model, relationships, included, meta, links);
     }
 
     /**
@@ -187,5 +304,23 @@ public class JsonApiModelBuilder {
      */
     public static JsonApiModelBuilder jsonApiModel() {
         return new JsonApiModelBuilder();
+    }
+
+    private PagedModel.PageMetadata getPageMetadata() {
+        if (this.model == null) {
+            throw new IllegalStateException("Model object (PagedModel) must be set.");
+        }
+
+        if (!(this.model instanceof PagedModel)) {
+            throw new IllegalStateException("Model object must be a PagedModel.");
+        }
+
+        final PagedModel.PageMetadata metadata = ((PagedModel<?>) model).getMetadata();
+
+        if (metadata == null) {
+            throw new IllegalStateException("PagedModel object must contain page meta data.");
+        }
+
+        return metadata;
     }
 }

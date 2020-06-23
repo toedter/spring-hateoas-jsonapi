@@ -52,9 +52,7 @@ public class DirectorController {
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
-        final int size = pageSize;
-        final int page = pageNumber;
-        final PageRequest pageRequest = PageRequest.of(page, size);
+        final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         final Page<Director> pagedResult = repository.findAll(pageRequest);
 
@@ -62,37 +60,21 @@ public class DirectorController {
                 .map(directorModelAssembler::toJsonApiModel)
                 .collect(Collectors.toList());
 
-        Link selfLink = linkTo(MovieController.class).slash("movies").withSelfRel();
-        Link templatedLink = Link.of(selfLink.getHref() + "?page[number]=" + page +",page[size]=" + size).withSelfRel();
+        Link selfLink = linkTo(DirectorController.class).slash(
+                "directors?page[number]=" + pagedResult.getNumber()
+                        + "&page[size]=" + pagedResult.getSize()).withSelfRel();
+
+
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(pagedResult.getSize(), pagedResult.getNumber(), pagedResult.getTotalElements(), pagedResult.getTotalPages());
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
-                PagedModel.of(movieResources, pageMetadata, templatedLink);
+                PagedModel.of(movieResources, pageMetadata, selfLink);
 
-        final Pageable prev = pageRequest.previous();
-        if (prev.getPageNumber() < page) {
-            Link prevLink = Link.of(selfLink.getHref() + "?page[number]=" + prev.getPageNumber() + "&page[size]=" + prev.getPageSize()).withRel(IanaLinkRelations.PREV);
-            pagedModel.add(prevLink);
-        }
+        String pageLinksBase = linkTo(MovieController.class).slash("directors").withSelfRel().getHref();
+        final JsonApiModelBuilder jsonApiModelBuilder =
+                jsonApiModel().model(pagedModel).pageMeta().pageLinks(pageLinksBase);
 
-        final Pageable next = pageRequest.next();
-        if (next.getPageNumber() > page && next.getPageNumber() < pagedResult.getTotalPages()) {
-            Link nextLink = Link.of(selfLink.getHref() + "?page[number]=" + next.getPageNumber() + "&page[size]=" + next.getPageSize()).withRel(IanaLinkRelations.NEXT);
-            pagedModel.add(nextLink);
-        }
-
-        if (page > 0) {
-            Link firstLink = Link.of(selfLink.getHref() + "?page[number]=0&page[size]=" + size).withRel(IanaLinkRelations.FIRST);
-            pagedModel.add(firstLink);
-        }
-
-        if (page < pagedResult.getTotalPages() - 1) {
-            Link lastLink = Link.of(selfLink.getHref() + "?page[number]=" + (pagedResult.getTotalPages() - 1) + "&page[size]=" + size).withRel(IanaLinkRelations.LAST);
-            pagedModel.add(lastLink);
-        }
-
-        final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel().model(pagedModel);
         HashMap<Long, Movie> directors = new HashMap<>();
         for (Director director : pagedResult.getContent()) {
             for (Movie movie : director.getMovies()) {
@@ -100,11 +82,10 @@ public class DirectorController {
             }
         }
 
-        directors.values().stream().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
+        directors.values().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
 
         final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
         return ResponseEntity.ok(pagedJsonApiModel);
-
     }
 
     @GetMapping("/directors/{id}")
