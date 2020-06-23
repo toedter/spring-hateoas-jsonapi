@@ -241,6 +241,8 @@ public class JsonApiModelBuilder {
      * - the model contains a Pageable*
      *
      * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
+     * @param pageNumberRequestParam the request parameter for page number
+     * @param pageSizeRequestParam the request parameter for page size
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder pageLinks(String linkBase,
