@@ -219,10 +219,11 @@ public class JsonApiModelBuilder {
      * Creates all pagination links with {@literal JSON:API} default request parameters for
      * page number {@literal page[number]} and page size {@literal page[size]}.
      * <p>
-     * Preconditions are:
-     * - the model has been added before
-     * - the model is a paged model
-     * - the model contains a Pageable*
+     * Preconditions are:<ul>
+     * <li>the model has been added before
+     * <li>the model is a paged model
+     * <li>the model contains a Pageable*
+     * </ul>
      *
      * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
      * @return will never be {@literal null}.
@@ -235,14 +236,15 @@ public class JsonApiModelBuilder {
     /**
      * Creates all pagination links.
      * <p>
-     * Preconditions are:
-     * - the model has been added before
-     * - the model is a paged model
-     * - the model contains a Pageable*
+     * Preconditions are:<ul>
+     * <li>the model has been added before
+     * <li>the model is a paged model
+     * <li>the model contains a Pageable
+     * </ul>
      *
-     * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
+     * @param linkBase               the prefix of all pagination links, e.g. the base URL of the collection resource
      * @param pageNumberRequestParam the request parameter for page number
-     * @param pageSizeRequestParam the request parameter for page size
+     * @param pageSizeRequestParam   the request parameter for page size
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder pageLinks(String linkBase,
