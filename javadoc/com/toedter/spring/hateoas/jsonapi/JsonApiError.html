@@ -157,39 +157,56 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getCode--">getCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getCode--">getCode</a></span>()</code>
+<div class="block">Gets an application-specific error code, expressed as a string value.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getDetail--">getDetail</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getDetail--">getDetail</a></span>()</code>
+<div class="block">Gets a human-readable explanation specific to this occurrence of the problem.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getId--">getId</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getId--">getId</a></span>()</code>
+<div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getLinks--">getLinks</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getLinks--">getLinks</a></span>()</code>
+<div class="block">Gets a links object containing the following members:
+ about: a link that leads to further details about this particular occurrence of the problem.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getMeta--">getMeta</a></span>()</code>
-<div class="block">Adds the given meta to the JSON:API error meta.</div>
+<div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getSource--">getSource</a></span>()</code>
-<div class="block">Gets the source of the error, can contain pointer and/or parameter</div>
+<div class="block">Gets an object containing references to the source of the error, optionally including
+ any of the following members:
+ pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
+ [e.g.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getStatus--">getStatus</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getStatus--">getStatus</a></span>()</code>
+<div class="block">Gets the the HTTP status code applicable to this problem, expressed as a string value.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getTitle--">getTitle</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getTitle--">getTitle</a></span>()</code>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change
+ from occurrence to occurrence of the problem, except for purposes of localization.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -207,20 +224,26 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withCode-java.lang.String-">withCode</a></span>(java.lang.String&nbsp;code)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withCode-java.lang.String-">withCode</a></span>(java.lang.String&nbsp;code)</code>
+<div class="block">Sets an application-specific error code, expressed as a string value.</div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withDetail-java.lang.String-">withDetail</a></span>(java.lang.String&nbsp;detail)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withDetail-java.lang.String-">withDetail</a></span>(java.lang.String&nbsp;detail)</code>
+<div class="block">Sets a human-readable explanation specific to this occurrence of the problem.</div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withId-java.lang.String-">withId</a></span>(java.lang.String&nbsp;id)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withId-java.lang.String-">withId</a></span>(java.lang.String&nbsp;id)</code>
+<div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withMeta-java.util.Map-">withMeta</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;meta)</code>
-<div class="block">Adds the given meta to the JSON:API error meta.</div>
+<div class="block">Sets a meta object containing non-standard meta-information about the error.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -237,11 +260,16 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withStatus-java.lang.String-">withStatus</a></span>(java.lang.String&nbsp;status)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withStatus-java.lang.String-">withStatus</a></span>(java.lang.String&nbsp;status)</code>
+<div class="block">Adds the HTTP status code applicable to this problem, expressed as a string value.</div>
+</td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withTitle-java.lang.String-">withTitle</a></span>(java.lang.String&nbsp;title)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withTitle-java.lang.String-">withTitle</a></span>(java.lang.String&nbsp;title)</code>
+<div class="block">Sets a short, human-readable summary of the problem that SHOULD NOT change
+ from occurrence to occurrence of the problem, except for purposes of localization.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -392,6 +420,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getId</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getId()</pre>
+<div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="withId-java.lang.String-">
@@ -401,6 +434,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withId</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withId(java.lang.String&nbsp;id)</pre>
+<div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>id</code> - the unique identifier of the error.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
 </li>
 </ul>
 <a name="getLinks--">
@@ -410,6 +450,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLinks</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.String&gt;&nbsp;getLinks()</pre>
+<div class="block">Gets a links object containing the following members:
+ about: a link that leads to further details about this particular occurrence of the problem.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="getStatus--">
@@ -419,6 +465,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getStatus</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getStatus()</pre>
+<div class="block">Gets the the HTTP status code applicable to this problem, expressed as a string value.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="withStatus-java.lang.String-">
@@ -428,6 +479,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withStatus</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withStatus(java.lang.String&nbsp;status)</pre>
+<div class="block">Adds the HTTP status code applicable to this problem, expressed as a string value.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>status</code> - the HTTP status code.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
 </li>
 </ul>
 <a name="getCode--">
@@ -437,6 +495,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getCode</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getCode()</pre>
+<div class="block">Gets an application-specific error code, expressed as a string value.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="withCode-java.lang.String-">
@@ -446,6 +509,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withCode</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withCode(java.lang.String&nbsp;code)</pre>
+<div class="block">Sets an application-specific error code, expressed as a string value.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>code</code> - code of the error.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
 </li>
 </ul>
 <a name="getTitle--">
@@ -455,6 +525,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getTitle</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getTitle()</pre>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change
+ from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="withTitle-java.lang.String-">
@@ -464,6 +540,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withTitle</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withTitle(java.lang.String&nbsp;title)</pre>
+<div class="block">Sets a short, human-readable summary of the problem that SHOULD NOT change
+ from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>title</code> - title of the error.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
 </li>
 </ul>
 <a name="getDetail--">
@@ -473,6 +557,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDetail</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getDetail()</pre>
+<div class="block">Gets a human-readable explanation specific to this occurrence of the problem.
+ Like title, the value can be localized.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
 </li>
 </ul>
 <a name="withDetail-java.lang.String-">
@@ -482,6 +572,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withDetail</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withDetail(java.lang.String&nbsp;detail)</pre>
+<div class="block">Sets a human-readable explanation specific to this occurrence of the problem.
+ Like title, the value can be localized.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>detail</code> - error detail.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
 </li>
 </ul>
 <a name="getSource--">
@@ -491,7 +589,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getSource</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.String&gt;&nbsp;getSource()</pre>
-<div class="block">Gets the source of the error, can contain pointer and/or parameter</div>
+<div class="block">Gets an object containing references to the source of the error, optionally including
+ any of the following members:
+ pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
+ [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+ parameter: a string indicating which URI query parameter caused the error.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>can be null.</dd>
@@ -505,7 +607,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getMeta</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;getMeta()</pre>
-<div class="block">Adds the given meta to the JSON:API error meta.</div>
+<div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
@@ -519,10 +621,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withMeta</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;withMeta(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;meta)</pre>
-<div class="block">Adds the given meta to the JSON:API error meta.</div>
+<div class="block">Sets a meta object containing non-standard meta-information about the error.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>meta</code> - meta data added to the error.</dd>
+<dd><code>meta</code> - meta object added to the error.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
