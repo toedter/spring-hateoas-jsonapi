@@ -36,31 +36,85 @@ import java.util.Map;
 public class JsonApiError {
     private static final JsonApiError EMPTY = new JsonApiError();
 
+    /**
+     * Gets a unique identifier for this particular occurrence of the problem.
+     *
+     * @return will never be {@literal null}.
+     * -- WITHER --
+     * Sets a unique identifier for this particular occurrence of the problem.
+     * @param id the unique identifier of the error.
+     */
     @Getter
     @With
     String id;
 
+    /**
+     * Gets a links object containing the following members:
+     * {@literal about}: a link that leads to further details about this particular occurrence of the problem.
+     *
+     * @return will never be {@literal null}.
+     */
     @Getter
     Map<String, String> links;
 
+    /**
+     * Gets the the HTTP status code applicable to this problem, expressed as a string value.
+     *
+     * @return will never be {@literal null}.
+     * -- WITHER --
+     * Adds the HTTP status code applicable to this problem, expressed as a string value.
+     * @param status the HTTP status code.
+     */
     @Getter
     @With
     String status;
 
+    /**
+     * Gets an application-specific error code, expressed as a string value.
+     *
+     * @return will never be {@literal null}.
+     * -- WITHER --
+     * Sets an application-specific error code, expressed as a string value.
+     * @param code code of the error.
+     */
     @Getter
     @With
     String code;
 
+    /**
+     * Gets a short, human-readable summary of the problem that SHOULD NOT change
+     * from occurrence to occurrence of the problem, except for purposes of localization.
+     *
+     * @return will never be {@literal null}.
+     * -- WITHER --
+     * Sets a short, human-readable summary of the problem that SHOULD NOT change
+     * from occurrence to occurrence of the problem, except for purposes of localization.
+     * @param title title of the error.
+     */
     @Getter
     @With
     String title;
 
+    /**
+     * Gets a human-readable explanation specific to this occurrence of the problem.
+     * Like title, the value can be localized.
+     *
+     * @return will never be {@literal null}.
+     * -- WITHER --
+     * Sets a human-readable explanation specific to this occurrence of the problem.
+     * Like title, the value can be localized.
+     * @param detail error detail.
+     */
     @Getter
     @With
     String detail;
 
     /**
-     * Gets the source of the error, can contain {@literal pointer} and/or {@literal parameter}
+     * Gets an object containing references to the source of the error, optionally including
+     * any of the following members:
+     * pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
+     * [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+     * parameter: a string indicating which URI query parameter caused the error.
      *
      * @return can be {@literal null}.
      */
@@ -68,10 +122,12 @@ public class JsonApiError {
     Map<String, String> source;
 
     /**
-     * Adds the given meta to the {@literal JSON:API} error meta.
+     * Gets a meta object containing non-standard meta-information about the error.
      *
-     * @param meta   meta data added to the error.
      * @return will never be {@literal null}.
+     * -- WITHER --
+     * Sets a meta object containing non-standard meta-information about the error.
+     * @param meta meta object added to the error.
      */
     @Getter
     @With
@@ -87,7 +143,7 @@ public class JsonApiError {
      */
     public JsonApiError withSourcePointer(final String sourcePointer) {
         Map<String, String> source = new HashMap<>();
-        if(this.source != null && this.source.get("parameter") != null) {
+        if (this.source != null && this.source.get("parameter") != null) {
             source.put("parameter", this.source.get("parameter"));
         }
         source.put("pointer", sourcePointer);
@@ -102,7 +158,7 @@ public class JsonApiError {
      */
     public JsonApiError withSourceParameter(final String sourceParameter) {
         Map<String, String> source = new HashMap<>();
-        if(this.source != null && this.source.get("pointer") != null) {
+        if (this.source != null && this.source.get("pointer") != null) {
             source.put("pointer", this.source.get("pointer"));
         }
         source.put("parameter", sourceParameter);
