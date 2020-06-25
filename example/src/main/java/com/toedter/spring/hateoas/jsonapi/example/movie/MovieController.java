@@ -82,11 +82,11 @@ public class MovieController {
                         pagedResult.getTotalPages());
 
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
-                PagedModel.of(movieResources, pageMetadata, selfLink);
+                PagedModel.of(movieResources, pageMetadata);
 
         String pageLinksBase = linkTo(MovieController.class).slash("movies").withSelfRel().getHref();
         final JsonApiModelBuilder jsonApiModelBuilder =
-                jsonApiModel().model(pagedModel).pageMeta().pageLinks(pageLinksBase);
+                jsonApiModel().model(pagedModel).link(selfLink).pageMeta().pageLinks(pageLinksBase);
 
         HashMap<Long, Director> directors = new HashMap<>();
         for (Movie movie : pagedResult.getContent()) {
@@ -190,7 +190,7 @@ public class MovieController {
     @GetMapping("/error")
     public ResponseEntity<? extends RepresentationModel<?>> error() {
 
-        @SuppressWarnings("NumericOverflow")
+        @SuppressWarnings({"NumericOverflow", "divzero"})
         int i = 1 / 0;
         return null;
     }
