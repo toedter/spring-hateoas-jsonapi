@@ -59,8 +59,8 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
             @Nonnull ObjectMapper mapper,
             JsonApiConfiguration configuration) {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
-        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        // mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+        // mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         mapper.registerModule(new Jackson2JsonApiModule());
         mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
                 configuration, beanFactory));

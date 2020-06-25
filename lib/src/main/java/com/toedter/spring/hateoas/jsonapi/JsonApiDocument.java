@@ -42,8 +42,10 @@ class JsonApiDocument {
 
     @Getter
     @With(AccessLevel.PACKAGE)
+    @JsonProperty("data")
+    // data can either a a single JsonApiData object or a list of JsonApiData objects
     // if no JSON:API primary data is present, we render it as "data":[], which is conform with the spec
-    List<JsonApiData> data;
+    Object data;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -67,7 +69,7 @@ class JsonApiDocument {
 
     @JsonCreator
     JsonApiDocument(@JsonProperty("jsonapi") @Nullable JsonApiJsonApi jsonapi,
-                    @JsonProperty("data") @Nullable List<JsonApiData> data,
+                    @JsonProperty("data") @Nullable Object data,
                     @JsonProperty("meta") @Nullable Map<String, Object> meta,
                     @JsonProperty("errors") @Nullable JsonApiErrors errors,
                     @JsonProperty("links") @Nullable Links links,

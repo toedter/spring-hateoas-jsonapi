@@ -38,7 +38,7 @@ class MovieModelAssembler {
         Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
         Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
-        String relationshipSelfLink = selfLink.getHref() + "/relationships/1";
+        String relationshipSelfLink = selfLink.getHref() + "/relationships/directors";
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
@@ -47,7 +47,7 @@ class MovieModelAssembler {
         int i = 0;
         for (Director director : movie.getDirectors()) {
             EntityModel<Director> directorEntityModel = EntityModel.of(director);
-            String relationshipRelatedLink = selfLink.getHref() + "/directors/" + i++;
+            String relationshipRelatedLink = selfLink.getHref() + "/directors";
             builder = builder.relationship("directors", directorEntityModel,
                     relationshipSelfLink, relationshipRelatedLink);
         }

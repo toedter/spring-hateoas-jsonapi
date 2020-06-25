@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +34,7 @@ import java.lang.reflect.Method;
 
 
 @Value
-@Getter(onMethod_={@JsonProperty})
+@Getter(onMethod_ = {@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -64,6 +65,20 @@ class JsonApiResource {
             this.name = name;
             this.value = value;
         }
+    }
+
+    /**
+     * Creates a JSON:API resource from an entity model
+     *
+     * @param entityModel the base for the relationship
+     * @return the JSON:API resource
+     */
+    public static JsonApiResource of(EntityModel<?> entityModel) {
+        final Object content = entityModel.getContent();
+        final JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
+        Object id = JsonApiResource.getId(content, jsonApiConfiguration).value;
+        String type = JsonApiResource.getType(content, jsonApiConfiguration).value;
+        return new JsonApiResource(id, type);
     }
 
     static ResourceField getId(Object object, JsonApiConfiguration jsonApiConfiguration) {
@@ -136,8 +151,7 @@ class JsonApiResource {
                 jsonApiType = English.plural(jsonApiType, 2);
             }
             return new ResourceField(null, jsonApiType);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
     }

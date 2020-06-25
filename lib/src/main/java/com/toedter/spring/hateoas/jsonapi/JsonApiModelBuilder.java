@@ -33,7 +33,7 @@ import java.util.Map;
 public class JsonApiModelBuilder {
     private RepresentationModel<?> model;
     private Links links = Links.NONE;
-    private final HashMap<String, List<JsonApiRelationship>> relationships = new HashMap<>();
+    private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
     private final List<RepresentationModel<?>> included = new ArrayList<>();
     private final Map<String, Object> meta = new HashMap<>();
 
@@ -152,7 +152,6 @@ public class JsonApiModelBuilder {
         Assert.notNull(name, "Relationship name must not be null!");
         Assert.notNull(entityModel, "EntityModel must not be null!");
 
-        List<JsonApiRelationship> relationships = this.relationships.computeIfAbsent(name, k -> new ArrayList<>());
         Links links = Links.NONE;
 
         if (selfLink != null && selfLink.trim().length() != 0) {
@@ -163,10 +162,15 @@ public class JsonApiModelBuilder {
             links = links.and(Link.of(relatedLink).withRel("related"));
         }
 
-        if (links.isEmpty()) {
-            relationships.add(JsonApiRelationship.of(entityModel));
+        if(links.isEmpty()) {
+            links = null;
+        }
+
+        JsonApiRelationship jsonApiRelationship = this.relationships.get(name);
+        if (jsonApiRelationship == null) {
+            relationships.put(name, JsonApiRelationship.of(entityModel).withLinks(links));
         } else {
-            relationships.add(JsonApiRelationship.of(entityModel).withLinks(links));
+            relationships.put(name, jsonApiRelationship.withData(JsonApiResource.of(entityModel)).withLinks(links));
         }
 
         return this;

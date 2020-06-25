@@ -13,20 +13,18 @@
             "type": "movies"
           }
         },
-        "directors": [
-          {
-            "data": {
+        "directors": {
+          "data": [
+            {
               "id": "1",
               "type": "directors"
-            }
-          },
-          {
-            "data": {
+            },
+            {
               "id": "2",
               "type": "directors"
             }
-          }
-        ]
+          ]
+        }
       }
     },
     {

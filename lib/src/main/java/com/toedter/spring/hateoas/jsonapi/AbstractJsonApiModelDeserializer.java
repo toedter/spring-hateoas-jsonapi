@@ -29,8 +29,7 @@ import org.springframework.hateoas.mediatype.PropertyUtils;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
@@ -47,13 +46,30 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         this.contentType = contentType;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
-        List<Object> resources = doc.getData().stream()
-                .map(this::convertToResource)
-                .collect(Collectors.toList());
-        return convertToRepresentationModel(resources, doc);
+        if (doc.getData() != null && doc.getData() instanceof Collection<?>) {
+            List<HashMap<String,Object>> collection = (List<HashMap<String,Object>>) doc.getData();
+            List<Object> resources = collection.stream()
+                    .map(this::convertToResource2)
+                    .collect(Collectors.toList());
+            return convertToRepresentationModel(resources, doc);
+        }
+        HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
+        final Object objectFromProperties = convertToResource2(data);
+        return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
+    }
+
+    private Object convertToResource2(HashMap<String, Object> data) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
+        JavaType rootType = JacksonHelper.findRootType(this.contentType);
+        final Object objectFromProperties = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.id, (String) data.get("id"));
+        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.type, (String) data.get("type"));
+        return objectFromProperties;
     }
 
     protected Object convertToResource(JsonApiData jsonApiData) {

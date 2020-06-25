@@ -25,6 +25,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
@@ -40,8 +41,26 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     @Override
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
+        CollectionModel<?> collectionModel = null;
+        if (value instanceof JsonApiModel) {
+            Object content = ((JsonApiModel) value).getContent();
+            if (content instanceof CollectionModel) {
+                collectionModel = (CollectionModel<?>) content;
+            }
+        } else if (value instanceof CollectionModel<?>) {
+            collectionModel = (CollectionModel<?>) value;
+        }
+
+        Object data;
+        if (collectionModel != null) {
+            data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration);
+        } else {
+            final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(value, true, jsonApiConfiguration);
+            data = jsonApiData.orElse(null);
+        }
+
         JsonApiDocument doc = new JsonApiDocument()
-                .withData(JsonApiData.extractCollectionContent(value, jsonApiConfiguration))
+                .withData(data)
                 .withLinks(getLinksOrNull(value))
                 .withIncluded(getIncluded(value));
 

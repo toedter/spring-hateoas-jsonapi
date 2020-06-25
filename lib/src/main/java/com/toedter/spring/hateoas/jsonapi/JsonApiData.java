@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 @Value
-@Getter(onMethod_={@JsonProperty})
+@Getter(onMethod_ = {@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -64,25 +64,14 @@ class JsonApiData {
     }
 
     static List<JsonApiData> extractCollectionContent(
-            @Nullable RepresentationModel<?> representationModel, JsonApiConfiguration jsonApiConfiguration) {
+            @Nullable CollectionModel<?> collectionModel, JsonApiConfiguration jsonApiConfiguration) {
 
         List<JsonApiData> dataList = new ArrayList<>();
-
-        if (representationModel instanceof JsonApiModel) {
-            RepresentationModel<?> content = ((JsonApiModel) representationModel).getContent();
-            if (content instanceof CollectionModel) {
-                representationModel = content;
-            }
-        }
-
-        if (representationModel instanceof CollectionModel) {
-            for (Object entity : ((CollectionModel<?>) representationModel).getContent()) {
+        if (collectionModel != null) {
+            for (Object entity : collectionModel.getContent()) {
                 Optional<JsonApiData> jsonApiData = extractContent(entity, false, jsonApiConfiguration);
                 jsonApiData.ifPresent(dataList::add);
             }
-        } else {
-            Optional<JsonApiData> jsonApiData = extractContent(representationModel, true, jsonApiConfiguration);
-            jsonApiData.ifPresent(dataList::add);
         }
         return dataList;
     }
@@ -108,25 +97,22 @@ class JsonApiData {
         }
 
         if (content == null) {
+            // will lead to "data":null, which is compliant with the JSON:API spec
             return Optional.empty();
         }
-        JsonApiResource.ResourceField idField;
-        try {
-            idField = JsonApiResource.getId(content, jsonApiConfiguration);
-        } catch (Exception e) {
-            // will lead to "data":[], which is ok with the spec
-            final Field[] fields = content.getClass().getDeclaredFields();
-            if (fields.length == 0
-                    || (links != null && fields.length == 1)
-                    || (links != null && fields.length == 2
-                    && ("$jacocoData".equals(fields[0].getName()) || "$jacocoData".equals(fields[1].getName())))) {
-                return Optional.empty();
-            }
-            // we have fields, but no id field
-            throw e;
+
+        final Field[] fields = content.getClass().getDeclaredFields();
+        if (fields.length == 0
+                || (content instanceof RepresentationModel<?> && fields.length == 1)
+                || (content instanceof RepresentationModel<?> && fields.length == 2
+                && ("$jacocoData".equals(fields[0].getName()) || "$jacocoData".equals(fields[1].getName())))) {
+            return Optional.empty();
         }
 
-        if (isSingleEntity || (links != null && links.isEmpty())) {
+        JsonApiResource.ResourceField idField;
+        idField = JsonApiResource.getId(content, jsonApiConfiguration);
+
+        if (isSingleEntity || links != null && links.isEmpty()) {
             links = null;
         }
         JsonApiResource.ResourceField typeField = JsonApiResource.getType(content, jsonApiConfiguration);

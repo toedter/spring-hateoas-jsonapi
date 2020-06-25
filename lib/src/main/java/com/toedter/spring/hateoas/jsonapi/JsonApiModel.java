@@ -34,7 +34,7 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     @JsonIgnore
     @Getter
-    private final Map<String, List<JsonApiRelationship>> relationships;
+    private final Map<String, JsonApiRelationship> relationships;
 
     @JsonIgnore
     @Getter
@@ -46,7 +46,7 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     JsonApiModel(
             @Nullable RepresentationModel<?> entity,
-            @Nullable Map<String, List<JsonApiRelationship>> relationships,
+            @Nullable Map<String, JsonApiRelationship> relationships,
             @Nullable List<RepresentationModel<?>> includedEntities,
             @Nullable Map<String, Object> metadata,
             @Nullable Links links) {

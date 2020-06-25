@@ -28,9 +28,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is used to build a JSON:API presentation model that uses relationships.
@@ -38,29 +36,46 @@ import java.util.Map;
  * @author Kai Toedter
  */
 @Value
-@With(AccessLevel.PACKAGE)
 @JsonPropertyOrder({"data", "links", "meta"})
 class JsonApiRelationship {
     @Getter
-    List<JsonApiResource> data;
+    Object data;
 
     @Getter
+    @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Links links;
 
     @Getter
+    @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Map<String, Object> meta;
 
     @JsonCreator
     JsonApiRelationship(
-            @JsonProperty("data") @Nullable List<JsonApiResource> data,
+            @JsonProperty("data") @Nullable Object data,
             @JsonProperty("links") @Nullable Links links,
             @JsonProperty("meta") @Nullable Map<String, Object> meta
     ) {
         this.data = data;
         this.links = links;
         this.meta = meta;
+    }
+
+    public JsonApiRelationship withData(JsonApiResource jsonApiResource) {
+        if (this.data == null) {
+            return new JsonApiRelationship(jsonApiResource, this.links, this.meta);
+        } else {
+            List<JsonApiResource> dataList = new ArrayList<>();
+            if (this.data instanceof JsonApiResource) {
+                dataList.add((JsonApiResource) this.data);
+            } else {
+                //noinspection unchecked
+                dataList.addAll((Collection<JsonApiResource>) this.data);
+            }
+            dataList.add(jsonApiResource);
+            return new JsonApiRelationship(dataList, this.links, this.meta);
+        }
     }
 
     /**
@@ -74,6 +89,6 @@ class JsonApiRelationship {
         final JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
         Object id = JsonApiResource.getId(content, jsonApiConfiguration).value;
         String type = JsonApiResource.getType(content, jsonApiConfiguration).value;
-        return new JsonApiRelationship(Collections.singletonList(new JsonApiResource(id, type)), null, null);
+        return new JsonApiRelationship(new JsonApiResource(id, type), null, null);
     }
 }
