@@ -373,20 +373,18 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
           "type": "movies"
         }
       },
-      "directors": [
-        {
-          "data": {
+      "directors": {
+        "data": [
+          {
             "id": "1",
             "type": "directors"
-          }
-        },
-        {
-          "data": {
+          },
+          {
             "id": "2",
             "type": "directors"
           }
-        }
-      ]
+        ]
+      }
     }
   },
   "included": [
@@ -478,20 +476,18 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
             "type": "movies"
           }
         },
-        "directors": [
-          {
-            "data": {
+        "directors": {
+          "data": [
+            {
               "id": "1",
               "type": "directors"
-            }
-          },
-          {
-            "data": {
+            },
+            {
               "id": "2",
               "type": "directors"
             }
-          }
-        ]
+          ]
+        }
       }
     },
     {
@@ -640,7 +636,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2020-06-24 14:37:14 UTC
+Last updated 2020-06-25 17:38:30 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>

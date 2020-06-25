@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -227,6 +227,16 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-org.springframework.hateoas.EntityModel-java.lang.String-java.lang.String-">relationship</a></span>(java.lang.String&nbsp;name,
+            org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel,
+            java.lang.String&nbsp;selfLink,
+            java.lang.String&nbsp;relatedLink)</code>
+<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
+ to the <code>RepresentationModel</code> to be built.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.Object-">relationship</a></span>(java.lang.String&nbsp;name,
             java.lang.Object&nbsp;object)</code>
 <div class="block">Adds the given relationship based on the given <code>Object</code>
@@ -362,6 +372,30 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - must not be null.</dd>
 <dd><code>entityModel</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="relationship-java.lang.String-org.springframework.hateoas.EntityModel-java.lang.String-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>relationship</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
+                                        org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel,
+                                        java.lang.String&nbsp;selfLink,
+                                        java.lang.String&nbsp;relatedLink)</pre>
+<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
+ to the <code>RepresentationModel</code> to be built. Optional, a self link of the relation and
+ a related link (to the related resource) can be added.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - must not be null.</dd>
+<dd><code>entityModel</code> - must not be null.</dd>
+<dd><code>selfLink</code> - can be null.</dd>
+<dd><code>relatedLink</code> - can be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
 </dl>
