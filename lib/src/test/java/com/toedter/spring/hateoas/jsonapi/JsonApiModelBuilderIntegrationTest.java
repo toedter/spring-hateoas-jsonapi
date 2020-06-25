@@ -115,6 +115,21 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_single_movie_model_with_relationship_and_links() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(movie)
+                        .relationship("directors", EntityModel.of(director),
+                                "http://movies/1/relationships/1",
+                                "http://movies/1/directors/1")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinks.json");
+    }
+
+    @Test
     void should_build_single_movie_model_with_many_relationships() throws Exception {
         Movie movie = new Movie("4", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");

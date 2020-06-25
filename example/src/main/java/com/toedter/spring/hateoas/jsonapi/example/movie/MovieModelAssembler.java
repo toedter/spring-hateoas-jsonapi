@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import com.toedter.spring.hateoas.jsonapi.example.director.DirectorController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -37,13 +38,18 @@ class MovieModelAssembler {
         Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
         Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
+        String relationshipSelfLink = selfLink.getHref() + "/relationships/1";
+
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
                 .link(selfLink)
                 .link(templatedMoviesLink);
+        int i = 0;
         for (Director director : movie.getDirectors()) {
             EntityModel<Director> directorEntityModel = EntityModel.of(director);
-            builder = builder.relationship("directors", directorEntityModel);
+            String relationshipRelatedLink = selfLink.getHref() + "/directors/" + i++;
+            builder = builder.relationship("directors", directorEntityModel,
+                    relationshipSelfLink, relationshipRelatedLink);
         }
 
         return builder.build();

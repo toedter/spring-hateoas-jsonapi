@@ -131,11 +131,44 @@ public class JsonApiModelBuilder {
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
+        return this.relationship(name, entityModel, null, null);
+    }
+
+    /**
+     * Adds the given {@literal relationship} based on the given {@link EntityModel}
+     * to the {@link RepresentationModel} to be built. Optional, a self link of the relation and
+     * a related link (to the related resource) can be added.
+     *
+     * @param name        must not be {@literal null}.
+     * @param entityModel must not be {@literal null}.
+     * @param selfLink    can be {@literal null}.
+     * @param relatedLink can be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            EntityModel<?> entityModel,
+                                            String selfLink,
+                                            String relatedLink) {
         Assert.notNull(name, "Relationship name must not be null!");
         Assert.notNull(entityModel, "EntityModel must not be null!");
 
         List<JsonApiRelationship> relationships = this.relationships.computeIfAbsent(name, k -> new ArrayList<>());
-        relationships.add(JsonApiRelationship.of(entityModel));
+        Links links = Links.NONE;
+
+        if (selfLink != null && selfLink.trim().length() != 0) {
+            links = links.and(Link.of(selfLink));
+        }
+
+        if (relatedLink != null && relatedLink.trim().length() != 0) {
+            links = links.and(Link.of(relatedLink).withRel("related"));
+        }
+
+        if (links.isEmpty()) {
+            relationships.add(JsonApiRelationship.of(entityModel));
+        } else {
+            relationships.add(JsonApiRelationship.of(entityModel).withLinks(links));
+        }
+
         return this;
     }
 
