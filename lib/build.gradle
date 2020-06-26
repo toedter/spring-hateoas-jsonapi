@@ -4,10 +4,11 @@ plugins {
     id 'jacoco'
     id 'io.freefair.lombok' version '5.1.0'
     id 'org.asciidoctor.jvm.convert' version '3.1.0'
+    id 'maven-publish'
 }
 
 group = 'com.toedter'
-version = '0.0.1-SNAPSHOT'
+version = '0.5.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -103,3 +104,35 @@ asciidoctor {
 }
 
 asciidoctor.dependsOn prepareAsciidocBuild
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'spring-hateoas-jsonapi'
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username System.getenv('OSSRH_USERNAME')
+                password System.getenv('OSSRH_PASSWORD')
+            }
+            if (project.version.endsWith("-SNAPSHOT")) {
+                url 'https://oss.sonatype.org/content/repositories/snapshots/'
+            } else {
+                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            }
+        }
+    }
+}
+
+// we don't publish the gradle module meta data
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}

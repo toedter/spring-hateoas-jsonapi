@@ -70,8 +70,9 @@ class JsonApiRelationship {
             if (this.data instanceof JsonApiResource) {
                 dataList.add((JsonApiResource) this.data);
             } else {
-                //noinspection unchecked
-                dataList.addAll((Collection<JsonApiResource>) this.data);
+                @SuppressWarnings("unchecked")
+                Collection<JsonApiResource> collectionData = (Collection<JsonApiResource>) this.data;
+                dataList.addAll(collectionData);
             }
             dataList.add(jsonApiResource);
             return new JsonApiRelationship(dataList, this.links, this.meta);
