@@ -23,11 +23,10 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: echo Hello world $OSSRH_USERNAME $OSSRH_PASSWORD
-#      run: ./gradlew build doc publish
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      run: ./gradlew build doc publish
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
