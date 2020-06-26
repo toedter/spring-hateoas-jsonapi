@@ -23,7 +23,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build doc publish
+      run: echo Hello world $OSSRH_USERNAME $OSSRH_PASSWORD
+#      run: ./gradlew build doc publish
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
