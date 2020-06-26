@@ -1,0 +1,33 @@
+{
+  "data": {
+    "id": "4",
+    "type": "movies",
+    "attributes": {
+      "title": "The Matrix"
+    },
+    "relationships": {
+      "relatedMovies": {
+        "data": {
+          "id": "2",
+          "type": "movies"
+        }
+      },
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "directors"
+          },
+          {
+            "id": "2",
+            "type": "directors"
+          },
+          {
+            "id": "3",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  }
+}
