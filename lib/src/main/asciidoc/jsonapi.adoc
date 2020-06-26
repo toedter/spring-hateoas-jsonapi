@@ -10,12 +10,26 @@ You can find a list of implementations and tools https://jsonapi.org/implementat
 Answers to a few questions, e.g. related to HAL, you can find
 https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
 
-To enable JSON:API for Spring HATEOAS, just put com.toedter.spring.hateoas.jsonapi.{version}.jar in your classpath.
+== Integration in your Backends
 
-NOTE: The jar is not published to Maven Central yet. I will wait until the API keeps being more stable.
+Currently, I publish the current SNAPSHOT version to the `https://oss.sonatype.org/content/repositories/snapshots/`
+repository. So please make sure you add this repository to your Maven or Gradle configuration.
+Then you can configure a dependency to `spring-hateoas-jsonapi`
+
+Maven:
+[source,xml]
+<dependency>
+    <groupId>com.toedter</groupId>
+    <artifactId>spring-hateoas-jsonapi</artifactId>
+    <version>0.5.0-SNAPSHOT</version>
+</dependency>
+
+Gradle:
+[source]
+implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'
+
+NOTE: The jar is not published as a released version to Maven Central yet. I will wait until the API keeps being more stable.
 (Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
-For now, you have to clone the Gitbub project https://github.com/toedter/spring-hateoas-jsonapi
-and build the jar locally.
 
 Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
 
