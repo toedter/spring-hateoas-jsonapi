@@ -51,33 +51,24 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
         if (doc.getData() != null && doc.getData() instanceof Collection<?>) {
-            List<HashMap<String,Object>> collection = (List<HashMap<String,Object>>) doc.getData();
+            List<HashMap<String, Object>> collection = (List<HashMap<String, Object>>) doc.getData();
             List<Object> resources = collection.stream()
-                    .map(this::convertToResource2)
+                    .map(this::convertToResource)
                     .collect(Collectors.toList());
             return convertToRepresentationModel(resources, doc);
         }
         HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
-        final Object objectFromProperties = convertToResource2(data);
+        final Object objectFromProperties = convertToResource(data);
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
-    private Object convertToResource2(HashMap<String, Object> data) {
+    private Object convertToResource(HashMap<String, Object> data) {
         @SuppressWarnings("unchecked")
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
         final Object objectFromProperties = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
         JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.id, (String) data.get("id"));
         JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.type, (String) data.get("type"));
-        return objectFromProperties;
-    }
-
-    protected Object convertToResource(JsonApiData jsonApiData) {
-        Map<String, Object> attributes = jsonApiData.getAttributes();
-        JavaType rootType = JacksonHelper.findRootType(this.contentType);
-        final Object objectFromProperties = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
-        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.id, jsonApiData.getId());
-        JsonApiResource.setTypeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.type, jsonApiData.getType());
         return objectFromProperties;
     }
 
@@ -96,9 +87,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) {
-
         JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-
         return createJsonDeserializer(type);
     }
 
