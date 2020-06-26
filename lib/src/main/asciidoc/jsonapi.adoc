@@ -10,6 +10,13 @@ You can find a list of implementations and tools https://jsonapi.org/implementat
 Answers to a few questions, e.g. related to HAL, you can find
 https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
 
+Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
+
+[source, json]
+----
+include::{resource-dir}/jsonapi-sample.json[]
+----
+
 == Integration in your Backends
 
 Currently, I publish the current SNAPSHOT version to the `https://oss.sonatype.org/content/repositories/snapshots/`
@@ -30,13 +37,6 @@ implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'
 
 NOTE: The jar is not published as a released version to Maven Central yet. I will wait until the API keeps being more stable.
 (Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
-
-Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
-
-[source, json]
-----
-include::{resource-dir}/jsonapi-sample.json[]
-----
 
 == Representation Models
 
