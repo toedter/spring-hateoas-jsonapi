@@ -25,7 +25,6 @@ import org.springframework.hateoas.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// tag::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 // end::import-builder[]

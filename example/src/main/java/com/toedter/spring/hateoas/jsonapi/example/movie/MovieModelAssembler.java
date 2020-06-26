@@ -16,9 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
-import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
-import com.toedter.spring.hateoas.jsonapi.example.director.DirectorController;
+import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;

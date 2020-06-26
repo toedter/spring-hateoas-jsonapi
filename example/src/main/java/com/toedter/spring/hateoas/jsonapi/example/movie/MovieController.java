@@ -17,9 +17,9 @@
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
-import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.*;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 // end::import-builder[]
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)

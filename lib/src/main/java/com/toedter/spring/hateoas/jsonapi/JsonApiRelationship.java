@@ -28,7 +28,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used to build a JSON:API presentation model that uses relationships.
