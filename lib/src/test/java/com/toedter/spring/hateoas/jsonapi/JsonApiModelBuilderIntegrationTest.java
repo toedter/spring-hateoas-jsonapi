@@ -25,9 +25,10 @@ import org.springframework.hateoas.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// start::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 // end::import-builder[]
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Test")
