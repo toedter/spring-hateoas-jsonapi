@@ -88,46 +88,6 @@ You can find a list of implementations and tools <a href="https://jsonapi.org/im
 Answers to a few questions, e.g. related to HAL, you can find
 <a href="https://jsonapi.org/faq/#why-not-use-the-hal-specification">here</a>.</p>
 </div>
-<div class="sect2">
-<h3 id="_integration_in_your_backends">Integration in your Backends</h3>
-<div class="paragraph">
-<p>Currently, I publish the current SNAPSHOT version to the <code><a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a></code>
-repository. So please make sure you add this repository to your Maven or Gradle configuration.
-Then you can configure a dependency to <code>spring-hateoas-jsonapi</code></p>
-</div>
-<div class="paragraph">
-<p>Maven:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
-    &lt;groupId&gt;com.toedter&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.5.0-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Gradle:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-The jar is not published as a released version to Maven Central yet. I will wait until the API keeps being more stable.
-(Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Anytime a client supplies an <code>Accept</code> header with <code>application/vnd.api+json</code>, you can expect something like this:</p>
 </div>
@@ -180,6 +140,46 @@ The jar is not published as a released version to Maven Central yet. I will wait
   }
 }</code></pre>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_integration_in_your_backends">Integration in your Backends</h3>
+<div class="paragraph">
+<p>Currently, I publish the current SNAPSHOT version to the <code><a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a></code>
+repository. So please make sure you add this repository to your Maven or Gradle configuration.
+Then you can configure a dependency to <code>spring-hateoas-jsonapi</code></p>
+</div>
+<div class="paragraph">
+<p>Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;com.toedter&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
+    &lt;version&gt;0.5.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The jar is not published as a released version to Maven Central yet. I will wait until the API keeps being more stable.
+(Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -711,7 +711,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.5.0-SNAPSHOT<br>
-Last updated 2020-06-26 13:39:05 UTC
+Last updated 2020-06-26 13:45:56 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
