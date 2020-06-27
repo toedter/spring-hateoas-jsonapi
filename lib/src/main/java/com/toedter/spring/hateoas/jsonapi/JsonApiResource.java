@@ -26,6 +26,7 @@ import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -137,7 +138,8 @@ class JsonApiResource {
 
             if (resourceField == JsonApiResourceField.id) {
                 // then try field "id"
-                Field field = object.getClass().getDeclaredField("id");
+                Field field = ReflectionUtils.findField(object.getClass(), "id");
+                //noinspection ConstantConditions
                 field.setAccessible(true);
                 final Object id = field.get(object);
                 if (id == null) {
@@ -156,7 +158,7 @@ class JsonApiResource {
         }
     }
 
-    static void setTypeForObject(Object object, JsonApiResourceField jsonApiTypeKey, String jsonApiTypeValue) {
+    static void setJsonApiResourceFieldAttributeForObject(Object object, JsonApiResourceField name, String value) {
         final Field[] declaredFields = object.getClass().getDeclaredFields();
         try {
             // first try annotation on fields
@@ -165,11 +167,11 @@ class JsonApiResource {
                 final Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if (jsonApiTypeKey == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                    if (name == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
                             || JSONAPI_ID_ANNOTATION.equals(annotationName))
-                            || (jsonApiTypeKey == JsonApiResourceField.type
+                            || (name == JsonApiResourceField.type
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName))) {
-                        field.set(object, jsonApiTypeValue);
+                        field.set(object, value);
                         return;
                     }
                 }
@@ -182,30 +184,30 @@ class JsonApiResource {
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
                     boolean isAnnotatedMethod = false;
-                    if (jsonApiTypeKey == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                    if (name == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
                             || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
                         isAnnotatedMethod = true;
-                    } else if (jsonApiTypeKey == JsonApiResourceField.type
+                    } else if (name == JsonApiResourceField.type
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
                         isAnnotatedMethod = true;
                     }
                     // if the method is a setter find the corresponding field if there is one
                     final String methodName = method.getName();
                     if (isAnnotatedMethod && methodName.startsWith("set")) {
-                        method.invoke(object, jsonApiTypeValue);
+                        method.invoke(object, value);
                         return;
                     }
                 }
             }
 
             // then try field directly
-            if (jsonApiTypeKey == JsonApiResourceField.id) {
-                Field field = object.getClass().getDeclaredField(jsonApiTypeKey.name());
+            if (name == JsonApiResourceField.id) {
+                Field field = object.getClass().getDeclaredField(name.name());
                 field.setAccessible(true);
-                field.set(object, jsonApiTypeValue);
+                field.set(object, value);
             }
         } catch (Exception e) {
-            System.out.println("Cannot set JSON:API " + jsonApiTypeKey + " on object of type " + object.getClass().getSimpleName());
+            System.out.println("Cannot set JSON:API " + name + " on object of type " + object.getClass().getSimpleName());
         }
     }
 }

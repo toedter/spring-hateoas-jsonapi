@@ -252,6 +252,39 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_single_movie_entity_model_with_one_relationship() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("postMovieWithOneRelationship.json", getClass()).getFile();
+        EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithDirectors movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        List<Director> directors = movie.getDirectors();
+        assertThat(directors.size()).isEqualTo(1);
+        assertThat(directors.get(0).getId()).isEqualTo("1");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_two_relationships() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("postMovieWithTwoRelationships.json", getClass()).getFile();
+        EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithDirectors movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        List<Director> directors = movie.getDirectors();
+        assertThat(directors.size()).isEqualTo(2);
+        assertThat(directors.get(0).getId()).isEqualTo("1");
+        assertThat(directors.get(1).getId()).isEqualTo("2");
+    }
+
+    @Test
     void should_deserialize_single_movie_entity_model_with_field_annotation() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie2.class);
         File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();

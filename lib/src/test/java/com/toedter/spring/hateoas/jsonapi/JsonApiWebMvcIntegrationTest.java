@@ -104,6 +104,27 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_create_new_movie_with_relationships() throws Exception {
+
+        String input = readFile("postMovieWithTwoRelationships.json");
+
+        this.mockMvc.perform(post("/moviesWithDirectors")
+                .content(input)
+                .contentType(JSON_API))
+                .andExpect(status().isCreated())
+                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
+
+        String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
+                .accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "movieCreatedWithDirectors.json");
+    }
+
+    @Test
     void should_patch_movie() throws Exception {
 
         String input = readFile("patchMovie.json");

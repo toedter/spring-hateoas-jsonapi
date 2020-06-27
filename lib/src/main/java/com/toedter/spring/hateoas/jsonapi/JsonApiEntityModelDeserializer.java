@@ -22,10 +22,19 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>>
         implements ContextualDeserializer {
+
+    public static final String JSONAPI_RELATIONSHIPS_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiRelationships";
+    public static final String CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL = "Cannot deserialize input to EntityModel";
 
     JsonApiEntityModelDeserializer() {
         super();
@@ -43,9 +52,64 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             if (links != null) {
                 entityModel.add(links);
             }
+
+            @SuppressWarnings("unchecked")
+            HashMap<String, Object> relationships =
+                    (HashMap<String, Object>) ((HashMap<String, Object>) doc.getData()).get("relationships");
+
+            if (relationships != null) {
+
+                Object object = entityModel.getContent();
+                if (object == null) {
+                    return entityModel;
+                }
+
+                final Field[] declaredFields = object.getClass().getDeclaredFields();
+                for (Field field : declaredFields) {
+                    field.setAccessible(true);
+                    JsonApiRelationships relationshipsAnnotation = field.getAnnotation(JsonApiRelationships.class);
+                    if (relationshipsAnnotation != null) {
+                        Object relationship = relationships.get(relationshipsAnnotation.value());
+                        try {
+                            final Type genericType = field.getGenericType();
+                            if (genericType instanceof ParameterizedType) {
+                                ParameterizedType type = (ParameterizedType) genericType;
+                                if (List.class.isAssignableFrom(field.getType())) {
+                                    List<Object> relationshipList = new ArrayList<>();
+                                    Object data = ((HashMap<?, ?>) relationship).get("data");
+                                    List<HashMap<String, String>> jsonApiRelationships;
+                                    if (data instanceof List) {
+                                        //noinspection unchecked
+                                        jsonApiRelationships = (List<HashMap<String, String>>) data;
+                                    } else if (data instanceof HashMap) {
+                                        //noinspection unchecked
+                                        jsonApiRelationships = Collections.singletonList((HashMap<String, String>) data);
+                                    } else {
+                                        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                                    }
+                                    Type typeArgument = type.getActualTypeArguments()[0];
+
+                                    for (HashMap<String, String> entry : jsonApiRelationships) {
+                                        Class<?> typeArgClass = (Class<?>) typeArgument;
+                                        Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
+                                        JsonApiResource.setJsonApiResourceFieldAttributeForObject(
+                                                newInstance, JsonApiResource.JsonApiResourceField.id, entry.get("id"));
+                                        relationshipList.add(newInstance);
+                                    }
+
+                                    field.set(object, relationshipList);
+                                }
+                            }
+                        } catch (Exception e) {
+                            throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                        }
+                    }
+                }
+            }
             return entityModel;
         }
-        throw new RuntimeException("Cannot deserialize input to EntityModel");
+        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {

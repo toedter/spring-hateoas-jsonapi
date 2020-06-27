@@ -17,14 +17,13 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -72,11 +71,45 @@ public class WebMvcMovieController {
                 selfLink);
     }
 
+    @GetMapping("/moviesWithDirectors/{id}")
+    public RepresentationModel<?> findOneWidthDirectors(@PathVariable Integer id) {
+        WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
+
+        Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
+
+        Movie movie = MOVIES.get(id);
+        if(movie instanceof  MovieWithDirectors) {
+            List<Director> directors = ((MovieWithDirectors)movie).getDirectors();
+            JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
+            for(Director director: directors) {
+                model = model.relationship("directors", director);
+            }
+            return model.build();
+        }
+        return EntityModel.of(
+                movie,
+                selfLink);
+    }
+
     @PostMapping("/movies")
     public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) {
         int newMovieId = MOVIES.size() + 1;
         String newMovieIdString = "" + newMovieId;
         Movie movieContent = movie.getContent();
+        assert movieContent != null;
+        movieContent.setId(newMovieIdString);
+        MOVIES.put(newMovieId, movieContent);
+
+        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
+
+        return ResponseEntity.created(link.toUri()).build();
+    }
+
+    @PostMapping("/moviesWithDirectors")
+    public ResponseEntity<?> newMovieWithDirectors(@RequestBody EntityModel<MovieWithDirectors> movie) {
+        int newMovieId = MOVIES.size() + 1;
+        String newMovieIdString = "" + newMovieId;
+        MovieWithDirectors movieContent = movie.getContent();
         assert movieContent != null;
         movieContent.setId(newMovieIdString);
         MOVIES.put(newMovieId, movieContent);
