@@ -567,6 +567,85 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 <div class="sect1">
+<h2 id="Creating">Creating Resources with HTTP POST</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
+For example, a <code>POST</code> with the body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "attributes": {
+      "title": "Batman Begins"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> automatically.
+You can also create REST resources that contain <code>JSON:API relationships</code>.
+You just have to annotate the underlying domain model class, with <code>JsonApiRelationships(&lt;relationship name&gt;)</code></p>
+</div>
+<div class="paragraph">
+<p>For example, a <code>POST</code> with the body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "directors"
+          },
+          {
+            "id": "2",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> with a filled list of directors,
+where ONLY the id attribute of each director is set.
+The REST controller then has to interpret those relationships and bind the
+real director objects to the movie.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of a class using the annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithDirectors extends Movie {
+    @JsonApiType
+    String myType = "movies";
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;Director&gt; directors;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="configuration">Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -660,7 +739,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.5.0-SNAPSHOT<br>
-Last updated 2020-06-28 09:41:26 UTC
+Last updated 2020-06-28 10:02:55 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
