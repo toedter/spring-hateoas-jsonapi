@@ -170,6 +170,40 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
+[[Creating]]
+== Creating Resources with HTTP POST ==
+
+To create new REST resources using HTTP POST, you can provide `JSON:API` formatted JSON as input.
+For example, a `POST` with the body
+
+[source, json]
+----
+include::{test-resources-dir}/postMovie.json[]
+----
+
+will be deserialized to an `EntityModel<Movie>` automatically.
+You can also create REST resources that contain `JSON:API relationships`.
+You just have to annotate the underlying domain model class, with `JsonApiRelationships(<relationship name>)`
+
+For example, a `POST` with the body
+
+[source, json]
+----
+include::{test-resources-dir}/postMovieWithTwoRelationships.json[]
+----
+
+will be deserialized to an `EntityModel<Movie>` with a filled list of directors,
+where ONLY the id attribute of each director is set.
+The REST controller then has to interpret those relationships and bind the
+real director objects to the movie.
+
+Here is an example of a class using the annotation:
+
+[source, java]
+----
+include::{test-dir}/support/MovieWithDirectors.java[tags=Movie-with-directors]
+----
+
 [[configuration]]
 == Configuration ==
 
