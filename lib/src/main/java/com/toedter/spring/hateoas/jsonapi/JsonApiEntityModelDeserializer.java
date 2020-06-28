@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -29,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import static org.springframework.util.ReflectionUtils.doWithFields;
 
 class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>>
         implements ContextualDeserializer {
@@ -64,7 +68,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                     return entityModel;
                 }
 
-                final Field[] declaredFields = object.getClass().getDeclaredFields();
+                final Field[] declaredFields = getAllDeclaredFields(object.getClass());
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
                     JsonApiRelationships relationshipsAnnotation = field.getAnnotation(JsonApiRelationships.class);

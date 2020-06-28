@@ -32,6 +32,11 @@ import org.springframework.util.StringUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import static org.springframework.util.ReflectionUtils.*;
 
 
 @Value
@@ -97,7 +102,7 @@ class JsonApiResource {
 
         try {
             // first search for field annotation
-            final Field[] declaredFields = object.getClass().getDeclaredFields();
+            final Field[] declaredFields = getAllDeclaredFields(object.getClass());
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 final Annotation[] annotations = field.getAnnotations();
@@ -114,7 +119,7 @@ class JsonApiResource {
             }
 
             // first search for method annotation
-            final Method[] declaredMethods = object.getClass().getDeclaredMethods();
+            final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
             for (Method method : declaredMethods) {
                 final Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
@@ -159,7 +164,7 @@ class JsonApiResource {
     }
 
     static void setJsonApiResourceFieldAttributeForObject(Object object, JsonApiResourceField name, String value) {
-        final Field[] declaredFields = object.getClass().getDeclaredFields();
+        final Field[] declaredFields = getAllDeclaredFields(object.getClass());
         try {
             // first try annotation on fields
             for (Field field : declaredFields) {
@@ -178,7 +183,7 @@ class JsonApiResource {
             }
 
             // first try annotation on methods
-            final Method[] declaredMethods = object.getClass().getDeclaredMethods();
+            final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
             for (Method method : declaredMethods) {
                 final Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
@@ -202,7 +207,8 @@ class JsonApiResource {
 
             // then try field directly
             if (name == JsonApiResourceField.id) {
-                Field field = object.getClass().getDeclaredField(name.name());
+                Field field = findField(object.getClass(), name.name());
+                //noinspection ConstantConditions
                 field.setAccessible(true);
                 field.set(object, value);
             }

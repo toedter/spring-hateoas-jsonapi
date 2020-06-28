@@ -18,7 +18,9 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.support.*;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -291,6 +293,23 @@ class Jackson2JsonApiIntegrationTest {
         EntityModel<Movie2> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
         Movie2 movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getMyId()).isEqualTo("1");
+        assertThat(movie.getType()).isEqualTo("movies");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+    }
+
+    @Test
+    void should_deserialize_derived_class_with_field_annotation() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie4.class);
+        File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
+        EntityModel<Movie4> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        Movie4 movie = movieEntityModel.getContent();
         assert movie != null;
         assertThat(movie.getMyId()).isEqualTo("1");
         assertThat(movie.getType()).isEqualTo("movies");

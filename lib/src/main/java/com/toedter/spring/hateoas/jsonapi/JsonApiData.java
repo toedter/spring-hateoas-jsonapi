@@ -29,7 +29,12 @@ import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import static org.springframework.util.ReflectionUtils.doWithFields;
+import static org.springframework.util.ReflectionUtils.doWithMethods;
 
 @Value
 @Getter(onMethod_ = {@JsonProperty})
@@ -101,7 +106,7 @@ class JsonApiData {
             return Optional.empty();
         }
 
-        final Field[] fields = content.getClass().getDeclaredFields();
+        final Field[] fields = getAllDeclaredFields(content.getClass());
         if (fields.length == 0
                 || (content instanceof RepresentationModel<?> && fields.length == 1)
                 || (content instanceof RepresentationModel<?> && fields.length == 2
