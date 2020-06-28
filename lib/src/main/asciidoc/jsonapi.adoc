@@ -204,6 +204,10 @@ Here is an example of a class using the annotation:
 include::{test-dir}/support/MovieWithDirectors.java[tags=Movie-with-directors]
 ----
 
+NOTE: If you use the annotation `JsonApiRelationships` on an attribute of a Java class,
+the content will NOT be serialized automatically to `JSON:API relationships`. This is on purpose,
+please us the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
+
 [[configuration]]
 == Configuration ==
 
