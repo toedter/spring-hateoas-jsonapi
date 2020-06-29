@@ -11,9 +11,10 @@ sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
+// if you want to used the snapshot version from oss.sonatype.org
+//    maven {
+//        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+//    }
 }
 
 dependencies {
@@ -21,8 +22,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'
-    //implementation project(':lib')
+
+    // if you want to used the snapshot version from oss.sonatype.org
+    // implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'
+    implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
