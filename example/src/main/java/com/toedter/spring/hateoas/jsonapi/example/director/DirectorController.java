@@ -66,8 +66,6 @@ public class DirectorController {
                 "directors?page[number]=" + pagedResult.getNumber()
                         + "&page[size]=" + pagedResult.getSize()).withSelfRel();
 
-
-
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(pagedResult.getSize(), pagedResult.getNumber(), pagedResult.getTotalElements(), pagedResult.getTotalPages());
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
@@ -75,7 +73,7 @@ public class DirectorController {
 
         String pageLinksBase = linkTo(MovieController.class).slash("directors").withSelfRel().getHref();
         final JsonApiModelBuilder jsonApiModelBuilder =
-                jsonApiModel().model(pagedModel).pageMeta().pageLinks(pageLinksBase);
+                jsonApiModel().model(pagedModel).pageLinks(pageLinksBase);
 
         HashMap<Long, Movie> directors = new HashMap<>();
         for (Director director : pagedResult.getContent()) {

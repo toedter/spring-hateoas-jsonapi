@@ -86,7 +86,7 @@ public class MovieController {
 
         String pageLinksBase = linkTo(MovieController.class).slash("movies").withSelfRel().getHref();
         final JsonApiModelBuilder jsonApiModelBuilder =
-                jsonApiModel().model(pagedModel).link(selfLink).pageMeta().pageLinks(pageLinksBase);
+                jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
         HashMap<Long, Director> directors = new HashMap<>();
         for (Movie movie : pagedResult.getContent()) {

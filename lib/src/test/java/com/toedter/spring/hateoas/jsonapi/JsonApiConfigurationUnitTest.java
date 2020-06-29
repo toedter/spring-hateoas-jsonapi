@@ -30,17 +30,22 @@ class JsonApiConfigurationUnitTest {
     void should_initialize_defaults() {
         assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
+        assertThat(new JsonApiConfiguration().isPaginationMetaAutomaticallyCreated()).isTrue();
     }
 
     @Test
     void should_set_pluralized_type() {
-        new JsonApiConfiguration().withPluralizedTypeRendered(false);
         assertThat(new JsonApiConfiguration().withPluralizedTypeRendered(false).isPluralizedTypeRendered()).isFalse();
     }
 
     @Test
     void should_set_render_version() {
-        new JsonApiConfiguration().withPluralizedTypeRendered(false);
         assertThat(new JsonApiConfiguration().withJsonApiVersionRendered(true).isJsonApiVersionRendered()).isTrue();
+    }
+
+    @Test
+    void should_set_page_meta_auotomatically_created() {
+        assertThat(new JsonApiConfiguration().withPaginationMetaAutomaticallyCreated(false)
+                .isPaginationMetaAutomaticallyCreated()).isFalse();
     }
 }

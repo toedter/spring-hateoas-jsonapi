@@ -55,10 +55,20 @@ public class JsonApiConfiguration {
     private final @With @Getter boolean jsonApiVersionRendered;
 
     /**
+     * Indicates if page meta data (rendered as top level JSON:API meta)
+     * for a paged model is created automatically.
+     *
+     * @param paginationMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
+     * @return The default is {@literal true}.
+     */
+    private final @With @Getter boolean paginationMetaAutomaticallyCreated;
+
+    /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
+        this.paginationMetaAutomaticallyCreated = true;
     }
 }

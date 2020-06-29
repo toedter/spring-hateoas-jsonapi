@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.IOException;
@@ -68,10 +69,25 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             doc = doc.withJsonapi(new JsonApiJsonApi());
         }
 
+        if(collectionModel instanceof PagedModel) {
+            JsonApiModel model =
+                    (JsonApiModel) JsonApiModelBuilder.jsonApiModel().model(collectionModel).pageMeta().build();
+            doc = doc.withMeta(model.getMetaData());
+        }
+
         if (value instanceof JsonApiModel) {
             // we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
-            doc = doc.withMeta(metaData);
+            if(doc.getMeta() == null ) {
+                doc = doc.withMeta(metaData);
+            } else {
+                final Map<String, Object> meta = doc.getMeta();
+                // add/override with meta data created with builder
+                // this will override the previous generated page meta data, if the key is the same
+                for( Map.Entry entry: metaData.entrySet()) {
+                    meta.put(entry.getKey().toString(), entry.getValue());
+                }
+            }
         }
 
         provider

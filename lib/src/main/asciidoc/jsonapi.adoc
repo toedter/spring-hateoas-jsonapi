@@ -217,7 +217,10 @@ For a specific JSON:API configuration, you can create a Spring bean of type Json
 Currently, you can configure
 
 * if the JSON:API version should be rendered automatically, the default is `false`.
-* if JSON:API types should be rendered as non pluralized class names.
+* if JSON:API types should be rendered as pluralized or non pluralized class names,
+the default is pluralized.
+* if page information of a PagedModel should be rendered automatically as JSON:API meta object,
+the default is `true`.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
 make sure that you provide the following configuration in your Spring `application.properties` when using Tomcat:
