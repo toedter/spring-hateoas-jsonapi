@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -154,17 +154,31 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPaginationMetaAutomaticallyCreated--">isPaginationMetaAutomaticallyCreated</a></span>()</code>
+<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+ for a paged model is created automatically.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPluralizedTypeRendered--">isPluralizedTypeRendered</a></span>()</code>
 <div class="block">Indicates how to render JSON:API type attributes.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiVersionRendered-boolean-">withJsonApiVersionRendered</a></span>(boolean&nbsp;jsonApiVersionRendered)</code>
 <div class="block">Indicates how to render JSON:API document.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPaginationMetaAutomaticallyCreated-boolean-">withPaginationMetaAutomaticallyCreated</a></span>(boolean&nbsp;paginationMetaAutomaticallyCreated)</code>
+<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+ for a paged model is created automatically.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPluralizedTypeRendered-boolean-">withPluralizedTypeRendered</a></span>(boolean&nbsp;pluralizedTypeRendered)</code>
 <div class="block">Indicates how to render JSON:API type attributes.</div>
@@ -269,7 +283,7 @@ extends java.lang.Object</pre>
 <a name="isJsonApiVersionRendered--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isJsonApiVersionRendered</h4>
 <pre>public&nbsp;boolean&nbsp;isJsonApiVersionRendered()</pre>
@@ -285,6 +299,38 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is false.</dd>
+</dl>
+</li>
+</ul>
+<a name="withPaginationMetaAutomaticallyCreated-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withPaginationMetaAutomaticallyCreated</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withPaginationMetaAutomaticallyCreated(boolean&nbsp;paginationMetaAutomaticallyCreated)</pre>
+<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+ for a paged model is created automatically.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>paginationMetaAutomaticallyCreated</code> - The new value of this configuration's paginationLinksAutomaticallyCreated</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</li>
+</ul>
+<a name="isPaginationMetaAutomaticallyCreated--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isPaginationMetaAutomaticallyCreated</h4>
+<pre>public&nbsp;boolean&nbsp;isPaginationMetaAutomaticallyCreated()</pre>
+<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+ for a paged model is created automatically.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The default is true.</dd>
 </dl>
 </li>
 </ul>
