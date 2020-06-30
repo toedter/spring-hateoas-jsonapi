@@ -20,10 +20,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     public JsonApiLinksSerializer() {
@@ -32,18 +33,52 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     @Override
     public void serialize(Links value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeStartObject();
+        Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
         for (Link link : value) {
-            if (isSimpleLink(link)) {
-                gen.writeStringField(link.getRel().value(), link.getHref());
+            linksMap.computeIfAbsent(
+                    link.getRel(), key -> new ArrayList<>())
+                    .add(link);
+        }
+
+        gen.writeStartObject();
+
+        for (Map.Entry<LinkRelation, List<Link>> entry : linksMap.entrySet()) {
+            LinkRelation rel = entry.getKey();
+            List<Link> list = entry.getValue();
+            if (list.size() == 1) {
+                Link link = list.get(0);
+                serializeLinkWithRelation(gen, link);
             } else {
-                gen.writeObjectFieldStart(link.getRel().value());
-                gen.writeStringField("href", link.getHref());
-                gen.writeObjectField("meta", getAttributes(link));
-                gen.writeEndObject();
+                gen.writeArrayFieldStart(rel.value());
+                for(Link link: list) {
+                    serializeLinkWithoutRelation(gen, link);
+                }
+                gen.writeEndArray();
             }
         }
         gen.writeEndObject();
+    }
+
+    private void serializeLinkWithRelation(JsonGenerator gen, Link link) throws IOException {
+        if (isSimpleLink(link)) {
+            gen.writeStringField(link.getRel().value(), link.getHref());
+        } else {
+            gen.writeObjectFieldStart(link.getRel().value());
+            gen.writeStringField("href", link.getHref());
+            gen.writeObjectField("meta", getAttributes(link));
+            gen.writeEndObject();
+        }
+    }
+
+    private void serializeLinkWithoutRelation(JsonGenerator gen, Link link) throws IOException {
+        if (isSimpleLink(link)) {
+            gen.writeString(link.getHref());
+        } else {
+            gen.writeStartObject();
+            gen.writeStringField("href", link.getHref());
+            gen.writeObjectField("meta", getAttributes(link));
+            gen.writeEndObject();
+        }
     }
 
     private boolean isSimpleLink(Link link) {

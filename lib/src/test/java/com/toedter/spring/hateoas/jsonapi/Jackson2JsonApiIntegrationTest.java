@@ -21,6 +21,7 @@ import com.toedter.spring.hateoas.jsonapi.support.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -32,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -413,6 +415,55 @@ class Jackson2JsonApiIntegrationTest {
                                 .withTitle("link title")));
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
+    }
+
+    @Test
+    void should_serialize_single_movie_model_with_many_director_links () throws Exception {
+        Movie movie = new Movie("4", "The Matrix");
+
+        EntityModel<Movie> movieEntityModel = EntityModel.of(movie);
+        movieEntityModel.add(Link.of("http://mymovies.com/directors/1").withRel("directors"));
+        Link bigLink = Link.of("http://mymovies.com/directors/2")
+                .withRel("directors")
+                .withHreflang("hreflang")
+                .withMedia("media")
+                .withTitle("title")
+                .withType("type")
+                .withDeprecation("deprecation")
+                .withProfile("profile")
+                .withName("Lana Wachowski");
+        movieEntityModel.add(bigLink);
+
+        final String movieJson = mapper.writeValueAsString(movieEntityModel);
+        compareWithFile(movieJson, "movieEntityModelWithTwoDirectorsLinks.json");
+    }
+
+    @Test
+    void should_deserialize_single_movie_model_with_many_director_links () throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        File file = new ClassPathResource("movieEntityModelWithTwoDirectorsLinks.json", getClass()).getFile();
+        EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        Movie movie = movieEntityModel.getContent();
+        assertThat(movie).isNotNull();
+        assertThat(movie.getId()).isEqualTo("4");
+        assertThat(movie.getTitle()).isEqualTo("The Matrix");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSize(2)).isTrue();
+
+        Object[] linksArray = links.stream().toArray();
+        Link link1 = (Link) linksArray[0];
+        assertThat(link1.getHref()).isEqualTo("http://mymovies.com/directors/1");
+
+        Link link2 = (Link) linksArray[1];
+        assertThat(link2.getHreflang()).isEqualTo("hreflang");
+        assertThat(link2.getMedia()).isEqualTo("media");
+        assertThat(link2.getTitle()).isEqualTo("title");
+        assertThat(link2.getType()).isEqualTo("type");
+        assertThat(link2.getDeprecation()).isEqualTo("deprecation");
+        assertThat(link2.getProfile()).isEqualTo("profile");
+        assertThat(link2.getName()).isEqualTo("Lana Wachowski");
     }
 
     @Test

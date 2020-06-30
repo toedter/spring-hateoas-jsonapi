@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "4",
+    "type": "movies",
+    "attributes": {
+      "title": "The Matrix"
+    }
+  },
+  "links": {
+    "directors": [
+      "http://mymovies.com/directors/1",
+      {
+        "href": "http://mymovies.com/directors/2",
+        "meta": {
+          "hreflang": "hreflang",
+          "media": "media",
+          "title": "title",
+          "type": "type",
+          "deprecation": "deprecation",
+          "profile": "profile",
+          "name": "Lana Wachowski"
+        }
+      }
+    ]
+  }
+}
