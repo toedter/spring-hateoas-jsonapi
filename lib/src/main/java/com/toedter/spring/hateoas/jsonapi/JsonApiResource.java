@@ -153,11 +153,18 @@ class JsonApiResource {
                 return new ResourceField("id", id.toString());
             }
 
+            if (resourceField == JsonApiResourceField.type) {
+                String type = jsonApiConfiguration.getTypeForClass(object.getClass());
+                if(type != null) {
+                    return new ResourceField("type", type);
+                }
+            }
+
             String jsonApiType = object.getClass().getSimpleName().toLowerCase();
             if (jsonApiConfiguration.isPluralizedTypeRendered()) {
                 jsonApiType = English.plural(jsonApiType, 2);
             }
-            return new ResourceField(null, jsonApiType);
+            return new ResourceField("type", jsonApiType);
         } catch (Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }

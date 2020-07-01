@@ -18,10 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.support.*;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.With;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -33,7 +30,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -156,8 +152,8 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_single_movie_representation_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        MovieRepresentationModel movieRepresentationModel = new MovieRepresentationModel(movie);
-        String movieJson = mapper.writeValueAsString(movieRepresentationModel);
+        MovieRepresentationModelWithJsonApiType movieRepresentationModelWithJsonApiType = new MovieRepresentationModelWithJsonApiType(movie);
+        String movieJson = mapper.writeValueAsString(movieRepresentationModelWithJsonApiType);
 
         compareWithFile(movieJson, "movieRepresentationModel.json");
     }
@@ -343,15 +339,15 @@ class Jackson2JsonApiIntegrationTest {
     void should_deserialize_single_movie_representation_model() throws Exception {
         JavaType movieRepresentationModelType =
                 mapper.getTypeFactory()
-                        .constructParametricType(RepresentationModel.class, MovieRepresentationModel.class);
+                        .constructParametricType(RepresentationModel.class, MovieRepresentationModelWithJsonApiType.class);
         File file = new ClassPathResource("movieRepresentationModel.json", getClass()).getFile();
-        MovieRepresentationModel movieRepresentationModel = mapper.readValue(file, movieRepresentationModelType);
+        MovieRepresentationModelWithJsonApiType movieRepresentationModelWithJsonApiType = mapper.readValue(file, movieRepresentationModelType);
 
-        assertThat(movieRepresentationModel.getId()).isEqualTo("1");
-        assertThat(movieRepresentationModel.getName()).isEqualTo("Star Wars");
-        assertThat(movieRepresentationModel.getType()).isEqualTo("movie-type");
+        assertThat(movieRepresentationModelWithJsonApiType.getId()).isEqualTo("1");
+        assertThat(movieRepresentationModelWithJsonApiType.getName()).isEqualTo("Star Wars");
+        assertThat(movieRepresentationModelWithJsonApiType.getType()).isEqualTo("movie-type");
 
-        Links links = movieRepresentationModel.getLinks();
+        Links links = movieRepresentationModelWithJsonApiType.getLinks();
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/7");
     }

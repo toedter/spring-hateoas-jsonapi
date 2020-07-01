@@ -16,6 +16,8 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 
+import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
+import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -32,6 +35,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -42,7 +47,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("JsonApi WebMvc Integration Test")
+@DisplayName("JsonApi WebMvc with Configuration Integration Test")
 class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
     @Autowired
     WebApplicationContext context;
@@ -67,6 +72,18 @@ class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithJsonApiVersionAndSingleType.json");
     }
 
+    @Test
+    void should_get_single_movie_with_configured_type() throws Exception {
+        String movieJson = this.mockMvc
+                .perform(get("/movieWithClassType").accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "movieRepresentationModelWithConfiguredClassType.json");
+    }
+
     @Configuration
     @WebAppConfiguration
     @EnableWebMvc
@@ -81,7 +98,8 @@ class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
         JsonApiConfiguration jsonApiConfiguration() {
             return new JsonApiConfiguration()
                     .withJsonApiVersionRendered(true)
-                    .withPluralizedTypeRendered(false);
+                    .withPluralizedTypeRendered(false)
+                    .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
         }
         // end::jsonApiConfig[]
     }

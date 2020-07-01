@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -47,5 +48,11 @@ class JsonApiConfigurationUnitTest {
     void should_set_page_meta_auotomatically_created() {
         assertThat(new JsonApiConfiguration().withPaginationMetaAutomaticallyCreated(false)
                 .isPaginationMetaAutomaticallyCreated()).isFalse();
+    }
+
+    @Test
+    void should_set_type_for_class() {
+        assertThat(new JsonApiConfiguration().withTypeForClass(Movie.class, "mymovies")
+                .getTypeForClass(Movie.class)).isEqualTo("mymovies");
     }
 }

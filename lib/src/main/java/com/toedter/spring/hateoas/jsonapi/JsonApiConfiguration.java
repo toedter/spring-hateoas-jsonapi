@@ -20,6 +20,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
+import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.mediatype.hal.HalConfiguration;
+import org.springframework.util.Assert;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * JSON:API specific configuration.
@@ -63,6 +69,39 @@ public class JsonApiConfiguration {
      */
     private final @With @Getter boolean paginationMetaAutomaticallyCreated;
 
+    private final @With(AccessLevel.PRIVATE) Map<Class<?>, String> typeForClass;
+
+    /**
+     * Creates a mapping for a given class to get the JSON:API resource object type {@literal type}
+     * when rendered.
+     *
+     * @param clazz must not be {@literal null}.
+     * @param type must not be {@literal null}.
+     * @return
+     */
+    public JsonApiConfiguration withTypeForClass(Class<?> clazz, String type) {
+
+        Assert.notNull(clazz, "class must not be null!");
+        Assert.notNull(type, "type must not be null!");
+
+        Map<Class<?>, String> map = new LinkedHashMap<>(typeForClass);
+        map.put(clazz, type);
+
+        return withTypeForClass(map);
+    }
+
+    /**
+     * Returns the {@literal JSON:API resource object type}
+     * for a given class, when it was added with {@link #withTypeForClass(Class, String)} withTypeForClass.
+     *
+     * @param clazz must not be {@literal null}.
+     * @return can return {@literal null}.
+     */
+    public String getTypeForClass(Class<?> clazz) {
+        Assert.notNull(clazz, "class must not be null!");
+        return typeForClass.get(clazz);
+    }
+
     /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
@@ -70,5 +109,6 @@ public class JsonApiConfiguration {
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
         this.paginationMetaAutomaticallyCreated = true;
+        this.typeForClass = new LinkedHashMap<>();
     }
 }

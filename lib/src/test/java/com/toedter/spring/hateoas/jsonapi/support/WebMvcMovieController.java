@@ -78,10 +78,10 @@ public class WebMvcMovieController {
         Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
 
         Movie movie = MOVIES.get(id);
-        if(movie instanceof  MovieWithDirectors) {
-            List<Director> directors = ((MovieWithDirectors)movie).getDirectors();
+        if (movie instanceof MovieWithDirectors) {
+            List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
             JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
-            for(Director director: directors) {
+            for (Director director : directors) {
                 model = model.relationship("directors", director);
             }
             return model.build();
@@ -89,6 +89,12 @@ public class WebMvcMovieController {
         return EntityModel.of(
                 movie,
                 selfLink);
+    }
+
+    @GetMapping("/movieWithClassType")
+    public RepresentationModel<?> movieWithClassType() {
+        Movie movie = new Movie("1", "Star Wars");
+        return new MovieRepresentationModelWithoutJsonApiType(movie);
     }
 
     @PostMapping("/movies")
