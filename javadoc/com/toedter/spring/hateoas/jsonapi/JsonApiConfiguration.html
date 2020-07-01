@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,41 +147,56 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getTypeForClass-java.lang.Class-">getTypeForClass</a></span>(java.lang.Class&lt;?&gt;&nbsp;clazz)</code>
+<div class="block">Returns the JSON:API resource object type
+ for a given class, when it was added with <a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-"><code>withTypeForClass(Class, String)</code></a> withTypeForClass.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonApiVersionRendered--">isJsonApiVersionRendered</a></span>()</code>
 <div class="block">Indicates how to render JSON:API document.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPaginationMetaAutomaticallyCreated--">isPaginationMetaAutomaticallyCreated</a></span>()</code>
 <div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPluralizedTypeRendered--">isPluralizedTypeRendered</a></span>()</code>
 <div class="block">Indicates how to render JSON:API type attributes.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiVersionRendered-boolean-">withJsonApiVersionRendered</a></span>(boolean&nbsp;jsonApiVersionRendered)</code>
 <div class="block">Indicates how to render JSON:API document.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPaginationMetaAutomaticallyCreated-boolean-">withPaginationMetaAutomaticallyCreated</a></span>(boolean&nbsp;paginationMetaAutomaticallyCreated)</code>
 <div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPluralizedTypeRendered-boolean-">withPluralizedTypeRendered</a></span>(boolean&nbsp;pluralizedTypeRendered)</code>
 <div class="block">Indicates how to render JSON:API type attributes.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-">withTypeForClass</a></span>(java.lang.Class&lt;?&gt;&nbsp;clazz,
+                java.lang.String&nbsp;type)</code>
+<div class="block">Creates a mapping for a given class to get the JSON:API resource object type type
+ when rendered.</div>
 </td>
 </tr>
 </table>
@@ -224,6 +239,41 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="withTypeForClass-java.lang.Class-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withTypeForClass</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withTypeForClass(java.lang.Class&lt;?&gt;&nbsp;clazz,
+                                             java.lang.String&nbsp;type)</pre>
+<div class="block">Creates a mapping for a given class to get the JSON:API resource object type type
+ when rendered.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - must not be null.</dd>
+<dd><code>type</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
+</li>
+</ul>
+<a name="getTypeForClass-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTypeForClass</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getTypeForClass(java.lang.Class&lt;?&gt;&nbsp;clazz)</pre>
+<div class="block">Returns the JSON:API resource object type
+ for a given class, when it was added with <a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-"><code>withTypeForClass(Class, String)</code></a> withTypeForClass.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>can return null.</dd>
+</dl>
+</li>
+</ul>
 <a name="withPluralizedTypeRendered-boolean-">
 <!--   -->
 </a>

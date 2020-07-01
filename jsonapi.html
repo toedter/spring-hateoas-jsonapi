@@ -682,6 +682,11 @@ the default is pluralized.</p>
 <p>if page information of a PagedModel should be rendered automatically as JSON:API meta object,
 the default is <code>true</code>.</p>
 </li>
+<li>
+<p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
+representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
+should get the <code>JSON:API type</code> of the super class. See example below.</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -692,7 +697,7 @@ the default is <code>true</code>.</p>
 </td>
 <td class="content">
 Since the JSON:API recommendation contains square brackets in the request parameter names,
-make sure that you provide the following configuration in your Spring <code>application.properties</code> when using Tomcat:
+make sure you provide the following configuration in your Spring <code>application.properties</code> when using Tomcat:
 <code>server.tomcat.relaxed-query-chars= [,]</code>
 </td>
 </tr>
@@ -707,7 +712,8 @@ make sure that you provide the following configuration in your Spring <code>appl
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
             .withJsonApiVersionRendered(true)
-            .withPluralizedTypeRendered(false);
+            .withPluralizedTypeRendered(false)
+            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
 }</code></pre>
 </div>
 </div>
@@ -758,7 +764,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.5.0-SNAPSHOT<br>
-Last updated 2020-06-30 12:45:12 UTC
+Last updated 2020-07-01 09:32:01 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
