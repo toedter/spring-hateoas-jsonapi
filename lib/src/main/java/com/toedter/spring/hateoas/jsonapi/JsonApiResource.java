@@ -123,9 +123,6 @@ class JsonApiResource {
                     }
                 }
             }
-            if (jpaIdField != null) {
-                return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
-            }
 
             // then search for method annotation
             final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
@@ -147,6 +144,13 @@ class JsonApiResource {
                     }
                 }
             }
+
+            // JPA @id annotation have lower priority than @JsonApiId annotations,
+            // this is why they are returned later in the game.
+            if (jpaIdField != null) {
+                return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
+            }
+
             if (jpaIdMethod != null) {
                 return getResourceFieldForMethod(object, jpaIdMethod, resourceField);
             }

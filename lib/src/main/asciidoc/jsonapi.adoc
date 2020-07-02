@@ -68,10 +68,13 @@ NOTE: You can configure if you want to use non-pluralized class names, see <<con
 The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible for the developer.
 
-There are two new Annotations provided by this project:
+There are 3 new Annotations provided by this project:
 
 * `@JsonApiId` to mark a JSON:API `id`
 * `@JsonApiType` to mark a JSON:API `type`
+* `@JsonApiRelationships` to mark a JSON:API `relationship`
+** This annotation is not used for serialization but for deserialization,
+see <<Creating>> for an example.
 
 The use of these annotations is optional. For the mapping of the `id`, the
 following rules apply in order:
