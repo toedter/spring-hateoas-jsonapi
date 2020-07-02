@@ -246,7 +246,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 as convenient as possible for the developer.</p>
 </div>
 <div class="paragraph">
-<p>There are two new Annotations provided by this project:</p>
+<p>There are 3 new Annotations provided by this project:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -255,6 +255,17 @@ as convenient as possible for the developer.</p>
 </li>
 <li>
 <p><code>@JsonApiType</code> to mark a JSON:API <code>type</code></p>
+</li>
+<li>
+<p><code>@JsonApiRelationships</code> to mark a JSON:API <code>relationship</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>This annotation is not used for serialization but for deserialization,
+see <a href="#Creating">Creating Resources with HTTP POST</a> for an example.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -814,7 +825,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.5.0-SNAPSHOT<br>
-Last updated 2020-07-02 13:09:38 UTC
+Last updated 2020-07-02 13:56:26 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
