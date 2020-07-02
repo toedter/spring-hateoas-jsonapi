@@ -45,56 +45,60 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
         List<Link> links = new ArrayList<>();
         Map<String, Object> jsonApiLinks = jp.getCodec().readValue(jp, type);
         jsonApiLinks.forEach((rel, object) -> {
-            if (object instanceof String) {
-                links.add(Link.of(object.toString(), rel));
-            } else if (object instanceof List) {
+            if (object instanceof List) {
                 for (Object linkObject : (List<?>) object) {
-                    if (linkObject instanceof String) {
-                        links.add(Link.of(linkObject.toString(), rel));
-                    } else if (linkObject instanceof LinkedHashMap) {
-                        @SuppressWarnings("rawtypes")
-                        LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap) linkObject;
-                        Object href = linkedHashMap.get("href");
-                        Object meta = linkedHashMap.get("meta");
-                        if (href instanceof String) {
-                            Link link = Link.of(href.toString(), rel);
-                            if (meta instanceof LinkedHashMap) {
-                                @SuppressWarnings({"unchecked", "rawtypes"})
-                                LinkedHashMap<String, String> attributes = (LinkedHashMap) meta;
-                                if (attributes.containsKey("hreflang")) {
-                                    link = link.withHreflang(attributes.get("hreflang"));
-                                }
-
-                                if (attributes.containsKey("media")) {
-                                    link = link.withMedia(attributes.get("media"));
-                                }
-
-                                if (attributes.containsKey("title")) {
-                                    link = link.withTitle(attributes.get("title"));
-                                }
-
-                                if (attributes.containsKey("type")) {
-                                    link = link.withType(attributes.get("type"));
-                                }
-
-                                if (attributes.containsKey("deprecation")) {
-                                    link = link.withDeprecation(attributes.get("deprecation"));
-                                }
-
-                                if (attributes.containsKey("profile")) {
-                                    link = link.withProfile(attributes.get("profile"));
-                                }
-
-                                if (attributes.containsKey("name")) {
-                                    link = link.withName(attributes.get("name"));
-                                }
-                            }
-                            links.add(link);
-                        }
-                    }
+                    deserializeLink(links, rel, linkObject);
                 }
+            } else {
+                deserializeLink(links, rel, object);
             }
         });
         return Links.of(links);
+    }
+
+    private void deserializeLink(List<Link> links, String rel, Object linkObject) {
+        if (linkObject instanceof String) {
+            links.add(Link.of(linkObject.toString(), rel));
+        } else if (linkObject instanceof LinkedHashMap) {
+            @SuppressWarnings("rawtypes")
+            LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap) linkObject;
+            Object href = linkedHashMap.get("href");
+            Object meta = linkedHashMap.get("meta");
+            if (href instanceof String) {
+                Link link = Link.of(href.toString(), rel);
+                if (meta instanceof LinkedHashMap) {
+                    @SuppressWarnings({"unchecked", "rawtypes"})
+                    LinkedHashMap<String, String> attributes = (LinkedHashMap) meta;
+                    if (attributes.containsKey("hreflang")) {
+                        link = link.withHreflang(attributes.get("hreflang"));
+                    }
+
+                    if (attributes.containsKey("media")) {
+                        link = link.withMedia(attributes.get("media"));
+                    }
+
+                    if (attributes.containsKey("title")) {
+                        link = link.withTitle(attributes.get("title"));
+                    }
+
+                    if (attributes.containsKey("type")) {
+                        link = link.withType(attributes.get("type"));
+                    }
+
+                    if (attributes.containsKey("deprecation")) {
+                        link = link.withDeprecation(attributes.get("deprecation"));
+                    }
+
+                    if (attributes.containsKey("profile")) {
+                        link = link.withProfile(attributes.get("profile"));
+                    }
+
+                    if (attributes.containsKey("name")) {
+                        link = link.withName(attributes.get("name"));
+                    }
+                }
+                links.add(link);
+            }
+        }
     }
 }

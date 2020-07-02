@@ -1,0 +1,11 @@
+{
+  "data": null,
+  "links": {
+    "complex": {
+      "href": "http://localhost/items/{id}",
+      "meta": {
+        "isTemplated": true
+      }
+    }
+  }
+}

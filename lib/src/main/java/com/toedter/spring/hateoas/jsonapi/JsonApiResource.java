@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,44 +102,53 @@ class JsonApiResource {
             JsonApiResourceField resourceField, Object object, JsonApiConfiguration jsonApiConfiguration) {
 
         try {
-            // first search for field annotation
+            // firstly search for field annotation
             final Field[] declaredFields = getAllDeclaredFields(object.getClass());
+            Field jpaIdField = null;
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 final Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if (resourceField == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
-                            || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
-                        return new ResourceField(field.getName(), field.get(object).toString());
+                    if (resourceField == JsonApiResourceField.id) {
+                        if (JPA_ID_ANNOTATION.equals(annotationName)) {
+                            jpaIdField = field;
+                        }
+                        if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
+                            return new ResourceField(field.getName(), field.get(object).toString());
+                        }
                     } else if (resourceField == JsonApiResourceField.type
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
                         return new ResourceField(field.getName(), field.get(object).toString());
                     }
                 }
             }
+            if (jpaIdField != null) {
+                return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
+            }
 
-            // first search for method annotation
+            // then search for method annotation
             final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
+            Method jpaIdMethod = null;
             for (Method method : declaredMethods) {
                 final Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    boolean isAnnotatedMethod = false;
-                    if (resourceField == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
-                            || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
-                        isAnnotatedMethod = true;
+                    if (resourceField == JsonApiResourceField.id) {
+                        if (JPA_ID_ANNOTATION.equals(annotationName)) {
+                            jpaIdMethod = method;
+                        }
+                        if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
+                            return getResourceFieldForMethod(object, method, resourceField);
+                        }
                     } else if (resourceField == JsonApiResourceField.type
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
-                        isAnnotatedMethod = true;
-                    }
-                    // if the method is a getter find the corresponding field if there is one
-                    final String methodName = method.getName();
-                    if (isAnnotatedMethod && methodName.startsWith("get")) {
-                        String typeFieldName = StringUtils.uncapitalize(methodName.substring(3));
-                        return new ResourceField(typeFieldName, method.invoke(object).toString());
+                        return getResourceFieldForMethod(object, method, resourceField);
                     }
                 }
+            }
+            if (jpaIdMethod != null) {
+                return getResourceFieldForMethod(object, jpaIdMethod, resourceField);
             }
 
             if (resourceField == JsonApiResourceField.id) {
@@ -153,11 +163,9 @@ class JsonApiResource {
                 return new ResourceField("id", id.toString());
             }
 
-            if (resourceField == JsonApiResourceField.type) {
-                String type = jsonApiConfiguration.getTypeForClass(object.getClass());
-                if(type != null) {
-                    return new ResourceField("type", type);
-                }
+            String type = jsonApiConfiguration.getTypeForClass(object.getClass());
+            if (type != null) {
+                return new ResourceField("type", type);
             }
 
             String jsonApiType = object.getClass().getSimpleName().toLowerCase();
@@ -168,6 +176,17 @@ class JsonApiResource {
         } catch (Exception e) {
             throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
+    }
+
+    private static ResourceField getResourceFieldForMethod(
+            Object object, Method jpaIdMethod, JsonApiResourceField resourceField)
+            throws IllegalAccessException, InvocationTargetException {
+        final String methodName = jpaIdMethod.getName();
+        if (methodName.startsWith("get")) {
+            String fieldName = StringUtils.uncapitalize(methodName.substring(3));
+            return new ResourceField(fieldName, jpaIdMethod.invoke(object).toString());
+        }
+        return new ResourceField(resourceField.name(), jpaIdMethod.invoke(object).toString());
     }
 
     static void setJsonApiResourceFieldAttributeForObject(Object object, JsonApiResourceField name, String value) {

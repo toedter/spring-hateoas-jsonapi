@@ -243,23 +243,20 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     void should_build_single_movie_entity_model_with_meta() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(EntityModel.of(movie)).meta("x","y").build();
+                jsonApiModel().model(EntityModel.of(movie)).meta("x", "y").build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
-
     @Test
     void should_not_build_with_second_entity() {
         Movie movie = new Movie("1", "Star Wars");
 
-        assertThrows(IllegalStateException.class, () -> {
-            final RepresentationModel<?> jsonApiModel =
-                    jsonApiModel().model(movie)
-                            .model(movie)
-                            .build();
-        });
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+                .model(movie)
+                .model(movie)
+                .build());
     }
 
     @Test
@@ -267,9 +264,9 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "Star Wars");
 
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
-               .model(movie)
-               .pageMeta()
-               .build());
+                .model(movie)
+                .pageMeta()
+                .build());
     }
 
     @Test

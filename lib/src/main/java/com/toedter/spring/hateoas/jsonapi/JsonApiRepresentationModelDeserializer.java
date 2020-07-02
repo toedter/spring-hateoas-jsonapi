@@ -27,6 +27,9 @@ import java.util.List;
 class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeserializer<RepresentationModel<?>>
         implements ContextualDeserializer {
 
+    public static final String CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL
+            = "Cannot deserialize input to RepresentationModel";
+
     JsonApiRepresentationModelDeserializer() {
         super();
     }
@@ -38,12 +41,19 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
     @Override
     protected RepresentationModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
         Links links = doc.getLinks();
-        if (resources.size() == 1 && resources.get(0) instanceof RepresentationModel<?>) {
-            RepresentationModel<?> representationModel = (RepresentationModel<?>) resources.get(0);
+        if (resources.size() == 1) {
+            RepresentationModel<?> representationModel;
+            if (resources.get(0) instanceof RepresentationModel<?>) {
+                representationModel = (RepresentationModel<?>) resources.get(0);
+            } else if (resources.get(0) == null) {
+                representationModel = new RepresentationModel<>();
+            } else {
+                throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
+            }
             representationModel.add(links);
             return representationModel;
         }
-        throw new RuntimeException("Cannot deserialize input to RepresentationModel");
+        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {

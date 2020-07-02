@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.*;
 import com.toedter.spring.hateoas.jsonapi.support.*;
 import lombok.Getter;
@@ -113,11 +114,49 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_entity_model_with_annotated_id_methods_and_no_field() throws Exception {
+        class Movie {
+            @Getter
+            private final String title = "Star Wars";
+
+            @Id
+            @JsonIgnore
+            public String getJPAId() {
+                return "2";
+            }
+
+            @JsonApiId
+            public String getId() {
+                return "1";
+            }
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id() throws Exception {
         @Getter
         class Movie {
             @JsonApiId
             private final String myId = "1";
+            private final String title = "Star Wars";
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id_and_jpa_id() throws Exception {
+        @Getter
+        class Movie {
+            @Id
+            @JsonIgnore
+            private final String jpaId = "2";
+            @JsonApiId
+            private final String jsonApiId = "1";
             private final String title = "Star Wars";
         }
 
@@ -388,6 +427,17 @@ class Jackson2JsonApiIntegrationTest {
         Movie movie2 = iterator.next();
         assertThat(movie2.getId()).isEqualTo("2");
         assertThat(movie2.getTitle()).isEqualTo("Avengers");
+    }
+
+    @Test
+    void should_deserialize_empty_model_with_complex_link() throws Exception {
+        JavaType movieEntityModelType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        File file = new ClassPathResource("emptyModelWithComplexLink.json", getClass()).getFile();
+        RepresentationModel<?> movieEntityModel = mapper.readValue(file, RepresentationModel.class);
+
+        assertThat(movieEntityModel.getLinks().hasSize(1)).isTrue();
+        assertThat(movieEntityModel.getLink("complex").get().isTemplated()).isTrue();
     }
 
     @Test

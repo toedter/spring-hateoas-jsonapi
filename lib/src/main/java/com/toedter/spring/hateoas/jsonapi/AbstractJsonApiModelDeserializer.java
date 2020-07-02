@@ -63,6 +63,9 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     }
 
     private Object convertToResource(HashMap<String, Object> data) {
+        if (data == null) {
+            return null;
+        }
         @SuppressWarnings("unchecked")
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
