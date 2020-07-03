@@ -9,7 +9,6 @@ plugins {
 
 group = 'com.toedter'
 version = '0.5.0-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
@@ -36,7 +35,7 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'org.springframework:spring-webmvc:5.2.6.RELEASE'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
-
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux:2.3.1.RELEASE'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     docs "io.spring.docresources:spring-doc-resources:0.2.2.RELEASE@zip"

@@ -80,11 +80,13 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     Object data = ((HashMap<?, ?>) relationship).get("data");
                                     List<HashMap<String, String>> jsonApiRelationships;
                                     if (data instanceof List) {
-                                        //noinspection unchecked
-                                        jsonApiRelationships = (List<HashMap<String, String>>) data;
+                                        @SuppressWarnings("unchecked")
+                                        List<HashMap<String, String>> castedData = (List<HashMap<String, String>>) data;
+                                        jsonApiRelationships = castedData;
                                     } else if (data instanceof HashMap) {
-                                        //noinspection unchecked
-                                        jsonApiRelationships = Collections.singletonList((HashMap<String, String>) data);
+                                        @SuppressWarnings("unchecked")
+                                        HashMap<String, String> castedData = (HashMap<String, String>) data;
+                                        jsonApiRelationships = Collections.singletonList(castedData);
                                     } else {
                                         throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
                                     }

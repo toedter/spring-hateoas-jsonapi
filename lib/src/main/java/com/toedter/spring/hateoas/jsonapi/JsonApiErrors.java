@@ -31,8 +31,6 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class JsonApiErrors {
-    private static final JsonApiErrors EMPTY = new JsonApiErrors();
-
     @Getter
     List<JsonApiError> errors = new ArrayList<>();
 
@@ -46,6 +44,6 @@ public class JsonApiErrors {
     }
 
     public static JsonApiErrors create() {
-        return EMPTY;
+        return new JsonApiErrors();
     }
 }

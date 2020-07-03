@@ -77,7 +77,7 @@ public class JsonApiConfiguration {
      *
      * @param clazz must not be {@literal null}.
      * @param type must not be {@literal null}.
-     * @return
+     * @return a clone of this object, except with this updated property
      */
     public JsonApiConfiguration withTypeForClass(Class<?> clazz, String type) {
 

@@ -125,18 +125,6 @@ public class WebMvcMovieController {
         return ResponseEntity.created(link.toUri()).build();
     }
 
-    @PutMapping("/movies/{id}")
-    public ResponseEntity<?> updateMovie(@RequestBody EntityModel<Movie> movie, @PathVariable Integer id) {
-
-        MOVIES.put(id, movie.getContent());
-
-        Link link = linkTo(methodOn(getClass()).findOne(id)).withSelfRel().expand();
-
-        return ResponseEntity.noContent()
-                .location(link.toUri())
-                .build();
-    }
-
     @PatchMapping("/movies/{id}")
     public ResponseEntity<?> partiallyUpdateMovie(@RequestBody EntityModel<Movie> movie,
                                                   @PathVariable Integer id) {
