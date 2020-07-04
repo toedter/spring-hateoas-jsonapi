@@ -22,7 +22,7 @@ import java.util.List;
 
 import static org.springframework.util.ReflectionUtils.doWithFields;
 
-public class ReflectionUtils {
+class ReflectionUtils {
     static Field[] getAllDeclaredFields(Class<?> leafClass) {
         final List<Field> fields = new ArrayList<>(32);
         doWithFields(leafClass, fields::add);
