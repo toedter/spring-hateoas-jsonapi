@@ -82,4 +82,23 @@ class JsonApiErrorsIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(errorsJson, "errorsAllAttributes.json");
     }
 
+    @Test
+    void should_build_complete_error_with_other_invocation_order() throws Exception {
+        HashMap<String, Object> metaMap = new HashMap<>();
+        metaMap.put("foo", "bar");
+        JsonApiError jsonApiError = new JsonApiError()
+                .withId("1")
+                .withAboutLink("http://example-error/about")
+                .withStatus("500")
+                .withCode("404")
+                .withTitle("error title")
+                .withDetail("error detail")
+                .withSourceParameter("...but always with towel.")
+                .withSourcePointer("to infinity and beyond")
+                .withMeta(metaMap);
+        JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
+        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+        compareWithFile(errorsJson, "errorsAllAttributes.json");
+    }
+
 }
