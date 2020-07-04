@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
 
     @Override
     protected RepresentationModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+        Assert.notNull(doc, "JsonApiDocument must not be null!");
         Links links = doc.getLinks();
         if (resources.size() == 1) {
             RepresentationModel<?> representationModel;
@@ -48,12 +50,12 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
             } else if (resources.get(0) == null) {
                 representationModel = new RepresentationModel<>();
             } else {
-                throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
+                throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
             }
             representationModel.add(links);
             return representationModel;
         }
-        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
+        throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
