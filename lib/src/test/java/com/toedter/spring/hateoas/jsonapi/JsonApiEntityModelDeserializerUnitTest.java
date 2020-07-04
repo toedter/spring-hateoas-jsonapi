@@ -27,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("JsonApiRepresentationModelDeserializer Unit Test")
-public class JsonApiRepresentationModelDeserializerUnitTest {
-    private JsonApiRepresentationModelDeserializer deserializer;
+@DisplayName("JsonApiEntityModelDeserializerUnitTest Unit Test")
+public class JsonApiEntityModelDeserializerUnitTest {
+    private JsonApiEntityModelDeserializer deserializer;
 
     @BeforeEach
     void setUpModule() {
-        deserializer = new JsonApiRepresentationModelDeserializer();
+        deserializer = new JsonApiEntityModelDeserializer();
     }
 
     @Test
@@ -52,11 +52,25 @@ public class JsonApiRepresentationModelDeserializerUnitTest {
     }
 
     @Test
-    public void should_throw_exception_with_wrong_list_content() {
+    public void should_throw_exception_for_null_content() {
         List<Object> list = new ArrayList<>();
-        list.add(new Object());
+        list.add(null);
         JsonApiDocument jsonApiDocument = new JsonApiDocument();
         assertThrows(IllegalArgumentException.class,
                 () -> deserializer.convertToRepresentationModel(list, jsonApiDocument));
+    }
+
+    @Test
+    public void should_return_emtity_model_for_empty_jsonapi_document() {
+        List<Object> list = new ArrayList<>();
+        Object object = new Object();
+        list.add(object);
+        JsonApiDocument jsonApiDocument = new JsonApiDocument();
+
+        RepresentationModel<?> representationModel =
+                deserializer.convertToRepresentationModel(list, jsonApiDocument);
+
+        assertThat(representationModel).isInstanceOf(EntityModel.class);
+        assertThat(((EntityModel<?>)representationModel).getContent()).isEqualTo(object);
     }
 }

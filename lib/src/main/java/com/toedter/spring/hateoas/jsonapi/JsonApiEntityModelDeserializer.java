@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -47,11 +48,16 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     @Override
     protected EntityModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
+        Assert.notNull(doc, "JsonApiDocument must not be null!");
         Links links = doc.getLinks();
         if (resources.size() == 1) {
             EntityModel<Object> entityModel = EntityModel.of(resources.get(0));
             if (links != null) {
                 entityModel.add(links);
+            }
+
+            if (doc.getData() == null) {
+                return entityModel;
             }
 
             @SuppressWarnings("unchecked")
@@ -61,10 +67,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             if (relationships != null) {
 
                 Object object = entityModel.getContent();
-                if (object == null) {
-                    return entityModel;
-                }
-
+                @SuppressWarnings("ConstantConditions")
                 final Field[] declaredFields = getAllDeclaredFields(object.getClass());
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
@@ -88,7 +91,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         HashMap<String, String> castedData = (HashMap<String, String>) data;
                                         jsonApiRelationships = Collections.singletonList(castedData);
                                     } else {
-                                        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                                        throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
                                     }
                                     Type typeArgument = type.getActualTypeArguments()[0];
 
@@ -104,14 +107,14 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                 }
                             }
                         } catch (Exception e) {
-                            throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
                         }
                     }
                 }
             }
             return entityModel;
         }
-        throw new RuntimeException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+        throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
 
     }
 
