@@ -144,7 +144,7 @@
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getTypeForClass-java.lang.Class-">getTypeForClass(Class&lt;?&gt;)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">Returns the JSON:API resource object type
- for a given class, when it was added with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-"><code>JsonApiConfiguration.withTypeForClass(Class, String)</code></a> withTypeForClass.</div>
+ for a given class, when it was added with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-"><code>JsonApiConfiguration.withTypeForClass(Class, String)</code></a>.</div>
 </dd>
 </dl>
 <a name="I:H">
@@ -172,16 +172,16 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonApiVersionRendered--">isJsonApiVersionRendered()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates how to render JSON:API document.</div>
+<div class="block">Indicates if the JSON:API version is rendered.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPaginationMetaAutomaticallyCreated--">isPaginationMetaAutomaticallyCreated()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPageMetaAutomaticallyCreated--">isPageMetaAutomaticallyCreated()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPluralizedTypeRendered--">isPluralizedTypeRendered()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates how to render JSON:API type attributes.</div>
+<div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </dd>
 </dl>
 <a name="I:J">
@@ -229,7 +229,7 @@
 <dd>&nbsp;</dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiId.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiId</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be rendered as JSON:API resource object id.</div>
+<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API resource object id.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#jsonApiModel--">jsonApiModel()</a></span> - Static method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
@@ -241,11 +241,11 @@
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiRelationships.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiRelationships</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be interpreded as JSON:API relationships.</div>
+<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API relationships.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiType.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiType</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be rendered as JSON:API resource object type.</div>
+<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API resource object type.</div>
 </dd>
 </dl>
 <a name="I:L">
@@ -368,20 +368,20 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiVersionRendered-boolean-">withJsonApiVersionRendered(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates how to render JSON:API document.</div>
+<div class="block">Indicates if the JSON:API version is rendered.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withMeta-java.util.Map-">withMeta(Map&lt;String, Object&gt;)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Sets a meta object containing non-standard meta-information about the error.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPaginationMetaAutomaticallyCreated-boolean-">withPaginationMetaAutomaticallyCreated(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPageMetaAutomaticallyCreated-boolean-">withPageMetaAutomaticallyCreated(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPluralizedTypeRendered-boolean-">withPluralizedTypeRendered(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates how to render JSON:API type attributes.</div>
+<div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withSourceParameter-java.lang.String-">withSourceParameter(String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
@@ -402,7 +402,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass-java.lang.Class-java.lang.String-">withTypeForClass(Class&lt;?&gt;, String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Creates a mapping for a given class to get the JSON:API resource object type type
+<div class="block">Creates a mapping for a given class to get the JSON:API resource object type
  when rendered.</div>
 </dd>
 </dl>

@@ -93,7 +93,9 @@
 <pre>@Target(value={METHOD,FIELD})
  @Retention(value=RUNTIME)
 public @interface <span class="memberNameLabel">JsonApiRelationships</span></pre>
-<div class="block">This is a marker annotation to indicate what will be interpreded as JSON:API relationships.</div>
+<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API relationships.
+ This annotation is only used for deserialization and is useful for POST and PATCH requests.
+ For serialization use a <a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiModelBuilder</code></a>.</div>
 </li>
 </ul>
 </div>
