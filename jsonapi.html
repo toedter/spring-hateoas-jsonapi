@@ -13,7 +13,7 @@
 <div id="header">
 <h1>JSON:API</h1>
 <div class="details">
-<span id="revnumber">version 0.5.0-SNAPSHOT</span>
+<span id="revnumber">version 0.5.0</span>
 </div>
 </div>
 <div id="content">
@@ -84,9 +84,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <h2 id="_integration_in_your_backends">Integration in your Backends</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Currently, I publish the current SNAPSHOT version to the <code><a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a></code>
-repository. So please make sure you add this repository to your Maven or Gradle configuration.
-Then you can configure a dependency to <code>spring-hateoas-jsonapi</code></p>
+<p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
 <div class="paragraph">
 <p>Maven:</p>
@@ -96,7 +94,7 @@ Then you can configure a dependency to <code>spring-hateoas-jsonapi</code></p>
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.5.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;0.5.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -105,21 +103,14 @@ Then you can configure a dependency to <code>spring-hateoas-jsonapi</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'</code></pre>
+<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0'</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-The jar is not published as a released version to Maven Central yet. I will wait until the API keeps being more stable.
-(Or, if accepted by the Spring HATEOAS team, contribute the implementation to the Spring HATEOAS project).
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>You find the latest published snapshot at <a href="https://oss.sonatype.org/#nexus-search;quick~spring-hateoas-jsonapi" class="bare">https://oss.sonatype.org/#nexus-search;quick~spring-hateoas-jsonapi</a>.
+If you want to try out the latest snapshot,
+please make sure to add <code><a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a></code>
+as repository to your Maven or Gradle configuration.</p>
 </div>
 </div>
 </div>
@@ -775,8 +766,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.5.0-SNAPSHOT<br>
-Last updated 2020-07-05 09:15:22 UTC
+Version 0.5.0<br>
+Last updated 2020-07-05 09:36:54 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
