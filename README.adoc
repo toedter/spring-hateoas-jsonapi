@@ -17,21 +17,24 @@ This project is work in progress, please stay tuned.
 
 == Integration in your Backends
 
-Currently, I publish the current SNAPSHOT version to the `https://oss.sonatype.org/content/repositories/snapshots/`
-repository. So please make sure you add this repository to your Maven or Gradle configuration.
-Then you can configure a dependency to `spring-hateoas-jsonapi`
+To enable the JSON:API media type you just need to add this module as a dependency to your project.
 
 Maven:
 [source,xml]
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.5.0</version>
 </dependency>
 
 Gradle:
 [source]
-implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0-SNAPSHOT'
+implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0'
+
+You find the latest published snapshot at https://oss.sonatype.org/#nexus-search;quick~spring-hateoas-jsonapi.
+If you want to try out the latest snapshot,
+please make sure to add `https://oss.sonatype.org/content/repositories/snapshots/`
+as repository to your Maven or Gradle configuration.
 
 == Running the Example
 
