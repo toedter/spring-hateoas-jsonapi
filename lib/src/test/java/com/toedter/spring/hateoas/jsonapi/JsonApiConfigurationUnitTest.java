@@ -31,7 +31,7 @@ class JsonApiConfigurationUnitTest {
     void should_initialize_defaults() {
         assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
-        assertThat(new JsonApiConfiguration().isPaginationMetaAutomaticallyCreated()).isTrue();
+        assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
     }
 
     @Test
@@ -46,8 +46,8 @@ class JsonApiConfigurationUnitTest {
 
     @Test
     void should_set_page_meta_auotomatically_created() {
-        assertThat(new JsonApiConfiguration().withPaginationMetaAutomaticallyCreated(false)
-                .isPaginationMetaAutomaticallyCreated()).isFalse();
+        assertThat(new JsonApiConfiguration().withPageMetaAutomaticallyCreated(false)
+                .isPageMetaAutomaticallyCreated()).isFalse();
     }
 
     @Test
