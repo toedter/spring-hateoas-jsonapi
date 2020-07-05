@@ -5,6 +5,7 @@ plugins {
     id 'io.freefair.lombok' version '5.1.0'
     id 'org.asciidoctor.jvm.convert' version '3.1.0'
     id 'maven-publish'
+    id 'signing'
 }
 
 group = 'com.toedter'
@@ -111,9 +112,31 @@ java {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             artifactId = 'spring-hateoas-jsonapi'
             from components.java
+
+            pom {
+                name = 'JSON:API for Spring HATEOAS'
+                description = 'Implementation of the media type application/vnd.api+json (JSON:API) to be integrated in Spring HATEOAS.'
+                url = 'https://github.com/toedter/spring-hateoas-jsonapi'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'toedter'
+                        name = 'Kai Toedter'
+                        email = 'kai@toedter.com'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/toedter/spring-hateoas-jsonapi.git'
+                }
+            }
         }
     }
     repositories {
@@ -134,4 +157,8 @@ publishing {
 // we don't publish the gradle module meta data
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
