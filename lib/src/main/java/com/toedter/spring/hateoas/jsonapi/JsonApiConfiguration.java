@@ -36,8 +36,7 @@ import java.util.Map;
 public class JsonApiConfiguration {
 
     /**
-     * Indicates how to render JSON:API type attributes.
-     * The can be rendered in singular or pluralized form.
+     * Indicates if the JSON:API type attribute of resource objects is pluralized.
      *
      * @param pluralizedTypeRendered The new value of this configuration's pluralizedTypeRendered
      * @return The default is {@literal true}.
@@ -45,7 +44,7 @@ public class JsonApiConfiguration {
     @With @Getter private final boolean pluralizedTypeRendered;
 
     /**
-     * Indicates how to render JSON:API document.
+     * Indicates if the JSON:API version is rendered.
      * <p>
      * If set to true, each rendered JSON:API document will start with
      *
@@ -64,15 +63,15 @@ public class JsonApiConfiguration {
      * Indicates if page meta data (rendered as top level JSON:API meta)
      * for a paged model is created automatically.
      *
-     * @param paginationMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
+     * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
      * @return The default is {@literal true}.
      */
-    private final @With @Getter boolean paginationMetaAutomaticallyCreated;
+    private final @With @Getter boolean pageMetaAutomaticallyCreated;
 
     private final @With(AccessLevel.PRIVATE) Map<Class<?>, String> typeForClass;
 
     /**
-     * Creates a mapping for a given class to get the JSON:API resource object type {@literal type}
+     * Creates a mapping for a given class to get the JSON:API resource object {@literal type}
      * when rendered.
      *
      * @param clazz must not be {@literal null}.
@@ -92,7 +91,7 @@ public class JsonApiConfiguration {
 
     /**
      * Returns the {@literal JSON:API resource object type}
-     * for a given class, when it was added with {@link #withTypeForClass(Class, String)} withTypeForClass.
+     * for a given class, when it was added with {@link #withTypeForClass(Class, String)}.
      *
      * @param clazz must not be {@literal null}.
      * @return can return {@literal null}.
@@ -108,7 +107,7 @@ public class JsonApiConfiguration {
     public JsonApiConfiguration() {
         this.pluralizedTypeRendered = true;
         this.jsonApiVersionRendered = false;
-        this.paginationMetaAutomaticallyCreated = true;
+        this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
     }
 }

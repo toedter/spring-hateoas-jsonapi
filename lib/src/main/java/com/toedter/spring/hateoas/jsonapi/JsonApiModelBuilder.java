@@ -261,8 +261,8 @@ public class JsonApiModelBuilder {
      * <p>
      * Preconditions are:<ul>
      * <li>the model has been added before
-     * <li>the model is a paged model
-     * <li>the model contains a Pageable*
+     * <li>the model is a {@literal PagedModel}
+     * <li>the model contains {@literal PageMetadata}
      * </ul>
      *
      * @param linkBase the prefix of all pagination links, e.g. the base URL of the collection resource
@@ -278,8 +278,8 @@ public class JsonApiModelBuilder {
      * <p>
      * Preconditions are:<ul>
      * <li>the model has been added before
-     * <li>the model is a paged model
-     * <li>the model contains a Pageable
+     * <li>the model is a {@literal PagedModel}
+     * <li>the model contains {@literal PageMetadata}
      * </ul>
      *
      * @param linkBase               the prefix of all pagination links, e.g. the base URL of the collection resource

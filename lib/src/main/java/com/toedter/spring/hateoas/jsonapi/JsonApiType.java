@@ -24,7 +24,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This is a marker annotation to indicate what will be rendered as JSON:API resource object type.
+ * This is a marker annotation to indicate what will be interpreted as JSON:API resource object type.
  *
  * @author Kai Toedter
  */
