@@ -160,5 +160,8 @@ tasks.withType(GenerateModuleMetadata) {
 }
 
 signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
 }
