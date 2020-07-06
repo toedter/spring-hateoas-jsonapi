@@ -22,9 +22,11 @@ configurations {
 
 dependencies {
     implementation 'org.springframework.hateoas:spring-hateoas:1.1.0.RELEASE'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
     implementation 'org.atteo:evo-inflector:1.2.2'
+
+    providedCompile 'com.google.code.findbugs:jsr305:3.0.2'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     testImplementation 'org.slf4j:slf4j-api:1.7.30'
     testImplementation 'org.slf4j:jcl-over-slf4j:1.7.30'
@@ -37,7 +39,6 @@ dependencies {
     testImplementation 'org.springframework:spring-webmvc:5.2.6.RELEASE'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux:2.3.1.RELEASE'
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     docs "io.spring.docresources:spring-doc-resources:0.2.2.RELEASE@zip"
 }
