@@ -19,8 +19,7 @@
       }
     },
     "links": {
-      "self": "http://localhost:8080/api/movies/1",
-      "movies": "http://localhost:8080/api/movies{?page[number],page[size]}"
+      "self": "http://localhost:8080/api/movies/1"
     }
   },
   "included": {
