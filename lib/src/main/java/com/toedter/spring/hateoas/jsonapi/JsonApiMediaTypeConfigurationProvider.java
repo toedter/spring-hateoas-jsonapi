@@ -20,21 +20,21 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.hateoas.config.MediaTypeConfigurationProvider;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 class JsonApiMediaTypeConfigurationProvider
   implements MediaTypeConfigurationProvider {
 
   @Override
-  @Nonnull
+  @NonNull
   public Class<? extends HypermediaMappingInformation> getConfiguration() {
     return JsonApiMediaTypeConfiguration.class;
   }
 
   @Override
-  public boolean supportsAny(Collection<MediaType> mediaTypes) {
+  public boolean supportsAny(@NonNull Collection<MediaType> mediaTypes) {
     // TODO: "return mediaTypes.contains(MediaTypes.JSON_API);" is not working
     return true;
   }

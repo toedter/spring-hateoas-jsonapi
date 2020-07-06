@@ -24,8 +24,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +36,7 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     private final AutowireCapableBeanFactory beanFactory;
 
     @Override
-    @Nonnull
+    @NonNull
     public List<MediaType> getMediaTypes() {
         return Collections.singletonList(MediaTypes.JSON_API);
     }
@@ -47,15 +47,15 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     }
 
     @Override
-    @Nonnull
-    public ObjectMapper configureObjectMapper(@Nonnull ObjectMapper mapper) {
+    @NonNull
+    public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
         return this.configureObjectMapper(
                 mapper, configuration.getIfAvailable(JsonApiConfiguration::new));
     }
 
-    @Nonnull
+    @NonNull
     ObjectMapper configureObjectMapper(
-            @Nonnull ObjectMapper mapper,
+            @NonNull ObjectMapper mapper,
             JsonApiConfiguration configuration) {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // mapper.enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
