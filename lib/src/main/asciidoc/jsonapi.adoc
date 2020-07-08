@@ -56,7 +56,7 @@ In JSON:API, the `id` field must be of type `String`.
 But in your model you can use any Class and `toString()` is used for conversion.
 So, if the `id` attribute of `Movie` would be of type `long`,
 the rendered JSON:API would be the same.
-The JSON:API `type` is automtically generated of the pluralized, lower case, simple class name.
+The JSON:API `type` is automatically generated of the pluralized, lower case, simple class name.
 This is best practice, since then most likely the type matches the URL (end)
 of the corresponding REST collection resource.
 
@@ -176,7 +176,7 @@ include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 == Creating Resources with HTTP POST ==
 
 To create new REST resources using HTTP POST, you can provide `JSON:API` formatted JSON as input.
-For example, a `POST` with the body
+For example, a `POST` with the body:
 
 [source, json]
 ----
@@ -187,7 +187,7 @@ will be deserialized to an `EntityModel<Movie>` automatically.
 You can also create REST resources that contain `JSON:API relationships`.
 You just have to annotate the underlying domain model class, with `JsonApiRelationships(<relationship name>)`
 
-For example, a `POST` with the body
+For example, a `POST` with the body:
 
 [source, json]
 ----
