@@ -152,7 +152,7 @@ public class Movie {
 But in your model you can use any Class and <code>toString()</code> is used for conversion.
 So, if the <code>id</code> attribute of <code>Movie</code> would be of type <code>long</code>,
 the rendered JSON:API would be the same.
-The JSON:API <code>type</code> is automtically generated of the pluralized, lower case, simple class name.
+The JSON:API <code>type</code> is automatically generated of the pluralized, lower case, simple class name.
 This is best practice, since then most likely the type matches the URL (end)
 of the corresponding REST collection resource.</p>
 </div>
@@ -475,6 +475,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
                 .model(pagedModel)
                 .included(director1EntityModel)
                 .included(director2EntityModel)
+                .included(director3EntityModel)
                 .pageMeta()
                 .pageLinks("http://localhost/movies")
                 .build();</code></pre>
@@ -544,6 +545,13 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
       "attributes": {
         "name": "Lilly Wachowski"
       }
+    },
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
     }
   ],
   "links": {
@@ -571,7 +579,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 <div class="sectionbody">
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
-For example, a <code>POST</code> with the body</p>
+For example, a <code>POST</code> with the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -590,7 +598,7 @@ You can also create REST resources that contain <code>JSON:API relationships</co
 You just have to annotate the underlying domain model class, with <code>JsonApiRelationships(&lt;relationship name&gt;)</code></p>
 </div>
 <div class="paragraph">
-<p>For example, a <code>POST</code> with the body</p>
+<p>For example, a <code>POST</code> with the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -765,7 +773,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.6.0-SNAPSHOT<br>
-Last updated 2020-07-06 09:45:39 UTC
+Last updated 2020-07-08 16:06:43 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
