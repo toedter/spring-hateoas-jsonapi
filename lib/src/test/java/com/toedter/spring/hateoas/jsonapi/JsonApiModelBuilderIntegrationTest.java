@@ -230,6 +230,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .model(pagedModel)
                         .included(director1EntityModel)
                         .included(director2EntityModel)
+                        .included(director3EntityModel)
                         .pageMeta()
                         .pageLinks("http://localhost/movies")
                         .build();

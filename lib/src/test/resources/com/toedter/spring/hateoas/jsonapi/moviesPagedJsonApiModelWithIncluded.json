@@ -57,6 +57,13 @@
       "attributes": {
         "name": "Lilly Wachowski"
       }
+    },
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
     }
   ],
   "links": {
