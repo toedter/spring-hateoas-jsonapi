@@ -22,13 +22,15 @@
       "self": "http://localhost:8080/api/movies/1"
     }
   },
-  "included": {
-    "id": "2",
-    "type": "directors",
-    "attributes": {
-      "name": "Frank Darabont"
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
     }
-  },
+  ],
   "links": {
     "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=1",
     "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",

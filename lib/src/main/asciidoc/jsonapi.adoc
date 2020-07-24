@@ -47,7 +47,7 @@ Consider a simple Movie Class as base for a Spring HATEOAS entity model:
 include::{test-dir}/support/Movie.java[tags=Movie]
 ----
 
-An `EnitiyModel.of(new Movie("1", "Star Wars"))` is then rendered as
+An `EntityModel.of(new Movie("1", "Star Wars"))` is then rendered as
 
 [source, json]
 include::{test-resources-dir}/movieEntityModel.json[]
