@@ -117,7 +117,7 @@ public class MovieController {
                         throw new RuntimeException(e);
                     }
                 })
-                .map(uri -> ResponseEntity.noContent().location(uri).build())
+                .map(uri -> ResponseEntity.created(uri).build())
                 .orElse(ResponseEntity.badRequest().body("Unable to create " + movie));
     }
 
