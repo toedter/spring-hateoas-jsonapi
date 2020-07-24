@@ -17,6 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,9 @@ import java.util.List;
 @NoArgsConstructor
 @Relation(collectionRelation = "movies")
 public class Movie {
-    @Id @GeneratedValue @JsonIgnore
+    @Id
+    @GeneratedValue
+    @JsonIgnore
     private Long id;
 
     private String title;
@@ -46,6 +49,7 @@ public class Movie {
 
     @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonApiRelationships("directors")  // Only used for deserialization, e.g. useful when doing a HTTP POST
     List<Director> directors = new ArrayList<>();
 
     public Movie(String imdbId, String title, long year, double rating, int rank, String thumb) {
@@ -67,22 +71,22 @@ public class Movie {
     }
 
     public void update(Movie updatedMovie) {
-        if(updatedMovie.title != null) {
+        if (updatedMovie.title != null) {
             this.title = updatedMovie.title;
         }
-        if(updatedMovie.thumb != null) {
+        if (updatedMovie.thumb != null) {
             this.thumb = updatedMovie.thumb;
         }
-        if(updatedMovie.imdbId != null) {
+        if (updatedMovie.imdbId != null) {
             this.imdbId = updatedMovie.imdbId;
         }
-        if(updatedMovie.year != 0) {
+        if (updatedMovie.year != 0) {
             this.year = updatedMovie.year;
         }
-        if(updatedMovie.rating != 0) {
+        if (updatedMovie.rating != 0) {
             this.rating = updatedMovie.rating;
         }
-        if(updatedMovie.rank != 0) {
+        if (updatedMovie.rank != 0) {
             this.rank = updatedMovie.rank;
         }
 
