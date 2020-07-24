@@ -54,13 +54,15 @@ Answers to a few questions, e.g. related to HAL, you can find
       "self": "http://localhost:8080/api/movies/1"
     }
   },
-  "included": {
-    "id": "2",
-    "type": "directors",
-    "attributes": {
-      "name": "Frank Darabont"
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
     }
-  },
+  ],
   "links": {
     "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=1",
     "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
@@ -132,7 +134,7 @@ public class Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>An <code>EnitiyModel.of(new Movie("1", "Star Wars"))</code> is then rendered as</p>
+<p>An <code>EntityModel.of(new Movie("1", "Star Wars"))</code> is then rendered as</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -773,7 +775,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.6.0-SNAPSHOT<br>
-Last updated 2020-07-08 16:06:43 UTC
+Last updated 2020-07-24 17:54:07 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>

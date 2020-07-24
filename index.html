@@ -16,7 +16,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.6.0-SNAPSHOT,</span>
-<span id="revdate">2020-07-08</span>
+<span id="revdate">2020-07-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -68,7 +68,7 @@ Copies of this document may be made for your own use and for distribution to oth
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/">Spring HEATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -118,13 +118,15 @@ Answers to a few questions, e.g. related to HAL, you can find
       "self": "http://localhost:8080/api/movies/1"
     }
   },
-  "included": {
-    "id": "2",
-    "type": "directors",
-    "attributes": {
-      "name": "Frank Darabont"
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
     }
-  },
+  ],
   "links": {
     "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=1",
     "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
@@ -191,7 +193,7 @@ public class Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>An <code>EnitiyModel.of(new Movie("1", "Star Wars"))</code> is then rendered as</p>
+<p>An <code>EntityModel.of(new Movie("1", "Star Wars"))</code> is then rendered as</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -823,7 +825,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.6.0-SNAPSHOT<br>
-Last updated 2020-07-08 16:06:43 UTC
+Last updated 2020-07-24 17:54:07 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
