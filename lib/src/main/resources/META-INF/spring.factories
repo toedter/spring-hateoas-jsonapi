@@ -1,2 +1,2 @@
-org.springframework.hateoas.config.MediaTypeConfigurationProvider=\
-  com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfigurationProvider
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration

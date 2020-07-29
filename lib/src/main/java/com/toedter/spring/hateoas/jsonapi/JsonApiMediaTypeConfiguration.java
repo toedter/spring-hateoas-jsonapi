@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Configuration
 class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
     private final ObjectProvider<JsonApiConfiguration> configuration;

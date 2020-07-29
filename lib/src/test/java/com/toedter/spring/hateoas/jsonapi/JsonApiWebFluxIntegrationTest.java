@@ -20,10 +20,11 @@ import com.toedter.spring.hateoas.jsonapi.support.WebFluxMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.HypermediaWebTestClientConfigurer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
@@ -165,7 +166,7 @@ class JsonApiWebFluxIntegrationTest extends AbstractJsonApiTest {
     @Configuration
     @WebAppConfiguration
     @EnableWebFlux
-    @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
+    @EnableAutoConfiguration(exclude = WebMvcAutoConfiguration.class)
     static class TestConfig {
         @Bean
         WebFluxMovieController movieController() {

@@ -16,16 +16,14 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 
-import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.hateoas.config.EnableHypermediaSupport;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -35,8 +33,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -48,6 +44,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ContextConfiguration
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApi WebMvc with Configuration Integration Test")
+@EnableAutoConfiguration
 class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
     @Autowired
     WebApplicationContext context;
@@ -87,7 +84,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
     @Configuration
     @WebAppConfiguration
     @EnableWebMvc
-    @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
+    @EnableAutoConfiguration
     static class TestConfig {
         @Bean
         WebMvcMovieController movieController() {

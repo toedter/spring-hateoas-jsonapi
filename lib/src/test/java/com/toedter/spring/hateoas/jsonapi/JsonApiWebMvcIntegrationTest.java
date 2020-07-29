@@ -20,6 +20,7 @@ import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
@@ -161,7 +162,7 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     @Configuration
     @WebAppConfiguration
     @EnableWebMvc
-    @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
+    @EnableAutoConfiguration
     static class TestConfig {
         @Bean
         WebMvcMovieController movieController() {
