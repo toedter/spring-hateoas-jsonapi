@@ -1,2 +1,0 @@
-org.springframework.hateoas.config.MediaTypeConfigurationProvider=\
-  com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfigurationProvider

@@ -20,13 +20,12 @@ package com.toedter.jsonapi.example;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-// @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.UBER)
+@SpringBootApplication(scanBasePackages = {"com.toedter"})
 public class JsonApiDemoApplication {
 
 
-    public static void main(String[] args) {
-        SpringApplication.run(JsonApiDemoApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(JsonApiDemoApplication.class, args);
+	}
 
 }

@@ -23,11 +23,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
 public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+
     @Override
     public List<MediaType> getMediaTypes() {
         return Collections.singletonList(MediaTypes.JSON_API);
