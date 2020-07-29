@@ -25,10 +25,12 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
