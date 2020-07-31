@@ -26,14 +26,14 @@ Maven:
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 </dependency>
 
 Gradle:
 [source]
-implementation 'com.toedter:spring-hateoas-jsonapi:0.5.0'
+implementation 'com.toedter:spring-hateoas-jsonapi:0.6.0'
 
-The latest published snapshot version is `0.6.0-SNAPSHOT`.
+The latest published snapshot version is `0.7.0-SNAPSHOT`.
 If you want to try it out, please make sure to add https://oss.sonatype.org/content/repositories/snapshots/
 as repository to your Maven or Gradle configuration.
 
