@@ -130,27 +130,6 @@ public class MovieController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/movies/{id}")
-    ResponseEntity<?> updateMovie(@RequestBody Movie movie, @PathVariable Long id) {
-
-        movie.setId(id);
-
-        final Movie savedMovie = repository.save(movie);
-        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(savedMovie);
-
-        return movieRepresentationModel
-                .getLink(IanaLinkRelations.SELF)
-                .map(Link::getHref).map(href -> {
-                    try {
-                        return new URI(href);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                }) //
-                .map(uri -> ResponseEntity.noContent().location(uri).build()) //
-                .orElse(ResponseEntity.badRequest().body("Unable to update " + movie));
-    }
-
     @PatchMapping("/movies/{id}")
     ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
 
