@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to build {@literal JSON:API} compliant error messages
+ * Class to build {@literal JSON:API} compliant error messages.
  *
  * @author Kai Toedter
  */

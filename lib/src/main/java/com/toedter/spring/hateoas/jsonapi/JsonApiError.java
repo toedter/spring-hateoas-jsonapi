@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * Class to build a single {@literal JSON:API} compliant error.
- * This eroor can be added to {@link JsonApiErrors}.
+ * This error can be added to {@link JsonApiErrors}.
  *
  * @author Kai Toedter
  */
