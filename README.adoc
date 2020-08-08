@@ -41,7 +41,7 @@ as repository to your Maven or Gradle configuration.
 
 * Make sure Java 8 or later JDK is installed
 * Clone this Git repository and cd into `spring-hateoas-jsonapi`
-* Invoke `./gradlew build bootrun` (just `gradlew` under Windows)
+* Invoke `./gradlew build bootrun` (just `gradlew` on Windows)
 * Call endpoint link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1++]
  with request header `Accept application/vnd.api+json`
 
