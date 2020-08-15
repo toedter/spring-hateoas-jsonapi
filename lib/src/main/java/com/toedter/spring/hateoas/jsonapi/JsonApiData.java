@@ -29,12 +29,9 @@ import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
-import static org.springframework.util.ReflectionUtils.doWithFields;
-import static org.springframework.util.ReflectionUtils.doWithMethods;
 
 @Value
 @Getter(onMethod_ = {@JsonProperty})

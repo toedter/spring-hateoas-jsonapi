@@ -20,8 +20,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
-import org.springframework.hateoas.LinkRelation;
-import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
