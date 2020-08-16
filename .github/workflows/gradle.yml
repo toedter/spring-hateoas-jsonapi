@@ -33,6 +33,7 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./lib/build
     - name: Deploy doc to Github pages
       uses: peaceiris/actions-gh-pages@v3
       with:
