@@ -28,7 +28,6 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,7 +45,7 @@ class MovieLoader {
 
             File file = ResourceUtils.getFile("classpath:static/movie-data/movies-250.json");
 
-            moviesJson = readFile(file.getPath(), StandardCharsets.UTF_8);
+            moviesJson = readFile(file.getPath());
             JsonNode rootNode = mapper.readValue(moviesJson, JsonNode.class);
 
             JsonNode movies = rootNode.get("movies");
@@ -85,10 +84,10 @@ class MovieLoader {
         return new Movie(imdbId, title, year, imdbRating, rank, movieImage);
     }
 
-    private String readFile(String path, Charset encoding)
+    private String readFile(String path)
             throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
 }

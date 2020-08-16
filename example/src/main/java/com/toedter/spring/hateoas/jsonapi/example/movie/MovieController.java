@@ -104,7 +104,7 @@ public class MovieController {
 
     @PostMapping("/movies")
     ResponseEntity<?> newMovie(@RequestBody Movie movie) {
-        Movie savedMovie = repository.save(movie);
+        repository.save(movie);
         final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie);
 
         return movieRepresentationModel
@@ -165,13 +165,4 @@ public class MovieController {
 
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/error")
-    public ResponseEntity<? extends RepresentationModel<?>> error() {
-
-        @SuppressWarnings({"NumericOverflow", "divzero"})
-        int i = 1 / 0;
-        return null;
-    }
-
 }

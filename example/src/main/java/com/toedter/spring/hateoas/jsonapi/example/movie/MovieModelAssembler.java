@@ -34,8 +34,6 @@ class MovieModelAssembler {
     public RepresentationModel<?> toJsonApiModel(Movie movie) {
         Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId())).withSelfRel();
 
-        Link moviesLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-
         // TODO: Spring HATEOAS does not recognize templated links with square brackets
         // Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
@@ -44,7 +42,7 @@ class MovieModelAssembler {
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
                 .link(selfLink);
-        int i = 0;
+
         for (Director director : movie.getDirectors()) {
             EntityModel<Director> directorEntityModel = EntityModel.of(director);
             String relationshipRelatedLink = selfLink.getHref() + "/directors";
