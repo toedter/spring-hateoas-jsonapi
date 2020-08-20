@@ -16,7 +16,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.7.0-SNAPSHOT,</span>
-<span id="revdate">2020-08-16</span>
+<span id="revdate">2020-08-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -497,26 +497,23 @@ The builder supports adding both pagination metadata and pagination links.</p>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
 Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
-final EntityModel&lt;Director&gt; director1EntityModel = EntityModel.of(director1);
 Director director2 = new Director("2", "Lilly Wachowski");
-final EntityModel&lt;Director&gt; director2EntityModel = EntityModel.of(director2);
 
 final RepresentationModel&lt;?&gt; jsonApiModel1 =
         jsonApiModel()
                 .model(movie)
-                .relationship("directors", director1EntityModel)
-                .relationship("directors", director2EntityModel)
+                .relationship("directors", director1)
+                .relationship("directors", director2)
                 .relationship("relatedMovies", EntityModel.of(relatedMovie))
                 .build();
 
 Movie movie2 = new Movie("3", "Star Wars");
 Director director3 = new Director("3", "George Lucas");
-final EntityModel&lt;Director&gt; director3EntityModel = EntityModel.of(director3);
 
 final RepresentationModel&lt;?&gt; jsonApiModel2 =
         jsonApiModel()
                 .model(movie2)
-                .relationship("directors", director3EntityModel)
+                .relationship("directors", director3)
                 .build();
 
 List&lt;RepresentationModel&lt;?&gt;&gt; movies = new ArrayList&lt;&gt;();
@@ -530,9 +527,9 @@ final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(
 RepresentationModel&lt;?&gt; pagedJasonApiModel =
         jsonApiModel()
                 .model(pagedModel)
-                .included(director1EntityModel)
-                .included(director2EntityModel)
-                .included(director3EntityModel)
+                .included(director1)
+                .included(director2)
+                .included(director3)
                 .pageMeta()
                 .pageLinks("http://localhost/movies")
                 .build();</code></pre>
@@ -825,7 +822,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.7.0-SNAPSHOT<br>
-Last updated 2020-08-16 13:53:07 UTC
+Last updated 2020-08-20 15:01:46 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -72,13 +72,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -116,6 +116,29 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#RELATED">RELATED</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#RELATIONSHIP_NAME_MUST_NOT_BE_NULL">RELATIONSHIP_NAME_MUST_NOT_BE_NULL</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -221,7 +244,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-org.springframework.hateoas.EntityModel-">relationship</a></span>(java.lang.String&nbsp;name,
             org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</code>
-<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
+<div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
  to the <code>RepresentationModel</code> to be built.</div>
 </td>
 </tr>
@@ -231,15 +254,33 @@ extends java.lang.Object</pre>
             org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel,
             java.lang.String&nbsp;selfLink,
             java.lang.String&nbsp;relatedLink)</code>
-<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
- to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
+ and links.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.util.Map-">relationship</a></span>(java.lang.String&nbsp;name,
+            java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;meta)</code>
+<div class="block">Adds or updates a relationship based on the meta
+ to the <code>RepresentationModel</code> to be built.</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.Object-">relationship</a></span>(java.lang.String&nbsp;name,
-            java.lang.Object&nbsp;object)</code>
-<div class="block">Adds the given relationship based on the given <code>Object</code>
+            java.lang.Object&nbsp;dataObject)</code>
+<div class="block">Adds or updates a relationship based on the dataObject
+ to the <code>RepresentationModel</code> to be built.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.String-java.lang.String-org.springframework.hateoas.Links-">relationship</a></span>(java.lang.String&nbsp;name,
+            java.lang.String&nbsp;selfLink,
+            java.lang.String&nbsp;relatedLink,
+            org.springframework.hateoas.Links&nbsp;otherLinks)</code>
+<div class="block">Adds the given relationship based on the given links
  to the <code>RepresentationModel</code> to be built.</div>
 </td>
 </tr>
@@ -259,6 +300,40 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="RELATIONSHIP_NAME_MUST_NOT_BE_NULL">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RELATIONSHIP_NAME_MUST_NOT_BE_NULL</h4>
+<pre>public static final&nbsp;java.lang.String RELATIONSHIP_NAME_MUST_NOT_BE_NULL</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../constant-values.html#com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.RELATIONSHIP_NAME_MUST_NOT_BE_NULL">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="RELATED">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RELATED</h4>
+<pre>public static final&nbsp;java.lang.String RELATED</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../constant-values.html#com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.RELATED">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.detail">
@@ -366,8 +441,10 @@ extends java.lang.Object</pre>
 <h4>relationship</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
                                         org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</pre>
-<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
- to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
+ to the <code>RepresentationModel</code> to be built.
+ If there is already a relationship for the given name defined,
+ the new <code>EntityModel</code> will be added to the existing relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - must not be null.</dd>
@@ -384,16 +461,21 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>relationship</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
+                                        @Nullable
                                         org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel,
+                                        @Nullable
                                         java.lang.String&nbsp;selfLink,
+                                        @Nullable
                                         java.lang.String&nbsp;relatedLink)</pre>
-<div class="block">Adds the given relationship based on the given <code>EntityModel</code>
- to the <code>RepresentationModel</code> to be built. Optional, a self link of the relation and
- a related link (to the related resource) can be added.</div>
+<div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
+ and links. A self link of the relation and
+ a related link (to the related resource) can also be added.
+ While entityModel, selfLink, and relatedLink can be null, at least
+ one of them has to be not null.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - must not be null.</dd>
-<dd><code>entityModel</code> - must not be null.</dd>
+<dd><code>entityModel</code> - can be null.</dd>
 <dd><code>selfLink</code> - can be null.</dd>
 <dd><code>relatedLink</code> - can be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -408,14 +490,64 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>relationship</h4>
 <pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
-                                        java.lang.Object&nbsp;object)</pre>
-<div class="block">Adds the given relationship based on the given <code>Object</code>
- to the <code>RepresentationModel</code> to be built. The object is automatically
- wrapped into an <code>EntityModel</code>.</div>
+                                        java.lang.Object&nbsp;dataObject)</pre>
+<div class="block">Adds or updates a relationship based on the dataObject
+ to the <code>RepresentationModel</code> to be built.
+ If there is already a relationship for the given name defined,
+ the new data object will be added to the existing relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - must not be null.</dd>
-<dd><code>object</code> - must not be null.</dd>
+<dd><code>dataObject</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="relationship-java.lang.String-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>relationship</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
+                                        java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;meta)</pre>
+<div class="block">Adds or updates a relationship based on the meta
+ to the <code>RepresentationModel</code> to be built.
+ If there is already a relationship for the given name defined,
+ the meta will overwrite the existing relationship.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - must not be null.</dd>
+<dd><code>meta</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a name="relationship-java.lang.String-java.lang.String-java.lang.String-org.springframework.hateoas.Links-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>relationship</h4>
+<pre>public&nbsp;<a href="../../../../../com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship(java.lang.String&nbsp;name,
+                                        @Nullable
+                                        java.lang.String&nbsp;selfLink,
+                                        @Nullable
+                                        java.lang.String&nbsp;relatedLink,
+                                        @Nullable
+                                        org.springframework.hateoas.Links&nbsp;otherLinks)</pre>
+<div class="block">Adds the given relationship based on the given links
+ to the <code>RepresentationModel</code> to be built.
+ If there is already a relationship for the given name defined,
+ the new links will overwrite the existing ones.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - must not be null.</dd>
+<dd><code>selfLink</code> - can be null.</dd>
+<dd><code>relatedLink</code> - can be null.</dd>
+<dd><code>otherLinks</code> - can be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
 </dl>
@@ -624,13 +756,13 @@ extends java.lang.Object</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
