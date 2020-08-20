@@ -131,6 +131,25 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_single_movie_model_with_relationship_links_and_meta() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        HashMap<String, Object> meta = new HashMap<>();
+        meta.put("key", "value");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(movie)
+                        .relationship("directors", director)
+                        .relationship("directors",
+                                "http://movies/1/relationships/1",
+                                "http://movies/1/directors/1", Links.NONE)
+                        .relationship("directors", meta)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
+    }
+
+    @Test
     void should_build_single_movie_model_with_many_relationships() throws Exception {
         Movie movie = new Movie("4", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
@@ -293,7 +312,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_not_build_with_invalid_relationship_data_object() {
-       Links links = Links.NONE;
+        Links links = Links.NONE;
         Object object = new Object();
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
                 .relationship("directors", object)
@@ -303,21 +322,21 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     @Test
     void should_not_add_invalid_relationship_data_object() {
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
-                .relationship("directors", (EntityModel<?>)null, null, null)
+                .relationship("directors", (EntityModel<?>) null, null, null)
                 .build());
     }
 
     @Test
     void should_not_add_invalid_relationship_links() {
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
-                .relationship("directors", (String)null, null, null)
+                .relationship("directors", (String) null, null, null)
                 .build());
     }
 
     @Test
     void should_not_add_invalid_relationship_meta() {
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
-                .relationship("directors", (HashMap<?,?>)null)
+                .relationship("directors", (HashMap<?, ?>) null)
                 .build());
     }
 }
