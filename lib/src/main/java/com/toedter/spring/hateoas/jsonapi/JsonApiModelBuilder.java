@@ -16,9 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,10 @@ import java.util.Map;
  *
  * @author Kai Toedter
  */
+@Slf4j
 public class JsonApiModelBuilder {
+    public static final String RELATIONSHIP_NAME_MUST_NOT_BE_NULL = "relationship name must not be null!";
+    public static final String RELATED = "related";
     private RepresentationModel<?> model;
     private Links links = Links.NONE;
     private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
@@ -123,8 +128,10 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds the given {@literal relationship} based on the given {@link EntityModel}
+     * Adds or updates a {@literal relationship} based on the given {@link EntityModel}
      * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new {@link EntityModel} will be added to the existing relationship.
      *
      * @param name        must not be {@literal null}.
      * @param entityModel must not be {@literal null}.
@@ -135,58 +142,155 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds the given {@literal relationship} based on the given {@link EntityModel}
-     * to the {@link RepresentationModel} to be built. Optional, a self link of the relation and
-     * a related link (to the related resource) can be added.
+     * Adds or updates a {@literal relationship} based on the given {@link EntityModel}
+     * and links. A self link of the relation and
+     * a related link (to the related resource) can also be added.
+     * While entityModel, selfLink, and relatedLink can be null, at least
+     * one of them has to be not null.
      *
      * @param name        must not be {@literal null}.
-     * @param entityModel must not be {@literal null}.
+     * @param entityModel can be {@literal null}.
      * @param selfLink    can be {@literal null}.
      * @param relatedLink can be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name,
-                                            EntityModel<?> entityModel,
-                                            String selfLink,
-                                            String relatedLink) {
+                                            @Nullable EntityModel<?> entityModel,
+                                            @Nullable String selfLink,
+                                            @Nullable String relatedLink) {
         Assert.notNull(name, "Relationship name must not be null!");
-        Assert.notNull(entityModel, "EntityModel must not be null!");
+
+        if (entityModel == null && selfLink == null && relatedLink == null) {
+            throw new IllegalArgumentException(
+                    "At least one of entityModel, selfLink, and relatedLink must not be null!");
+        }
+
+        JsonApiRelationship jsonApiRelationship = null;
+        if (entityModel != null) {
+            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent());
+        }
+
+        if (selfLink != null || relatedLink != null) {
+            jsonApiRelationship = replaceLinks(jsonApiRelationship, selfLink, relatedLink, null);
+        }
+
+        relationships.put(name, jsonApiRelationship);
+        return this;
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new data object will be added to the existing relationship.
+     *
+     * @param name       must not be {@literal null}.
+     * @param dataObject must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Object dataObject) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(dataObject, "relationship data object must not be null!");
+
+        final JsonApiRelationship jsonApiRelationship = addDataObject(relationships.get(name), dataObject);
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the {@literal meta}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the meta will overwrite the existing relationship.
+     *
+     * @param name must not be {@literal null}.
+     * @param meta must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Map<String, Object> meta) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(meta, "relationship meta object must not be null!");
+
+        JsonApiRelationship jsonApiRelationship = relationships.get(name);
+        if (jsonApiRelationship == null) {
+            jsonApiRelationship = JsonApiRelationship.of(meta);
+        } else {
+            jsonApiRelationship = jsonApiRelationship.withMeta(meta);
+        }
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
+    /**
+     * Adds the given {@literal relationship} based on the given links
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new links will overwrite the existing ones.
+     *
+     * @param name        must not be {@literal null}.
+     * @param selfLink    can be {@literal null}.
+     * @param relatedLink can be {@literal null}.
+     * @param otherLinks  can be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            @Nullable String selfLink,
+                                            @Nullable String relatedLink,
+                                            @Nullable Links otherLinks) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+
+        final JsonApiRelationship jsonApiRelationship = replaceLinks(relationships.get(name), selfLink, relatedLink, otherLinks);
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
+    private JsonApiRelationship replaceLinks(
+            @Nullable JsonApiRelationship jsonApiRelationship,
+            @Nullable String selfLink,
+            @Nullable String relatedLink,
+            @Nullable Links otherLinks) {
 
         Links links = Links.NONE;
+
+        if (otherLinks != null) {
+            links = otherLinks;
+        }
 
         if (selfLink != null && selfLink.trim().length() != 0) {
             links = links.and(Link.of(selfLink));
         }
 
         if (relatedLink != null && relatedLink.trim().length() != 0) {
-            links = links.and(Link.of(relatedLink).withRel("related"));
+            links = links.and(Link.of(relatedLink).withRel(RELATED));
         }
 
-        if(links.isEmpty()) {
-            links = null;
+        if (links.isEmpty() || !(links.hasLink("self") || links.hasLink(RELATED))) {
+            throw new IllegalArgumentException(
+                    "JSON:API relationship links must contain a \"self\" link or a \"related\" link!");
         }
 
-        JsonApiRelationship jsonApiRelationship = this.relationships.get(name);
+        JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
-            relationships.put(name, JsonApiRelationship.of(entityModel).withLinks(links));
+            newRelationship = JsonApiRelationship.of(links);
         } else {
-            relationships.put(name, jsonApiRelationship.withData(JsonApiResource.of(entityModel)).withLinks(links));
+            newRelationship = jsonApiRelationship.withLinks(links);
         }
-
-        return this;
+        return newRelationship;
     }
 
-    /**
-     * Adds the given {@literal relationship} based on the given {@link Object}
-     * to the {@link RepresentationModel} to be built. The object is automatically
-     * wrapped into an {@link EntityModel}.
-     *
-     * @param name   must not be {@literal null}.
-     * @param object must not be {@literal null}.
-     * @return will never be {@literal null}.
-     */
-    public JsonApiModelBuilder relationship(String name, Object object) {
-        return this.relationship(name, EntityModel.of(object));
+    private JsonApiRelationship addDataObject(@Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
+        JsonApiRelationship newRelationship;
+        if (jsonApiRelationship == null) {
+            newRelationship = JsonApiRelationship.of(dataObject);
+        } else {
+            newRelationship = jsonApiRelationship.withData(JsonApiResource.of(dataObject));
+        }
+        return newRelationship;
     }
 
     /**
@@ -338,6 +442,11 @@ public class JsonApiModelBuilder {
      * @return will never be {@literal null}.
      */
     public RepresentationModel<?> build() {
+        for (JsonApiRelationship jsonApiRelationship : relationships.values()) {
+            if (!JsonApiRelationship.isValid(jsonApiRelationship)) {
+                throw new IllegalStateException("Cannot build representation model: JSON:API relationship validation error");
+            }
+        }
         return new JsonApiModel(model, relationships, included, meta, links);
     }
 

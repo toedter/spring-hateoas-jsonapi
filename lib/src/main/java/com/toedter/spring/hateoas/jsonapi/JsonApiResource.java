@@ -74,16 +74,16 @@ class JsonApiResource {
     }
 
     /**
-     * Creates a JSON:API resource from an entity model
+     * Creates a JSON:API resource from an object
+     * JSON:API id (and type) must be extractable from the dataObject.
      *
-     * @param entityModel the base for the relationship
+     * @param dataObject the base for the relationship
      * @return the JSON:API resource
      */
-    public static JsonApiResource of(EntityModel<?> entityModel) {
-        final Object content = entityModel.getContent();
+    public static JsonApiResource of(Object dataObject) {
         final JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
-        Object id = JsonApiResource.getId(content, jsonApiConfiguration).value;
-        String type = JsonApiResource.getType(content, jsonApiConfiguration).value;
+        Object id = JsonApiResource.getId(dataObject, jsonApiConfiguration).value;
+        String type = JsonApiResource.getType(dataObject, jsonApiConfiguration).value;
         return new JsonApiResource(id, type);
     }
 
@@ -161,7 +161,7 @@ class JsonApiResource {
                 field.setAccessible(true);
                 final Object id = field.get(object);
                 if (id == null) {
-                    throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+                    throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
                 }
                 return new ResourceField("id", id.toString());
             }
@@ -177,7 +177,7 @@ class JsonApiResource {
             }
             return new ResourceField("type", jsonApiType);
         } catch (Exception e) {
-            throw new RuntimeException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+            throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }
     }
 

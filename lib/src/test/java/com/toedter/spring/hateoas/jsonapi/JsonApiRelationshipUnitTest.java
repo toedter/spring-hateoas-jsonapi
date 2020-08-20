@@ -20,6 +20,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +36,51 @@ class JsonApiRelationshipUnitTest {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
         jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "movies"));
         JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+
         assertThat(data.getId()).isEqualTo("1");
         assertThat(data.getType()).isEqualTo("movies");
+    }
+
+    @Test
+    void should_create_of_entity_model() {
+        class Test {
+            private String id = "1";
+        }
+
+        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(EntityModel.of(new Test()));
+        JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+
+        assertThat(data.getId()).isEqualTo("1");
+        assertThat(data.getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_of_object() {
+        class Test {
+            private String id = "1";
+        }
+
+        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(new Test());
+        JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+
+        assertThat(data.getId()).isEqualTo("1");
+        assertThat(data.getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_of_links() {
+        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(Links.NONE);
+        final Links links = jsonApiRelationship.getLinks();
+        assertThat(links).isEqualTo(Links.NONE);
+    }
+
+    @Test
+    void should_create_of_meta() {
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("key", "value");
+
+        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(meta);
+
+        assertThat(jsonApiRelationship.getMeta()).isEqualTo(meta);
     }
 }

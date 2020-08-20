@@ -23,6 +23,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.hateoas.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 // tag::import-builder[]
@@ -195,26 +196,23 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
         Director director1 = new Director("1", "Lana Wachowski");
-        final EntityModel<Director> director1EntityModel = EntityModel.of(director1);
         Director director2 = new Director("2", "Lilly Wachowski");
-        final EntityModel<Director> director2EntityModel = EntityModel.of(director2);
 
         final RepresentationModel<?> jsonApiModel1 =
                 jsonApiModel()
                         .model(movie)
-                        .relationship("directors", director1EntityModel)
-                        .relationship("directors", director2EntityModel)
+                        .relationship("directors", director1)
+                        .relationship("directors", director2)
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
                         .build();
 
         Movie movie2 = new Movie("3", "Star Wars");
         Director director3 = new Director("3", "George Lucas");
-        final EntityModel<Director> director3EntityModel = EntityModel.of(director3);
 
         final RepresentationModel<?> jsonApiModel2 =
                 jsonApiModel()
                         .model(movie2)
-                        .relationship("directors", director3EntityModel)
+                        .relationship("directors", director3)
                         .build();
 
         List<RepresentationModel<?>> movies = new ArrayList<>();
@@ -228,9 +226,9 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         RepresentationModel<?> pagedJasonApiModel =
                 jsonApiModel()
                         .model(pagedModel)
-                        .included(director1EntityModel)
-                        .included(director2EntityModel)
-                        .included(director3EntityModel)
+                        .included(director1)
+                        .included(director2)
+                        .included(director3)
                         .pageMeta()
                         .pageLinks("http://localhost/movies")
                         .build();
@@ -282,6 +280,44 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
                 .model(PagedModel.empty())
                 .pageMeta()
+                .build());
+    }
+
+    @Test
+    void should_not_build_with_invalid_null_value_relationship() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+                .relationship("directors", jsonApiRelationship)
+                .build());
+    }
+
+    @Test
+    void should_not_build_with_invalid_relationship_data_object() {
+       Links links = Links.NONE;
+        Object object = new Object();
+        assertThrows(IllegalStateException.class, () -> jsonApiModel()
+                .relationship("directors", object)
+                .build());
+    }
+
+    @Test
+    void should_not_add_invalid_relationship_data_object() {
+        assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
+                .relationship("directors", (EntityModel<?>)null, null, null)
+                .build());
+    }
+
+    @Test
+    void should_not_add_invalid_relationship_links() {
+        assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
+                .relationship("directors", (String)null, null, null)
+                .build());
+    }
+
+    @Test
+    void should_not_add_invalid_relationship_meta() {
+        assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
+                .relationship("directors", (HashMap<?,?>)null)
                 .build());
     }
 }

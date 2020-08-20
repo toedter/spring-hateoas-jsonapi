@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.With;
 import org.springframework.util.Assert;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -94,7 +95,7 @@ public class JsonApiConfiguration {
      * @param clazz must not be {@literal null}.
      * @return can return {@literal null}.
      */
-    public String getTypeForClass(Class<?> clazz) {
+    public @Nullable String getTypeForClass(Class<?> clazz) {
         Assert.notNull(clazz, "class must not be null!");
         return typeForClass.get(clazz);
     }
