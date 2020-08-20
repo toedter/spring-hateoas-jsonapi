@@ -21,8 +21,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,5 +84,65 @@ class JsonApiRelationshipUnitTest {
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(meta);
 
         assertThat(jsonApiRelationship.getMeta()).isEqualTo(meta);
+    }
+
+    @Test
+    void should_validate_relationship_with_constructor() {
+        class Test {
+            String id = "1";
+        }
+
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(new Test(), Links.of(Link.of("x")), new HashMap<>());
+        assertThat(jsonApiRelationship.isValid()).isTrue();
+    }
+
+    @Test
+    void should_validate_relationship_with_wither() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "type"));
+        jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
+        jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
+        assertThat(jsonApiRelationship.isValid()).isTrue();
+    }
+
+    @Test
+    void should_validate_relationship_with_wither_and_multiple_data() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "type"));
+        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("2", "type"));
+        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("3", "type"));
+        jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
+        jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
+        assertThat(jsonApiRelationship.isValid()).isTrue();
+    }
+
+    @Test
+    void should_validate_invalid_null_relationship() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        assertThat(jsonApiRelationship.isValid()).isFalse();
+    }
+
+    @Test
+    void should_validate_invalid_single_data() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(new Object(), null, null);
+        assertThat(jsonApiRelationship.isValid()).isFalse();
+    }
+
+    @Test
+    void should_validate_invalid_collection_data() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(Collections.singletonList(new Object()), null, null);
+        assertThat(jsonApiRelationship.isValid()).isFalse();
+    }
+
+    @Test
+    void should_validate_invalid_meta() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, new HashMap<>());
+        assertThat(jsonApiRelationship.isValid()).isTrue();
+    }
+
+    @Test
+    void should_validate_invalid_links() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, Links.NONE, null);
+        assertThat(jsonApiRelationship.isValid()).isFalse();
     }
 }

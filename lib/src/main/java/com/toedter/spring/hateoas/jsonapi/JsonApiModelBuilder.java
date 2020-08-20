@@ -443,8 +443,10 @@ public class JsonApiModelBuilder {
      */
     public RepresentationModel<?> build() {
         for (JsonApiRelationship jsonApiRelationship : relationships.values()) {
-            if (!JsonApiRelationship.isValid(jsonApiRelationship)) {
-                throw new IllegalStateException("Cannot build representation model: JSON:API relationship validation error");
+            if (!jsonApiRelationship.isValid()) {
+                throw new IllegalStateException(
+                        "Cannot build representation model: JSON:API relationship validation error for: "
+                                + jsonApiRelationship);
             }
         }
         return new JsonApiModel(model, relationships, included, meta, links);

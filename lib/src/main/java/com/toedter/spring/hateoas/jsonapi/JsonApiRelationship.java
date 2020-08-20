@@ -16,10 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
@@ -42,15 +39,12 @@ import java.util.*;
 class JsonApiRelationship {
     final static JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
 
-    @Getter
     Object data;
 
-    @Getter
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Links links;
 
-    @Getter
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Map<String, Object> meta;
@@ -126,16 +120,12 @@ class JsonApiRelationship {
     }
 
     /**
-     * Validates the given jsonApiRelationship against the JSON:API 1.0 specification.
+     * Validates against the JSON:API 1.0 specification.
      *
-     * @param jsonApiRelationship the JSON:API relationship to be validated
      * @return true, if the jsonApiRelationship is valid
      */
-    public static boolean isValid(JsonApiRelationship jsonApiRelationship) {
-
-        final Object data = jsonApiRelationship.data;
-        final Links links = jsonApiRelationship.links;
-        final Map<String, Object> meta = jsonApiRelationship.meta;
+    @JsonIgnore
+    public boolean isValid() {
 
         if (data == null && links == null && meta == null) {
             return false;
