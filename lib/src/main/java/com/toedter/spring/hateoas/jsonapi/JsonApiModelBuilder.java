@@ -139,10 +139,28 @@ public class JsonApiModelBuilder {
      */
     public JsonApiModelBuilder relationship(String name,
                                             Object dataObject) {
+        return this.relationship(name, dataObject, false);
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new data object will be added to the existing relationship.
+     *
+     * @param name         must not be {@literal null}.
+     * @param dataObject   must not be {@literal null}.
+     * @param asCollection if true, the data of this relationship will be serialized as collection.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Object dataObject,
+                                            boolean asCollection) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
         Assert.notNull(dataObject, "relationship data object must not be null!");
 
-        final JsonApiRelationship jsonApiRelationship = addDataObject(relationships.get(name), dataObject);
+        final JsonApiRelationship jsonApiRelationship =
+                addDataObject(relationships.get(name), dataObject, asCollection);
         relationships.put(name, jsonApiRelationship);
 
         return this;
@@ -162,6 +180,23 @@ public class JsonApiModelBuilder {
         Assert.notNull(entityModel, "EntityModel must not be null!");
         Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
         return this.relationship(name, entityModel.getContent());
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the given {@link EntityModel}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new {@link EntityModel} will be added to the existing relationship.
+     *
+     * @param name         must not be {@literal null}.
+     * @param entityModel  must not be {@literal null}.
+     * @param asCollection if true, the data of this relationship will be serialized as collection.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel, boolean asCollection) {
+        Assert.notNull(entityModel, "EntityModel must not be null!");
+        Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
+        return this.relationship(name, entityModel.getContent(), asCollection);
     }
 
     /**
@@ -191,7 +226,7 @@ public class JsonApiModelBuilder {
         JsonApiRelationship jsonApiRelationship = null;
         if (entityModel != null) {
             Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
-            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent());
+            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent(), false);
         }
 
         if (selfLink != null || relatedLink != null) {
@@ -287,12 +322,12 @@ public class JsonApiModelBuilder {
     }
 
     private JsonApiRelationship addDataObject(
-            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
+            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject, boolean asCollection) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
-            newRelationship = JsonApiRelationship.of(dataObject);
+            newRelationship = JsonApiRelationship.of(dataObject, asCollection);
         } else {
-            newRelationship = jsonApiRelationship.withData(JsonApiResource.of(dataObject));
+            newRelationship = jsonApiRelationship.withData(JsonApiResource.of(dataObject), asCollection);
         }
         return newRelationship;
     }

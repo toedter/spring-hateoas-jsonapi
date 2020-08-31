@@ -24,9 +24,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,6 +68,19 @@ class JsonApiRelationshipUnitTest {
     }
 
     @Test
+    void should_create_of_object_as_collection() {
+        class Test {
+            private String id = "1";
+        }
+
+        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(new Test(), true);
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.get(0).getId()).isEqualTo("1");
+        assertThat(data.get(0).getType()).isEqualTo("tests");
+    }
+
+    @Test
     void should_create_of_links() {
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(Links.NONE);
         final Links links = jsonApiRelationship.getLinks();
@@ -84,6 +95,17 @@ class JsonApiRelationshipUnitTest {
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(meta);
 
         assertThat(jsonApiRelationship.getMeta()).isEqualTo(meta);
+    }
+
+    @Test
+    void should_create_with_data_as_collection() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "tests"), true);
+
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.get(0).getId()).isEqualTo("1");
+        assertThat(data.get(0).getType()).isEqualTo("tests");
     }
 
     @Test

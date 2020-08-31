@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-// tag::import-builder[]
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
-// end::import-builder[]
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -143,6 +141,25 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                                 "http://movies/1/relationships/1",
                                 "http://movies/1/directors/1", Links.NONE)
                         .relationship("directors", meta)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
+    }
+
+    @Test
+    void should_build_single_movie_model_with_relationship_links_and_meta_and_different_order() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        HashMap<String, Object> meta = new HashMap<>();
+        meta.put("key", "value");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(movie)
+                        .relationship("directors",
+                                "http://movies/1/relationships/1",
+                                "http://movies/1/directors/1", Links.NONE)
+                        .relationship("directors", meta)
+                        .relationship("directors", director)
                         .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -265,6 +282,20 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_single_collection_relationship() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("3", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationship("directors", director, true)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
     }
 
     @Test

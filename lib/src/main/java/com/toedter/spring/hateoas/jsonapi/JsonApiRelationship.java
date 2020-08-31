@@ -60,9 +60,13 @@ class JsonApiRelationship {
         this.meta = meta;
     }
 
-    public JsonApiRelationship withData(JsonApiResource jsonApiResource) {
+    public JsonApiRelationship withData(JsonApiResource jsonApiResource, boolean asCollection) {
         if (this.data == null) {
-            return new JsonApiRelationship(jsonApiResource, this.links, this.meta);
+            if (asCollection) {
+                return new JsonApiRelationship(Collections.singletonList(jsonApiResource), this.links, this.meta);
+            } else {
+                return new JsonApiRelationship(jsonApiResource, this.links, this.meta);
+            }
         } else {
             List<JsonApiResource> dataList = new ArrayList<>();
             if (this.data instanceof JsonApiResource) {
@@ -75,6 +79,10 @@ class JsonApiRelationship {
             dataList.add(jsonApiResource);
             return new JsonApiRelationship(dataList, this.links, this.meta);
         }
+    }
+
+    public JsonApiRelationship withData(JsonApiResource jsonApiResource) {
+        return this.withData(jsonApiResource, false);
     }
 
     /**
@@ -94,8 +102,25 @@ class JsonApiRelationship {
      * @return the JSON:API relationship
      */
     public static JsonApiRelationship of(Object object) {
+        return of(object, false);
+    }
+
+    /**
+     * Creates a JSON:API relationship from an object.
+     * This relationship is serialized as JSON array.
+     *
+     * @param object the base for the relationship
+     * @return the JSON:API relationship
+     */
+    public static JsonApiRelationship of(Object object, boolean asCollection) {
         Object id = JsonApiResource.getId(object, jsonApiConfiguration).value;
         String type = JsonApiResource.getType(object, jsonApiConfiguration).value;
+
+        if (asCollection) {
+            return new JsonApiRelationship(
+                    Collections.singletonList(new JsonApiResource(id, type)), null, null);
+        }
+
         return new JsonApiRelationship(new JsonApiResource(id, type), null, null);
     }
 
