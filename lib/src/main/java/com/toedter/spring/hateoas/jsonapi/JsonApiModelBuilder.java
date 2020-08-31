@@ -128,6 +128,27 @@ public class JsonApiModelBuilder {
     }
 
     /**
+     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the new data object will be added to the existing relationship.
+     *
+     * @param name       must not be {@literal null}.
+     * @param dataObject must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Object dataObject) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(dataObject, "relationship data object must not be null!");
+
+        final JsonApiRelationship jsonApiRelationship = addDataObject(relationships.get(name), dataObject);
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
+    /**
      * Adds or updates a {@literal relationship} based on the given {@link EntityModel}
      * to the {@link RepresentationModel} to be built.
      * If there is already a relationship for the given name defined,
@@ -138,7 +159,9 @@ public class JsonApiModelBuilder {
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
-        return this.relationship(name, entityModel, null, null);
+        Assert.notNull(entityModel, "EntityModel must not be null!");
+        Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
+        return this.relationship(name, entityModel.getContent());
     }
 
     /**
@@ -167,6 +190,7 @@ public class JsonApiModelBuilder {
 
         JsonApiRelationship jsonApiRelationship = null;
         if (entityModel != null) {
+            Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
             jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent());
         }
 
@@ -175,27 +199,6 @@ public class JsonApiModelBuilder {
         }
 
         relationships.put(name, jsonApiRelationship);
-        return this;
-    }
-
-    /**
-     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
-     * to the {@link RepresentationModel} to be built.
-     * If there is already a relationship for the given name defined,
-     * the new data object will be added to the existing relationship.
-     *
-     * @param name       must not be {@literal null}.
-     * @param dataObject must not be {@literal null}.
-     * @return will never be {@literal null}.
-     */
-    public JsonApiModelBuilder relationship(String name,
-                                            Object dataObject) {
-        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
-        Assert.notNull(dataObject, "relationship data object must not be null!");
-
-        final JsonApiRelationship jsonApiRelationship = addDataObject(relationships.get(name), dataObject);
-        relationships.put(name, jsonApiRelationship);
-
         return this;
     }
 
@@ -283,7 +286,8 @@ public class JsonApiModelBuilder {
         return newRelationship;
     }
 
-    private JsonApiRelationship addDataObject(@Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
+    private JsonApiRelationship addDataObject(
+            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
             newRelationship = JsonApiRelationship.of(dataObject);
