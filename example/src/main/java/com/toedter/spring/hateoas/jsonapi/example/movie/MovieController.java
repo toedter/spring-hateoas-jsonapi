@@ -40,7 +40,7 @@ import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiMode
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping(RootController.API_BASE_PATH)
+@RequestMapping(value = RootController.API_BASE_PATH, produces = "application/vnd.api+json")
 public class MovieController {
 
     private final MovieRepository repository;
