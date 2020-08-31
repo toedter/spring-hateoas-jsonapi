@@ -18,7 +18,6 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.springframework.hateoas.EntityModel;
@@ -26,7 +25,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -60,7 +58,7 @@ class JsonApiRelationship {
         this.meta = meta;
     }
 
-    public JsonApiRelationship withData(JsonApiResource jsonApiResource, boolean asCollection) {
+    public JsonApiRelationship addData(final JsonApiResource jsonApiResource, boolean asCollection) {
         if (this.data == null) {
             if (asCollection) {
                 return new JsonApiRelationship(Collections.singletonList(jsonApiResource), this.links, this.meta);
@@ -81,8 +79,8 @@ class JsonApiRelationship {
         }
     }
 
-    public JsonApiRelationship withData(JsonApiResource jsonApiResource) {
-        return this.withData(jsonApiResource, false);
+    public JsonApiRelationship addData(final JsonApiResource jsonApiResource) {
+        return this.addData(jsonApiResource, false);
     }
 
     /**

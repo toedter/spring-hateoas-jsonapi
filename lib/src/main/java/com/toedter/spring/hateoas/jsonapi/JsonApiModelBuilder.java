@@ -327,7 +327,7 @@ public class JsonApiModelBuilder {
         if (jsonApiRelationship == null) {
             newRelationship = JsonApiRelationship.of(dataObject, asCollection);
         } else {
-            newRelationship = jsonApiRelationship.withData(JsonApiResource.of(dataObject), asCollection);
+            newRelationship = jsonApiRelationship.addData(JsonApiResource.of(dataObject), asCollection);
         }
         return newRelationship;
     }

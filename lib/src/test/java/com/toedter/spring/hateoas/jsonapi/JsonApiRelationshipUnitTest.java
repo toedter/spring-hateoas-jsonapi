@@ -34,7 +34,7 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_add_data_to_empty_relation() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "movies"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "movies"));
         JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
 
         assertThat(data.getId()).isEqualTo("1");
@@ -100,7 +100,7 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_create_with_data_as_collection() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "tests"), true);
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "tests"), true);
 
         List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
 
@@ -121,7 +121,7 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_validate_relationship_with_wither() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "type"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "type"));
         jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
         jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
         assertThat(jsonApiRelationship.isValid()).isTrue();
@@ -130,9 +130,9 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_validate_relationship_with_wither_and_multiple_data() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("1", "type"));
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("2", "type"));
-        jsonApiRelationship = jsonApiRelationship.withData(new JsonApiResource("3", "type"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "type"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("2", "type"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("3", "type"));
         jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
         jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
         assertThat(jsonApiRelationship.isValid()).isTrue();
