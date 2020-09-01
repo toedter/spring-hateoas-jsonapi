@@ -74,6 +74,7 @@ task doc {
         copy {
             from "$buildDir/docs/javadoc"
             into "$buildDir/docs/gh-pages/snapshot/api"
+            filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
         }
 
         copy {
@@ -119,6 +120,10 @@ asciidoctor.dependsOn prepareAsciidocBuild
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+javadoc {
+    options.overview = 'src/main/javadoc/overview.html'
 }
 
 publishing {
