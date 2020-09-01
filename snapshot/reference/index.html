@@ -5,19 +5,83 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>JSON:API</title>
+<meta name="author" content="Kai Tödter">
+<title>JSON:API for Spring HATEOAS</title>
 <link rel="stylesheet" href="css/spring.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body id="mediatypes.jsonapi" class="article">
+<body class="article toc2 toc-left">
 <div id="header">
-<h1>JSON:API</h1>
+<h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
-<span id="revnumber">version 0.7.0-SNAPSHOT</span>
+<span id="author" class="author">Kai Tödter</span><br>
+<span id="revnumber">version 0.7.0-SNAPSHOT,</span>
+<span id="revdate">2020-09-01</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#fundamentals">Fundamentals</a></li>
+<li><a href="#mediatypes.jsonapi">JSON:API</a>
+<ul class="sectlevel2">
+<li><a href="#_integration_in_your_backends">Integration in your Backends</a></li>
+<li><a href="#_representation_models">Representation Models</a></li>
+<li><a href="#_annotations">Annotations</a></li>
+<li><a href="#_jsonapi_builder">JSON:API Builder</a></li>
+<li><a href="#Creating">Creating Resources with HTTP POST</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#errors">Error Handling</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This project provides JSON:API media type support for Spring HATEOAS.</p>
+</div>
+<div class="paragraph">
+<p>&#169; 2020 The original authors.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fundamentals">Fundamentals</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For further understanding of this document, please be aware of both</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/">Spring HATEOAS documentation</a></p>
+</li>
+<li>
+<p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following documentation assumes that the reader knows above documents.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mediatypes.jsonapi">JSON:API</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
@@ -30,7 +94,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "jsonapi": {
     "version": "1.0"
   },
@@ -79,11 +143,8 @@ Answers to a few questions, e.g. related to HAL, you can find
 }</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_integration_in_your_backends">Integration in your Backends</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_integration_in_your_backends">Integration in your Backends</h3>
 <div class="paragraph">
 <p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
@@ -92,7 +153,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
     &lt;version&gt;0.6.0&lt;/version&gt;
@@ -104,26 +165,24 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.6.0'</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.6.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The latest published snapshot version is <code>0.7.0-SNAPSHOT</code>.
-If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a>
+If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_representation_models">Representation Models</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_representation_models">Representation Models</h3>
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
 Consider a simple Movie Class as base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Data
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
@@ -138,7 +197,7 @@ public class Movie {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -171,10 +230,8 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_annotations">Annotations</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_annotations">Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible for the developer.</p>
@@ -257,7 +314,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Getter
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -275,7 +332,7 @@ public class Movie2 {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "id": "1",
     "type": "my-movies",
@@ -287,22 +344,20 @@ public class Movie2 {
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_jsonapi_builder">JSON:API Builder</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_jsonapi_builder">JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
 final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();</code></pre>
 </div>
 </div>
@@ -312,7 +367,7 @@ A simple <code>Director</code> class could look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Data
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
@@ -327,7 +382,7 @@ public class Director {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
 Director director = new Director("1", "George Lucas");
 final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
@@ -341,7 +396,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -367,7 +422,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(EntityModel.of(movie))
                 .relationshipAlwaysSerializedWithDataArray("directors")
@@ -380,7 +435,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -412,7 +467,7 @@ you can build included director resources like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
 Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
@@ -433,7 +488,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -487,7 +542,7 @@ The builder supports adding both pagination metadata and pagination links.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
 Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
@@ -533,7 +588,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": [
     {
       "id": "1",
@@ -620,17 +675,15 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="Creating">Creating Resources with HTTP POST</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="Creating">Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "attributes": {
       "title": "Batman Begins"
@@ -649,7 +702,7 @@ You just have to annotate the underlying domain model class, with <code>JsonApiR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "type": "movies",
     "attributes": {
@@ -684,7 +737,7 @@ real director objects to the movie.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Data
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -714,10 +767,8 @@ please us the <code>JsonApiModelBuilder</code> to decide, which relationships an
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="configuration">Configuration</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="configuration">Configuration</h3>
 <div class="paragraph">
 <p>There are several options how to change the output of the JSON:API rendering.</p>
 </div>
@@ -764,7 +815,7 @@ make sure you provide the following configuration in your Spring <code>applicati
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">@Bean
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
             .withJsonApiVersionRendered(true)
@@ -774,10 +825,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="errors">Error Handling</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="errors">Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -786,7 +835,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">return ResponseEntity.badRequest().body(
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">return ResponseEntity.badRequest().body(
         JsonApiErrors.create().withError(
                 JsonApiError.create()
                         .withAboutLink("http://movie-db.com/problem")
@@ -800,7 +849,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "errors": [
     {
       "links": {
@@ -817,12 +866,16 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 0.7.0-SNAPSHOT<br>
-Last updated 2020-09-01 10:43:01 UTC
+Last updated 2020-09-01 10:53:54 UTC
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
 <script type="text/javascript" src="js/toc.js"></script>
 </body>
