@@ -30,9 +30,13 @@ import org.springframework.lang.NonNull;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Main configuration class enabling JSON:API media type.
+ * No need to import this configuration when using spring-boot.
+ */
 @RequiredArgsConstructor
 @Configuration
-class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
     private final ObjectProvider<JsonApiConfiguration> configuration;
     private final AutowireCapableBeanFactory beanFactory;
