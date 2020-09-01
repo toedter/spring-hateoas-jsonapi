@@ -297,7 +297,7 @@ public class Movie2 {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"></code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -330,8 +330,9 @@ public class Director {
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 Director director = new Director("1", "George Lucas");
 final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().model(movie)
-                .relationship("directors", EntityModel.of(director))
+        jsonApiModel()
+                .model(movie)
+                .relationship("directors", director)
                 .build();</code></pre>
 </div>
 </div>
@@ -360,8 +361,54 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 </div>
 <div class="paragraph">
+<p>If you want the <code>directors</code> relationship always being rendered as an array,
+even if it is empty or contains only a single data element,
+you can build it like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(movie))
+                .relationshipAlwaysSerializedWithDataArray("directors")
+                .relationship("directors", director)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "3",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The builder also provides methods for adding links and meta data to a relationship.
+Visit the <a href="https://toedter.github.io/spring-hateoas-jsonapi/javadoc/index.html">Javadoc API documentation</a>
+for more details.</p>
+</div>
+<div class="paragraph">
 <p>If you want to include the related resources in the JSON:API output,
-you can build included director resources like</p>
+you can build included director resources like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -371,10 +418,11 @@ Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
 
 final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel().model(movie)
+        jsonApiModel()
+                .model(movie)
                 .relationship("directors", director1)
                 .relationship("directors", director2)
-                .relationship("relatedMovies", EntityModel.of(relatedMovie))
+                .relationship("relatedMovies", relatedMovie)
                 .included(director1)
                 .included(director2)
                 .build();</code></pre>
@@ -772,7 +820,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.7.0-SNAPSHOT<br>
-Last updated 2020-08-31 20:40:52 UTC
+Last updated 2020-09-01 09:54:16 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>

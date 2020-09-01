@@ -231,7 +231,7 @@
 <dd>&nbsp;</dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiId.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiId</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API resource object id.</div>
+<div class="block">Specifies the JSON:API id of a resource object.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#jsonApiModel--">jsonApiModel()</a></span> - Static method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
@@ -243,11 +243,11 @@
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiRelationships.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiRelationships</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API relationships.</div>
+<div class="block">Specifies the JSON:API relationships of a resource object.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiType.html" title="annotation in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiType</span></a> - Annotation Type in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
-<div class="block">This is a marker annotation to indicate what will be interpreted as JSON:API resource object type.</div>
+<div class="block">Specifies the JSON:API type of a resource object.</div>
 </dd>
 </dl>
 <a name="I:L">
@@ -282,7 +282,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#meta-java.lang.String-java.lang.Object-">meta(String, Object)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
-<div class="block">Adds the given key/value pair to the JSON:API meta</div>
+<div class="block">Adds the given key/value pair to the JSON:API meta.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#model-org.springframework.hateoas.RepresentationModel-">model(RepresentationModel&lt;?&gt;)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
@@ -319,24 +319,12 @@
 </a>
 <h2 class="title">R</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#RELATED">RELATED</a></span> - Static variable in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.Object-">relationship(String, Object)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
-<div class="block">Adds or updates a relationship based on the dataObject
- to the <code>RepresentationModel</code> to be built.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.Object-boolean-">relationship(String, Object, boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
-<dd>
-<div class="block">Adds or updates a relationship based on the dataObject
+<div class="block">Adds or updates a relationship based on the <code>Object</code>
  to the <code>RepresentationModel</code> to be built.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-org.springframework.hateoas.EntityModel-">relationship(String, EntityModel&lt;?&gt;)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
-<dd>
-<div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
- to the <code>RepresentationModel</code> to be built.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-org.springframework.hateoas.EntityModel-boolean-">relationship(String, EntityModel&lt;?&gt;, boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
 <div class="block">Adds or updates a relationship based on the given <code>EntityModel</code>
  to the <code>RepresentationModel</code> to be built.</div>
@@ -353,11 +341,16 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationship-java.lang.String-java.lang.String-java.lang.String-org.springframework.hateoas.Links-">relationship(String, String, String, Links)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
 <dd>
-<div class="block">Adds the given relationship based on the given links
+<div class="block">Adds or updates a relationship based on the links
  to the <code>RepresentationModel</code> to be built.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#RELATIONSHIP_NAME_MUST_NOT_BE_NULL">RELATIONSHIP_NAME_MUST_NOT_BE_NULL</a></span> - Static variable in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html#relationshipAlwaysSerializedWithDataArray-java.lang.String-">relationshipAlwaysSerializedWithDataArray(String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></dt>
+<dd>
+<div class="block">If called (anywhere in the builder sequence),
+ the data portion of this relationship will be always rendered
+ as an array, even if the data is not set or is one single element,
+ e.g.</div>
+</dd>
 </dl>
 <a name="I:T">
 <!--   -->
