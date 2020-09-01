@@ -104,8 +104,9 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
-                        .relationship("directors", EntityModel.of(director))
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", director)
                         .build();
         // end::build-relationship[]
 
@@ -118,7 +119,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors", EntityModel.of(director),
                                 "http://movies/1/relationships/1",
                                 "http://movies/1/directors/1")
@@ -135,7 +137,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         HashMap<String, Object> meta = new HashMap<>();
         meta.put("key", "value");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors", director)
                         .relationship("directors",
                                 "http://movies/1/relationships/1",
@@ -154,7 +157,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         HashMap<String, Object> meta = new HashMap<>();
         meta.put("key", "value");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors",
                                 "http://movies/1/relationships/1",
                                 "http://movies/1/directors/1", Links.NONE)
@@ -174,7 +178,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Director director2 = new Director("2", "Lilly Wachowski");
 
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors", director1)
                         .relationship("directors", EntityModel.of(director2))
                         .relationship("relatedMovies", EntityModel.of(relatedMovie))
@@ -193,7 +198,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Director director3 = new Director("3", "A Secret Director");
 
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors", director1)
                         .relationship("directors", EntityModel.of(director2))
                         .relationship("directors", EntityModel.of(director3))
@@ -213,10 +219,11 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Director director2 = new Director("2", "Lilly Wachowski");
 
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(movie)
+                jsonApiModel()
+                        .model(movie)
                         .relationship("directors", director1)
                         .relationship("directors", director2)
-                        .relationship("relatedMovies", EntityModel.of(relatedMovie))
+                        .relationship("relatedMovies", relatedMovie)
                         .included(director1)
                         .included(director2)
                         .build();
@@ -288,12 +295,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     void should_build_single_movie_with_single_collection_relationship_before_data_is_added() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("3", "George Lucas");
+
+        // tag::single-collection-relationship[]
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(EntityModel.of(movie))
                         .relationshipAlwaysSerializedWithDataArray("directors")
                         .relationship("directors", director)
                         .build();
+       // end::single-collection-relationship[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");

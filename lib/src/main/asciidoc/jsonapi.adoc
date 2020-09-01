@@ -112,7 +112,7 @@ If you want to use JSON:API `relationships` or `included` data, you can use the
 `JsonApiModelBuilder`. The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
 [source, java]
 ----
-include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=import-builder]
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 ----
 
 [source, java,indent=0]
@@ -141,9 +141,27 @@ The representation model will be rendered as
 include::{test-resources-dir}/movieJsonApiModelWithRelationship.json[]
 ----
 
+If you want the `directors` relationship always being rendered as an array,
+even if it is empty or contains only a single data element,
+you can build it like:
+
+[source, java,indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=single-collection-relationship]
+----
+
+The representation model will be rendered as
+[source, java,indent=0]
+----
+include::{test-resources-dir}/movieWithSingleCollectionRelationship.json[]
+----
+
+The builder also provides methods for adding links and meta data to a relationship.
+Visit the https://toedter.github.io/spring-hateoas-jsonapi/javadoc/index.html[Javadoc API documentation]
+for more details.
 
 If you want to include the related resources in the JSON:API output,
-you can build included director resources like
+you can build included director resources like:
 
 [source, java,indent=0]
 ----

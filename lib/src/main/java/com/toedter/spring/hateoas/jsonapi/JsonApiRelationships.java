@@ -24,8 +24,10 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This is a marker annotation to indicate what will be interpreted as JSON:API relationships.
- * This annotation is only used for deserialization and is useful for POST and PATCH requests.
+ * Specifies the JSON:API relationships of a resource object.
+ * This annotation is only used for deserialization
+ * of JSON:API structured JSON to Java objects,
+ * and is useful for POST and PATCH requests.
  * For serialization use a {@link JsonApiModelBuilder}.
  *
  * @author Kai Toedter

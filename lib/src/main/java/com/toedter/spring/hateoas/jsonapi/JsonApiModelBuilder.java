@@ -34,8 +34,8 @@ import java.util.Map;
  */
 @Slf4j
 public class JsonApiModelBuilder {
-    public static final String RELATIONSHIP_NAME_MUST_NOT_BE_NULL = "relationship name must not be null!";
-    public static final String RELATED = "related";
+    private static final String RELATIONSHIP_NAME_MUST_NOT_BE_NULL = "relationship name must not be null!";
+    private static final String RELATED = "related";
     private RepresentationModel<?> model;
     private Links links = Links.NONE;
     private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
@@ -128,7 +128,7 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
+     * Adds or updates a {@literal relationship} based on the {@link Object}
      * to the {@link RepresentationModel} to be built.
      * If there is already a relationship for the given name defined,
      * the new data object will be added to the existing relationship.
@@ -230,7 +230,7 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds the given {@literal relationship} based on the given links
+     * Adds or updates a {@literal relationship} based on the links
      * to the {@link RepresentationModel} to be built.
      * If there is already a relationship for the given name defined,
      * the new links will overwrite the existing ones.
@@ -257,9 +257,9 @@ public class JsonApiModelBuilder {
      * If called (anywhere in the builder sequence),
      * the data portion of this relationship will be always rendered
      * as an array, even if the data is not set or is one single element,
-     * e.g. "data": [] or "data" : [{"id":"1", "type":"movies"}].
-     * This is convenient if the consumer always expects (a one to many)
-     * relationship to be rendered as an array rather than have to check for
+     * e.g. {@literal "data": []} or {@literal "data" : [{"id":"1", "type":"movies"}]}.
+     * This is convenient if the consumer always expects a (one to many)
+     * relationship to be rendered as an array rather than having to check for
      * null values or single objects.
      *
      * @param name        must not be {@literal null}.
@@ -353,7 +353,7 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds the given key/value pair to the {@literal JSON:API} meta
+     * Adds the given key/value pair to the {@literal JSON:API} meta.
      *
      * @param key   the json key
      * @param value the json value
