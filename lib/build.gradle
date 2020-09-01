@@ -78,7 +78,7 @@ task doc {
 
         copy {
             from "$buildDir/docs/asciidoc"
-            into "$buildDir/docs/gh-pages/snapshot/reference/html"
+            into "$buildDir/docs/gh-pages/snapshot/reference"
         }
     }
 }

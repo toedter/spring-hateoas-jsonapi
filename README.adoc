@@ -14,7 +14,7 @@ This project is work in progress, please stay tuned.
 == Documentation
 
 * Current Snapshot
-** https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/html/index.html[Reference documentation]
+** https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/index.html[Reference documentation]
 ** https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/index.html[API documentation]
 
 == Integration in your Backends
