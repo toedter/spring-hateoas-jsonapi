@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
+import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
@@ -70,6 +71,14 @@ public class JsonApiConfiguration {
     private final @With(AccessLevel.PRIVATE) Map<Class<?>, String> typeForClass;
 
     /**
+     * Allows to customize media type used for JSON:API payloads.
+     *
+     * @param mediaType The custom media type.
+     * @return The default is {@link MediaTypes#JSON_API}.
+     */
+    private final @With @Getter MediaType mediaType;
+
+    /**
      * Creates a mapping for a given class to get the JSON:API resource object {@literal type}
      * when rendered.
      *
@@ -108,5 +117,6 @@ public class JsonApiConfiguration {
         this.jsonApiVersionRendered = false;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
+        this.mediaType = MediaTypes.JSON_API;
     }
 }

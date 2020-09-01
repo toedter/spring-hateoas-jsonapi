@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +33,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
+        assertThat(new JsonApiConfiguration().getMediaType()).isEqualTo(MediaTypes.JSON_API);
     }
 
     @Test
@@ -54,5 +56,12 @@ class JsonApiConfigurationUnitTest {
     void should_set_type_for_class() {
         assertThat(new JsonApiConfiguration().withTypeForClass(Movie.class, "mymovies")
                 .getTypeForClass(Movie.class)).isEqualTo("mymovies");
+    }
+
+    @Test
+    void should_set_media_type() {
+        final MediaType mediaType = new MediaType("application", "vnd.test.api+json");
+        assertThat(new JsonApiConfiguration().withMediaType(mediaType)
+                .getMediaType()).isEqualTo(mediaType);
     }
 }

@@ -40,7 +40,7 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     @Override
     @NonNull
     public List<MediaType> getMediaTypes() {
-        return Collections.singletonList(MediaTypes.JSON_API);
+        return Collections.singletonList(getJsonApiConfiguration().getMediaType());
     }
 
     @Override
@@ -52,7 +52,7 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
     @NonNull
     public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
         return this.configureObjectMapper(
-                mapper, configuration.getIfAvailable(JsonApiConfiguration::new));
+                mapper, getJsonApiConfiguration());
     }
 
     @NonNull
@@ -65,5 +65,9 @@ class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
                 configuration, beanFactory));
 
         return mapper;
+    }
+
+    private JsonApiConfiguration getJsonApiConfiguration() {
+        return configuration.getIfAvailable(JsonApiConfiguration::new);
     }
 }

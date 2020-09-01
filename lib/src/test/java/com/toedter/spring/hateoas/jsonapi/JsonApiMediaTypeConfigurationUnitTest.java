@@ -21,6 +21,11 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -30,18 +35,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiMediaTypeConfiguration Unit Test")
 class JsonApiMediaTypeConfigurationUnitTest {
+    private JsonApiConfiguration jsonApiConfiguration;
     private JsonApiMediaTypeConfiguration configuration;
+
+    private static final String DEFAULT_MEDIA_TYPE = "application/vnd.api+json";
 
     @BeforeEach
     void setUpModule() {
-        configuration = new JsonApiMediaTypeConfiguration(null, null);
+        configuration = new JsonApiMediaTypeConfiguration(new JsonApiConfigurationProvider(), null);
     }
 
-    @Test
-    public void should_return_json_api_media_type() {
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = { DEFAULT_MEDIA_TYPE, "application/vnd.test.api+json"})
+    public void should_return_json_api_media_type(String mediaType) {
+        String expectedType = DEFAULT_MEDIA_TYPE;
+        if (mediaType != null) {
+            jsonApiConfiguration = new JsonApiConfiguration().withMediaType(MediaType.parseMediaType(mediaType));
+            expectedType = mediaType;
+        }
         List<MediaType> mediaTypes = configuration.getMediaTypes();
         assertThat(mediaTypes.size()).isEqualTo(1);
-        assertThat(mediaTypes.get(0).toString()).isEqualTo("application/vnd.api+json");
+        assertThat(mediaTypes.get(0).toString()).isEqualTo(expectedType);
     }
 
     @Test
@@ -58,6 +73,29 @@ class JsonApiMediaTypeConfigurationUnitTest {
         assertThat(objectMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)).isFalse();
         assertThat(objectMapper.getRegisteredModuleIds().
                 contains("com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule")).isTrue();
+    }
+
+    private class JsonApiConfigurationProvider implements ObjectProvider<JsonApiConfiguration> {
+
+        @Override
+        public JsonApiConfiguration getObject(final Object... objects) throws BeansException {
+            return jsonApiConfiguration;
+        }
+
+        @Override
+        public JsonApiConfiguration getIfAvailable() throws BeansException {
+            return jsonApiConfiguration;
+        }
+
+        @Override
+        public JsonApiConfiguration getIfUnique() throws BeansException {
+            return jsonApiConfiguration;
+        }
+
+        @Override
+        public JsonApiConfiguration getObject() throws BeansException {
+            return jsonApiConfiguration;
+        }
     }
 
 }
