@@ -66,12 +66,21 @@ jacocoTestReport {
     }
 }
 
-task doc(type: Sync) {
+task doc {
     dependsOn asciidoctor
     dependsOn javadoc
 
-    from "$buildDir/docs/javadoc"
-    into "$buildDir/docs/asciidoc/javadoc"
+    doLast {
+        copy {
+            from "$buildDir/docs/javadoc"
+            into "$buildDir/docs/gh-pages/snapshot/api"
+        }
+
+        copy {
+            from "$buildDir/docs/asciidoc"
+            into "$buildDir/docs/gh-pages/snapshot/reference/html"
+        }
+    }
 }
 
 task prepareAsciidocBuild(type: Sync) {
