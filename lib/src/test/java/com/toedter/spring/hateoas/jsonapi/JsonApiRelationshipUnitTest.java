@@ -73,7 +73,8 @@ class JsonApiRelationshipUnitTest {
             private String id = "1";
         }
 
-        JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(new Test(), true);
+        JsonApiRelationship jsonApiRelationship =
+                JsonApiRelationship.of(new Test()).isAlwaysSerializedWithDataArray();
         List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
 
         assertThat(data.get(0).getId()).isEqualTo("1");
@@ -98,7 +99,7 @@ class JsonApiRelationshipUnitTest {
     }
 
     @Test
-    void should_create_with_data_as_collection() {
+    void should_create_with_data_as_collection_on_creation() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
         jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "tests"), true);
 
@@ -106,6 +107,53 @@ class JsonApiRelationshipUnitTest {
 
         assertThat(data.get(0).getId()).isEqualTo("1");
         assertThat(data.get(0).getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_with_data_as_collection_on_first_statement() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "tests"));
+
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.get(0).getId()).isEqualTo("1");
+        assertThat(data.get(0).getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_with_data_as_collection_on_second_statement() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "tests"));
+        jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.get(0).getId()).isEqualTo("1");
+        assertThat(data.get(0).getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_with_data_as_collection_on_third_statement() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("1", "tests"));
+        jsonApiRelationship = jsonApiRelationship.addData(new JsonApiResource("2", "tests"));
+        jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.get(0).getId()).isEqualTo("1");
+        assertThat(data.get(0).getType()).isEqualTo("tests");
+    }
+
+    @Test
+    void should_create_with_data_as_empty_collection() {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+
+        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+
+        assertThat(data.isEmpty()).isTrue();
     }
 
     @Test

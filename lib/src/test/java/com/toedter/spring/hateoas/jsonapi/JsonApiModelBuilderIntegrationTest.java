@@ -285,17 +285,46 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
-    void should_build_single_movie_with_single_collection_relationship() throws Exception {
+    void should_build_single_movie_with_single_collection_relationship_before_data_is_added() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("3", "George Lucas");
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(EntityModel.of(movie))
-                        .relationship("directors", director, true)
+                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .relationship("directors", director)
                         .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_single_collection_relationship_after_data_is_added() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("3", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationship("directors", director)
+                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_empty_collection_relationship() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
     }
 
     @Test

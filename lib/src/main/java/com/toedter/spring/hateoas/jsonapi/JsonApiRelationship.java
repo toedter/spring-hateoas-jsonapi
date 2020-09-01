@@ -83,8 +83,19 @@ class JsonApiRelationship {
         return this.addData(jsonApiResource, false);
     }
 
+    public JsonApiRelationship isAlwaysSerializedWithDataArray() {
+        if (this.data == null) {
+            return new JsonApiRelationship(Collections.emptyList(), this.links, this.meta);
+        } else if (this.data instanceof JsonApiResource) {
+            return new JsonApiRelationship(Collections.singletonList(this.data), this.links, this.meta);
+        }
+        return this;
+    }
+
     /**
      * Creates a JSON:API relationship from an entity model
+     * It must be possible to extract the JSON:API id of this object,
+     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
      *
      * @param entityModel the base for the relationship
      * @return the JSON:API relationship
@@ -94,30 +105,16 @@ class JsonApiRelationship {
     }
 
     /**
-     * Creates a JSON:API relationship from an object
+     * Creates a JSON:API relationship from an object.
+     * It must be possible to extract the JSON:API id of this object,
+     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
      *
      * @param object the base for the relationship
      * @return the JSON:API relationship
      */
     public static JsonApiRelationship of(Object object) {
-        return of(object, false);
-    }
-
-    /**
-     * Creates a JSON:API relationship from an object.
-     * This relationship is serialized as JSON array.
-     *
-     * @param object the base for the relationship
-     * @return the JSON:API relationship
-     */
-    public static JsonApiRelationship of(Object object, boolean asCollection) {
         Object id = JsonApiResource.getId(object, jsonApiConfiguration).value;
         String type = JsonApiResource.getType(object, jsonApiConfiguration).value;
-
-        if (asCollection) {
-            return new JsonApiRelationship(
-                    Collections.singletonList(new JsonApiResource(id, type)), null, null);
-        }
 
         return new JsonApiRelationship(new JsonApiResource(id, type), null, null);
     }

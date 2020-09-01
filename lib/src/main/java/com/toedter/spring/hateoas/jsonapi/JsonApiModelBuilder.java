@@ -133,34 +133,17 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the new data object will be added to the existing relationship.
      *
-     * @param name       must not be {@literal null}.
-     * @param dataObject must not be {@literal null}.
+     * @param name         must not be {@literal null}.
+     * @param dataObject   must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name,
                                             Object dataObject) {
-        return this.relationship(name, dataObject, false);
-    }
-
-    /**
-     * Adds or updates a {@literal relationship} based on the {@literal dataObject}
-     * to the {@link RepresentationModel} to be built.
-     * If there is already a relationship for the given name defined,
-     * the new data object will be added to the existing relationship.
-     *
-     * @param name         must not be {@literal null}.
-     * @param dataObject   must not be {@literal null}.
-     * @param asCollection if true, the data of this relationship will be serialized as collection.
-     * @return will never be {@literal null}.
-     */
-    public JsonApiModelBuilder relationship(String name,
-                                            Object dataObject,
-                                            boolean asCollection) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
         Assert.notNull(dataObject, "relationship data object must not be null!");
 
         final JsonApiRelationship jsonApiRelationship =
-                addDataObject(relationships.get(name), dataObject, asCollection);
+                addDataObject(relationships.get(name), dataObject);
         relationships.put(name, jsonApiRelationship);
 
         return this;
@@ -172,31 +155,14 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the new {@link EntityModel} will be added to the existing relationship.
      *
-     * @param name        must not be {@literal null}.
-     * @param entityModel must not be {@literal null}.
+     * @param name         must not be {@literal null}.
+     * @param entityModel  must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
         Assert.notNull(entityModel, "EntityModel must not be null!");
         Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
         return this.relationship(name, entityModel.getContent());
-    }
-
-    /**
-     * Adds or updates a {@literal relationship} based on the given {@link EntityModel}
-     * to the {@link RepresentationModel} to be built.
-     * If there is already a relationship for the given name defined,
-     * the new {@link EntityModel} will be added to the existing relationship.
-     *
-     * @param name         must not be {@literal null}.
-     * @param entityModel  must not be {@literal null}.
-     * @param asCollection if true, the data of this relationship will be serialized as collection.
-     * @return will never be {@literal null}.
-     */
-    public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel, boolean asCollection) {
-        Assert.notNull(entityModel, "EntityModel must not be null!");
-        Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
-        return this.relationship(name, entityModel.getContent(), asCollection);
     }
 
     /**
@@ -226,7 +192,7 @@ public class JsonApiModelBuilder {
         JsonApiRelationship jsonApiRelationship = null;
         if (entityModel != null) {
             Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
-            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent(), false);
+            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent());
         }
 
         if (selfLink != null || relatedLink != null) {
@@ -287,6 +253,34 @@ public class JsonApiModelBuilder {
         return this;
     }
 
+    /**
+     * If called (anywhere in the builder sequence),
+     * the data portion of this relationship will be always rendered
+     * as an array, even if the data is not set or is one single element,
+     * e.g. "data": [] or "data" : [{"id":"1", "type":"movies"}].
+     * This is convenient if the consumer always expects (a one to many)
+     * relationship to be rendered as an array rather than have to check for
+     * null values or single objects.
+     *
+     * @param name        must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationshipAlwaysSerializedWithDataArray(String name) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(meta, "relationship meta object must not be null!");
+
+        JsonApiRelationship jsonApiRelationship = relationships.get(name);
+        if (jsonApiRelationship == null) {
+            jsonApiRelationship = new JsonApiRelationship(null, null, null);
+            jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+        } else {
+            jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
+        }
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
     private JsonApiRelationship replaceLinks(
             @Nullable JsonApiRelationship jsonApiRelationship,
             @Nullable String selfLink,
@@ -322,12 +316,12 @@ public class JsonApiModelBuilder {
     }
 
     private JsonApiRelationship addDataObject(
-            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject, boolean asCollection) {
+            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
-            newRelationship = JsonApiRelationship.of(dataObject, asCollection);
+            newRelationship = JsonApiRelationship.of(dataObject);
         } else {
-            newRelationship = jsonApiRelationship.addData(JsonApiResource.of(dataObject), asCollection);
+            newRelationship = jsonApiRelationship.addData(JsonApiResource.of(dataObject));
         }
         return newRelationship;
     }
