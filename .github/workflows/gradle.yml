@@ -35,7 +35,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: ./lib/build
     - name: Deploy doc to Github pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v3.7.0-8
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./lib/build/docs/gh-pages/snapshot
