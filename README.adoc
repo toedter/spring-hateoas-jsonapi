@@ -44,7 +44,7 @@ as repository to your Maven or Gradle configuration.
 
 * Make sure Java 8 or later JDK is installed
 * Clone this Git repository and cd into `spring-hateoas-jsonapi`
-* Invoke `./gradlew build bootrun` (just `gradlew` on Windows)
+* Invoke `./gradlew bootrun` (just `gradlew` on Windows)
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1++]
  in your Web browser
 
