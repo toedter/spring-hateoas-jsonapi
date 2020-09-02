@@ -31,6 +31,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 @Slf4j
 class DirectorModelAssembler {
+
+    private static final String MOVIES = "movies";
+
     public RepresentationModel<?> toJsonApiModel(Director director) {
         Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId())).withSelfRel();
 
@@ -39,11 +42,12 @@ class DirectorModelAssembler {
         
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(director)
+                .relationshipAlwaysSerializedWithDataArray(MOVIES)
                 .link(selfLink)
                 .link(templatedDirectorsLink);
+
         for (Movie movie : director.getMovies()) {
-            EntityModel<Movie> movieEntityModel = EntityModel.of(movie);
-            builder = builder.relationship("movies", movieEntityModel);
+            builder = builder.relationship(MOVIES, movie);
         }
 
         return builder.build();

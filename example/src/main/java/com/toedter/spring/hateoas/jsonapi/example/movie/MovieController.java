@@ -130,6 +130,15 @@ public class MovieController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/movies/{id}/directors")
+    public ResponseEntity<? extends RepresentationModel<?>> findDirectors(@PathVariable Long id) {
+
+        return repository.findById(id)
+                .map(movieModelAssembler::directorsToJsonApiModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PatchMapping("/movies/{id}")
     ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
 

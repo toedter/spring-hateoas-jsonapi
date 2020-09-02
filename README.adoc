@@ -52,57 +52,59 @@ The (pretty printed) rendered result is:
 
 [source,json]
 {
-    "jsonapi": {
-        "version": "1.0"
-    },
-    "data": [
-        {
-            "id": "1",
-            "type": "movies",
-            "attributes": {
-                "title": "The Shawshank Redemption",
-                "year": 1994,
-                "rating": 9.3
-            },
-            "relationships": {
-                "directors": {
-                    "data": {
-                        "id": "2",
-                        "type": "directors"
-                    },
-                    "links": {
-                        "self": "http://localhost:8080/api/movies/1/relationships/directors",
-                        "related": "http://localhost:8080/api/movies/1/directors"
-                    }
-                }
-            },
-            "links": {
-                "self": "http://localhost:8080/api/movies/1"
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Shawshank Redemption",
+        "year": 1994,
+        "rating": 9.3
+      },
+      "relationships": {
+        "directors": {
+          "data": [
+            {
+              "id": "2",
+              "type": "directors"
             }
+          ],
+          "links": {
+            "self": "http://localhost:8080/api/movies/1/relationships/directors",
+            "related": "http://localhost:8080/api/movies/1/directors"
+          }
         }
-    ],
-    "included": [
-        {
-            "id": "2",
-            "type": "directors",
-            "attributes": {
-                "name": "Frank Darabont"
-            }
-        }
-    ],
-    "links": {
-        "self": "http://localhost:8080/api/movies?page[number]=0&page[size]=1",
-        "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",
-        "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
-    },
-    "meta": {
-        "page": {
-            "number": 0,
-            "size": 1,
-            "totalPages": 250,
-            "totalElements": 250
-        }
+      },
+      "links": {
+        "self": "http://localhost:8080/api/movies/1"
+      }
     }
+  ],
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost:8080/api/movies?page[number]=0&page[size]=1",
+    "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",
+    "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
+  },
+  "meta": {
+    "page": {
+      "number": 0,
+      "size": 1,
+      "totalPages": 250,
+      "totalElements": 250
+    }
+  }
 }
 
 == License

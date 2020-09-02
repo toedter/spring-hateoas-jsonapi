@@ -18,7 +18,9 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
+import com.toedter.spring.hateoas.jsonapi.example.director.DirectorController;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
@@ -31,26 +33,40 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 @Slf4j
 class MovieModelAssembler {
+
+    private static final String DIRECTORS = "directors";
+
     public RepresentationModel<?> toJsonApiModel(Movie movie) {
         Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId())).withSelfRel();
 
         // TODO: Spring HATEOAS does not recognize templated links with square brackets
         // Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
-        String relationshipSelfLink = selfLink.getHref() + "/relationships/directors";
+        String relationshipSelfLink = selfLink.getHref() + "/relationships/"  + DIRECTORS;
+        String relationshipRelatedLink = selfLink.getHref() + "/" + DIRECTORS;
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
+                .relationshipAlwaysSerializedWithDataArray(DIRECTORS)
+                .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null)
                 .link(selfLink);
 
         for (Director director : movie.getDirectors()) {
-            EntityModel<Director> directorEntityModel = EntityModel.of(director);
-            String relationshipRelatedLink = selfLink.getHref() + "/directors";
-            builder = builder.relationship("directors", directorEntityModel,
-                    relationshipSelfLink, relationshipRelatedLink);
+            builder = builder.relationship(DIRECTORS, director);
         }
 
         return builder.build();
     }
 
+    public RepresentationModel<?> directorsToJsonApiModel(Movie movie) {
+        Link selfLink = linkTo(methodOn(MovieController.class).findDirectors(movie.getId())).withSelfRel();
+
+
+        JsonApiModelBuilder builder = jsonApiModel()
+                .model(CollectionModel.of(movie.getDirectors()))
+                .relationshipAlwaysSerializedWithDataArray("movies")
+                .link(selfLink);
+
+        return builder.build();
+    }
 }

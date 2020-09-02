@@ -50,7 +50,7 @@ public class DirectorController {
     }
 
     @GetMapping("/directors")
-    ResponseEntity<RepresentationModel<?>> findAll(
+    public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
 
