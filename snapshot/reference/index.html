@@ -433,7 +433,7 @@ you can build it like:</p>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(EntityModel.of(movie))
-                .relationshipAlwaysSerializedWithDataArray("directors")
+                .relationshipWithDataArray("directors")
                 .relationship("directors", director)
                 .build();</code></pre>
 </div>
@@ -878,7 +878,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.7.0-SNAPSHOT<br>
-Last updated 2020-09-02 09:01:22 UTC
+Last updated 2020-09-02 10:55:00 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -262,8 +262,7 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationship(java.lang.String,java.lang.Object)">relationship</a></span>&#8203;(java.lang.String&nbsp;name,
             java.lang.Object&nbsp;dataObject)</code></th>
 <td class="colLast">
-<div class="block">Adds or updates a relationship based on the <code>Object</code>
- to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds or updates a relationship based on the <code>Object</code>.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -279,6 +278,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationship(java.lang.String,java.util.Collection)">relationship</a></span>&#8203;(java.lang.String&nbsp;name,
+            java.util.Collection&lt;?&gt;&nbsp;collection)</code></th>
+<td class="colLast">
+<div class="block">Adds or updates a relationship based on the <code>Collection</code>.</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationship(java.lang.String,java.util.Map)">relationship</a></span>&#8203;(java.lang.String&nbsp;name,
             java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;meta)</code></th>
 <td class="colLast">
@@ -286,7 +293,7 @@ extends java.lang.Object</pre>
  to the <code>RepresentationModel</code> to be built.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationship(java.lang.String,org.springframework.hateoas.EntityModel)">relationship</a></span>&#8203;(java.lang.String&nbsp;name,
             org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</code></th>
@@ -295,7 +302,7 @@ extends java.lang.Object</pre>
  to the <code>RepresentationModel</code> to be built.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationship(java.lang.String,org.springframework.hateoas.EntityModel,java.lang.String,java.lang.String)">relationship</a></span>&#8203;(java.lang.String&nbsp;name,
             org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel,
@@ -306,9 +313,9 @@ extends java.lang.Object</pre>
  and links.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationshipAlwaysSerializedWithDataArray(java.lang.String)">relationshipAlwaysSerializedWithDataArray</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#relationshipWithDataArray(java.lang.String)">relationshipWithDataArray</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">If called (anywhere in the builder sequence),
  the data portion of this relationship will be always rendered
@@ -441,14 +448,38 @@ extends java.lang.Object</pre>
 <h4>relationship</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship&#8203;(java.lang.String&nbsp;name,
                                         java.lang.Object&nbsp;dataObject)</pre>
-<div class="block">Adds or updates a relationship based on the <code>Object</code>
- to the <code>RepresentationModel</code> to be built.
+<div class="block">Adds or updates a relationship based on the <code>Object</code>.
+ It must be possible to extract the JSON:API id of this object,
+ see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
  If there is already a relationship for the given name defined,
  the new data object will be added to the existing relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - must not be null.</dd>
 <dd><code>dataObject</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>will never be null.</dd>
+</dl>
+</li>
+</ul>
+<a id="relationship(java.lang.String,java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>relationship</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationship&#8203;(java.lang.String&nbsp;name,
+                                        java.util.Collection&lt;?&gt;&nbsp;collection)</pre>
+<div class="block">Adds or updates a relationship based on the <code>Collection</code>.
+ It must be possible to extract the JSON:API id of all elements
+ of this collection,
+ see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
+ If there is already a relationship for the given name defined,
+ the elements of the collection will be added to the existing relationship.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - must not be null.</dd>
+<dd><code>collection</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
 </dl>
@@ -553,13 +584,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="relationshipAlwaysSerializedWithDataArray(java.lang.String)">
+<a id="relationshipWithDataArray(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>relationshipAlwaysSerializedWithDataArray</h4>
-<pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationshipAlwaysSerializedWithDataArray&#8203;(java.lang.String&nbsp;name)</pre>
+<h4>relationshipWithDataArray</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;relationshipWithDataArray&#8203;(java.lang.String&nbsp;name)</pre>
 <div class="block">If called (anywhere in the builder sequence),
  the data portion of this relationship will be always rendered
  as an array, even if the data is not set or is one single element,
