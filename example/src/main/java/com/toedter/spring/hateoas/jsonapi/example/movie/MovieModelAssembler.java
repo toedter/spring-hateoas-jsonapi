@@ -18,10 +18,8 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
-import com.toedter.spring.hateoas.jsonapi.example.director.DirectorController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
@@ -47,13 +45,9 @@ class MovieModelAssembler {
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
-                .relationshipAlwaysSerializedWithDataArray(DIRECTORS)
+                .relationship(DIRECTORS, movie.getDirectors())
                 .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null)
                 .link(selfLink);
-
-        for (Director director : movie.getDirectors()) {
-            builder = builder.relationship(DIRECTORS, director);
-        }
 
         return builder.build();
     }
@@ -61,10 +55,9 @@ class MovieModelAssembler {
     public RepresentationModel<?> directorsToJsonApiModel(Movie movie) {
         Link selfLink = linkTo(methodOn(MovieController.class).findDirectors(movie.getId())).withSelfRel();
 
-
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(CollectionModel.of(movie.getDirectors()))
-                .relationshipAlwaysSerializedWithDataArray("movies")
+                .relationshipWithDataArray("movies")
                 .link(selfLink);
 
         return builder.build();

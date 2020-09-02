@@ -23,6 +23,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.hateoas.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiMode
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("JsonApiModelBuilder Test")
+@DisplayName("JsonApiModelBuilder Integration Test")
 class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     private ObjectMapper mapper;
 
@@ -300,7 +301,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(EntityModel.of(movie))
-                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .relationshipWithDataArray("directors")
                         .relationship("directors", director)
                         .build();
        // end::single-collection-relationship[]
@@ -317,7 +318,21 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                 jsonApiModel()
                         .model(EntityModel.of(movie))
                         .relationship("directors", director)
-                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .relationshipWithDataArray("directors")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_single_one_element_collection_relationship() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("3", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationship("directors", Collections.singletonList(director))
                         .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -330,7 +345,20 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(EntityModel.of(movie))
-                        .relationshipAlwaysSerializedWithDataArray("directors")
+                        .relationshipWithDataArray("directors")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_empty_collection_data_relationship() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationship("directors", Collections.EMPTY_LIST)
                         .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);

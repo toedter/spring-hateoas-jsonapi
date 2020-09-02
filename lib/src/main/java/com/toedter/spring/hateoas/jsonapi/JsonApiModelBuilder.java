@@ -21,10 +21,7 @@ import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API.
@@ -128,8 +125,9 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds or updates a {@literal relationship} based on the {@link Object}
-     * to the {@link RepresentationModel} to be built.
+     * Adds or updates a {@literal relationship} based on the {@link Object}.
+     * It must be possible to extract the JSON:API id of this object,
+     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
      * If there is already a relationship for the given name defined,
      * the new data object will be added to the existing relationship.
      *
@@ -140,10 +138,34 @@ public class JsonApiModelBuilder {
     public JsonApiModelBuilder relationship(String name,
                                             Object dataObject) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
-        Assert.notNull(dataObject, "relationship data object must not be null!");
+        Assert.notNull(dataObject, "Relationship data object must not be null!");
 
         final JsonApiRelationship jsonApiRelationship =
                 addDataObject(relationships.get(name), dataObject);
+        relationships.put(name, jsonApiRelationship);
+
+        return this;
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the {@link Collection}.
+     * It must be possible to extract the JSON:API id of all elements
+     * of this collection,
+     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
+     * If there is already a relationship for the given name defined,
+     * the elements of the collection will be added to the existing relationship.
+     *
+     * @param name         must not be {@literal null}.
+     * @param collection   must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Collection<?> collection) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(collection, "Relationship data collection must not be null!");
+
+        final JsonApiRelationship jsonApiRelationship =
+                addDataCollection(relationships.get(name), collection);
         relationships.put(name, jsonApiRelationship);
 
         return this;
@@ -265,7 +287,7 @@ public class JsonApiModelBuilder {
      * @param name        must not be {@literal null}.
      * @return will never be {@literal null}.
      */
-    public JsonApiModelBuilder relationshipAlwaysSerializedWithDataArray(String name) {
+    public JsonApiModelBuilder relationshipWithDataArray(String name) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
         Assert.notNull(meta, "relationship meta object must not be null!");
 
@@ -321,7 +343,18 @@ public class JsonApiModelBuilder {
         if (jsonApiRelationship == null) {
             newRelationship = JsonApiRelationship.of(dataObject);
         } else {
-            newRelationship = jsonApiRelationship.addData(JsonApiResource.of(dataObject));
+            newRelationship = jsonApiRelationship.addDataObject(dataObject);
+        }
+        return newRelationship;
+    }
+
+    private JsonApiRelationship addDataCollection(
+            @Nullable JsonApiRelationship jsonApiRelationship, Collection<?> collection) {
+        JsonApiRelationship newRelationship;
+        if (jsonApiRelationship == null) {
+            newRelationship = JsonApiRelationship.of(collection);
+        } else {
+            newRelationship = jsonApiRelationship.addDataCollection(collection);
         }
         return newRelationship;
     }

@@ -27,7 +27,6 @@ import org.springframework.lang.Nullable;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor
 class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     private final RepresentationModel<?> entity;
