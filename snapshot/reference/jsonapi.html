@@ -34,26 +34,34 @@ Answers to a few questions, e.g. related to HAL, you can find
   "jsonapi": {
     "version": "1.0"
   },
-  "data": {
-    "id": "1",
-    "type": "movies",
-    "attributes": {
-      "title": "The Shawshank Redemption",
-      "year": 1994,
-      "rating": 9.3
-    },
-    "relationships": {
-      "directors": {
-        "data": {
-          "id": "2",
-          "type": "directors"
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Shawshank Redemption",
+        "year": 1994,
+        "rating": 9.3
+      },
+      "relationships": {
+        "directors": {
+          "data": [
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ],
+          "links": {
+            "self": "http://localhost:8080/api/movies/1/relationships/directors",
+            "related": "http://localhost:8080/api/movies/1/directors"
+          }
         }
+      },
+      "links": {
+        "self": "http://localhost:8080/api/movies/1"
       }
-    },
-    "links": {
-      "self": "http://localhost:8080/api/movies/1"
     }
-  },
+  ],
   "included": [
     {
       "id": "2",
@@ -64,7 +72,7 @@ Answers to a few questions, e.g. related to HAL, you can find
     }
   ],
   "links": {
-    "self": "http://localhost:8080/api/movies?page[number]=0,page[size]=1",
+    "self": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1",
     "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
     "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
   },
@@ -820,7 +828,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.7.0-SNAPSHOT<br>
-Last updated 2020-09-01 16:56:24 UTC
+Last updated 2020-09-02 09:01:22 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
