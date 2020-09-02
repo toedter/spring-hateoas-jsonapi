@@ -159,10 +159,7 @@ include::{test-resources-dir}/movieWithSingleCollectionRelationship.json[]
 You can also pass a Java `Collection` as data for a relationship.
 A collection will always be rendered as JSON array,
 even when it is empty or contains a single element.
-
-The builder also provides methods for adding links and meta to a relationship.
-Visit the link:../api/index.html[Javadoc API documentation]
-for more details. So,
+So,
 
 [source, java,indent=0]
 ----
@@ -170,6 +167,10 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=single-collecti
 ----
 
 would be rendered exactly like the previous example.
+
+The builder also provides methods for adding links and meta to a relationship.
+Check out the link:../api/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html[Javadoc API documentation]
+for more details.
 
 If you want to include the related resources in the JSON:API output,
 you can build included `director` resources like:
