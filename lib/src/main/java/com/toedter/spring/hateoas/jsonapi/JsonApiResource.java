@@ -25,7 +25,6 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -50,14 +49,16 @@ class JsonApiResource {
     public static final String JSONAPI_ID_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiId";
     public static final String JSONAPI_TYPE_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiType";
     public static final String JPA_ID_ANNOTATION = "javax.persistence.Id";
+    public static final String ID = "id";
+    public static final String TYPE = "type";
 
     Object id;
     String type;
 
     @JsonCreator
     public JsonApiResource(
-            @JsonProperty("id") Object id,
-            @JsonProperty("type") String type
+            @JsonProperty(ID) Object id,
+            @JsonProperty(TYPE) String type
     ) {
         this.id = id;
         this.type = type;
@@ -101,7 +102,14 @@ class JsonApiResource {
             JsonApiResourceField resourceField, Object object, JsonApiConfiguration jsonApiConfiguration) {
 
         try {
-            // firstly search for field annotation
+            // check Class based JSON:API type annotation
+            if (resourceField == JsonApiResourceField.type
+                    && object.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
+                JsonApiTypeForClass annotation = object.getClass().getAnnotation(JsonApiTypeForClass.class);
+                return new ResourceField(TYPE, annotation.value());
+            }
+
+            // then search for field annotation
             final Field[] declaredFields = getAllDeclaredFields(object.getClass());
             Field jpaIdField = null;
             for (Field field : declaredFields) {
@@ -156,26 +164,26 @@ class JsonApiResource {
 
             if (resourceField == JsonApiResourceField.id) {
                 // then try field "id"
-                Field field = ReflectionUtils.findField(object.getClass(), "id");
+                Field field = ReflectionUtils.findField(object.getClass(), ID);
                 //noinspection ConstantConditions
                 field.setAccessible(true);
                 final Object id = field.get(object);
                 if (id == null) {
                     throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
                 }
-                return new ResourceField("id", id.toString());
+                return new ResourceField(ID, id.toString());
             }
 
             String type = jsonApiConfiguration.getTypeForClass(object.getClass());
             if (type != null) {
-                return new ResourceField("type", type);
+                return new ResourceField(TYPE, type);
             }
 
             String jsonApiType = object.getClass().getSimpleName().toLowerCase();
             if (jsonApiConfiguration.isPluralizedTypeRendered()) {
                 jsonApiType = English.plural(jsonApiType, 2);
             }
-            return new ResourceField("type", jsonApiType);
+            return new ResourceField(TYPE, jsonApiType);
         } catch (Exception e) {
             throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
         }

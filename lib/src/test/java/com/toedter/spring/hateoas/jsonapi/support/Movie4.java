@@ -16,12 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class Movie4 extends Movie2 {
 }

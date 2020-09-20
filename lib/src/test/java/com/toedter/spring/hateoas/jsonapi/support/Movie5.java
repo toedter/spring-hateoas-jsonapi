@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi;
+package com.toedter.spring.hateoas.jsonapi.support;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import lombok.NoArgsConstructor;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-/**
- * Specifies the JSON:API type of a resource object.
- *
- * @author Kai Toedter
- */
-@Target({METHOD, FIELD})
-@Retention(RUNTIME)
-public @interface JsonApiType {
+@NoArgsConstructor
+@JsonApiTypeForClass("my-movies")
+public class Movie5 extends Movie {
+    public Movie5(String id, String title) {
+        super(id, title);
+    }
 }
