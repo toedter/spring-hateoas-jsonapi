@@ -245,7 +245,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 as convenient as possible for the developer.</p>
 </div>
 <div class="paragraph">
-<p>There are 3 new Annotations provided by this project:</p>
+<p>There are 4 new Annotations provided by this project:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -253,7 +253,17 @@ as convenient as possible for the developer.</p>
 <p><code>@JsonApiId</code> to mark a JSON:API <code>id</code></p>
 </li>
 <li>
-<p><code>@JsonApiType</code> to mark a JSON:API <code>type</code></p>
+<p><code>@JsonApiType</code> to mark a field or method to provide a JSON:API <code>type</code></p>
+</li>
+<li>
+<p><code>@JsonApiTypeForClass</code> to mark class to provide a JSON:API <code>type</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>The JSON:API type is a required value of this annotation</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><code>@JsonApiRelationships</code> to mark a JSON:API <code>relationship</code></p>
@@ -298,7 +308,13 @@ following rules apply in order:</p>
 <div class="ulist">
 <ul>
 <li>
+<p>the annotation <code>@JsonApiTypeForClass</code> is used on a class</p>
+</li>
+<li>
 <p>the annotation <code>@JsonApiType</code> is used on a field</p>
+</li>
+<li>
+<p>the annotation <code>@JsonApiType</code> is used on a method</p>
 </li>
 <li>
 <p>if no annotation is present, the pluralized, lower case, simple class name of the entity will be used</p>
@@ -896,7 +912,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.8.0-SNAPSHOT<br>
-Last updated 2020-09-20 16:16:47 UTC
+Last updated 2020-09-20 16:33:06 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
