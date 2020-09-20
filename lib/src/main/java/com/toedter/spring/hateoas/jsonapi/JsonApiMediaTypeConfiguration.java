@@ -32,22 +32,35 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
-class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
     private final ObjectProvider<JsonApiConfiguration> configuration;
     private final AutowireCapableBeanFactory beanFactory;
 
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.hateoas.config.HypermediaMappingInformation#getMediaTypes()
+     */
     @Override
     @NonNull
     public List<MediaType> getMediaTypes() {
         return Collections.singletonList(MediaTypes.JSON_API);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.hateoas.config.HypermediaMappingInformation#getJacksonModule()
+     */
     @Override
     public Module getJacksonModule() {
         return new Jackson2JsonApiModule();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.hateoas.config.HypermediaMappingInformation#configureObjectMapper(com.fasterxml.jackson.databind.
+     * ObjectMapper)
+     */
     @Override
     @NonNull
     public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
