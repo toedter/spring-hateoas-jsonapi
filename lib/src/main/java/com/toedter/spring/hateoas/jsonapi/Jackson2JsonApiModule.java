@@ -34,7 +34,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
         super("json-api-module",
                 new Version(1, 0, 0, null,
                         "com.toedter",
-                        "jsonapi-spring-hateoas"));
+                        "spring-hateoas-jsonapi"));
 
         setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
         setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
