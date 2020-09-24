@@ -30,6 +30,11 @@ import org.springframework.lang.NonNull;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Spring configuration for JSON:API support.
+ *
+ * @author Kai Toedter
+ */
 @RequiredArgsConstructor
 @Configuration
 public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
