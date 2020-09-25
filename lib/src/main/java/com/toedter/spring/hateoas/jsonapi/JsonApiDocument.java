@@ -43,8 +43,7 @@ class JsonApiDocument {
     @Getter
     @With(AccessLevel.PACKAGE)
     @JsonProperty("data")
-    // data can either a a single JsonApiData object or a list of JsonApiData objects
-    // if no JSON:API primary data is present, we render it as "data":[], which is conform with the spec
+    // data can either be a single JsonApiData object or a list of JsonApiData objects
     Object data;
 
     @Getter
