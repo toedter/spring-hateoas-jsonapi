@@ -72,7 +72,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         if(collectionModel instanceof PagedModel) {
             JsonApiModel model =
                     (JsonApiModel) JsonApiModelBuilder.jsonApiModel().model(collectionModel).pageMeta().build();
-            doc = doc.withMeta(model.getMetaData());
+            Map<String, Object> metaData = model.getMetaData();
+            doc = doc.withMeta(metaData);
         }
 
         if (value instanceof JsonApiModel) {
@@ -84,7 +85,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                 final Map<String, Object> meta = doc.getMeta();
                 // add/override with meta data created with builder
                 // this will override the previous generated page meta data, if the key is the same
-                for( Map.Entry entry: metaData.entrySet()) {
+                for( Map.Entry<?,?> entry: metaData.entrySet()) {
                     meta.put(entry.getKey().toString(), entry.getValue());
                 }
             }

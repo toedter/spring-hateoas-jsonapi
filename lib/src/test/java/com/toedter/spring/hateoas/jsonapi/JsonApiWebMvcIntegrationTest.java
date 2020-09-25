@@ -19,10 +19,12 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -32,6 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType.HAL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -161,11 +164,17 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     @Configuration
     @WebAppConfiguration
     @EnableWebMvc
-    @EnableAutoConfiguration
+    @EnableHypermediaSupport(type = HAL)
     static class TestConfig {
         @Bean
         WebMvcMovieController movieController() {
             return new WebMvcMovieController();
+        }
+
+        @Bean
+        JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(ObjectProvider<JsonApiConfiguration> configuration,
+                                                                    AutowireCapableBeanFactory beanFactory) {
+            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
         }
     }
 }

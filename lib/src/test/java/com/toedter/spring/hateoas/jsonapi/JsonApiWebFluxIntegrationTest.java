@@ -19,12 +19,13 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.toedter.spring.hateoas.jsonapi.support.WebFluxMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.HypermediaWebTestClientConfigurer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType.HAL;
 
 /**
  * @author Kai Toedter
@@ -166,11 +168,17 @@ class JsonApiWebFluxIntegrationTest extends AbstractJsonApiTest {
     @Configuration
     @WebAppConfiguration
     @EnableWebFlux
-    @EnableAutoConfiguration(exclude = WebMvcAutoConfiguration.class)
+    @EnableHypermediaSupport(type = HAL)
     static class TestConfig {
         @Bean
         WebFluxMovieController movieController() {
             return new WebFluxMovieController();
+        }
+
+        @Bean
+        JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(ObjectProvider<JsonApiConfiguration> configuration,
+                                                                    AutowireCapableBeanFactory beanFactory) {
+            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
         }
 
         @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

@@ -292,6 +292,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
+//    @Test  // issue: #13
+//    void should_build_with_meta_only() throws Exception {
+//        final RepresentationModel<?> jsonApiModel =
+//                jsonApiModel().meta("x", "y").build();
+//
+//        final String json = mapper.writeValueAsString(jsonApiModel);
+//        assertThat(json).isEqualTo("{\"meta\":{\"x\":\"y\"}}");
+//    }
+
     @Test
     void should_build_single_movie_with_single_collection_relationship_before_data_is_added() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
@@ -412,7 +421,6 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_not_build_with_invalid_relationship_data_object() {
-        Links links = Links.NONE;
         Object object = new Object();
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
                 .relationship("directors", object)

@@ -6,6 +6,7 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.1.0'
     id 'maven-publish'
     id 'signing'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 }
 
 group = 'com.toedter'
@@ -21,25 +22,34 @@ configurations {
     docs
 }
 
+dependencyManagement {
+    dependencies {
+        imports {
+            mavenBom 'org.springframework:spring-framework-bom:5.2.9.RELEASE'
+            mavenBom 'com.fasterxml.jackson:jackson-bom:2.11.2'
+            mavenBom 'org.junit:junit-bom:5.7.0'
+        }
+    }
+}
+
 dependencies {
     implementation 'org.springframework.hateoas:spring-hateoas:1.1.2.RELEASE'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.atteo:evo-inflector:1.2.2'
 
     providedCompile 'com.google.code.findbugs:jsr305:3.0.2'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
+    testImplementation 'org.springframework:spring-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework:spring-webmvc'
+    testImplementation 'org.springframework:spring-webflux'
     testImplementation 'org.slf4j:slf4j-api:1.7.30'
     testImplementation 'org.slf4j:jcl-over-slf4j:1.7.30'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
-    testImplementation 'org.springframework:spring-test:5.2.6.RELEASE'
-    testImplementation 'org.springframework.hateoas:spring-hateoas:1.1.2.RELEASE'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'org.assertj:assertj-core:3.17.2'
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
-    testImplementation 'org.springframework:spring-webmvc:5.2.6.RELEASE'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webflux:2.3.1.RELEASE'
 
     docs "io.spring.docresources:spring-doc-resources:0.2.2.RELEASE@zip"
 }
