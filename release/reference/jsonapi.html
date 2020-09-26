@@ -13,7 +13,7 @@
 <div id="header">
 <h1>JSON:API</h1>
 <div class="details">
-<span id="revnumber">version 0.7.0</span>
+<span id="revnumber">version 0.8.0</span>
 </div>
 </div>
 <div id="content">
@@ -103,7 +103,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.7.0&lt;/version&gt;
+    &lt;version&gt;0.8.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -112,11 +112,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.7.0'</code></pre>
+<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.8.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.8.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.9.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -188,7 +188,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 as convenient as possible for the developer.</p>
 </div>
 <div class="paragraph">
-<p>There are 3 new Annotations provided by this project:</p>
+<p>There are 4 new Annotations provided by this project:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -196,7 +196,17 @@ as convenient as possible for the developer.</p>
 <p><code>@JsonApiId</code> to mark a JSON:API <code>id</code></p>
 </li>
 <li>
-<p><code>@JsonApiType</code> to mark a JSON:API <code>type</code></p>
+<p><code>@JsonApiType</code> to mark a field or method to provide a JSON:API <code>type</code></p>
+</li>
+<li>
+<p><code>@JsonApiTypeForClass</code> to mark class to provide a JSON:API <code>type</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>The JSON:API type is a required value of this annotation</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><code>@JsonApiRelationships</code> to mark a JSON:API <code>relationship</code></p>
@@ -241,7 +251,13 @@ following rules apply in order:</p>
 <div class="ulist">
 <ul>
 <li>
+<p>the annotation <code>@JsonApiTypeForClass</code> is used on a class</p>
+</li>
+<li>
 <p>the annotation <code>@JsonApiType</code> is used on a field</p>
+</li>
+<li>
+<p>the annotation <code>@JsonApiType</code> is used on a method</p>
 </li>
 <li>
 <p>if no annotation is present, the pluralized, lower case, simple class name of the entity will be used</p>
@@ -845,8 +861,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.7.0<br>
-Last updated 2020-09-02 17:43:41 +0200
+Version 0.8.0<br>
+Last updated 2020-09-26 10:12:02 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
