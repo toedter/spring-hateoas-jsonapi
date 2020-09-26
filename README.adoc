@@ -15,8 +15,8 @@ This project is work in progress, please stay tuned.
 
 Here you find the documentation for the latest release and the current snapshot:
 |===
-| 0.7.0 | https://toedter.github.io/spring-hateoas-jsonapi/0.7.0/reference/index.html[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/0.7.0/api/index.html[API Documentation]
-| 0.8.0-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/index.html[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/index.html[API Documentation]
+| 0.8.0 | https://toedter.github.io/spring-hateoas-jsonapi/0.8.0/reference/index.html[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/0.8.0/api/index.html[API Documentation]
+| 0.9.0-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/index.html[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/index.html[API Documentation]
 |===
 
 == Integration in your Backends
@@ -28,14 +28,14 @@ Maven:
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
 </dependency>
 
 Gradle:
 [source]
-implementation 'com.toedter:spring-hateoas-jsonapi:0.7.0'
+implementation 'com.toedter:spring-hateoas-jsonapi:0.8.0'
 
-The latest published snapshot version is `0.8.0-SNAPSHOT`.
+The latest published snapshot version is `0.9.0-SNAPSHOT`.
 If you want to try it out,
 please make sure to add `https://oss.sonatype.org/content/repositories/snapshots/`
 as repository to your Maven or Gradle configuration.
