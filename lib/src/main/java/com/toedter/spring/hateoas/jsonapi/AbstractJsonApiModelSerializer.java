@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
@@ -33,6 +34,21 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
 
     private final JsonApiConfiguration jsonApiConfiguration;
+
+    private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {
+        JsonApiDocumentWithoutSerializedData(JsonApiDocument jsonApiDocument) {
+            this.meta = jsonApiDocument.meta;
+            this.links = jsonApiDocument.links;
+            this.included = jsonApiDocument.included;
+            this.jsonapi = jsonApiDocument.jsonapi;
+        }
+
+        @Override
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public Object getData() {
+            return null;
+        }
+    }
 
     protected AbstractJsonApiModelSerializer(Class<?> t, boolean dummy, JsonApiConfiguration jsonApiConfiguration) {
         super(t, dummy);
@@ -69,7 +85,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             doc = doc.withJsonapi(new JsonApiJsonApi());
         }
 
-        if(collectionModel instanceof PagedModel) {
+        if (collectionModel instanceof PagedModel) {
             JsonApiModel model =
                     (JsonApiModel) JsonApiModelBuilder.jsonApiModel().model(collectionModel).pageMeta().build();
             Map<String, Object> metaData = model.getMetaData();
@@ -79,21 +95,30 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         if (value instanceof JsonApiModel) {
             // we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
-            if(doc.getMeta() == null ) {
+            if (doc.getMeta() == null) {
                 doc = doc.withMeta(metaData);
             } else {
                 final Map<String, Object> meta = doc.getMeta();
                 // add/override with meta data created with builder
                 // this will override the previous generated page meta data, if the key is the same
-                for( Map.Entry<?,?> entry: metaData.entrySet()) {
+                for (Map.Entry<?, ?> entry : metaData.entrySet()) {
                     meta.put(entry.getKey().toString(), entry.getValue());
                 }
             }
         }
 
-        provider
-                .findValueSerializer(JsonApiDocument.class)
-                .serialize(doc, gen, provider);
+        // issue #13: if meta is set, we don't want to serialize to "data": null
+        if (doc.getMeta() != null && !doc.getMeta().isEmpty() && doc.getData() == null) {
+            JsonApiDocumentWithoutSerializedData documentWithoutSerializedData =
+                    new JsonApiDocumentWithoutSerializedData(doc);
+            provider
+                    .findValueSerializer(JsonApiDocumentWithoutSerializedData.class)
+                    .serialize(documentWithoutSerializedData, gen, provider);
+        } else {
+            provider
+                    .findValueSerializer(JsonApiDocument.class)
+                    .serialize(doc, gen, provider);
+        }
     }
 
     Links getLinksOrNull(RepresentationModel<?> representationModel) {

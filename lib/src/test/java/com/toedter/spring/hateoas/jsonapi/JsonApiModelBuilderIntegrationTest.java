@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -292,14 +293,14 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
-//    @Test  // issue: #13
-//    void should_build_with_meta_only() throws Exception {
-//        final RepresentationModel<?> jsonApiModel =
-//                jsonApiModel().meta("x", "y").build();
-//
-//        final String json = mapper.writeValueAsString(jsonApiModel);
-//        assertThat(json).isEqualTo("{\"meta\":{\"x\":\"y\"}}");
-//    }
+    @Test  // issue: #13
+    void should_build_with_meta_only() throws Exception {
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().meta("x", "y").build();
+
+        final String json = mapper.writeValueAsString(jsonApiModel);
+        assertThat(json).isEqualTo("{\"meta\":{\"x\":\"y\"}}");
+    }
 
     @Test
     void should_build_single_movie_with_single_collection_relationship_before_data_is_added() throws Exception {
