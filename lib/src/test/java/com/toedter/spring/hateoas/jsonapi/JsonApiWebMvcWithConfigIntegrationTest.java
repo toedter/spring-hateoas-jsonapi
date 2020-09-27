@@ -105,6 +105,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
             return new JsonApiConfiguration()
                     .withJsonApiVersionRendered(true)
                     .withPluralizedTypeRendered(false)
+                    .withLowerCasedTypeRendered(false)
                     .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
         }
         // end::jsonApiConfig[]

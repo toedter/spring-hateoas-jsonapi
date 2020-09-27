@@ -30,6 +30,7 @@ class JsonApiConfigurationUnitTest {
     @Test
     void should_initialize_defaults() {
         assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
+        assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
     }
@@ -37,6 +38,11 @@ class JsonApiConfigurationUnitTest {
     @Test
     void should_set_pluralized_type() {
         assertThat(new JsonApiConfiguration().withPluralizedTypeRendered(false).isPluralizedTypeRendered()).isFalse();
+    }
+
+    @Test
+    void should_set_lower_cased_type() {
+        assertThat(new JsonApiConfiguration().withLowerCasedTypeRendered(false).isLowerCasedTypeRendered()).isFalse();
     }
 
     @Test

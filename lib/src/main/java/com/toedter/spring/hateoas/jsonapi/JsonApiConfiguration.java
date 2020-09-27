@@ -43,6 +43,14 @@ public class JsonApiConfiguration {
     @With @Getter private final boolean pluralizedTypeRendered;
 
     /**
+     * Indicates if the JSON:API type attribute of resource objects is lower-cased.
+     *
+     * @param lowerCasedTypeRendered The new value of this configuration's lowerCasedTypeRendered
+     * @return The default is {@literal true}.
+     */
+    @With @Getter private final boolean lowerCasedTypeRendered;
+
+    /**
      * Indicates if the JSON:API version is rendered.
      * <p>
      * If set to true, each rendered JSON:API document will start with
@@ -105,6 +113,7 @@ public class JsonApiConfiguration {
      */
     public JsonApiConfiguration() {
         this.pluralizedTypeRendered = true;
+        this.lowerCasedTypeRendered = true;
         this.jsonApiVersionRendered = false;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
