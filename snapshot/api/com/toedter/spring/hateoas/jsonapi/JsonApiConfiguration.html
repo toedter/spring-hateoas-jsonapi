@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -194,27 +194,41 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLowerCasedTypeRendered()">isLowerCasedTypeRendered</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPageMetaAutomaticallyCreated()">isPageMetaAutomaticallyCreated</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPluralizedTypeRendered()">isPluralizedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withJsonApiVersionRendered(boolean)">withJsonApiVersionRendered</a></span>&#8203;(boolean&nbsp;jsonApiVersionRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withLowerCasedTypeRendered(boolean)">withLowerCasedTypeRendered</a></span>&#8203;(boolean&nbsp;lowerCasedTypeRendered)</code></th>
+<td class="colLast">
+<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPageMetaAutomaticallyCreated(boolean)">withPageMetaAutomaticallyCreated</a></span>&#8203;(boolean&nbsp;pageMetaAutomaticallyCreated)</code></th>
 <td class="colLast">
@@ -222,14 +236,14 @@ extends java.lang.Object</pre>
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPluralizedTypeRendered(boolean)">withPluralizedTypeRendered</a></span>&#8203;(boolean&nbsp;pluralizedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClass(java.lang.Class,java.lang.String)">withTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz,
                 java.lang.String&nbsp;type)</code></th>
@@ -343,6 +357,36 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <h4>isPluralizedTypeRendered</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isPluralizedTypeRendered()</pre>
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The default is true.</dd>
+</dl>
+</li>
+</ul>
+<a id="withLowerCasedTypeRendered(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withLowerCasedTypeRendered</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withLowerCasedTypeRendered&#8203;(boolean&nbsp;lowerCasedTypeRendered)</pre>
+<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lowerCasedTypeRendered</code> - The new value of this configuration's lowerCasedTypeRendered</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</li>
+</ul>
+<a id="isLowerCasedTypeRendered()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isLowerCasedTypeRendered</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isLowerCasedTypeRendered()</pre>
+<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is true.</dd>
