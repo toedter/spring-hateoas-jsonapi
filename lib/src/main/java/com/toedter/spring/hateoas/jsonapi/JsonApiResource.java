@@ -179,7 +179,10 @@ class JsonApiResource {
                 return new ResourceField(TYPE, type);
             }
 
-            String jsonApiType = object.getClass().getSimpleName().toLowerCase();
+            String jsonApiType = object.getClass().getSimpleName();
+            if (jsonApiConfiguration.isLowerCasedTypeRendered()) {
+                jsonApiType = jsonApiType.toLowerCase();
+            }
             if (jsonApiConfiguration.isPluralizedTypeRendered()) {
                 jsonApiType = English.plural(jsonApiType, 2);
             }
