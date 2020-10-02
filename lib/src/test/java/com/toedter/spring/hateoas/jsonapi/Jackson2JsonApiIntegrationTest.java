@@ -438,13 +438,21 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_deserialize_empty_model_with_complex_link() throws Exception {
-        JavaType movieEntityModelType =
-                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
         File file = new ClassPathResource("emptyModelWithComplexLink.json", getClass()).getFile();
         RepresentationModel<?> movieEntityModel = mapper.readValue(file, RepresentationModel.class);
 
         assertThat(movieEntityModel.getLinks().hasSize(1)).isTrue();
         assertThat(movieEntityModel.getLink("complex").get().isTemplated()).isTrue();
+    }
+
+    @Test
+    void should_deserialize_number_to_double() throws Exception {
+        JavaType withDoubleEntityModelType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie6.class);
+        File file = new ClassPathResource("movieEntityWithNumber.json", getClass()).getFile();
+        EntityModel<Movie6> withDoubleModel = mapper.readValue(file, withDoubleEntityModelType);
+
+        assertThat(withDoubleModel.getContent().getRating()).isEqualTo(8.0);
     }
 
     @Test
