@@ -296,6 +296,19 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
     }
+    
+    @Test
+    void should_deserialize_single_movie_entity_model_with_playtime() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithPlaytime.class);
+        File file = new ClassPathResource("movieWithPlaytimeEntityModel.json", getClass()).getFile();
+        EntityModel<MovieWithPlaytime> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithPlaytime movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isEqualTo("1");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+        assertThat(movie.getPlaytime()).isEqualTo(42);
+    }
 
     @Test
     void should_deserialize_single_movie_entity_model_with_one_relationship() throws Exception {

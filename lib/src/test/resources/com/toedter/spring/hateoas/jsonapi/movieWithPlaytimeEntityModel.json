@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars",
+      "playtime": 42
+    }
+  }
+}
