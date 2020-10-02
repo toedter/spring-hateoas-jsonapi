@@ -69,7 +69,8 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         @SuppressWarnings("unchecked")
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
-        final Object objectFromProperties = PropertyUtils.createObjectFromProperties(rootType.getRawClass(), attributes);
+        ObjectMapper mapper = new ObjectMapper();
+        final Object objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());    
         JsonApiResource.setJsonApiResourceFieldAttributeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.id, (String) data.get("id"));
         JsonApiResource.setJsonApiResourceFieldAttributeForObject(objectFromProperties, JsonApiResource.JsonApiResourceField.type, (String) data.get("type"));
         return objectFromProperties;
