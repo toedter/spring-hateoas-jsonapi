@@ -4,6 +4,7 @@
 :resource-dir: json
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 :test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
+:example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
 
 https://jsonapi.org/[JSON:API] is a widely adapted hypermedia format.
 You can find a list of implementations and tools https://jsonapi.org/implementations/[here].
@@ -119,7 +120,7 @@ If you want to use JSON:API `relationships` or `included` data, you can use the
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 ----
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-movie-model]
 ----
@@ -134,13 +135,13 @@ include::{test-dir}/support/Director.java[tags=Director]
 
 You can build a relationship from a movie to a director like
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-relationship]
 ----
 
 The representation model will be rendered as
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-resources-dir}/movieJsonApiModelWithRelationship.json[]
 ----
@@ -149,13 +150,13 @@ If you want the `directors` relationship always being rendered as an array,
 even if it is empty or contains only a single data element,
 you can build it like:
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=single-collection-relationship]
 ----
 
 The representation model will be rendered as
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-resources-dir}/movieWithSingleCollectionRelationship.json[]
 ----
@@ -165,7 +166,7 @@ A collection will always be rendered as JSON array,
 even when it is empty or contains a single element.
 So,
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=single-collection-relationship2]
 ----
@@ -179,13 +180,13 @@ for more details.
 If you want to include the related resources in the JSON:API output,
 you can build included `director` resources like:
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-included]
 ----
 
 The representation model will be rendered as
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-resources-dir}/movieJsonApiModelWithManyRelationshipsAndIncluded.json[]
 ----
@@ -194,7 +195,7 @@ The following example shows the creation of a more complex
 JSON:API specific representation model with a paged model as base.
 The builder supports adding both pagination metadata and pagination links.
 
-[source, java,indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=complex-paged-model]
 ----
@@ -204,6 +205,23 @@ This model will be rendered as
 [source, json]
 ----
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
+----
+
+[[Inclusion]]
+== Inclusion of related resources ==
+
+There is no direct support for including related resources,
+but a REST controller could provide an optional request parameter like
+
+[source, java]
+@RequestParam(value = "included", required = false) String[] included)
+
+Then, within the controller implementation, this parameter could be interpreted,
+and the builder could be used for the inclusion, like
+
+[source, java, indent=0]
+----
+include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusion]
 ----
 
 [[Creating]]
