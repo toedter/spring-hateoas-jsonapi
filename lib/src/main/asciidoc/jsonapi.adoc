@@ -208,7 +208,7 @@ include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
 [[Inclusion]]
-== Inclusion of related resources ==
+== Inclusion of related Resources ==
 
 There is no direct support for including related resources,
 but a REST controller could provide an optional request parameter like
