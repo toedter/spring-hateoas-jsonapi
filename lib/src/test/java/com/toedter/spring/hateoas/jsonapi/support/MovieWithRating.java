@@ -23,11 +23,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @JsonApiTypeForClass("movies")
-public class MovieWithRating extends Movie {
+public class MovieWithRating {
+    private String id;
+    private String title;
     private double rating;
 
     public MovieWithRating(String id, String title, double rating) {
-        super(id, title);
+        this.id = id;
+        this.title = title;
         this.rating = rating;
     }
 }

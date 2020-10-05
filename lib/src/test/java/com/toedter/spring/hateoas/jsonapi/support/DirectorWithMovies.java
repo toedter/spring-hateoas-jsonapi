@@ -30,11 +30,17 @@ import java.util.List;
 @AllArgsConstructor
 @With
 @JsonApiTypeForClass("directors")
-public class DirectorWithMovies extends Director {
+public class DirectorWithMovies  {
+    private String id;
+    private String name;
+    private int born;
+
     @JsonIgnore
     private List<MovieWithRating> movies;
 
-    public DirectorWithMovies(String id, String name) {
-        super(id, name);
+    public DirectorWithMovies(String id, String name, int born) {
+        this.id = id;
+        this.name = name;
+        this.born = born;
     }
 }

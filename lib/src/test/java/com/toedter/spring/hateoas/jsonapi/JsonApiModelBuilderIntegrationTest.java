@@ -453,20 +453,6 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_apply_sparse_fieldsets_on_entity_model() throws Exception {
-        Movie movie = new MovieWithRating("1", "Star Wars", 8.6);
-
-        final RepresentationModel<?> jsonApiModel =
-                jsonApiModel()
-                        .model(EntityModel.of(movie))
-                        .fields("movies", "rating")
-                        .build();
-
-        final String movieJson = mapper.writeValueAsString(jsonApiModel);
-        compareWithFile(movieJson, "movieWithRating.json");
-    }
-
-    @Test
-    void should_apply_sparse_fieldsets_on_missing_relationship_fieldset() throws Exception {
         MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
 
         final RepresentationModel<?> jsonApiModel =
@@ -480,14 +466,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
-    void should_apply_sparse_fieldsets_on_included_movies() throws Exception {
+    void should_apply_sparse_fieldsets_on_included_resources() throws Exception {
         MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
-        DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas");
+        DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
         director.setMovies(Collections.singletonList(movie));
 
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(EntityModel.of(director))
+                        .fields("directors", "name")
                         .fields("movies", "title")
                         .relationship("movies", movie)
                         .included(movie)
