@@ -16,11 +16,18 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class Movie6 extends Movie {
+@JsonApiTypeForClass("movies")
+public class MovieWithRating extends Movie {
     private double rating;
+
+    public MovieWithRating(String id, String title, double rating) {
+        super(id, title);
+        this.rating = rating;
+    }
 }

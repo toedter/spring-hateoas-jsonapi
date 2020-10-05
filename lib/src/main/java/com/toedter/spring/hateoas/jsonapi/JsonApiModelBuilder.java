@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
@@ -36,6 +37,7 @@ public class JsonApiModelBuilder {
     private RepresentationModel<?> model;
     private Links links = Links.NONE;
     private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
+    private final HashMap<String, Collection<String>> sparseFieldsets = new HashMap<>();
     private final List<RepresentationModel<?>> included = new ArrayList<>();
     private final Map<String, Object> meta = new HashMap<>();
 
@@ -501,6 +503,12 @@ public class JsonApiModelBuilder {
         return this;
     }
 
+    public JsonApiModelBuilder fields(String jsonapiType, String... fields) {
+        List<String> fieldList = new ArrayList<>(Arrays.asList(fields));
+        sparseFieldsets.put(jsonapiType, fieldList);
+        return this;
+    }
+
     /**
      * Transform the entities, Links, relationships and included
      * into a {@link RepresentationModel}.
@@ -515,7 +523,7 @@ public class JsonApiModelBuilder {
                                 + jsonApiRelationship);
             }
         }
-        return new JsonApiModel(model, relationships, included, meta, links);
+        return new JsonApiModel(model, relationships, included, meta, links, sparseFieldsets);
     }
 
     /**

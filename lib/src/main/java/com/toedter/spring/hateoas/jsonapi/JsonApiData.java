@@ -88,9 +88,11 @@ class JsonApiData {
             links = ((RepresentationModel<?>) content).getLinks();
         }
 
+        HashMap<String, Collection<String>> sparseFieldsets = null;
         if (content instanceof JsonApiModel) {
             JsonApiModel jsonApiRepresentationModel = (JsonApiModel) content;
             relationships = jsonApiRepresentationModel.getRelationships();
+            sparseFieldsets = jsonApiRepresentationModel.getSparseFieldsets();
             content = jsonApiRepresentationModel.getContent();
         }
 
@@ -126,11 +128,25 @@ class JsonApiData {
         attributeMap.remove(idField.name);
         attributeMap.remove(typeField.name);
 
-        final Map<String, Object> finalContentObject = attributeMap;
         Links finalLinks = links;
         String finalId = idField.value;
         String finalType = typeField.value;
         Object finalRelationships = relationships;
+
+        // apply sparse fieldsets
+        if (sparseFieldsets != null) {
+            Collection<String> attributes = sparseFieldsets.get(finalType);
+            if(attributes != null) {
+                Set<String> keys = new HashSet<>(attributeMap.keySet());
+                for (String key : keys) {
+                    if(!attributes.contains(key)) {
+                        attributeMap.remove(key);
+                    }
+                }
+            }
+        }
+        final Map<String, Object> finalContentObject = attributeMap;
+
         return Optional.of(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                 .map(it -> new JsonApiData()

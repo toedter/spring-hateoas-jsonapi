@@ -461,9 +461,9 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_deserialize_number_to_double() throws Exception {
         JavaType withDoubleEntityModelType =
-                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie6.class);
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithRating.class);
         File file = new ClassPathResource("movieEntityWithNumber.json", getClass()).getFile();
-        EntityModel<Movie6> withDoubleModel = mapper.readValue(file, withDoubleEntityModelType);
+        EntityModel<MovieWithRating> withDoubleModel = mapper.readValue(file, withDoubleEntityModelType);
 
         assertThat(withDoubleModel.getContent().getRating()).isEqualTo(8.0);
     }

@@ -19,6 +19,7 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import org.junit.jupiter.api.*;
 import org.springframework.hateoas.*;
 
@@ -447,5 +448,19 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
                 .relationship("directors", (HashMap<?, ?>) null)
                 .build());
+    }
+
+    @Test
+    void should_apply_sparse_fieldsets_on_entity_model() throws Exception {
+        Movie movie = new MovieWithRating("1", "Star Wars", 8.6);
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .fields("movies", "rating")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithRating.json");
     }
 }
