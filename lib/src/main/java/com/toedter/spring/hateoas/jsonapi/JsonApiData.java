@@ -66,12 +66,15 @@ class JsonApiData {
     }
 
     static List<JsonApiData> extractCollectionContent(
-            @Nullable CollectionModel<?> collectionModel, JsonApiConfiguration jsonApiConfiguration) {
+            @Nullable CollectionModel<?> collectionModel,
+            JsonApiConfiguration jsonApiConfiguration,
+            @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
 
         List<JsonApiData> dataList = new ArrayList<>();
         if (collectionModel != null) {
             for (Object entity : collectionModel.getContent()) {
-                Optional<JsonApiData> jsonApiData = extractContent(entity, false, jsonApiConfiguration);
+                Optional<JsonApiData> jsonApiData =
+                        extractContent(entity, false, jsonApiConfiguration, sparseFieldsets);
                 jsonApiData.ifPresent(dataList::add);
             }
         }
@@ -79,7 +82,10 @@ class JsonApiData {
     }
 
     static Optional<JsonApiData> extractContent(
-            @Nullable Object content, boolean isSingleEntity, JsonApiConfiguration jsonApiConfiguration) {
+            @Nullable Object content,
+            boolean isSingleEntity,
+            JsonApiConfiguration jsonApiConfiguration,
+            @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
 
         Links links = null;
         Object relationships = null;
@@ -88,7 +94,6 @@ class JsonApiData {
             links = ((RepresentationModel<?>) content).getLinks();
         }
 
-        HashMap<String, Collection<String>> sparseFieldsets = null;
         if (content instanceof JsonApiModel) {
             JsonApiModel jsonApiRepresentationModel = (JsonApiModel) content;
             relationships = jsonApiRepresentationModel.getRelationships();

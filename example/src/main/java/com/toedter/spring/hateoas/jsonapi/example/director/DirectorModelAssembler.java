@@ -22,6 +22,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -32,17 +34,24 @@ class DirectorModelAssembler {
 
     private static final String MOVIES = "movies";
 
-    public RepresentationModel<?> toJsonApiModel(Director director) {
-        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId())).withSelfRel();
+    public RepresentationModel<?> toJsonApiModel(Director director, String[] fieldsDirectors) {
+        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null)).withSelfRel();
 
         Link directorsLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
         Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel("directors");
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(director)
-                .relationship(MOVIES, director.getMovies())
                 .link(selfLink)
                 .link(templatedDirectorsLink);
+
+        if (fieldsDirectors != null) {
+            builder = builder.fields("directors", fieldsDirectors);
+        }
+
+        if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+            builder = builder.relationship(MOVIES, director.getMovies());
+        }
 
         return builder.build();
     }

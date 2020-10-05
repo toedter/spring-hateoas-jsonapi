@@ -60,7 +60,8 @@ public class MovieController {
     ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size,
-            @RequestParam(value = "included", required = false) String[] included) {
+            @RequestParam(value = "included", required = false) String[] included,
+            @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies) {
 
         final PageRequest pageRequest = PageRequest.of(page, size);
 
@@ -68,7 +69,7 @@ public class MovieController {
 
         List<? extends RepresentationModel<?>> movieResources =
                 StreamSupport.stream(pagedResult.spliterator(), false)
-                        .map(movieModelAssembler::toJsonApiModel)
+                        .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
                         .collect(Collectors.toList());
 
         Link selfLink = linkTo(MovieController.class).slash(
@@ -90,7 +91,7 @@ public class MovieController {
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
         // tag::relationship-inclusion[]
-        if(included != null && included.length == 1 && included[0].equals("directors")) {
+        if (included != null && included.length == 1 && included[0].equals("directors")) {
             HashMap<Long, Director> directors = new HashMap<>();
             for (Movie movie : pagedResult.getContent()) {
                 for (Director director : movie.getDirectors()) {
@@ -109,7 +110,7 @@ public class MovieController {
     @PostMapping("/movies")
     ResponseEntity<?> newMovie(@RequestBody Movie movie) {
         repository.save(movie);
-        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)
@@ -126,10 +127,12 @@ public class MovieController {
     }
 
     @GetMapping("/movies/{id}")
-    public ResponseEntity<? extends RepresentationModel<?>> findOne(@PathVariable Long id) {
+    public ResponseEntity<? extends RepresentationModel<?>> findOne(
+            @PathVariable Long id,
+            @RequestParam(value = "filter[movies]", required = false) String[] filterMovies) {
 
         return repository.findById(id)
-                .map(movieModelAssembler::toJsonApiModel)
+                .map(movie -> movieModelAssembler.toJsonApiModel(movie, filterMovies))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -150,7 +153,7 @@ public class MovieController {
         existingMovie.update(movie);
 
         repository.save(existingMovie);
-        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)

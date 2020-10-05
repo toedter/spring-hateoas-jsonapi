@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
+import com.toedter.spring.hateoas.jsonapi.support.DirectorWithMovies;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import org.junit.jupiter.api.*;
@@ -462,5 +463,37 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithRating.json");
+    }
+
+    @Test
+    void should_apply_sparse_fieldsets_on_missing_relationship_fieldset() throws Exception {
+        MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .fields("movies", "rating")
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithRating.json");
+    }
+
+    @Test
+    void should_apply_sparse_fieldsets_on_included_movies() throws Exception {
+        MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+        DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas");
+        director.setMovies(Collections.singletonList(movie));
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(director))
+                        .fields("movies", "title")
+                        .relationship("movies", movie)
+                        .included(movie)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "directorWithSparseFieldsetOnIncluded.json");
     }
 }

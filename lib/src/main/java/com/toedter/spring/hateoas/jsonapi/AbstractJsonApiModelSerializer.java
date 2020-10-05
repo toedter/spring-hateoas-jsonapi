@@ -70,9 +70,10 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
         Object data;
         if (collectionModel != null) {
-            data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration);
+            data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration, null);
         } else {
-            final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(value, true, jsonApiConfiguration);
+            final Optional<JsonApiData> jsonApiData =
+                    JsonApiData.extractContent(value, true, jsonApiConfiguration, null);
             data = jsonApiData.orElse(null);
         }
 
@@ -131,9 +132,11 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
     private List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
         if (representationModel instanceof JsonApiModel) {
-            final List<RepresentationModel<?>> includedEntities = ((JsonApiModel) representationModel).getIncludedEntities();
+            final List<RepresentationModel<?>> includedEntities =
+                    ((JsonApiModel) representationModel).getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
-            return JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration);
+            return JsonApiData.extractCollectionContent(
+                    collectionModel, jsonApiConfiguration, ((JsonApiModel) representationModel).getSparseFieldsets());
         }
         return null;
     }

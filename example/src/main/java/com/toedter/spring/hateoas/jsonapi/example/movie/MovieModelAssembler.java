@@ -23,6 +23,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -33,8 +35,8 @@ class MovieModelAssembler {
 
     private static final String DIRECTORS = "directors";
 
-    public RepresentationModel<?> toJsonApiModel(Movie movie) {
-        Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId())).withSelfRel();
+    public RepresentationModel<?> toJsonApiModel(Movie movie, String[] fieldsMovies) {
+        Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId(), null)).withSelfRel();
 
         // TODO: Spring HATEOAS does not recognize templated links with square brackets
         // Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
@@ -44,9 +46,17 @@ class MovieModelAssembler {
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
-                .relationship(DIRECTORS, movie.getDirectors())
-                .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null)
                 .link(selfLink);
+
+        if(fieldsMovies != null) {
+                builder = builder.fields("movies", fieldsMovies);
+        }
+
+        if(fieldsMovies == null || Arrays.asList(fieldsMovies).contains("directors")) {
+            builder = builder
+                    .relationship(DIRECTORS, movie.getDirectors())
+                    .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null);
+        }
 
         return builder.build();
     }

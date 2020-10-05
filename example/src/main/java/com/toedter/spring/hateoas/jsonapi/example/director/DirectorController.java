@@ -29,6 +29,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class DirectorController {
 
     private final DirectorRepository repository;
     private final DirectorModelAssembler directorModelAssembler;
-    
+
     DirectorController(DirectorRepository repository, DirectorModelAssembler directorModelAssembler) {
         this.repository = repository;
         this.directorModelAssembler = directorModelAssembler;
@@ -52,14 +53,17 @@ public class DirectorController {
     @GetMapping("/directors")
     public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize) {
+            @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "included", required = false) String[] included,
+            @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+            @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
 
         final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         final Page<Director> pagedResult = repository.findAll(pageRequest);
 
         List<? extends RepresentationModel<?>> movieResources = StreamSupport.stream(pagedResult.spliterator(), false)
-                .map(directorModelAssembler::toJsonApiModel)
+                .map(director -> directorModelAssembler.toJsonApiModel(director, fieldsDirectors))
                 .collect(Collectors.toList());
 
         Link selfLink = linkTo(DirectorController.class).slash(
@@ -72,26 +76,35 @@ public class DirectorController {
                 PagedModel.of(movieResources, pageMetadata, selfLink);
 
         String pageLinksBase = linkTo(MovieController.class).slash("directors").withSelfRel().getHref();
-        final JsonApiModelBuilder jsonApiModelBuilder =
+        JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).pageLinks(pageLinksBase);
 
-        HashMap<Long, Movie> directors = new HashMap<>();
-        for (Director director : pagedResult.getContent()) {
-            for (Movie movie : director.getMovies()) {
-                directors.put(movie.getId(), movie);
-            }
+        if (fieldsMovies != null) {
+            jsonApiModelBuilder = jsonApiModelBuilder.fields("movies", fieldsMovies);
         }
 
-        directors.values().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
+        final JsonApiModelBuilder finalJsonApiModelBuilder = jsonApiModelBuilder;
+        if (included != null && included.length == 1 && included[0].equals("movies")) {
+            HashMap<Long, Movie> movies = new HashMap<>();
+            for (Director director : pagedResult.getContent()) {
+                for (Movie movie : director.getMovies()) {
+                    movies.put(movie.getId(), movie);
+                }
+            }
+            movies.values().forEach(entry -> finalJsonApiModelBuilder.included(EntityModel.of(entry)));
+        }
+
 
         final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
         return ResponseEntity.ok(pagedJsonApiModel);
     }
 
     @GetMapping("/directors/{id}")
-    public ResponseEntity<? extends RepresentationModel<?>> findOne(@PathVariable Long id) {
+    public ResponseEntity<? extends RepresentationModel<?>> findOne(
+            @PathVariable Long id,
+            @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
         return repository.findById(id)
-                .map(directorModelAssembler::toJsonApiModel)
+                .map(director -> directorModelAssembler.toJsonApiModel(director, fieldsDirectors))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
