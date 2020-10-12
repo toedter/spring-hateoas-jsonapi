@@ -503,6 +503,18 @@ public class JsonApiModelBuilder {
         return this;
     }
 
+    /**
+     * Adds a sparse fieldset for the given JSON:API type.
+     * Only the resource objects attributes that are in the fields
+     * parameters will be serialized to JSON. THis will apply to data
+     * attributes and attributes of included resources.
+     * This will not exclude relationships, if the name of a relationship
+     * for the given JSON:API type is not part of the fields parameters.
+     *
+     * @param jsonapiType the JSON:API type
+     * @param fields the attributes that should be included
+     * @return ill never be {@literal null}.
+     */
     public JsonApiModelBuilder fields(String jsonapiType, String... fields) {
         List<String> fieldList = new ArrayList<>(Arrays.asList(fields));
         sparseFieldsets.put(jsonapiType, fieldList);
