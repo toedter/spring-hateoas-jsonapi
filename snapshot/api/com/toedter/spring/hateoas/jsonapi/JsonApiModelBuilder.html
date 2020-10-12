@@ -167,7 +167,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fields(java.lang.String,java.lang.String...)">fields</a></span>&#8203;(java.lang.String&nbsp;jsonapiType,
       java.lang.String...&nbsp;fields)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds a sparse fieldset for the given JSON:API type.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
@@ -742,6 +744,19 @@ extends java.lang.Object</pre>
 <h4>fields</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;fields&#8203;(java.lang.String&nbsp;jsonapiType,
                                   java.lang.String...&nbsp;fields)</pre>
+<div class="block">Adds a sparse fieldset for the given JSON:API type.
+ Only the resource objects attributes that are in the fields
+ parameters will be serialized to JSON. THis will apply to data
+ attributes and attributes of included resources.
+ This will not exclude relationships, if the name of a relationship
+ for the given JSON:API type is not part of the fields parameters.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>jsonapiType</code> - the JSON:API type</dd>
+<dd><code>fields</code> - the attributes that should be included</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>ill never be null.</dd>
+</dl>
 </li>
 </ul>
 <a id="build()">
