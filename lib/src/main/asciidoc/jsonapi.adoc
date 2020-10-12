@@ -141,7 +141,7 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-relations
 ----
 
 The representation model will be rendered as
-[source, java, indent=0]
+[source, json, indent=0]
 ----
 include::{test-resources-dir}/movieJsonApiModelWithRelationship.json[]
 ----
@@ -156,7 +156,7 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=single-collecti
 ----
 
 The representation model will be rendered as
-[source, java, indent=0]
+[source, json, indent=0]
 ----
 include::{test-resources-dir}/movieWithSingleCollectionRelationship.json[]
 ----
@@ -186,7 +186,7 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=build-included]
 ----
 
 The representation model will be rendered as
-[source, java, indent=0]
+[source, json, indent=0]
 ----
 include::{test-resources-dir}/movieJsonApiModelWithManyRelationshipsAndIncluded.json[]
 ----
@@ -223,6 +223,48 @@ and the builder could be used for the inclusion, like
 ----
 include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusion]
 ----
+
+[[SparseFielsets]]
+== Sparse Fieldsets ==
+
+Sparse fieldsets are supported for attributes within `data` and `included`. You can add sparse fieldsets
+by using the `JsonApiBuilder`. The following example illustrates the build, assuming a director would have
+the attributes `name` and `born`, and a movie would have the attributes `title` and `rating`.
+
+[source, java, indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=sparse-fieldset]
+----
+
+So, only the name attribute of a director, and the title attribute
+of a movie would be serialized:
+
+[source, json]
+----
+include::{test-resources-dir}/directorWithSparseFieldsetOnIncluded.json[]
+----
+
+In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse field set
+that should be applied to a specific JSON:API type, like:
+
+[source, java]
+@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)
+
+In the following controller code, you could check the existence of these request parameters, like:
+
+[source, java]
+if (fieldsDirectors != null) {
+    builder = builder.fields("directors", fieldsDirectors);
+}
+
+When adding sparse fieldsets to the builder, they will NOT automatically exclude added relationships.
+Relationships have to be added conditionally, like the inclusions, for example:
+
+[source, java]
+if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+    builder = builder.relationship("movies", director.getMovies());
+}
 
 [[Creating]]
 == Creating Resources with HTTP POST ==
@@ -287,7 +329,7 @@ make sure you provide the following configuration in your Spring `application.pr
 
 Here is an example how you would implement a JSON:API configuration:
 
-[source, json, indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
 ----
@@ -299,7 +341,7 @@ To create `JSON:API` compliant error messages, you can use `JsonApiErrors` and `
 
 Here is an example how to produce an error response:
 
-[source, json, indent=0]
+[source, java, indent=0]
 ----
 include::{test-dir}/support/WebMvcMovieController.java[tags=errors-builder]
 ----

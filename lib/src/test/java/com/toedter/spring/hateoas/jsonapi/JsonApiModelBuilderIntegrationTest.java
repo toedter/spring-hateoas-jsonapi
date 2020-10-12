@@ -467,6 +467,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_apply_sparse_fieldsets_on_included_resources() throws Exception {
+        // tag::sparse-fieldset[]
         MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
         DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
         director.setMovies(Collections.singletonList(movie));
@@ -479,6 +480,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .relationship("movies", movie)
                         .included(movie)
                         .build();
+        // end::sparse-fieldset[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "directorWithSparseFieldsetOnIncluded.json");
