@@ -365,7 +365,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -404,7 +404,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -475,7 +475,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -681,7 +681,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if(included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
+<pre class="highlight"><code class="language-java" data-lang="java">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
     HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
     for (Movie movie : pagedResult.getContent()) {
         for (Director director : movie.getDirectors()) {
@@ -689,6 +689,97 @@ and the builder could be used for the inclusion, like</p>
         }
     }
     directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="SparseFielsets">Sparse Fieldsets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
+by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
+the attributes <code>name</code> and <code>born</code>, and a movie would have the attributes <code>title</code> and <code>rating</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
+director.setMovies(Collections.singletonList(movie));
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .fields("directors", "name")
+                .fields("movies", "title")
+                .relationship("movies", movie)
+                .included(movie)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So, only the name attribute of a director, and the title attribute
+of a movie would be serialized:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "3",
+    "type": "directors",
+    "attributes": {
+      "name": "George Lucas"
+    },
+    "relationships": {
+      "movies": {
+        "data": {
+          "id": "1",
+          "type": "movies"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse field set
+that should be applied to a specific JSON:API type, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the following controller code, you could check the existence of these request parameters, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors != null) {
+    builder = builder.fields("directors", fieldsDirectors);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When adding sparse fieldsets to the builder, they will NOT automatically exclude added relationships.
+Relationships have to be added conditionally, like the inclusions, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+    builder = builder.relationship("movies", director.getMovies());
 }</code></pre>
 </div>
 </div>
@@ -859,7 +950,7 @@ make sure you provide the following configuration in your Spring <code>applicati
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">@Bean
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
             .withJsonApiVersionRendered(true)
@@ -882,7 +973,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">return ResponseEntity.badRequest().body(
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
         JsonApiErrors.create().withError(
                 JsonApiError.create()
                         .withAboutLink("http://movie-db.com/problem")
@@ -916,7 +1007,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.9.0-SNAPSHOT<br>
-Last updated 2020-10-05 08:33:25 UTC
+Last updated 2020-10-12 14:08:09 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
