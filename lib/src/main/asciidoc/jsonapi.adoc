@@ -244,7 +244,7 @@ of a movie would be serialized:
 include::{test-resources-dir}/directorWithSparseFieldsetOnIncluded.json[]
 ----
 
-In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse field set
+In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
 that should be applied to a specific JSON:API type, like:
 
 [source, java]
