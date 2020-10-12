@@ -21,8 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.TemplateVariables;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
@@ -37,22 +41,24 @@ class MovieModelAssembler {
 
     public RepresentationModel<?> toJsonApiModel(Movie movie, String[] fieldsMovies) {
         Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId(), null)).withSelfRel();
+        String href = selfLink.getHref();
+        selfLink = selfLink.withHref(href.substring(0,href.indexOf("{")));
 
         // TODO: Spring HATEOAS does not recognize templated links with square brackets
         // Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
-        String relationshipSelfLink = selfLink.getHref() + "/relationships/"  + DIRECTORS;
+        String relationshipSelfLink = selfLink.getHref() + "/relationships/" + DIRECTORS;
         String relationshipRelatedLink = selfLink.getHref() + "/" + DIRECTORS;
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
                 .link(selfLink);
 
-        if(fieldsMovies != null) {
-                builder = builder.fields("movies", fieldsMovies);
+        if (fieldsMovies != null) {
+            builder = builder.fields("movies", fieldsMovies);
         }
 
-        if(fieldsMovies == null || Arrays.asList(fieldsMovies).contains("directors")) {
+        if (fieldsMovies == null || Arrays.asList(fieldsMovies).contains("directors")) {
             builder = builder
                     .relationship(DIRECTORS, movie.getDirectors())
                     .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null);

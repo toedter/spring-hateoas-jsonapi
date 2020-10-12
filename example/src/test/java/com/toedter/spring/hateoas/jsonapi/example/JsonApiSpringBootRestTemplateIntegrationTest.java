@@ -69,7 +69,7 @@ public class JsonApiSpringBootRestTemplateIntegrationTest {
         final HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response =
-                restTemplate.exchange("/api/movies/" + savedMovie.getId(), HttpMethod.GET, entity, String.class);
+                restTemplate.exchange("/api/movies/" + savedMovie.getId() + "?fields[movies]=title,year,rating,directors", HttpMethod.GET, entity, String.class);
 
         String expectedResult =
                 "{\"jsonapi\":{\"version\":\"1.0\"},\"data\":{\"id\":\""

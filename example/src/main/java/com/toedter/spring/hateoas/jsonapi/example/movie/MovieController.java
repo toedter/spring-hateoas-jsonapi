@@ -129,7 +129,7 @@ public class MovieController {
     @GetMapping("/movies/{id}")
     public ResponseEntity<? extends RepresentationModel<?>> findOne(
             @PathVariable Long id,
-            @RequestParam(value = "filter[movies]", required = false) String[] filterMovies) {
+            @RequestParam(value = "fields[movies]", required = false) String[] filterMovies) {
 
         return repository.findById(id)
                 .map(movie -> movieModelAssembler.toJsonApiModel(movie, filterMovies))
