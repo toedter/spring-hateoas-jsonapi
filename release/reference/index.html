@@ -15,8 +15,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 0.8.0,</span>
-<span id="revdate">2020-09-26</span>
+<span id="revnumber">version 0.9.0,</span>
+<span id="revdate">2020-10-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -28,6 +28,8 @@
 <li><a href="#_representation_models">Representation Models</a></li>
 <li><a href="#_annotations">Annotations</a></li>
 <li><a href="#_jsonapi_builder">JSON:API Builder</a></li>
+<li><a href="#Inclusion">Inclusion of related Resources</a></li>
+<li><a href="#SparseFielsets">Sparse Fieldsets</a></li>
 <li><a href="#Creating">Creating Resources with HTTP POST</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#errors">Error Handling</a></li>
@@ -164,7 +166,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.8.0&lt;/version&gt;
+    &lt;version&gt;0.9.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -173,11 +175,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.8.0'</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.9.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.9.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.10.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -420,7 +422,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -459,7 +461,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -530,7 +532,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -718,6 +720,124 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 <div class="sect2">
+<h3 id="Inclusion">Inclusion of related Resources</h3>
+<div class="paragraph">
+<p>There is no direct support for including related resources,
+but a REST controller could provide an optional request parameter like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RequestParam(value = "included", required = false) String[] included)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, within the controller implementation, this parameter could be interpreted,
+and the builder could be used for the inclusion, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
+    HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
+    for (Movie movie : pagedResult.getContent()) {
+        for (Director director : movie.getDirectors()) {
+            directors.put(director.getId(), director);
+        }
+    }
+    directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="SparseFielsets">Sparse Fieldsets</h3>
+<div class="paragraph">
+<p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
+by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
+the attributes <code>name</code> and <code>born</code>, and a movie would have the attributes <code>title</code> and <code>rating</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
+director.setMovies(Collections.singletonList(movie));
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .fields("directors", "name")
+                .fields("movies", "title")
+                .relationship("movies", movie)
+                .included(movie)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So, only the name attribute of a director, and the title attribute
+of a movie would be serialized:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "id": "3",
+    "type": "directors",
+    "attributes": {
+      "name": "George Lucas"
+    },
+    "relationships": {
+      "movies": {
+        "data": {
+          "id": "1",
+          "type": "movies"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
+that should be applied to a specific JSON:API type, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the following controller code, you could check the existence of these request parameters, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors != null) {
+    builder = builder.fields("directors", fieldsDirectors);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When adding sparse fieldsets to the builder, they will NOT automatically exclude added relationships.
+Relationships have to be added conditionally, like the inclusions, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+    builder = builder.relationship("movies", director.getMovies());
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="Creating">Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
@@ -824,12 +944,34 @@ Currently, you can configure</p>
 <p>if the JSON:API version should be rendered automatically, the default is <code>false</code>.</p>
 </li>
 <li>
-<p>if JSON:API types should be rendered as pluralized or non pluralized class names,
-the default is pluralized.</p>
+<p>if JSON:API types should be rendered as pluralized or non pluralized class names.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is pluralized.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta object,
-the default is <code>true</code>.</p>
+<p>if JSON:API types should be rendered as lower cased or original class names.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is lower cased.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if page information of a PagedModel should be rendered automatically as JSON:API meta object.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is <code>true</code>.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
@@ -857,11 +999,12 @@ make sure you provide the following configuration in your Spring <code>applicati
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">@Bean
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
             .withJsonApiVersionRendered(true)
             .withPluralizedTypeRendered(false)
+            .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
 }</code></pre>
 </div>
@@ -877,7 +1020,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">return ResponseEntity.badRequest().body(
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return ResponseEntity.badRequest().body(
         JsonApiErrors.create().withError(
                 JsonApiError.create()
                         .withAboutLink("http://movie-db.com/problem")
@@ -911,8 +1054,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.8.0<br>
-Last updated 2020-09-26 10:12:02 UTC
+Version 0.9.0<br>
+Last updated 2020-10-13 12:56:41 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
