@@ -1,0 +1,9 @@
+{
+  "data": {
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  }
+}

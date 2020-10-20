@@ -304,6 +304,48 @@ NOTE: If you use the annotation `JsonApiRelationships` on an attribute of a Java
 the content will NOT be serialized automatically to `JSON:API relationships`. This is on purpose,
 please us the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
 
+[[polymorphy]]
+== Polymorphic Deserialization ==
+
+You can configure polymorphic deserialization (and serialization) on a 'per class' base,
+using some Jackson annotations. The following example illustrates this:
+
+Imagine a controller method like
+[source, java]
+@PostMapping("/movies")
+public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) { ...
+
+and a subclass of `Movie` that contains a rating, like
+[source, java]
+@NoArgsConstructor
+@Data
+@JsonApiTypeForClass("movies")
+public class MovieWithRating extends Movie {
+    private double rating;
+}
+
+You could now annotate the `Movie` class with:
+[source, java]
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
+})
+
+Then a HTTP POST to /movies with body
+[source, json]
+----
+include::{test-resources-dir}/postMovieWithRating.json[]
+----
+
+would be deserialized to an object of class `MovieWithRating`, even though the controller
+method accepts the superclass `Movie`.
+
+The JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
+[source, json]
+----
+include::{test-resources-dir}/polymorphicMovie.json[]
+----
+
 [[configuration]]
 == Configuration ==
 

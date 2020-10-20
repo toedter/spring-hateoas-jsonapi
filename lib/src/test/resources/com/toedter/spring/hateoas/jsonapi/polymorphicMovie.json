@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "3",
+    "type": "movies",
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/3"
+  }
+}
