@@ -349,7 +349,7 @@ include::{test-resources-dir}/polymorphicMovie.json[]
 NOTE: @-members will be introduced in JSON:API version 1.1.
 The above example will produce JSON that is not compliant with JSON:API 1.0.
 For JSON:API 1.0 compliance you could configure Jackson like
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type") instead.
+`@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")` instead.
 
 [[configuration]]
 == Configuration ==
