@@ -16,7 +16,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.10.0-SNAPSHOT,</span>
-<span id="revdate">2020-10-13</span>
+<span id="revdate">2020-10-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -31,6 +31,7 @@
 <li><a href="#Inclusion">Inclusion of related Resources</a></li>
 <li><a href="#SparseFielsets">Sparse Fieldsets</a></li>
 <li><a href="#Creating">Creating Resources with HTTP POST</a></li>
+<li><a href="#polymorphy">Polymorphic Deserialization</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#errors">Error Handling</a></li>
 </ul>
@@ -930,6 +931,87 @@ please us the <code>JsonApiModelBuilder</code> to decide, which relationships an
 </div>
 </div>
 <div class="sect2">
+<h3 id="polymorphy">Polymorphic Deserialization</h3>
+<div class="paragraph">
+<p>You can configure polymorphic deserialization (and serialization) on a 'per class' base,
+using some Jackson annotations. The following example illustrates this:</p>
+</div>
+<div class="paragraph">
+<p>Imagine a controller method like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@PostMapping("/movies")
+public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and a subclass of <code>Movie</code> that contains a rating, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+@Data
+@JsonApiTypeForClass("movies")
+public class MovieWithRating extends Movie {
+    private double rating;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You could now annotate the <code>Movie</code> class with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a HTTP POST to /movies with body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller
+method accepts the superclass <code>Movie</code>.</p>
+</div>
+<div class="paragraph">
+<p>The JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "id": "3",
+    "type": "movies",
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/3"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="configuration">Configuration</h3>
 <div class="paragraph">
 <p>There are several options how to change the output of the JSON:API rendering.</p>
@@ -1055,7 +1137,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.10.0-SNAPSHOT<br>
-Last updated 2020-10-13 13:20:44 UTC
+Last updated 2020-10-20 16:00:14 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
