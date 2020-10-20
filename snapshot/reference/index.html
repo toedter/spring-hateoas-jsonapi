@@ -1010,6 +1010,21 @@ method accepts the superclass <code>Movie</code>.</p>
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+@-members will be introduced in JSON:API version 1.1.
+The above example will produce JSON that is not compliant with JSON:API 1.0.
+For JSON:API 1.0 compliance you could configure Jackson like
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type") instead.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="configuration">Configuration</h3>
@@ -1137,7 +1152,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.10.0-SNAPSHOT<br>
-Last updated 2020-10-20 16:00:14 UTC
+Last updated 2020-10-20 16:19:34 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
