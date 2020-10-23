@@ -564,7 +564,7 @@ class Jackson2JsonApiIntegrationTest {
             private Instant instant;
 
             InstantExample() throws ParseException {
-                instant = new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-31").toInstant();
+                instant = Instant.ofEpochSecond(1603465191);
             }
         }
         EntityModel<InstantExample> entityModel = EntityModel.of(new InstantExample());

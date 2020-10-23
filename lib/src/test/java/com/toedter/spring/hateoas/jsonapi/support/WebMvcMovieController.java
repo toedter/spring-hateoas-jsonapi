@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -107,7 +108,7 @@ public class WebMvcMovieController {
     @GetMapping("/movieWithLastSeen")
     public RepresentationModel<?> movieWithLastSeen() throws ParseException {
         MovieWithLastSeen movie = new MovieWithLastSeen("1", "Star Wars",
-                new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-31").toInstant() );
+                Instant.ofEpochSecond(1603465191) );
         return EntityModel.of(movie);
     }
 
