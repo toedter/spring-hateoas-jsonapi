@@ -20,12 +20,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.mediatype.PropertyUtils;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
@@ -126,9 +126,7 @@ class JsonApiData {
         }
         JsonApiResource.ResourceField typeField = JsonApiResource.getType(content, jsonApiConfiguration);
 
-        ObjectMapper mapper = new ObjectMapper();
-        @SuppressWarnings("unchecked")
-        Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
+        Map<String, Object> attributeMap = PropertyUtils.extractPropertyValues(content);
         attributeMap.remove("links");
         attributeMap.remove(idField.name);
         attributeMap.remove(typeField.name);
@@ -141,10 +139,10 @@ class JsonApiData {
         // apply sparse fieldsets
         if (sparseFieldsets != null) {
             Collection<String> attributes = sparseFieldsets.get(finalType);
-            if(attributes != null) {
+            if (attributes != null) {
                 Set<String> keys = new HashSet<>(attributeMap.keySet());
                 for (String key : keys) {
-                    if(!attributes.contains(key)) {
+                    if (!attributes.contains(key)) {
                         attributeMap.remove(key);
                     }
                 }
