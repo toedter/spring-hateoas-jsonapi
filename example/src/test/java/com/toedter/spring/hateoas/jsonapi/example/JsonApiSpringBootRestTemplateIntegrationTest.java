@@ -74,7 +74,7 @@ public class JsonApiSpringBootRestTemplateIntegrationTest {
         String expectedResult =
                 "{\"jsonapi\":{\"version\":\"1.0\"},\"data\":{\"id\":\""
                         + savedMovie.getId()
-                        + "\",\"type\":\"movies\",\"attributes\":{\"title\":\"Test Movie\",\"year\":2020,\"rating\":9.3}"
+                        + "\",\"type\":\"movies\",\"attributes\":{\"year\":2020,\"rating\":9.3,\"title\":\"Test Movie\"}"
                         + ",\"relationships\":{\"directors\":{\"data\":[],\"links\":{\"self\":\"http://localhost:"
                         + this.randomPort
                         + "/api/movies/427/relationships/directors\",\"related\":\"http://localhost:"
