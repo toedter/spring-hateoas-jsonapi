@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.support.*;
 import lombok.Getter;
 import org.junit.jupiter.api.*;
@@ -26,12 +27,16 @@ import org.springframework.hateoas.*;
 
 import javax.persistence.Id;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("Jackson2JsonApi Integration Test")
@@ -296,7 +301,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
     }
-    
+
     @Test
     void should_deserialize_single_movie_entity_model_with_playtime() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithPlaytime.class);
@@ -492,7 +497,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_single_movie_model_with_many_director_links () throws Exception {
+    void should_serialize_single_movie_model_with_many_director_links() throws Exception {
         Movie movie = new Movie("4", "The Matrix");
 
         EntityModel<Movie> movieEntityModel = EntityModel.of(movie);
@@ -513,7 +518,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_deserialize_single_movie_model_with_many_director_links () throws Exception {
+    void should_deserialize_single_movie_model_with_many_director_links() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
         File file = new ClassPathResource("movieEntityModelWithTwoDirectorsLinks.json", getClass()).getFile();
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
@@ -549,6 +554,24 @@ class Jackson2JsonApiIntegrationTest {
 
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithJsonApiVersion.json");
+    }
+
+    @Test
+    void should_serialize_custom_instant() throws Exception {
+        @Getter
+        class InstantExample {
+            private String id = "1";
+            private Instant instant;
+
+            InstantExample() throws ParseException {
+                instant = new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-31").toInstant();
+            }
+        }
+        EntityModel<InstantExample> entityModel = EntityModel.of(new InstantExample());
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        String instantJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(instantJson, "instantWithCustomConfig.json");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

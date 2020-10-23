@@ -1,5 +1,6 @@
 {
   "data": {
+    "type": "movies",
     "attributes": {
       "@type": "movieWithRating",
       "title": "Batman Begins",

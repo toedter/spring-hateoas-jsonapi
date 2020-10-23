@@ -16,6 +16,9 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,6 +86,18 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
                 .getContentAsString();
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");
+    }
+
+    @Test
+    void should_get_last_seen_movie() throws Exception {
+        String movieJson = this.mockMvc
+                .perform(get("/movieWithLastSeen").accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "movieWithLastSeen.json");
     }
 
     @Test
@@ -195,7 +210,16 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
         @Bean
         JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(ObjectProvider<JsonApiConfiguration> configuration,
                                                                     AutowireCapableBeanFactory beanFactory) {
-            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
+            return new JsonApiMediaTypeConfiguration(configuration, beanFactory) {
+                @Override
+                ObjectMapper configureObjectMapper(ObjectMapper mapper, JsonApiConfiguration configuration) {
+                    ObjectMapper objectMapper = super.configureObjectMapper(mapper, configuration);
+
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                    return objectMapper;
+                }
+            };
         }
     }
 }

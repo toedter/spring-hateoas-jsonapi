@@ -307,7 +307,7 @@ please us the `JsonApiModelBuilder` to decide, which relationships and included 
 [[polymorphy]]
 == Polymorphic Deserialization ==
 
-You can configure polymorphic deserialization (and serialization) on a 'per class' base,
+You can configure polymorphic deserialization on a 'per class' base,
 using some Jackson annotations. The following example illustrates this:
 
 Imagine a controller method like
@@ -340,16 +340,20 @@ include::{test-resources-dir}/postMovieWithRating.json[]
 would be deserialized to an object of class `MovieWithRating`, even though the controller
 method accepts the superclass `Movie`.
 
-The JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
+NOTE: @-members will be introduced in JSON:API version 1.1.
+The above example will produce JSON that is not compliant with JSON:API 1.0.
+For JSON:API 1.0 compliance you could configure Jackson like
+`@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")` instead.
+
+Important: The above mechanism is only used for deserialization, NOT for serialization, since the
+JSON:API specification uses the `type` attribute (within data) for the same purpose.
+So the JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
+
 [source, json]
 ----
 include::{test-resources-dir}/polymorphicMovie.json[]
 ----
 
-NOTE: @-members will be introduced in JSON:API version 1.1.
-The above example will produce JSON that is not compliant with JSON:API 1.0.
-For JSON:API 1.0 compliance you could configure Jackson like
-`@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")` instead.
 
 [[configuration]]
 == Configuration ==

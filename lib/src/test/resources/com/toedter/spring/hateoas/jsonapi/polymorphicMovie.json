@@ -3,9 +3,8 @@
     "id": "3",
     "type": "movies",
     "attributes": {
-      "@type": "movieWithRating",
-      "title": "Batman Begins",
-      "rating": 8.2
+      "rating": 8.2,
+      "title": "Batman Begins"
     }
   },
   "links": {

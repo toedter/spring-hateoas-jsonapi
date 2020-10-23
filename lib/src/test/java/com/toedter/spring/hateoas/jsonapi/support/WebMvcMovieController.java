@@ -15,14 +15,21 @@
  */
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -95,6 +102,13 @@ public class WebMvcMovieController {
     public RepresentationModel<?> movieWithClassType() {
         Movie movie = new Movie("1", "Star Wars");
         return new MovieRepresentationModelWithoutJsonApiType(movie);
+    }
+
+    @GetMapping("/movieWithLastSeen")
+    public RepresentationModel<?> movieWithLastSeen() throws ParseException {
+        MovieWithLastSeen movie = new MovieWithLastSeen("1", "Star Wars",
+                new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-31").toInstant() );
+        return EntityModel.of(movie);
     }
 
     @PostMapping("/movies")

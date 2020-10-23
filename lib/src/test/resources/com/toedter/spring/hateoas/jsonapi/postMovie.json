@@ -1,5 +1,6 @@
 {
   "data": {
+    "type": "movies",
     "attributes": {
       "title": "Batman Begins"
     }
