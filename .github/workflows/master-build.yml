@@ -27,6 +27,11 @@ jobs:
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
       run: ./gradlew build doc publish
+    - name: Archive reports (for lib only)
+      uses: actions/upload-artifact@v2
+      with:
+        name: reports
+        path: ./lib/build/reports
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
