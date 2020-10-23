@@ -28,6 +28,7 @@ jobs:
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
       run: ./gradlew build doc publish
     - name: Archive reports (for lib only)
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: reports
