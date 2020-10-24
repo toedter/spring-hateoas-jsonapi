@@ -20,6 +20,6 @@ import org.springframework.hateoas.EntityModel;
 
 class JsonApiEntityModelSerializer extends AbstractJsonApiModelSerializer<EntityModel<?>> {
     public JsonApiEntityModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(EntityModel.class, false, jsonApiConfiguration);
+        super(EntityModel.class, jsonApiConfiguration);
     }
 }

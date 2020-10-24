@@ -20,6 +20,6 @@ import org.springframework.hateoas.CollectionModel;
 
 class JsonApiCollectionModelSerializer extends AbstractJsonApiModelSerializer<CollectionModel<?>> {
     public JsonApiCollectionModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(CollectionModel.class, false, jsonApiConfiguration);
+        super(CollectionModel.class, jsonApiConfiguration);
     }
 }

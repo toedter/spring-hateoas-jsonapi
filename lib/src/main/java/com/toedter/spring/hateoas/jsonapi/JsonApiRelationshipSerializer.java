@@ -30,7 +30,7 @@ public class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<Jso
     private final JsonApiConfiguration jsonApiConfiguration;
 
     @Getter
-    private class JsonApiRelationshipForSerialization {
+    private static class JsonApiRelationshipForSerialization {
         Object data;
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         Links links;

@@ -15,21 +15,15 @@
  */
 package com.toedter.spring.hateoas.jsonapi.support;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;

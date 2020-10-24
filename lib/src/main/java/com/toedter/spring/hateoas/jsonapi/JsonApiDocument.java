@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Value;
 import lombok.With;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;

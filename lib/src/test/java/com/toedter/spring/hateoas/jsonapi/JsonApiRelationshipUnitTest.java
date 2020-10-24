@@ -88,6 +88,7 @@ class JsonApiRelationshipUnitTest {
         List<Test> collection = new ArrayList<>();
 
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(collection);
+        //noinspection unchecked
         List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
 
         assertThat(data.size()).isEqualTo(0);

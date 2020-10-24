@@ -19,7 +19,6 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;

@@ -50,8 +50,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
     }
 
-    protected AbstractJsonApiModelSerializer(Class<?> t, boolean dummy, JsonApiConfiguration jsonApiConfiguration) {
-        super(t, dummy);
+    protected AbstractJsonApiModelSerializer(Class<?> t, JsonApiConfiguration jsonApiConfiguration) {
+        super(t, false);
         this.jsonApiConfiguration = jsonApiConfiguration;
     }
 

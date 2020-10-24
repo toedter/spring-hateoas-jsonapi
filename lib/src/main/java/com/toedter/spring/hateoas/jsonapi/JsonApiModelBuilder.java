@@ -16,7 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.*;
 import org.springframework.util.Assert;
@@ -296,10 +295,8 @@ public class JsonApiModelBuilder {
         JsonApiRelationship jsonApiRelationship = relationships.get(name);
         if (jsonApiRelationship == null) {
             jsonApiRelationship = new JsonApiRelationship(null, null, null);
-            jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
-        } else {
-            jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
         }
+        jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
         relationships.put(name, jsonApiRelationship);
 
         return this;

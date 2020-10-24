@@ -21,7 +21,7 @@ import org.springframework.hateoas.PagedModel;
 class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedModel<?>> {
 
     public JsonApiPagedModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(PagedModel.class, false, jsonApiConfiguration);
+        super(PagedModel.class, jsonApiConfiguration);
     }
 
 }

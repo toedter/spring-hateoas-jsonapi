@@ -20,6 +20,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 class JsonApiRepresentationModelSerializer extends AbstractJsonApiModelSerializer<RepresentationModel<?>> {
     public JsonApiRepresentationModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(RepresentationModel.class, false, jsonApiConfiguration);
+        super(RepresentationModel.class, jsonApiConfiguration);
     }
 }
