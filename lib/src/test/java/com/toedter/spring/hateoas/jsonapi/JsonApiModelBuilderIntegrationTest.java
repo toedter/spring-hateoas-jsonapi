@@ -295,7 +295,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
-    @Test  // issue: #13
+    @Test
+        // issue: #13
     void should_build_with_meta_only() throws Exception {
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().meta("x", "y").build();
@@ -484,5 +485,27 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "directorWithSparseFieldsetOnIncluded.json");
+    }
+
+    @Test
+    void should_build_single_movie_model_with_relationship_included_type_config() throws Exception {
+        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
+        ObjectMapper mapper = new ObjectMapper();
+        configuration.configureObjectMapper(mapper,
+                new JsonApiConfiguration()
+                        .withPluralizedTypeRendered(false)
+                        .withLowerCasedTypeRendered(false));
+
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", director)
+                        .included(director)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWidthDirectorRelationshipAndTypeConfiguration.json");
     }
 }

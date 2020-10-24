@@ -41,38 +41,36 @@ class JsonApiRelationshipUnitTest {
     void should_add_data_to_empty_relation() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
         jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
-        JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+        Movie data = (Movie) jsonApiRelationship.getData();
 
         assertThat(data.getId()).isEqualTo("1");
-        assertThat(data.getType()).isEqualTo("movies");
+        assertThat(data.getTitle()).isEqualTo("Star Wars");
     }
 
     @Test
     void should_create_of_entity_model() {
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(EntityModel.of(movie));
-        JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+        Movie data = (Movie) jsonApiRelationship.getData();
 
         assertThat(data.getId()).isEqualTo("1");
-        assertThat(data.getType()).isEqualTo("movies");
+        assertThat(data.getTitle()).isEqualTo("Star Wars");
     }
 
     @Test
     void should_create_of_object() {
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(movie);
-        JsonApiResource data = (JsonApiResource) jsonApiRelationship.getData();
+        Movie data = (Movie) jsonApiRelationship.getData();
 
         assertThat(data.getId()).isEqualTo("1");
-        assertThat(data.getType()).isEqualTo("movies");
+        assertThat(data.getTitle()).isEqualTo("Star Wars");
     }
 
     @Test
     void should_create_of_object_as_collection() {
         JsonApiRelationship jsonApiRelationship =
                 JsonApiRelationship.of(movie).isAlwaysSerializedWithDataArray();
-        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
 
-        assertThat(data.get(0).getId()).isEqualTo("1");
-        assertThat(data.get(0).getType()).isEqualTo("movies");
+        assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     }
 
     @Test
@@ -81,10 +79,8 @@ class JsonApiRelationshipUnitTest {
         collection.add(movie);
 
         JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(collection);
-        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
 
-        assertThat(data.get(0).getId()).isEqualTo("1");
-        assertThat(data.get(0).getType()).isEqualTo("movies");
+        assertThat(jsonApiRelationship.getData()).isEqualTo(collection);
     }
 
     @Test
@@ -120,10 +116,7 @@ class JsonApiRelationshipUnitTest {
         jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
         jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
 
-        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
-
-        assertThat(data.get(0).getId()).isEqualTo("1");
-        assertThat(data.get(0).getType()).isEqualTo("movies");
+        assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     }
 
     @Test
@@ -132,10 +125,10 @@ class JsonApiRelationshipUnitTest {
         jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
         jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
-        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+        List<Movie> data = (List<Movie>) jsonApiRelationship.getData();
 
         assertThat(data.get(0).getId()).isEqualTo("1");
-        assertThat(data.get(0).getType()).isEqualTo("movies");
+        assertThat(data.get(0).getTitle()).isEqualTo("Star Wars");
     }
 
     @Test
@@ -145,10 +138,10 @@ class JsonApiRelationshipUnitTest {
         jsonApiRelationship = jsonApiRelationship.addDataObject(new Movie("2", "Test"));
         jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
-        List<JsonApiResource> data = (List<JsonApiResource>) jsonApiRelationship.getData();
+        List<Movie> data = (List<Movie>) jsonApiRelationship.getData();
 
         assertThat(data.get(0).getId()).isEqualTo("1");
-        assertThat(data.get(0).getType()).isEqualTo("movies");
+        assertThat(data.get(0).getTitle()).isEqualTo("Star Wars");
     }
 
     @Test
