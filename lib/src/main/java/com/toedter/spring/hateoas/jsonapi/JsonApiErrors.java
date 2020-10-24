@@ -32,7 +32,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JsonApiErrors {
     @Getter
-    List<JsonApiError> errors = new ArrayList<>();
+    private List<JsonApiError> errors = new ArrayList<>();
 
     public JsonApiErrors(JsonApiError jsonApiError) {
         errors.add(jsonApiError);

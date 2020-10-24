@@ -38,7 +38,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     public static final String CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL = "Cannot deserialize input to EntityModel";
 
-    JsonApiEntityModelDeserializer() {
+    public JsonApiEntityModelDeserializer() {
         super();
     }
 

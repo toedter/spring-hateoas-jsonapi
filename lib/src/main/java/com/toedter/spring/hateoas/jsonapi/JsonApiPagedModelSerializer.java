@@ -23,5 +23,4 @@ class JsonApiPagedModelSerializer extends AbstractJsonApiModelSerializer<PagedMo
     public JsonApiPagedModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
         super(PagedModel.class, jsonApiConfiguration);
     }
-
 }

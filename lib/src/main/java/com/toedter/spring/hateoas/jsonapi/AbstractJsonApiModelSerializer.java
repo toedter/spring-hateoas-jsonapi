@@ -37,10 +37,9 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
     private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {
         JsonApiDocumentWithoutSerializedData(JsonApiDocument jsonApiDocument) {
-            this.meta = jsonApiDocument.meta;
-            this.links = jsonApiDocument.links;
-            this.included = jsonApiDocument.included;
-            this.jsonapi = jsonApiDocument.jsonapi;
+            super(jsonApiDocument.getJsonapi(), null,
+                    jsonApiDocument.getMeta(), jsonApiDocument.getErrors(),
+                    jsonApiDocument.getLinks(), jsonApiDocument.getIncluded());
         }
 
         @Override

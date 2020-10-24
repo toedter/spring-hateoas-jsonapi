@@ -44,18 +44,19 @@ import java.util.Map;
 public class JsonApiModelBuilder {
     private static final String RELATIONSHIP_NAME_MUST_NOT_BE_NULL = "relationship name must not be null!";
     private static final String RELATED = "related";
-    private RepresentationModel<?> model;
-    private Links links = Links.NONE;
-    private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
-    private final HashMap<String, Collection<String>> sparseFieldsets = new HashMap<>();
-    private final List<RepresentationModel<?>> included = new ArrayList<>();
-    private final Map<String, Object> meta = new HashMap<>();
-
     private static final String PAGE = "page";
     private static final String PAGE_NUMBER = "number";
     private static final String PAGE_SIZE = "size";
     private static final String PAGE_TOTAL_ELEMENTS = "totalElements";
     private static final String PAGE_TOTAL_PAGES = "totalPages";
+
+    private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
+    private final HashMap<String, Collection<String>> sparseFieldsets = new HashMap<>();
+    private final List<RepresentationModel<?>> included = new ArrayList<>();
+    private final Map<String, Object> meta = new HashMap<>();
+
+    private RepresentationModel<?> model;
+    private Links links = Links.NONE;
 
     private JsonApiModelBuilder() {
     }

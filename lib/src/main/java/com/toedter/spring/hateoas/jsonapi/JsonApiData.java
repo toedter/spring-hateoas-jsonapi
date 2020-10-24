@@ -51,12 +51,12 @@ import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredF
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JsonApiData {
-    String id;
-    String type;
-    Map<String, Object> attributes;
+    private String id;
+    private String type;
+    private Map<String, Object> attributes;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    Object relationships;
-    Links links;
+    private Object relationships;
+    private Links links;
 
     @JsonCreator
     public JsonApiData(

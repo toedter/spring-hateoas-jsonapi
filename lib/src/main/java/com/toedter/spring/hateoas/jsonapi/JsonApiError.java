@@ -50,7 +50,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    String id;
+    private String id;
 
     /**
      * Gets a links object containing the following members:
@@ -59,7 +59,7 @@ public class JsonApiError {
      * @return will never be {@literal null}.
      */
     @Getter
-    Map<String, String> links;
+    private Map<String, String> links;
 
     /**
      * Gets the the HTTP status code applicable to this problem, expressed as a string value.
@@ -71,7 +71,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    String status;
+    private String status;
 
     /**
      * Gets an application-specific error code, expressed as a string value.
@@ -83,7 +83,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    String code;
+    private String code;
 
     /**
      * Gets a short, human-readable summary of the problem that SHOULD NOT change
@@ -97,7 +97,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    String title;
+    private String title;
 
     /**
      * Gets a human-readable explanation specific to this occurrence of the problem.
@@ -111,7 +111,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    String detail;
+    private String detail;
 
     /**
      * Gets an object containing references to the source of the error, optionally including
@@ -123,7 +123,7 @@ public class JsonApiError {
      * @return can be {@literal null}.
      */
     @Getter
-    Map<String, String> source;
+    private Map<String, String> source;
 
     /**
      * Gets a meta object containing non-standard meta-information about the error.
@@ -135,7 +135,7 @@ public class JsonApiError {
      */
     @Getter
     @With
-    Map<String, Object> meta;
+    private Map<String, Object> meta;
 
     /**
      * Adds a source pointer to the error.

@@ -35,8 +35,8 @@ import java.util.Map;
 
 class JsonApiHandlerInstantiator extends HandlerInstantiator {
     private final Map<Class<?>, Object> serializers = new HashMap<>();
-    private final @Nullable
-    AutowireCapableBeanFactory beanFactory;
+    @Nullable
+    private final AutowireCapableBeanFactory beanFactory;
 
     public JsonApiHandlerInstantiator(
             JsonApiConfiguration jsonApiConfiguration, @Nullable AutowireCapableBeanFactory beanFactory) {

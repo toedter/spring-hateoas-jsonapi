@@ -23,12 +23,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
+import org.springframework.lang.Nullable;
 
 @Value
-@Getter(onMethod_={@JsonProperty})
+@Getter(onMethod_ = {@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JsonApiJsonApi {
+    @Nullable
     String version = "1.0";
 }
