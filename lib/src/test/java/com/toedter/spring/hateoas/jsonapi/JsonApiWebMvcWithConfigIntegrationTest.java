@@ -18,7 +18,11 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,11 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Value;
+import lombok.With;
 
 import java.util.HashMap;
 import java.util.Map;
