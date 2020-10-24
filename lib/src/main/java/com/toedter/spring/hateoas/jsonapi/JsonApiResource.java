@@ -74,20 +74,6 @@ class JsonApiResource {
         }
     }
 
-    /**
-     * Creates a JSON:API resource from an object
-     * JSON:API id (and type) must be extractable from the dataObject.
-     *
-     * @param dataObject the base for the relationship
-     * @return the JSON:API resource
-     */
-    public static JsonApiResource of(Object dataObject) {
-        final JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration();
-        Object id = JsonApiResource.getId(dataObject, jsonApiConfiguration).value;
-        String type = JsonApiResource.getType(dataObject, jsonApiConfiguration).value;
-        return new JsonApiResource(id, type);
-    }
-
     static ResourceField getId(Object object, JsonApiConfiguration jsonApiConfiguration) {
         return getResourceField(JsonApiResourceField.id, object, jsonApiConfiguration);
     }
