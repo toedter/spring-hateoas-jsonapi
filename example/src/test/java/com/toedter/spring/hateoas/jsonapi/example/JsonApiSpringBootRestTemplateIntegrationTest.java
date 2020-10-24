@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JsonApiSpringBootRestTemplateIntegrationTest {
 
     @LocalServerPort
-    int randomPort;
+    private int randomPort;
 
     @Autowired
     private TestRestTemplate restTemplate;

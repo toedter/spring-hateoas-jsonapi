@@ -49,13 +49,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Spring Boot MockMvc Integration Test")
 public class JsonApiSpringBootMockMvcIntegrationTest {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
 
     @MockBean
-    DirectorRepository directorRepository;
+    private DirectorRepository directorRepository;
 
     @Test
     void should_get_single_movie() throws Exception {

@@ -50,13 +50,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("WebMvc Integration Test")
 public class JsonApiWebMvcIntegrationTest {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
 
     @MockBean
-    DirectorRepository directorRepository;
+    private DirectorRepository directorRepository;
 
     @Test
     void should_get_single_movie() throws Exception {
