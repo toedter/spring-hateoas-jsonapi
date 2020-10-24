@@ -52,7 +52,7 @@ public class Movie {
     @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)
     @JsonIgnore
     @JsonApiRelationships("directors")  // Only used for deserialization, e.g. useful when doing a HTTP POST
-    List<Director> directors = new ArrayList<>();
+    private List<Director> directors = new ArrayList<>();
 
     public Movie(String imdbId, String title, long year, double rating, int rank, String thumb) {
         this.imdbId = imdbId;

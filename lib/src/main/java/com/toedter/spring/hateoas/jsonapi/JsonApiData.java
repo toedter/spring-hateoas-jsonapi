@@ -77,7 +77,7 @@ class JsonApiData {
         this(null, null, null, null, null);
     }
 
-    static List<JsonApiData> extractCollectionContent(
+    public static List<JsonApiData> extractCollectionContent(
             @Nullable CollectionModel<?> collectionModel,
             JsonApiConfiguration jsonApiConfiguration,
             @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
@@ -93,7 +93,7 @@ class JsonApiData {
         return dataList;
     }
 
-    static Optional<JsonApiData> extractContent(
+    public static Optional<JsonApiData> extractContent(
             @Nullable Object content,
             boolean isSingleEntity,
             JsonApiConfiguration jsonApiConfiguration,

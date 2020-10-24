@@ -69,7 +69,7 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    ResponseEntity<RepresentationModel<?>> findAll(
+    public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size,
             @RequestParam(value = "included", required = false) String[] included,
@@ -120,7 +120,7 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    ResponseEntity<?> newMovie(@RequestBody Movie movie) {
+    public ResponseEntity<?> newMovie(@RequestBody Movie movie) {
         repository.save(movie);
         final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
 
@@ -159,7 +159,7 @@ public class MovieController {
     }
 
     @PatchMapping("/movies/{id}")
-    ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
+    public ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
 
         Movie existingMovie = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
         existingMovie.update(movie);
@@ -181,7 +181,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/movies/{id}")
-    ResponseEntity<?> deleteMovie(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
         Optional<Movie> optional = repository.findById(id);
         if (optional.isPresent()) {
             Movie movie = optional.get();

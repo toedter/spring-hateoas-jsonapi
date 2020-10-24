@@ -121,7 +121,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
     }
 
-    Links getLinksOrNull(RepresentationModel<?> representationModel) {
+    private Links getLinksOrNull(RepresentationModel<?> representationModel) {
         Links links = representationModel.getLinks();
         if (links.isEmpty()) {
             links = null;
