@@ -28,7 +28,6 @@ import org.springframework.hateoas.*;
 import javax.persistence.Id;
 import java.io.File;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("Jackson2JsonApi Integration Test")
@@ -560,8 +558,8 @@ class Jackson2JsonApiIntegrationTest {
     void should_serialize_custom_instant() throws Exception {
         @Getter
         class InstantExample {
-            private String id = "1";
-            private Instant instant;
+            private final String id = "1";
+            private final Instant instant;
 
             InstantExample() throws ParseException {
                 instant = Instant.ofEpochSecond(1603465191);

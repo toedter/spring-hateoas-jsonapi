@@ -186,9 +186,7 @@ class JsonApiRelationship {
         if (links != null) {
             final Optional<Link> selfLink = links.getLink("self");
             final Optional<Link> relatedLink = links.getLink("related");
-            if (!selfLink.isPresent() && !relatedLink.isPresent()) {
-                return false;
-            }
+            return selfLink.isPresent() || relatedLink.isPresent();
         }
 
         // we allow null meta and non-null but empty meta
