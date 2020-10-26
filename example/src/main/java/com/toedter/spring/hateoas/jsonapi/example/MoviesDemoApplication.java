@@ -17,7 +17,6 @@
 package com.toedter.spring.hateoas.jsonapi.example;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,7 +39,7 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
     }
 
     @Bean
-    JsonApiConfiguration jsonApiConfiguration() {
+    public JsonApiConfiguration jsonApiConfiguration() {
         return new JsonApiConfiguration()
                 .withJsonApiVersionRendered(true)
                 .withObjectMapperCustomizer(objectMapper -> {
