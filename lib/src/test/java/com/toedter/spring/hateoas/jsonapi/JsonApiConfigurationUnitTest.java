@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -33,6 +35,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
+        assertThat(new JsonApiConfiguration().getObjectMapperCustomizer()).isNull();
     }
 
     @Test
@@ -60,5 +63,16 @@ class JsonApiConfigurationUnitTest {
     void should_set_type_for_class() {
         assertThat(new JsonApiConfiguration().withTypeForClass(Movie.class, "mymovies")
                 .getTypeForClass(Movie.class)).isEqualTo("mymovies");
+    }
+
+    @Test
+    void should_customize_object_mapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+        new JsonApiConfiguration()
+                .withObjectMapperCustomizer(
+                        mapper -> objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT))
+                .getObjectMapperCustomizer().accept(objectMapper);
+        assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)).isTrue();
     }
 }

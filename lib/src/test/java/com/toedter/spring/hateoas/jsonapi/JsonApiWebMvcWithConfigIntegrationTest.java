@@ -16,6 +16,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,7 +111,10 @@ class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
                     .withJsonApiVersionRendered(true)
                     .withPluralizedTypeRendered(false)
                     .withLowerCasedTypeRendered(false)
-                    .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
+                    .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+                    .withObjectMapperCustomizer(
+                            objectMapper -> objectMapper.configure(
+                                    SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
         }
         // end::jsonApiConfig[]
     }

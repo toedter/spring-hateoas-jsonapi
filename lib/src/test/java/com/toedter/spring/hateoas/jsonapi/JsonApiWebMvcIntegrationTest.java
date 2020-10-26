@@ -19,6 +19,7 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -216,16 +217,16 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
         @Bean
         JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(ObjectProvider<JsonApiConfiguration> configuration,
                                                                     AutowireCapableBeanFactory beanFactory) {
-            return new JsonApiMediaTypeConfiguration(configuration, beanFactory) {
-                @Override
-                ObjectMapper configureObjectMapper(ObjectMapper mapper, JsonApiConfiguration configuration) {
-                    ObjectMapper objectMapper = super.configureObjectMapper(mapper, configuration);
+            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
+        }
 
-                    objectMapper.registerModule(new JavaTimeModule());
-                    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-                    return objectMapper;
-                }
-            };
+        @Bean
+        JsonApiConfiguration jsonApiConfiguration() {
+            return new JsonApiConfiguration()
+                    .withObjectMapperCustomizer(objectMapper -> {
+                        objectMapper.registerModule(new JavaTimeModule());
+                        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                    });
         }
     }
 }

@@ -63,11 +63,6 @@ public class MovieController {
         this.movieModelAssembler = movieModelAssembler;
     }
 
-    @Bean
-    JsonApiConfiguration getConfig() {
-        return new JsonApiConfiguration().withJsonApiVersionRendered(true);
-    }
-
     @GetMapping("/movies")
     public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,

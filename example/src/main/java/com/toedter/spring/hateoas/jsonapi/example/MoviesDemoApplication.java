@@ -16,8 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -33,5 +37,15 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
         }
 
         SpringApplication.run(MoviesDemoApplication.class, args);
+    }
+
+    @Bean
+    JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+                .withJsonApiVersionRendered(true)
+                .withObjectMapperCustomizer(objectMapper -> {
+                    // put your additional object mapper config here
+                    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
+                });
     }
 }

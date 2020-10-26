@@ -373,6 +373,7 @@ Currently, you can configure
 * if a specific Java class should be rendered with a specific `JSON:API type`. This is useful when
 representation model classes should get the `JSON:API type` of the domain model or when derived classes
 should get the `JSON:API type` of the super class. See example below.
+* A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
 make sure you provide the following configuration in your Spring `application.properties` when using Tomcat:

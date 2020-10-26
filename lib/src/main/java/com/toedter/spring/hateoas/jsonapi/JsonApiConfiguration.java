@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import org.springframework.util.Assert;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * JSON:API specific configuration.
@@ -75,6 +77,19 @@ public class JsonApiConfiguration {
      */
     private final @With @Getter boolean pageMetaAutomaticallyCreated;
 
+    /**
+     * Gets the ObjectMapper customizer.
+     *
+     * @return the objectMapperCustomizer if set with {@literal withObjectMapperCustomizer}, null otherwise.
+     *
+     * --WITH--
+     * You can pass a lambda expression to customize the ObjectMapper used
+     * for serialization.
+     *
+     * @param objectMapperCustomizer the ObjectMapper customizer
+     */
+    private final @With @Getter Consumer<ObjectMapper> objectMapperCustomizer;
+
     private final @With(AccessLevel.PRIVATE) Map<Class<?>, String> typeForClass;
 
     /**
@@ -117,5 +132,7 @@ public class JsonApiConfiguration {
         this.jsonApiVersionRendered = false;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
+        this.objectMapperCustomizer = null;
     }
 }
+
