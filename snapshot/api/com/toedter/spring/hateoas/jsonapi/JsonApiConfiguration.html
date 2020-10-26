@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,6 +177,13 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectMapperCustomizer()">getObjectMapperCustomizer</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the ObjectMapper customizer.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTypeForClass(java.lang.Class)">getTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz)</code></th>
 <td class="colLast">
@@ -184,21 +191,21 @@ extends java.lang.Object</pre>
  for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isJsonApiVersionRendered()">isJsonApiVersionRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLowerCasedTypeRendered()">isLowerCasedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPageMetaAutomaticallyCreated()">isPageMetaAutomaticallyCreated</a></span>()</code></th>
 <td class="colLast">
@@ -206,28 +213,36 @@ extends java.lang.Object</pre>
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPluralizedTypeRendered()">isPluralizedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withJsonApiVersionRendered(boolean)">withJsonApiVersionRendered</a></span>&#8203;(boolean&nbsp;jsonApiVersionRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withLowerCasedTypeRendered(boolean)">withLowerCasedTypeRendered</a></span>&#8203;(boolean&nbsp;lowerCasedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withObjectMapperCustomizer(java.util.function.Consumer)">withObjectMapperCustomizer</a></span>&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</code></th>
+<td class="colLast">
+<div class="block">You can pass a lambda expression to customize the ObjectMapper used
+ for serialization.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPageMetaAutomaticallyCreated(boolean)">withPageMetaAutomaticallyCreated</a></span>&#8203;(boolean&nbsp;pageMetaAutomaticallyCreated)</code></th>
 <td class="colLast">
@@ -235,14 +250,14 @@ extends java.lang.Object</pre>
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPluralizedTypeRendered(boolean)">withPluralizedTypeRendered</a></span>&#8203;(boolean&nbsp;pluralizedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClass(java.lang.Class,java.lang.String)">withTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz,
                 java.lang.String&nbsp;type)</code></th>
@@ -458,7 +473,7 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <a id="isPageMetaAutomaticallyCreated()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isPageMetaAutomaticallyCreated</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isPageMetaAutomaticallyCreated()</pre>
@@ -467,6 +482,37 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is true.</dd>
+</dl>
+</li>
+</ul>
+<a id="withObjectMapperCustomizer(java.util.function.Consumer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withObjectMapperCustomizer</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withObjectMapperCustomizer&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</pre>
+<div class="block">You can pass a lambda expression to customize the ObjectMapper used
+ for serialization.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>objectMapperCustomizer</code> - the ObjectMapper customizer</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</li>
+</ul>
+<a id="getObjectMapperCustomizer()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getObjectMapperCustomizer</h4>
+<pre class="methodSignature">public&nbsp;java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;getObjectMapperCustomizer()</pre>
+<div class="block">Gets the ObjectMapper customizer.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the objectMapperCustomizer if set with withObjectMapperCustomizer, null otherwise.</dd>
 </dl>
 </li>
 </ul>

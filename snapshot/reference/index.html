@@ -16,7 +16,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.10.0-SNAPSHOT,</span>
-<span id="revdate">2020-10-24</span>
+<span id="revdate">2020-10-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1078,6 +1078,9 @@ Currently, you can configure</p>
 representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
 should get the <code>JSON:API type</code> of the super class. See example below.</p>
 </li>
+<li>
+<p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -1105,7 +1108,10 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withJsonApiVersionRendered(true)
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
-            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
+            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+            .withObjectMapperCustomizer(
+                    objectMapper -&gt; objectMapper.configure(
+                            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
 }</code></pre>
 </div>
 </div>
@@ -1155,7 +1161,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.10.0-SNAPSHOT<br>
-Last updated 2020-10-24 11:24:55 UTC
+Last updated 2020-10-26 17:57:15 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
