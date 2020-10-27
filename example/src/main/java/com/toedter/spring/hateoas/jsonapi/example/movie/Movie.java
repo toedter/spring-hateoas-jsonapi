@@ -28,7 +28,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,10 +61,6 @@ public class Movie {
         this.rating = rating;
         this.rank = rank;
         this.thumb = thumb;
-    }
-
-    public Instant getTime() {
-        return Instant.now();
     }
 
     @Override
