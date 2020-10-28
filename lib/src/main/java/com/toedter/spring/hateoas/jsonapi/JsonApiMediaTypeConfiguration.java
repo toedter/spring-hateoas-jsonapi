@@ -29,7 +29,6 @@ import org.springframework.lang.NonNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Spring configuration for JSON:API support.
@@ -82,10 +81,7 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
         mapper.registerModule(new Jackson2JsonApiModule());
         mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
                 configuration, beanFactory));
-        Consumer<ObjectMapper> objectMapperCustomizer = configuration.getObjectMapperCustomizer();
-        if (objectMapperCustomizer != null) {
-            objectMapperCustomizer.accept(mapper);
-        }
+        configuration.customize(mapper);
         return mapper;
     }
 }

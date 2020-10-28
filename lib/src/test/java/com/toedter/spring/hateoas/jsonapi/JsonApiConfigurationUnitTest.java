@@ -35,7 +35,6 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
-        assertThat(new JsonApiConfiguration().getObjectMapperCustomizer()).isNull();
     }
 
     @Test
@@ -72,7 +71,7 @@ class JsonApiConfigurationUnitTest {
         new JsonApiConfiguration()
                 .withObjectMapperCustomizer(
                         mapper -> objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT))
-                .getObjectMapperCustomizer().accept(objectMapper);
+                .customize(objectMapper);
         assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)).isTrue();
     }
 }

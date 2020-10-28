@@ -42,7 +42,9 @@ public class JsonApiConfiguration {
      * @param pluralizedTypeRendered The new value of this configuration's pluralizedTypeRendered
      * @return The default is {@literal true}.
      */
-    @With @Getter private final boolean pluralizedTypeRendered;
+    @With
+    @Getter
+    private final boolean pluralizedTypeRendered;
 
     /**
      * Indicates if the JSON:API type attribute of resource objects is lower-cased.
@@ -50,7 +52,9 @@ public class JsonApiConfiguration {
      * @param lowerCasedTypeRendered The new value of this configuration's lowerCasedTypeRendered
      * @return The default is {@literal true}.
      */
-    @With @Getter private final boolean lowerCasedTypeRendered;
+    @With
+    @Getter
+    private final boolean lowerCasedTypeRendered;
 
     /**
      * Indicates if the JSON:API version is rendered.
@@ -59,14 +63,16 @@ public class JsonApiConfiguration {
      *
      * <code>
      * "jsonapi": {
-     *     "version": "1.0"
+     * "version": "1.0"
      * }
      * </code>
      *
      * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
      * @return The default is {@literal false}.
      */
-    private final @With @Getter boolean jsonApiVersionRendered;
+    @With
+    @Getter
+    private final boolean jsonApiVersionRendered;
 
     /**
      * Indicates if page meta data (rendered as top level JSON:API meta)
@@ -75,29 +81,40 @@ public class JsonApiConfiguration {
      * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
      * @return The default is {@literal true}.
      */
-    private final @With @Getter boolean pageMetaAutomaticallyCreated;
+    @With
+    @Getter
+    private final boolean pageMetaAutomaticallyCreated;
 
     /**
-     * Gets the ObjectMapper customizer.
-     *
-     * @return the objectMapperCustomizer if set with {@literal withObjectMapperCustomizer}, null otherwise.
-     *
-     * --WITH--
      * You can pass a lambda expression to customize the ObjectMapper used
      * for serialization.
      *
      * @param objectMapperCustomizer the ObjectMapper customizer
      */
-    private final @With @Getter Consumer<ObjectMapper> objectMapperCustomizer;
+    @With
+    private final Consumer<ObjectMapper> objectMapperCustomizer;
 
-    private final @With(AccessLevel.PRIVATE) Map<Class<?>, String> typeForClass;
+    @With(AccessLevel.PRIVATE)
+    private final Map<Class<?>, String> typeForClass;
+
+    /**
+     * Customizes the object mapper if a customizer was set with
+     * {@literal withObjectMapperCustomizer}.
+     *
+     * @param objectMapper the object mapper to be customized
+     * @return this JsonApiConfiguration
+     */
+    public JsonApiConfiguration customize(ObjectMapper objectMapper) {
+        this.objectMapperCustomizer.accept(objectMapper);
+        return this;
+    }
 
     /**
      * Creates a mapping for a given class to get the JSON:API resource object {@literal type}
      * when rendered.
      *
      * @param clazz must not be {@literal null}.
-     * @param type must not be {@literal null}.
+     * @param type  must not be {@literal null}.
      * @return a clone of this object, except with this updated property
      */
     public JsonApiConfiguration withTypeForClass(Class<?> clazz, String type) {
@@ -118,7 +135,8 @@ public class JsonApiConfiguration {
      * @param clazz must not be {@literal null}.
      * @return can return {@literal null}.
      */
-    public @Nullable String getTypeForClass(Class<?> clazz) {
+    public @Nullable
+    String getTypeForClass(Class<?> clazz) {
         Assert.notNull(clazz, "class must not be null!");
         return typeForClass.get(clazz);
     }
@@ -132,7 +150,8 @@ public class JsonApiConfiguration {
         this.jsonApiVersionRendered = false;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
-        this.objectMapperCustomizer = null;
+        this.objectMapperCustomizer = objectMapper -> {
+        }; // Default to no action.
     }
 }
 
