@@ -177,10 +177,11 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectMapperCustomizer()">getObjectMapperCustomizer</a></span>()</code></th>
+<td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#customize(com.fasterxml.jackson.databind.ObjectMapper)">customize</a></span>&#8203;(com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></th>
 <td class="colLast">
-<div class="block">Gets the ObjectMapper customizer.</div>
+<div class="block">Customizes the object mapper if a customizer was set with
+ withObjectMapperCustomizer.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -310,6 +311,23 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="customize(com.fasterxml.jackson.databind.ObjectMapper)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>customize</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;customize&#8203;(com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</pre>
+<div class="block">Customizes the object mapper if a customizer was set with
+ withObjectMapperCustomizer.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>objectMapper</code> - the object mapper to be customized</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this JsonApiConfiguration</dd>
+</dl>
+</li>
+</ul>
 <a id="withTypeForClass(java.lang.Class,java.lang.String)">
 <!--   -->
 </a>
@@ -420,7 +438,7 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 
  <code>
  "jsonapi": {
-     "version": "1.0"
+ "version": "1.0"
  }
  </code></div>
 <dl>
@@ -444,7 +462,7 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 
  <code>
  "jsonapi": {
-     "version": "1.0"
+ "version": "1.0"
  }
  </code></div>
 <dl>
@@ -488,7 +506,7 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <a id="withObjectMapperCustomizer(java.util.function.Consumer)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>withObjectMapperCustomizer</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withObjectMapperCustomizer&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</pre>
@@ -499,20 +517,6 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <dd><code>objectMapperCustomizer</code> - the ObjectMapper customizer</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
-</dl>
-</li>
-</ul>
-<a id="getObjectMapperCustomizer()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getObjectMapperCustomizer</h4>
-<pre class="methodSignature">public&nbsp;java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;getObjectMapperCustomizer()</pre>
-<div class="block">Gets the ObjectMapper customizer.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the objectMapperCustomizer if set with withObjectMapperCustomizer, null otherwise.</dd>
 </dl>
 </li>
 </ul>
