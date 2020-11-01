@@ -15,8 +15,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 0.9.0,</span>
-<span id="revdate">2020-10-13</span>
+<span id="revnumber">version 0.10.0,</span>
+<span id="revdate">2020-11-01</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -31,6 +31,7 @@
 <li><a href="#Inclusion">Inclusion of related Resources</a></li>
 <li><a href="#SparseFielsets">Sparse Fieldsets</a></li>
 <li><a href="#Creating">Creating Resources with HTTP POST</a></li>
+<li><a href="#polymorphy">Polymorphic Deserialization</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#errors">Error Handling</a></li>
 </ul>
@@ -166,7 +167,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.9.0&lt;/version&gt;
+    &lt;version&gt;0.10.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -175,11 +176,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.9.0'</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.10.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.10.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.11.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -847,6 +848,7 @@ For example, a <code>POST</code> with the body:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
   "data": {
+    "type": "movies",
     "attributes": {
       "title": "Batman Begins"
     }
@@ -930,6 +932,104 @@ please us the <code>JsonApiModelBuilder</code> to decide, which relationships an
 </div>
 </div>
 <div class="sect2">
+<h3 id="polymorphy">Polymorphic Deserialization</h3>
+<div class="paragraph">
+<p>You can configure polymorphic deserialization on a 'per class' base,
+using some Jackson annotations. The following example illustrates this:</p>
+</div>
+<div class="paragraph">
+<p>Imagine a controller method like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@PostMapping("/movies")
+public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and a subclass of <code>Movie</code> that contains a rating, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+@Data
+@JsonApiTypeForClass("movies")
+public class MovieWithRating extends Movie {
+    private double rating;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You could now annotate the <code>Movie</code> class with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a HTTP POST to /movies with body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller
+method accepts the superclass <code>Movie</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+@-members will be introduced in JSON:API version 1.1.
+The above example will produce JSON that is not compliant with JSON:API 1.0.
+For JSON:API 1.0 compliance you could configure Jackson like
+<code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Important: The above mechanism is only used for deserialization, NOT for serialization, since the
+JSON:API specification uses the <code>type</code> attribute (within data) for the same purpose.
+So the JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "id": "3",
+    "type": "movies",
+    "attributes": {
+      "rating": 8.2,
+      "title": "Batman Begins"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/3"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="configuration">Configuration</h3>
 <div class="paragraph">
 <p>There are several options how to change the output of the JSON:API rendering.</p>
@@ -978,6 +1078,9 @@ Currently, you can configure</p>
 representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
 should get the <code>JSON:API type</code> of the super class. See example below.</p>
 </li>
+<li>
+<p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -1005,7 +1108,10 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withJsonApiVersionRendered(true)
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
-            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies");
+            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+            .withObjectMapperCustomizer(
+                    objectMapper -&gt; objectMapper.configure(
+                            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
 }</code></pre>
 </div>
 </div>
@@ -1054,8 +1160,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.0<br>
-Last updated 2020-10-13 12:56:41 UTC
+Version 0.10.0<br>
+Last updated 2020-11-01 10:41:57 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
