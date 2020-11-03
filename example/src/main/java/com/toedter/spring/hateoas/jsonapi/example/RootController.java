@@ -22,17 +22,20 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequestMapping(value = RootController.API_BASE_PATH, produces = JSON_API_VALUE)
 public class RootController {
 
 	public static final String API_BASE_PATH = "/api";
 
-	@GetMapping(API_BASE_PATH)
+	@GetMapping
     ResponseEntity<RepresentationModel<?>> root() {
 
 		RepresentationModel<?> resourceSupport = new RepresentationModel<>();

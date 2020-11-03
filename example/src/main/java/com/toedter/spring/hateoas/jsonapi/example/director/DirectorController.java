@@ -39,10 +39,11 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping(value = RootController.API_BASE_PATH, produces = "application/vnd.api+json")
+@RequestMapping(value = RootController.API_BASE_PATH, produces = JSON_API_VALUE)
 public class DirectorController {
 
     private final DirectorRepository repository;
