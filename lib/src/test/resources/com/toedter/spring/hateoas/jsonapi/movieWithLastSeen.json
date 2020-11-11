@@ -3,8 +3,8 @@
     "id": "1",
     "type": "moviewithlastseens",
     "attributes": {
-      "lastSeen": "2020-10-23T14:59:51Z",
-      "title": "Star Wars"
+      "title": "Star Wars",
+      "lastSeen": "2020-10-23T14:59:51Z"
     }
   }
 }

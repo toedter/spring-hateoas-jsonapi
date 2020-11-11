@@ -344,9 +344,13 @@ NOTE: @-members will be introduced in JSON:API version 1.1.
 The above example will produce JSON that is not compliant with JSON:API 1.0.
 For JSON:API 1.0 compliance you could configure Jackson like
 `@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")` instead.
+From the JSON:API 1.1 spec:
+...because @-Members must be ignored when interpreting that definition,
+an @-Member that occurs in an attributes object is not an attribute.
 
-Important: The above mechanism is only used for deserialization, NOT for serialization, since the
-JSON:API specification uses the `type` attribute (within data) for the same purpose.
+Important: The above mechanism is also used for serialization, so you could set
+the JSON:API `type` attribute (within data) to a more generic type, but still serialize the
+`@type` attribute to indicate the specialized type.
 So the JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
 
 [source, json]

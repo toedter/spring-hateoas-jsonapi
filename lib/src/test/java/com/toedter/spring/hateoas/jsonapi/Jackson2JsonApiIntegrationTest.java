@@ -17,6 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -596,6 +597,19 @@ class Jackson2JsonApiIntegrationTest {
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         String instantJson = mapper.writeValueAsString(entityModel);
         compareWithFile(instantJson, "instantWithCustomConfig.json");
+    }
+
+    @Test
+    void should_serialize_with_NON_NULL_annotation() throws Exception {
+        @Getter
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        class NonNullExample {
+            private final String id = "1";
+            private final String test = null;
+        }
+        EntityModel<NonNullExample> entityModel = EntityModel.of(new NonNullExample());
+        String json = mapper.writeValueAsString(entityModel);
+        compareWithFile(json, "nonNullAnnotationExample.json");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

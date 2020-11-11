@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
@@ -138,7 +139,21 @@ class JsonApiData {
         }
         JsonApiResource.ResourceField typeField = JsonApiResource.getType(content, jsonApiConfiguration);
 
-        Map<String, Object> attributeMap = PropertyUtils.extractPropertyValues(content);
+        // This does not serialize attribute values but leaves the original objects
+        Map<String, Object> attributeMapFromPropertyUtils = PropertyUtils.extractPropertyValues(content);
+
+        ObjectMapper mapper = new ObjectMapper();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
+
+        // we want to use the map created by the object mapper to react on Jackson annotations like
+        // @JsonInclude(JsonInclude.Include.NON_NULL)
+        for (String key : attributeMapFromPropertyUtils.keySet()) {
+            if (attributeMap.containsKey(key)) {
+                attributeMap.put(key, attributeMapFromPropertyUtils.get(key));
+            }
+        }
+
         attributeMap.remove("links");
         attributeMap.remove(idField.name);
         attributeMap.remove(typeField.name);
