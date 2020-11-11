@@ -952,13 +952,17 @@ method accepts the superclass <code>Movie</code>.</p>
 The above example will produce JSON that is not compliant with JSON:API 1.0.
 For JSON:API 1.0 compliance you could configure Jackson like
 <code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+From the JSON:API 1.1 spec:
+&#8230;&#8203;because @-Members must be ignored when interpreting that definition,
+an @-Member that occurs in an attributes object is not an attribute.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Important: The above mechanism is only used for deserialization, NOT for serialization, since the
-JSON:API specification uses the <code>type</code> attribute (within data) for the same purpose.
+<p>Important: The above mechanism is also used for serialization, so you could set
+the JSON:API <code>type</code> attribute (within data) to a more generic type, but still serialize the
+<code>@type</code> attribute to indicate the specialized type.
 So the JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
 </div>
 <div class="listingblock">
@@ -968,8 +972,9 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
     "id": "3",
     "type": "movies",
     "attributes": {
-      "rating": 8.2,
-      "title": "Batman Begins"
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
     }
   },
   "links": {
@@ -1114,7 +1119,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.11.0-SNAPSHOT<br>
-Last updated 2020-11-03 11:04:16 UTC
+Last updated 2020-11-11 18:18:11 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
