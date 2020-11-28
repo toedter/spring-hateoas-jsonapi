@@ -11,6 +11,9 @@ representation models to serialize/deserialize them according to the JSON:API sp
 
 This project is work in progress, please stay tuned.
 
+While an advanced usage example is part of this project,
+you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-examples.
+
 == Documentation
 
 Here you find the documentation for the latest release and the current snapshot:
