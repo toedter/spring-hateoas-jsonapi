@@ -67,43 +67,55 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             if (relationships != null) {
 
                 Object object = entityModel.getContent();
-                @SuppressWarnings("ConstantConditions")
-                final Field[] declaredFields = getAllDeclaredFields(object.getClass());
+                @SuppressWarnings("ConstantConditions") final Field[] declaredFields = getAllDeclaredFields(object.getClass());
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
                     JsonApiRelationships relationshipsAnnotation = field.getAnnotation(JsonApiRelationships.class);
                     if (relationshipsAnnotation != null) {
                         Object relationship = relationships.get(relationshipsAnnotation.value());
                         try {
-                            final Type genericType = field.getGenericType();
-                            if (genericType instanceof ParameterizedType) {
-                                ParameterizedType type = (ParameterizedType) genericType;
-                                if (List.class.isAssignableFrom(field.getType())) {
-                                    List<Object> relationshipList = new ArrayList<>();
-                                    Object data = ((HashMap<?, ?>) relationship).get("data");
-                                    List<HashMap<String, String>> jsonApiRelationships;
-                                    if (data instanceof List) {
-                                        @SuppressWarnings("unchecked")
-                                        List<HashMap<String, String>> castedData = (List<HashMap<String, String>>) data;
-                                        jsonApiRelationships = castedData;
-                                    } else if (data instanceof HashMap) {
-                                        @SuppressWarnings("unchecked")
-                                        HashMap<String, String> castedData = (HashMap<String, String>) data;
-                                        jsonApiRelationships = Collections.singletonList(castedData);
-                                    } else {
-                                        throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
-                                    }
-                                    Type typeArgument = type.getActualTypeArguments()[0];
+                            if (relationship != null) {
+                                final Type genericType = field.getGenericType();
+                                // expect collections to always be generic, like "List<Director>"
+                                if (genericType instanceof ParameterizedType) {
+                                    ParameterizedType type = (ParameterizedType) genericType;
+                                    if (List.class.isAssignableFrom(field.getType())) {
+                                        List<Object> relationshipList = new ArrayList<>();
+                                        Object data = ((HashMap<?, ?>) relationship).get("data");
+                                        List<HashMap<String, String>> jsonApiRelationships;
+                                        if (data instanceof List) {
+                                            @SuppressWarnings("unchecked")
+                                            List<HashMap<String, String>> castedData = (List<HashMap<String, String>>) data;
+                                            jsonApiRelationships = castedData;
+                                        } else if (data instanceof HashMap) {
+                                            @SuppressWarnings("unchecked")
+                                            HashMap<String, String> castedData = (HashMap<String, String>) data;
+                                            jsonApiRelationships = Collections.singletonList(castedData);
+                                        } else {
+                                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                                        }
+                                        Type typeArgument = type.getActualTypeArguments()[0];
 
-                                    for (HashMap<String, String> entry : jsonApiRelationships) {
-                                        Class<?> typeArgClass = (Class<?>) typeArgument;
-                                        Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
-                                        JsonApiResource.setJsonApiResourceFieldAttributeForObject(
-                                                newInstance, JsonApiResource.JsonApiResourceField.id, entry.get("id"));
-                                        relationshipList.add(newInstance);
-                                    }
+                                        for (HashMap<String, String> entry : jsonApiRelationships) {
+                                            Class<?> typeArgClass = (Class<?>) typeArgument;
+                                            Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
+                                            JsonApiResource.setJsonApiResourceFieldAttributeForObject(
+                                                    newInstance, JsonApiResource.JsonApiResourceField.id, entry.get("id"));
+                                            relationshipList.add(newInstance);
+                                        }
 
-                                    field.set(object, relationshipList);
+                                        field.set(object, relationshipList);
+                                    }
+                                } else {
+                                    // we expect a concrete type otherwise, like "Director"
+                                    Class<?> clazz = Class.forName(genericType.getTypeName());
+                                    Object newInstance = clazz.getDeclaredConstructor().newInstance();
+                                    @SuppressWarnings("unchecked")
+                                    HashMap<String, Object> data =
+                                            (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
+                                    JsonApiResource.setJsonApiResourceFieldAttributeForObject(
+                                            newInstance, JsonApiResource.JsonApiResourceField.id, data.get("id").toString());
+                                    field.set(object, newInstance);
                                 }
                             }
                         } catch (Exception e) {

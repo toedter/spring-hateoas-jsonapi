@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +95,11 @@ public class WebMvcMovieController {
                 model = model.relationship("directors", director);
             }
             return model.build();
+        } else if (movie instanceof MovieWithSingleDirector) {
+            Director director = ((MovieWithSingleDirector) movie).getDirector();
+            JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
+            model = model.relationship("directors", director);
+            return model.build();
         }
         return EntityModel.of(
                 movie,
@@ -109,9 +113,9 @@ public class WebMvcMovieController {
     }
 
     @GetMapping("/movieWithLastSeen")
-    public RepresentationModel<?> movieWithLastSeen() throws ParseException {
+    public RepresentationModel<?> movieWithLastSeen() {
         MovieWithLastSeen movie = new MovieWithLastSeen("1", "Star Wars",
-                Instant.ofEpochSecond(1603465191) );
+                Instant.ofEpochSecond(1603465191));
         return EntityModel.of(movie);
     }
 
@@ -148,6 +152,20 @@ public class WebMvcMovieController {
         int newMovieId = MOVIES.size() + 1;
         String newMovieIdString = "" + newMovieId;
         MovieWithDirectors movieContent = movie.getContent();
+        assert movieContent != null;
+        movieContent.setId(newMovieIdString);
+        MOVIES.put(newMovieId, movieContent);
+
+        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
+
+        return ResponseEntity.created(link.toUri()).build();
+    }
+
+    @PostMapping("/moviesWithSingleDirector")
+    public ResponseEntity<?> newMovieWithSingleDirector(@RequestBody EntityModel<MovieWithSingleDirector> movie) {
+        int newMovieId = MOVIES.size() + 1;
+        String newMovieIdString = "" + newMovieId;
+        MovieWithSingleDirector movieContent = movie.getContent();
         assert movieContent != null;
         movieContent.setId(newMovieIdString);
         MOVIES.put(newMovieId, movieContent);
