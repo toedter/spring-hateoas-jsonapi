@@ -667,7 +667,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 <h2 id="Inclusion">Inclusion of related Resources</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There is no direct support for including related resources,
+<p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
@@ -689,6 +689,89 @@ and the builder could be used for the inclusion, like</p>
         }
     }
     directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Nesting">Nesting of JsonApiModels</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When using the model builder, <code>JsonApiModel</code>s themselves can be used as model and included
+resources. Here is an example that also illustrates the different levels of meta.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Director director = new Director("3", "George Lucas");
+final RepresentationModel&lt;?&gt; directorModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .meta("director-meta", "director-meta-value")
+                .build();
+
+Map&lt;String, Object&gt; relationshipMeta = new HashMap&lt;&gt;();
+relationshipMeta.put("relationship-meta", "relationship-meta-value");
+
+Movie movie = new Movie("1", "Star Wars");
+final RepresentationModel&lt;?&gt; movieModel =
+        jsonApiModel()
+                .model(movie)
+                .meta("movie-meta", "movie-meta-value")
+                .relationship("directors", director)
+                .relationship("directors", relationshipMeta )
+                .build();
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movieModel)
+                .meta("top-level-meta", "top-level-meta-value")
+                .included(directorModel)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "3",
+          "type": "directors"
+        },
+        "meta": {
+          "relationship-meta": "relationship-meta-value"
+        }
+      }
+    },
+    "meta": {
+      "movie-meta": "movie-meta-value"
+    }
+  },
+  "included": [
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      },
+      "meta": {
+        "director-meta": "director-meta-value"
+      }
+    }
+  ],
+  "meta": {
+    "top-level-meta": "top-level-meta-value"
+  }
 }</code></pre>
 </div>
 </div>
@@ -1119,7 +1202,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.12.0-SNAPSHOT<br>
-Last updated 2020-12-04 10:02:30 UTC
+Last updated 2020-12-04 10:22:19 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
