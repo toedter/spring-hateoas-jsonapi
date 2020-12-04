@@ -68,12 +68,25 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
 
         Object data;
+        Map<String, Object> embeddedMeta = null;
+
         if (collectionModel != null) {
             data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration, null);
         } else {
-            final Optional<JsonApiData> jsonApiData =
-                    JsonApiData.extractContent(value, true, jsonApiConfiguration, null);
-            data = jsonApiData.orElse(null);
+            if (value instanceof JsonApiModel && ((JsonApiModel) value).getContent() instanceof JsonApiModel) {
+                JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
+                embeddedMeta = content.getMetaData();
+                final Optional<JsonApiData> jsonApiData =
+                        JsonApiData.extractContent(content, true, jsonApiConfiguration, null);
+                data = jsonApiData.orElse(null);
+            } else {
+                if (value instanceof JsonApiModel) {
+                    embeddedMeta = ((JsonApiModel) value).getMetaData();
+                }
+                final Optional<JsonApiData> jsonApiData =
+                        JsonApiData.extractContent(value, true, jsonApiConfiguration, null);
+                data = jsonApiData.orElse(null);
+            }
         }
 
         JsonApiDocument doc = new JsonApiDocument()
@@ -93,16 +106,22 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
 
         if (value instanceof JsonApiModel) {
-            // we want to add the metadata to the top level JSON:API document
+            // in some cases we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
-            if (doc.getMeta() == null) {
-                doc = doc.withMeta(metaData);
-            } else {
-                final Map<String, Object> meta = doc.getMeta();
-                // add/override with meta data created with builder
-                // this will override the previous generated page meta data, if the key is the same
-                for (Map.Entry<?, ?> entry : metaData.entrySet()) {
-                    meta.put(entry.getKey().toString(), entry.getValue());
+            if (embeddedMeta != metaData || data == null) {
+                if(metaData == null) {
+                    metaData = embeddedMeta;
+                }
+
+                if (doc.getMeta() == null) {
+                    doc = doc.withMeta(metaData);
+                } else {
+                    final Map<String, Object> meta = doc.getMeta();
+                    // add/override with meta data created with builder
+                    // this will override the previous generated page meta data, if the key is the same
+                    for (Map.Entry<?, ?> entry : metaData.entrySet()) {
+                        meta.put(entry.getKey().toString(), entry.getValue());
+                    }
                 }
             }
         }

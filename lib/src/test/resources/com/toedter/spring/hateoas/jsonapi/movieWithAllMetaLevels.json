@@ -1,0 +1,38 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "3",
+          "type": "directors"
+        },
+        "meta": {
+          "relationship-meta": "relationship-meta-value"
+        }
+      }
+    },
+    "meta": {
+      "movie-meta": "movie-meta-value"
+    }
+  },
+  "included": [
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      },
+      "meta": {
+        "director-meta": "director-meta-value"
+      }
+    }
+  ],
+  "meta": {
+    "top-level-meta": "top-level-meta-value"
+  }
+}

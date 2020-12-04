@@ -42,7 +42,7 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     @JsonIgnore
     @Getter
-    private final Map<String, Object> metaData;
+    private Map<String, Object> metaData;
 
     @JsonIgnore
     @Getter
@@ -71,5 +71,11 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
     @JsonUnwrapped
     public RepresentationModel<?> getContent() {
         return entity;
+    }
+
+    public Map<String, Object> getAndRemoveMetaData() {
+        final Map<String, Object> finalMetaData = this.metaData;
+        this.metaData = null;
+        return finalMetaData;
     }
 }

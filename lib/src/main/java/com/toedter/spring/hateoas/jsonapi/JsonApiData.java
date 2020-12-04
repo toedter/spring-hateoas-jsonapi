@@ -58,6 +58,8 @@ class JsonApiData {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Object relationships;
     private Links links;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, Object> meta;
 
     @JsonCreator
     public JsonApiData(
@@ -65,17 +67,19 @@ class JsonApiData {
             @JsonProperty("type") String type,
             @JsonProperty("attributes") Map<String, Object> attributes,
             @JsonProperty("relationships") Object relationships,
-            @JsonProperty("links") Links links
+            @JsonProperty("links") Links links,
+            @JsonProperty("meta") Map<String, Object> meta
     ) {
         this.id = id;
         this.type = type;
         this.attributes = attributes;
         this.relationships = relationships;
         this.links = links;
+        this.meta = meta;
     }
 
     public JsonApiData() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
     public static List<JsonApiData> extractCollectionContent(
@@ -101,7 +105,8 @@ class JsonApiData {
             @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
 
         Links links = null;
-        Object relationships = null;
+        Map<String, JsonApiRelationship> relationships = null;
+        Map<String, Object> metaData = null;
 
         if (content instanceof RepresentationModel<?>) {
             links = ((RepresentationModel<?>) content).getLinks();
@@ -111,6 +116,7 @@ class JsonApiData {
             JsonApiModel jsonApiRepresentationModel = (JsonApiModel) content;
             relationships = jsonApiRepresentationModel.getRelationships();
             sparseFieldsets = jsonApiRepresentationModel.getSparseFieldsets();
+            metaData = jsonApiRepresentationModel.getMetaData();
             content = jsonApiRepresentationModel.getContent();
         }
 
@@ -161,7 +167,8 @@ class JsonApiData {
         Links finalLinks = links;
         String finalId = idField.value;
         String finalType = typeField.value;
-        Object finalRelationships = relationships;
+        Map<String, JsonApiRelationship> finalRelationships = relationships;
+        Map<String, Object> finalMetaData = metaData;
 
         // apply sparse fieldsets
         if (sparseFieldsets != null) {
@@ -184,7 +191,8 @@ class JsonApiData {
                         .withType(finalType)
                         .withAttributes(finalContentObject)
                         .withRelationships(finalRelationships)
-                        .withLinks(finalLinks));
+                        .withLinks(finalLinks)
+                        .withMeta(finalMetaData));
     }
 
     private static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(

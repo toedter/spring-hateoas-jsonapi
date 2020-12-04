@@ -375,11 +375,11 @@ public class JsonApiModelBuilder {
      * to the {@literal included} {@link EntityModel}s.
      * It will appear then top level {@literal JSON:API included} values.
      *
-     * @param entityModel must not be {@literal null}.
+     * @param representationModel must not be {@literal null}.
      * @return will never be {@literal null}.
      */
-    public JsonApiModelBuilder included(EntityModel<?> entityModel) {
-        included.add(entityModel);
+    public JsonApiModelBuilder included(RepresentationModel<?> representationModel) {
+        included.add(representationModel);
         return this;
     }
 

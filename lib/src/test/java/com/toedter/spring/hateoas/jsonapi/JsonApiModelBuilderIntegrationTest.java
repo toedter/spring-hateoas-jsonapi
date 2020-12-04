@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -304,8 +305,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
-    @Test
-        // issue: #13
+    @Test // issue: #13
     void should_build_with_meta_only() throws Exception {
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().meta("x", "y").build();
@@ -516,5 +516,37 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWidthDirectorRelationshipAndTypeConfiguration.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_top_level_and_relationship_and_included_meta() throws Exception {
+        Director director = new Director("3", "George Lucas");
+        final RepresentationModel<?> directorModel =
+                jsonApiModel()
+                        .model(EntityModel.of(director))
+                        .meta("director-meta", "director-meta-value")
+                        .build();
+
+        Map<String, Object> relationshipMeta = new HashMap<>();
+        relationshipMeta.put("relationship-meta", "relationship-meta-value");
+
+        Movie movie = new Movie("1", "Star Wars");
+        final RepresentationModel<?> movieModel =
+                jsonApiModel()
+                        .model(movie)
+                        .meta("movie-meta", "movie-meta-value")
+                        .relationship("directors", director)
+                        .relationship("directors", relationshipMeta )
+                        .build();
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movieModel)
+                        .meta("top-level-meta", "top-level-meta-value")
+                        .included(directorModel)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithAllMetaLevels.json");
     }
 }
