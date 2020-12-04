@@ -180,7 +180,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#included(org.springframework.hateoas.EntityModel)">included</a></span>&#8203;(org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#included(org.springframework.hateoas.RepresentationModel)">included</a></span>&#8203;(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;representationModel)</code></th>
 <td class="colLast">
 <div class="block">Adds the given <code>EntityModel</code>
  to the included <code>EntityModel</code>s.</div>
@@ -613,19 +613,19 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="included(org.springframework.hateoas.EntityModel)">
+<a id="included(org.springframework.hateoas.RepresentationModel)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>included</h4>
-<pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;included&#8203;(org.springframework.hateoas.EntityModel&lt;?&gt;&nbsp;entityModel)</pre>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;included&#8203;(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;representationModel)</pre>
 <div class="block">Adds the given <code>EntityModel</code>
  to the included <code>EntityModel</code>s.
  It will appear then top level JSON:API included values.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entityModel</code> - must not be null.</dd>
+<dd><code>representationModel</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>will never be null.</dd>
 </dl>
