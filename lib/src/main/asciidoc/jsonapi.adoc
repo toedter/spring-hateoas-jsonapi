@@ -210,7 +210,7 @@ include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 [[Inclusion]]
 == Inclusion of related Resources ==
 
-There is no direct support for including related resources,
+There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like
 
 [source, java]
@@ -222,6 +222,24 @@ and the builder could be used for the inclusion, like
 [source, java, indent=0]
 ----
 include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusion]
+----
+
+[[Nesting]]
+== Nesting of JsonApiModels ==
+
+When using the model builder, ``JsonApiModel``s themselves can be used as model and included
+resources. Here is an example that also illustrates the different levels of meta.
+
+[source, java, indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=nesting]
+----
+
+This model will be rendered as
+
+[source, json]
+----
+include::{test-resources-dir}/movieWithAllMetaLevels.json[]
 ----
 
 [[SparseFielsets]]

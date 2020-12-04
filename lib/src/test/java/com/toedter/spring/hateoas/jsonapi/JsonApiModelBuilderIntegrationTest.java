@@ -520,6 +520,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_single_movie_with_top_level_and_relationship_and_included_meta() throws Exception {
+        // tag::nesting[]
         Director director = new Director("3", "George Lucas");
         final RepresentationModel<?> directorModel =
                 jsonApiModel()
@@ -545,6 +546,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .meta("top-level-meta", "top-level-meta-value")
                         .included(directorModel)
                         .build();
+        // end::nesting[]
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithAllMetaLevels.json");
