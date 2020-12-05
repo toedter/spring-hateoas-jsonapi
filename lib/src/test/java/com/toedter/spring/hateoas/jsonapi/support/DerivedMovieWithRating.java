@@ -18,11 +18,13 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
 @JsonApiTypeForClass("movies")
+@EqualsAndHashCode(callSuper=false)
 public class DerivedMovieWithRating extends MovieWithJsonTypeInfo {
     private double rating;
 }
