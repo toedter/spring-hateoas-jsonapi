@@ -345,7 +345,8 @@ extends com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getContentType</h4>
-<pre class="methodSignature">public&nbsp;com.fasterxml.jackson.databind.JavaType&nbsp;getContentType()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;com.fasterxml.jackson.databind.JavaType&nbsp;getContentType()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getContentType</code>&nbsp;in class&nbsp;<code>com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</code></dd>
@@ -358,7 +359,8 @@ extends com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getContentSerializer</h4>
-<pre class="methodSignature">public&nbsp;com.fasterxml.jackson.databind.JsonSerializer&lt;?&gt;&nbsp;getContentSerializer()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;com.fasterxml.jackson.databind.JsonSerializer&lt;?&gt;&nbsp;getContentSerializer()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getContentSerializer</code>&nbsp;in class&nbsp;<code>com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</code></dd>
@@ -386,7 +388,8 @@ extends com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>_withValueTypeSerializer</h4>
-<pre class="methodSignature">protected&nbsp;com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;?&gt;&nbsp;_withValueTypeSerializer&#8203;(com.fasterxml.jackson.databind.jsontype.TypeSerializer&nbsp;vts)</pre>
+<pre class="methodSignature">@Nullable
+protected&nbsp;com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;?&gt;&nbsp;_withValueTypeSerializer&#8203;(com.fasterxml.jackson.databind.jsontype.TypeSerializer&nbsp;vts)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>_withValueTypeSerializer</code>&nbsp;in class&nbsp;<code>com.fasterxml.jackson.databind.ser.ContainerSerializer&lt;T&gt;</code></dd>
