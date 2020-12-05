@@ -52,23 +52,23 @@ import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredF
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JsonApiData {
-    private String id;
-    private String type;
-    private Map<String, Object> attributes;
+    String id;
+    String type;
+    Map<String, Object> attributes;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Object relationships;
-    private Links links;
+    Object relationships;
+    Links links;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, Object> meta;
+    Map<String, Object> meta;
 
     @JsonCreator
     public JsonApiData(
-            @JsonProperty("id") String id,
-            @JsonProperty("type") String type,
-            @JsonProperty("attributes") Map<String, Object> attributes,
-            @JsonProperty("relationships") Object relationships,
-            @JsonProperty("links") Links links,
-            @JsonProperty("meta") Map<String, Object> meta
+            @JsonProperty("id") @Nullable String id,
+            @JsonProperty("type") @Nullable String type,
+            @JsonProperty("attributes") @Nullable Map<String, Object> attributes,
+            @JsonProperty("relationships") @Nullable Object relationships,
+            @JsonProperty("links") @Nullable Links links,
+            @JsonProperty("meta") @Nullable Map<String, Object> meta
     ) {
         this.id = id;
         this.type = type;
@@ -149,7 +149,6 @@ class JsonApiData {
         Map<String, Object> attributeMapFromPropertyUtils = PropertyUtils.extractPropertyValues(content);
 
         ObjectMapper mapper = new ObjectMapper();
-        @SuppressWarnings("unchecked")
         Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
 
         // we want to use the map created by the object mapper to react on Jackson annotations like
@@ -186,15 +185,10 @@ class JsonApiData {
 
         return Optional.of(content)
                 .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
-                .map(it -> new JsonApiData()
-                        .withId(finalId)
-                        .withType(finalType)
-                        .withAttributes(finalContentObject)
-                        .withRelationships(finalRelationships)
-                        .withLinks(finalLinks)
-                        .withMeta(finalMetaData));
+                .map(it -> new JsonApiData(
+                        finalId, finalType, finalContentObject, finalRelationships, finalLinks, finalMetaData));
     }
 
-    private static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(
+    static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(
             Arrays.asList(RepresentationModel.class, EntityModel.class, CollectionModel.class, PagedModel.class));
 }

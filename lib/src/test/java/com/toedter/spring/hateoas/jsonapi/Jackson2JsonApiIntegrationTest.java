@@ -54,12 +54,12 @@ import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Id;
 import java.io.File;
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -495,7 +495,7 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("movieEntityWithNumber.json", getClass()).getFile();
         EntityModel<MovieWithRating> withDoubleModel = mapper.readValue(file, withDoubleEntityModelType);
 
-        assertThat(withDoubleModel.getContent().getRating()).isEqualTo(8.0);
+        assertThat(Objects.requireNonNull(withDoubleModel.getContent()).getRating()).isEqualTo(8.0);
     }
 
     @Test
@@ -588,7 +588,7 @@ class Jackson2JsonApiIntegrationTest {
             private final String id = "1";
             private final Instant instant;
 
-            InstantExample() throws ParseException {
+            InstantExample() {
                 instant = Instant.ofEpochSecond(1603465191);
             }
         }

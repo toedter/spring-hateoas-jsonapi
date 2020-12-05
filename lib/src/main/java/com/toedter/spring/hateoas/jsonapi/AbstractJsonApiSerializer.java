@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
+import org.springframework.lang.Nullable;
 
 abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
 
@@ -32,11 +33,13 @@ abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
     }
 
     @Override
+    @Nullable
     public JavaType getContentType() {
         return null;
     }
 
     @Override
+    @Nullable
     public JsonSerializer<?> getContentSerializer() {
         return null;
     }
@@ -47,6 +50,7 @@ abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
     }
 
     @Override
+    @Nullable
     protected ContainerSerializer<?> _withValueTypeSerializer(TypeSerializer vts) {
         return null;
     }

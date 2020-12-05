@@ -50,7 +50,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         this.contentType = contentType;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
@@ -66,11 +65,10 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
-    private Object convertToResource(HashMap<String, Object> data) {
+    private @Nullable Object convertToResource(@Nullable HashMap<String, Object> data) {
         if (data == null) {
             return null;
         }
-        @SuppressWarnings("unchecked")
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
         ObjectMapper mapper = new ObjectMapper();

@@ -23,10 +23,12 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
@@ -44,7 +46,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
         @Override
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        public Object getData() {
+        public @Nullable
+        Object getData() {
             return null;
         }
     }
@@ -73,9 +76,11 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         if (collectionModel != null) {
             data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration, null);
         } else {
-            if (value instanceof JsonApiModel && ((JsonApiModel) value).getContent() instanceof JsonApiModel) {
+            if (value instanceof JsonApiModel
+                    && ((JsonApiModel) value).getContent() != null
+                    && ((JsonApiModel) value).getContent() instanceof JsonApiModel) {
                 JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
-                embeddedMeta = content.getMetaData();
+                embeddedMeta = Objects.requireNonNull(content).getMetaData();
                 final Optional<JsonApiData> jsonApiData =
                         JsonApiData.extractContent(content, true, jsonApiConfiguration, null);
                 data = jsonApiData.orElse(null);
@@ -109,7 +114,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             // in some cases we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
             if (embeddedMeta != metaData || data == null) {
-                if(metaData == null) {
+                if (metaData == null) {
                     metaData = embeddedMeta;
                 }
 
@@ -140,7 +145,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
     }
 
-    private Links getLinksOrNull(RepresentationModel<?> representationModel) {
+    private @Nullable
+    Links getLinksOrNull(RepresentationModel<?> representationModel) {
         Links links = representationModel.getLinks();
         if (links.isEmpty()) {
             links = null;
@@ -148,7 +154,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         return links;
     }
 
-    private List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
+    private @Nullable
+    List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
         if (representationModel instanceof JsonApiModel) {
             final List<RepresentationModel<?>> includedEntities =
                     ((JsonApiModel) representationModel).getIncludedEntities();

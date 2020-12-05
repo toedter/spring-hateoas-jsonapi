@@ -78,8 +78,8 @@ class JsonApiResourceIdentifier {
     }
 
     static class ResourceField {
-        String name;
-        String value;
+        final String name;
+        final String value;
 
         public ResourceField(String name, String value) {
             this.name = name;
