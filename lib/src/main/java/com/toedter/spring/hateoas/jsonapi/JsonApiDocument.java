@@ -36,33 +36,33 @@ class JsonApiDocument {
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
-    private JsonApiJsonApi jsonapi;
+    private final JsonApiJsonApi jsonapi;
 
     @Getter
     @With(AccessLevel.PACKAGE)
     @JsonProperty("data")
     // data can either be a single JsonApiData object or a list of JsonApiData objects
-    private Object data;
+    private final Object data;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
-    private Map<String, Object> meta;
+    private final Map<String, Object> meta;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
-    private JsonApiErrors errors;
+    private final JsonApiErrors errors;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
-    private Links links;
+    private final Links links;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
-    private List<JsonApiData> included;
+    private final List<JsonApiData> included;
 
     @JsonCreator
     JsonApiDocument(@JsonProperty("jsonapi") @Nullable JsonApiJsonApi jsonapi,

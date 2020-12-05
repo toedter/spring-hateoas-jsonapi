@@ -31,13 +31,13 @@ public class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<Jso
 
     @Getter
     private static class JsonApiRelationshipForSerialization {
-        private Object data;
+        private final Object data;
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private Links links;
+        private final Links links;
 
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private Map<String, Object> meta;
+        private final Map<String, Object> meta;
 
         public JsonApiRelationshipForSerialization(Object data, Links links, Map<String, Object> meta) {
             this.data = data;

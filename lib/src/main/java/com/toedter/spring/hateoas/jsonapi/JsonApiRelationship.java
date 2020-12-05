@@ -48,15 +48,15 @@ import java.util.Optional;
 @JsonSerialize(using = JsonApiRelationshipSerializer.class)
 @Getter
 class JsonApiRelationship {
-    private Object data;
+    private final Object data;
 
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Links links;
+    private final Links links;
 
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, Object> meta;
+    private final Map<String, Object> meta;
 
     @JsonIgnore
     private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
