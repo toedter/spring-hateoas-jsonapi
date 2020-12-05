@@ -9,7 +9,10 @@
       "directors": {
         "data": {
           "id": "3",
-          "type": "directors"
+          "type": "directors",
+          "meta": {
+            "director-relationship-meta": "director-relationship-meta-value"
+          }
         },
         "meta": {
           "relationship-meta": "relationship-meta-value"

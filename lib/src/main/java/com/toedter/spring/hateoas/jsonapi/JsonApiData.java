@@ -137,13 +137,13 @@ class JsonApiData {
             return Optional.empty();
         }
 
-        JsonApiResource.ResourceField idField;
-        idField = JsonApiResource.getId(content, jsonApiConfiguration);
+        JsonApiResourceIdentifier.ResourceField idField;
+        idField = JsonApiResourceIdentifier.getId(content, jsonApiConfiguration);
 
         if (isSingleEntity || links != null && links.isEmpty()) {
             links = null;
         }
-        JsonApiResource.ResourceField typeField = JsonApiResource.getType(content, jsonApiConfiguration);
+        JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
         // This does not serialize attribute values but leaves the original objects
         Map<String, Object> attributeMapFromPropertyUtils = PropertyUtils.extractPropertyValues(content);

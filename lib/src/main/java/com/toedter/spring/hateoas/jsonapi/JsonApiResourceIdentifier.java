@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
+import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +33,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 import static org.springframework.util.ReflectionUtils.findField;
@@ -43,7 +45,7 @@ import static org.springframework.util.ReflectionUtils.getAllDeclaredMethods;
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-class JsonApiResource {
+class JsonApiResourceIdentifier {
     public static final String JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID =
             "JSON:API resource object must have property \"id\".";
     public static final String JSONAPI_ID_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiId";
@@ -54,14 +56,25 @@ class JsonApiResource {
 
     Object id;
     String type;
+    Map<String, Object> meta;
 
     @JsonCreator
-    public JsonApiResource(
+    public JsonApiResourceIdentifier(
             @JsonProperty(ID) Object id,
-            @JsonProperty(TYPE) String type
+            @JsonProperty(TYPE) String type,
+            @Nullable Map<String, Object> meta
     ) {
         this.id = id;
         this.type = type;
+        this.meta = meta;
+    }
+
+    @JsonCreator
+    public JsonApiResourceIdentifier(
+            @JsonProperty(ID) Object id,
+            @JsonProperty(TYPE) String type
+    ) {
+        this(id, type, null);
     }
 
     static class ResourceField {

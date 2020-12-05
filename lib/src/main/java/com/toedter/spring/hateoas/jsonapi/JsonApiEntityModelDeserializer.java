@@ -99,8 +99,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
                                             Class<?> typeArgClass = (Class<?>) typeArgument;
                                             Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
-                                            JsonApiResource.setJsonApiResourceFieldAttributeForObject(
-                                                    newInstance, JsonApiResource.JsonApiResourceField.id, entry.get("id"));
+                                            JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                                                    newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
                                             relationshipList.add(newInstance);
                                         }
 
@@ -113,8 +113,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     @SuppressWarnings("unchecked")
                                     HashMap<String, Object> data =
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
-                                    JsonApiResource.setJsonApiResourceFieldAttributeForObject(
-                                            newInstance, JsonApiResource.JsonApiResourceField.id, data.get("id").toString());
+                                    JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                                            newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, data.get("id").toString());
                                     field.set(object, newInstance);
                                 }
                             }

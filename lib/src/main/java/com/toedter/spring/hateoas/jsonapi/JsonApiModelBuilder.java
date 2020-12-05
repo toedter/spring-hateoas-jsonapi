@@ -24,9 +24,9 @@ import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -154,7 +154,7 @@ public class JsonApiModelBuilder {
         Assert.notNull(dataObject, "Relationship data object must not be null!");
 
         final JsonApiRelationship jsonApiRelationship =
-                addDataObject(relationships.get(name), dataObject);
+                addDataObject(relationships.get(name), dataObject, null);
         relationships.put(name, jsonApiRelationship);
 
         return this;
@@ -227,7 +227,8 @@ public class JsonApiModelBuilder {
         JsonApiRelationship jsonApiRelationship = null;
         if (entityModel != null) {
             Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
-            jsonApiRelationship = addDataObject(relationships.get(name), entityModel.getContent());
+            jsonApiRelationship =
+                    addDataObject(relationships.get(name), entityModel.getContent(), null);
         }
 
         if (selfLink != null || relatedLink != null) {
@@ -261,6 +262,30 @@ public class JsonApiModelBuilder {
         }
         relationships.put(name, jsonApiRelationship);
 
+        return this;
+    }
+
+    /**
+     * Adds or updates a {@literal relationship} based on the {@literal meta}
+     * to the {@link RepresentationModel} to be built.
+     * If there is already a relationship for the given name defined,
+     * the meta will overwrite the existing relationship.
+     *
+     * @param name must not be {@literal null}.
+     * @param dataObject must not be {@literal null}.
+     * @param resourceIdentifierMeta can be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder relationship(String name,
+                                            Object dataObject,
+                                            Map<String, Object> resourceIdentifierMeta) {
+        Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+        Assert.notNull(dataObject, "Relationship data object must not be null!");
+
+        final JsonApiRelationship jsonApiRelationship =
+                addDataObject(relationships.get(name), dataObject, resourceIdentifierMeta);
+
+        relationships.put(name, jsonApiRelationship);
         return this;
     }
 
@@ -306,7 +331,7 @@ public class JsonApiModelBuilder {
 
         JsonApiRelationship jsonApiRelationship = relationships.get(name);
         if (jsonApiRelationship == null) {
-            jsonApiRelationship = new JsonApiRelationship(null, null, null);
+            jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
         }
         jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
         relationships.put(name, jsonApiRelationship);
@@ -349,12 +374,14 @@ public class JsonApiModelBuilder {
     }
 
     private JsonApiRelationship addDataObject(
-            @Nullable JsonApiRelationship jsonApiRelationship, Object dataObject) {
+            @Nullable JsonApiRelationship jsonApiRelationship,
+            Object dataObject,
+            Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
-            newRelationship = JsonApiRelationship.of(dataObject);
+            newRelationship = JsonApiRelationship.of(dataObject, resourceIdentifierMeta);
         } else {
-            newRelationship = jsonApiRelationship.addDataObject(dataObject);
+            newRelationship = jsonApiRelationship.addDataObject(dataObject, resourceIdentifierMeta);
         }
         return newRelationship;
     }

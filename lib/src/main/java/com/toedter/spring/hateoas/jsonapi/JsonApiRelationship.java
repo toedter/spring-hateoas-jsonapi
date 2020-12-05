@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,20 +58,46 @@ class JsonApiRelationship {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> meta;
 
+    @JsonIgnore
+    private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
+
+    @JsonCreator
+    JsonApiRelationship(
+            @JsonProperty("data") @Nullable Object data,
+            @JsonProperty("links") @Nullable Links links,
+            @JsonProperty("meta") @Nullable Map<String, Object> meta,
+            @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers
+    ) {
+        this.data = data;
+        this.links = links;
+        this.meta = meta;
+        this.metaForResourceIdentifiers = metaForResourceIdentifiers;
+    }
+
     @JsonCreator
     JsonApiRelationship(
             @JsonProperty("data") @Nullable Object data,
             @JsonProperty("links") @Nullable Links links,
             @JsonProperty("meta") @Nullable Map<String, Object> meta
     ) {
-        this.data = data;
-        this.links = links;
-        this.meta = meta;
+        this(data, links, meta, null);
     }
 
     public JsonApiRelationship addDataObject(final Object object) {
+        return this.addDataObject(object, null);
+    }
+
+    public JsonApiRelationship addDataObject(final Object object,
+                                             @Nullable Map<String, Object> metaForResourceIdentifier) {
+        if(metaForResourceIdentifier != null && !metaForResourceIdentifier.isEmpty()) {
+            if(metaForResourceIdentifiers == null) {
+                metaForResourceIdentifiers = new HashMap<>();
+            }
+            metaForResourceIdentifiers.put(object, metaForResourceIdentifier);
+        }
+
         if (this.data == null) {
-            return new JsonApiRelationship(object, this.links, this.meta);
+            return new JsonApiRelationship(object, this.links, this.meta, this.metaForResourceIdentifiers);
         } else {
             List<Object> dataList = new ArrayList<>();
             if (!(this.data instanceof Collection<?>)) {
@@ -81,13 +108,13 @@ class JsonApiRelationship {
                 dataList.addAll(collectionData);
             }
             dataList.add(object);
-            return new JsonApiRelationship(dataList, this.links, this.meta);
+            return new JsonApiRelationship(dataList, this.links, this.meta, this.metaForResourceIdentifiers);
         }
     }
 
     public JsonApiRelationship addDataCollection(final Collection<?> collection) {
         if (this.data == null) {
-            return new JsonApiRelationship(collection, this.links, this.meta);
+            return new JsonApiRelationship(collection, this.links, this.meta, this.metaForResourceIdentifiers);
         } else {
             List<Object> dataList = new ArrayList<>();
             if (!(this.data instanceof Collection<?>)) {
@@ -96,15 +123,15 @@ class JsonApiRelationship {
                 dataList.addAll((Collection<?>) data);
             }
             dataList.addAll(collection);
-            return new JsonApiRelationship(dataList, this.links, this.meta);
+            return new JsonApiRelationship(dataList, this.links, this.meta, this.metaForResourceIdentifiers);
         }
     }
 
     public JsonApiRelationship isAlwaysSerializedWithDataArray() {
         if (this.data == null) {
-            return new JsonApiRelationship(Collections.emptyList(), this.links, this.meta);
+            return new JsonApiRelationship(Collections.emptyList(), this.links, this.meta, this.metaForResourceIdentifiers);
         } else if (!(this.data instanceof Collection<?>)) {
-            return new JsonApiRelationship(Collections.singletonList(this.data), this.links, this.meta);
+            return new JsonApiRelationship(Collections.singletonList(this.data), this.links, this.meta, this.metaForResourceIdentifiers);
         }
         return this;
     }
@@ -131,6 +158,23 @@ class JsonApiRelationship {
      */
     public static JsonApiRelationship of(Object object) {
         return new JsonApiRelationship(object, null, null);
+    }
+
+    /**
+     * Creates a JSON:API relationship from an object and adds the meta
+     * to the (resource identifier) object itself, not the relationship
+     * It must be possible to extract the JSON:API id of this object,
+     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
+     *
+     * @param object the base for the relationship
+     * @param resourceIdentifierMeta the meta of the (resource identifier) object
+     * @return the JSON:API relationship
+     */
+    public static JsonApiRelationship of(Object object,
+                                         Map<String, Object> resourceIdentifierMeta) {
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        jsonApiRelationship = jsonApiRelationship.addDataObject(object, resourceIdentifierMeta);
+        return jsonApiRelationship;
     }
 
     /**
@@ -203,17 +247,22 @@ class JsonApiRelationship {
         return true;
     }
 
-    static JsonApiResource toJsonApiResource(Object data, JsonApiConfiguration jsonApiConfiguration) {
+    JsonApiResourceIdentifier toJsonApiResource(Object data, JsonApiConfiguration jsonApiConfiguration) {
+        Map<String, Object> meta = null;
+        if(metaForResourceIdentifiers != null) {
+            meta = metaForResourceIdentifiers.get(data);
+        }
+
         // JsonApiResource.getId and getType will throw IllegalStateExceptions
         // if id or type cannot be retrieved.
-        Object id = JsonApiResource.getId(data, jsonApiConfiguration).value;
-        String type = JsonApiResource.getType(data, jsonApiConfiguration).value;
-        return new JsonApiResource(id, type);
+        Object id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
+        String type = JsonApiResourceIdentifier.getType(data, jsonApiConfiguration).value;
+        return new JsonApiResourceIdentifier(id, type, meta);
     }
 
-    static List<JsonApiResource> toJsonApiResourceCollection(
+    List<JsonApiResourceIdentifier> toJsonApiResourceCollection(
             Collection<?> collection, JsonApiConfiguration jsonApiConfiguration) {
-        List<JsonApiResource> dataList = new ArrayList<>();
+        List<JsonApiResourceIdentifier> dataList = new ArrayList<>();
         for (Object object : collection) {
             dataList.add(toJsonApiResource(object, jsonApiConfiguration));
         }

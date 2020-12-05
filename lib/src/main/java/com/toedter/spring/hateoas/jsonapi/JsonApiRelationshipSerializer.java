@@ -55,9 +55,9 @@ public class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<Jso
     public void serialize(JsonApiRelationship value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         Object data = value.getData();
         if (data instanceof Collection) {
-            data = JsonApiRelationship.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
+            data = value.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
         } else {
-            data = JsonApiRelationship.toJsonApiResource(data, jsonApiConfiguration);
+            data = value.toJsonApiResource(data, jsonApiConfiguration);
         }
         JsonApiRelationshipForSerialization jsonApiRelationship =
                 new JsonApiRelationshipForSerialization(data, value.getLinks(), value.getMeta());

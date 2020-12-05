@@ -426,7 +426,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_not_build_with_invalid_null_value_relationship() {
-        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+        JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
                 .relationship("directors", jsonApiRelationship)
                 .build());
@@ -519,7 +519,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
-    void should_build_single_movie_with_top_level_and_relationship_and_included_meta() throws Exception {
+    void should_build_single_movie_with_different_meta_in_relationship_resources() throws Exception {
         // tag::nesting[]
         Director director = new Director("3", "George Lucas");
         final RepresentationModel<?> directorModel =
@@ -531,12 +531,15 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         Map<String, Object> relationshipMeta = new HashMap<>();
         relationshipMeta.put("relationship-meta", "relationship-meta-value");
 
+        Map<String, Object> directorRelationshipMeta = new HashMap<>();
+        directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
+
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> movieModel =
                 jsonApiModel()
                         .model(movie)
                         .meta("movie-meta", "movie-meta-value")
-                        .relationship("directors", director)
+                        .relationship("directors", director, directorRelationshipMeta)
                         .relationship("directors", relationshipMeta )
                         .build();
 
