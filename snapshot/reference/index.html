@@ -16,7 +16,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.12.0-SNAPSHOT,</span>
-<span id="revdate">2020-12-04</span>
+<span id="revdate">2020-12-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -768,12 +768,15 @@ final RepresentationModel&lt;?&gt; directorModel =
 Map&lt;String, Object&gt; relationshipMeta = new HashMap&lt;&gt;();
 relationshipMeta.put("relationship-meta", "relationship-meta-value");
 
+Map&lt;String, Object&gt; directorRelationshipMeta = new HashMap&lt;&gt;();
+directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
+
 Movie movie = new Movie("1", "Star Wars");
 final RepresentationModel&lt;?&gt; movieModel =
         jsonApiModel()
                 .model(movie)
                 .meta("movie-meta", "movie-meta-value")
-                .relationship("directors", director)
+                .relationship("directors", director, directorRelationshipMeta)
                 .relationship("directors", relationshipMeta )
                 .build();
 
@@ -801,7 +804,10 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
       "directors": {
         "data": {
           "id": "3",
-          "type": "directors"
+          "type": "directors",
+          "meta": {
+            "director-relationship-meta": "director-relationship-meta-value"
+          }
         },
         "meta": {
           "relationship-meta": "relationship-meta-value"
@@ -1248,7 +1254,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.12.0-SNAPSHOT<br>
-Last updated 2020-12-04 10:22:19 UTC
+Last updated 2020-12-05 12:50:49 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
