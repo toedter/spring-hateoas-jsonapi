@@ -13,7 +13,7 @@
 <div id="header">
 <h1>JSON:API</h1>
 <div class="details">
-<span id="revnumber">version 0.11.0</span>
+<span id="revnumber">version 0.12.0</span>
 </div>
 </div>
 <div id="content">
@@ -103,7 +103,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.11.0&lt;/version&gt;
+    &lt;version&gt;0.12.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -112,11 +112,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.11.0'</code></pre>
+<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.12.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.12.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.13.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -667,7 +667,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 <h2 id="Inclusion">Inclusion of related Resources</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There is no direct support for including related resources,
+<p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
@@ -689,6 +689,95 @@ and the builder could be used for the inclusion, like</p>
         }
     }
     directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Nesting">Nesting of JsonApiModels</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When using the model builder, <code>JsonApiModel</code>s themselves can be used as model and included
+resources. Here is an example that also illustrates the different levels of meta.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Director director = new Director("3", "George Lucas");
+final RepresentationModel&lt;?&gt; directorModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .meta("director-meta", "director-meta-value")
+                .build();
+
+Map&lt;String, Object&gt; relationshipMeta = new HashMap&lt;&gt;();
+relationshipMeta.put("relationship-meta", "relationship-meta-value");
+
+Map&lt;String, Object&gt; directorRelationshipMeta = new HashMap&lt;&gt;();
+directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
+
+Movie movie = new Movie("1", "Star Wars");
+final RepresentationModel&lt;?&gt; movieModel =
+        jsonApiModel()
+                .model(movie)
+                .meta("movie-meta", "movie-meta-value")
+                .relationship("directors", director, directorRelationshipMeta)
+                .relationship("directors", relationshipMeta )
+                .build();
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movieModel)
+                .meta("top-level-meta", "top-level-meta-value")
+                .included(directorModel)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "3",
+          "type": "directors",
+          "meta": {
+            "director-relationship-meta": "director-relationship-meta-value"
+          }
+        },
+        "meta": {
+          "relationship-meta": "relationship-meta-value"
+        }
+      }
+    },
+    "meta": {
+      "movie-meta": "movie-meta-value"
+    }
+  },
+  "included": [
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      },
+      "meta": {
+        "director-meta": "director-meta-value"
+      }
+    }
+  ],
+  "meta": {
+    "top-level-meta": "top-level-meta-value"
+  }
 }</code></pre>
 </div>
 </div>
@@ -1118,8 +1207,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.11.0<br>
-Last updated 2020-11-11 18:59:56 UTC
+Version 0.12.0<br>
+Last updated 2020-12-07 08:40:18 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
