@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+// tag::director-with-type[]
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,3 +34,4 @@ public class DirectorWithType {
     @JsonApiType
     private  String directorType;
 }
+// end::director-with-type[]

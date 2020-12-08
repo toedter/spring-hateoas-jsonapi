@@ -320,7 +320,38 @@ include::{test-dir}/support/MovieWithDirectors.java[tags=Movie-with-directors]
 
 NOTE: If you use the annotation `JsonApiRelationships` on an attribute of a Java class,
 the content will NOT be serialized automatically to `JSON:API relationships`. This is on purpose,
-please us the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
+please use the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
+
+== Deserialization of JSON:API types ==
+
+If entities contain an explicit `@JsonApiType` field annotation,
+those fields are also filled during deserialization.
+This is also true for relationships, if the relationship entity contains an explicit `@JsonApiType`
+annotation.
+
+Consider the following classes:
+
+[source, java]
+----
+include::{test-dir}/support/DirectorWithType.java[tags=director-with-type]
+----
+
+[source, java]
+----
+include::{test-dir}/support/MovieWithTypedDirectors.java[tags=movie-with-typed-director]
+----
+
+Then the following JSON
+
+[source, json]
+----
+include::{test-resources-dir}/postMovieWithTwoRelationshipsWithDifferentTypes.json[]
+----
+
+will be deserialized to a `MovieWithTypedDirectors` where myType is "movies"
+and 2 (empty) `DirectorWithType` objects.
+The first `DirectorWithType` object with id = '1' and directorType = "director-type-1",
+the second `DirectorWithType` object with id = '2' and directorType = "director-type-2",
 
 [[polymorphy]]
 == Polymorphic Deserialization ==

@@ -27,6 +27,7 @@ import lombok.With;
 
 import java.util.List;
 
+// tag::movie-with-typed-director[]
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -34,9 +35,10 @@ import java.util.List;
 @With
 public class MovieWithTypedDirectors extends Movie {
     @JsonApiType
-    String myType = "movies";
+    String myType;
 
     @JsonIgnore
     @JsonApiRelationships("directors")
     List<DirectorWithType> directors;
 }
+// end::movie-with-typed-director[]
