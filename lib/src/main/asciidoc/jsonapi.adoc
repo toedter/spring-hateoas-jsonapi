@@ -227,7 +227,7 @@ include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusi
 [[Nesting]]
 == Nesting of JsonApiModels ==
 
-When using the model builder, ``JsonApiModel``s themselves can be used as model and included
+When using the model builder, ``JsonApiModel`` instances can be used as model and included
 resources. Here is an example that also illustrates the different levels of meta.
 
 [source, java, indent=0]
