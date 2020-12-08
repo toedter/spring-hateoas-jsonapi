@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
+import com.toedter.spring.hateoas.jsonapi.support.DirectorWithType;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.Movie2;
 import com.toedter.spring.hateoas.jsonapi.support.Movie3;
@@ -36,6 +37,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -354,6 +356,42 @@ class Jackson2JsonApiIntegrationTest {
         List<Director> directors = movie.getDirectors();
         assertThat(directors.size()).isEqualTo(1);
         assertThat(directors.get(0).getId()).isEqualTo("1");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_one_relationship_and_relationship_type() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectors.class);
+        File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
+        EntityModel<MovieWithTypedDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithTypedDirectors movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        List<DirectorWithType> directors = movie.getDirectors();
+        assertThat(directors.size()).isEqualTo(1);
+        assertThat(directors.get(0).getId()).isEqualTo("1");
+        assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_two_relationship_and_different_relationship_types() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectors.class);
+        File file = new ClassPathResource("postMovieWithTwoRelationshipsWithDifferentTypes.json", getClass()).getFile();
+        EntityModel<MovieWithTypedDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithTypedDirectors movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        List<DirectorWithType> directors = movie.getDirectors();
+        assertThat(directors.size()).isEqualTo(2);
+        assertThat(directors.get(0).getId()).isEqualTo("1");
+        assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type-1");
+        assertThat(directors.get(1).getId()).isEqualTo("2");
+        assertThat(directors.get(1).getDirectorType()).isEqualTo("director-type-2");
     }
 
     @Test

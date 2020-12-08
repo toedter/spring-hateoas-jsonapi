@@ -60,7 +60,6 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                 return entityModel;
             }
 
-            @SuppressWarnings("unchecked")
             HashMap<String, Object> relationships =
                     (HashMap<String, Object>) ((HashMap<String, Object>) doc.getData()).get("relationships");
 
@@ -84,11 +83,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Object data = ((HashMap<?, ?>) relationship).get("data");
                                         List<HashMap<String, String>> jsonApiRelationships;
                                         if (data instanceof List) {
-                                            @SuppressWarnings("unchecked")
-                                            List<HashMap<String, String>> castedData = (List<HashMap<String, String>>) data;
-                                            jsonApiRelationships = castedData;
+                                            jsonApiRelationships = (List<HashMap<String, String>>) data;
                                         } else if (data instanceof HashMap) {
-                                            @SuppressWarnings("unchecked")
                                             HashMap<String, String> castedData = (HashMap<String, String>) data;
                                             jsonApiRelationships = Collections.singletonList(castedData);
                                         } else {
@@ -101,6 +97,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                                     newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
+                                            JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                                                    newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, entry.get("type"));
                                             relationshipList.add(newInstance);
                                         }
 
@@ -110,7 +108,6 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     // we expect a concrete type otherwise, like "Director"
                                     Class<?> clazz = Class.forName(genericType.getTypeName());
                                     Object newInstance = clazz.getDeclaredConstructor().newInstance();
-                                    @SuppressWarnings("unchecked")
                                     HashMap<String, Object> data =
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
                                     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
