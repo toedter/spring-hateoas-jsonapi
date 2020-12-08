@@ -962,10 +962,91 @@ public class MovieWithDirectors extends Movie {
 <td class="content">
 If you use the annotation <code>JsonApiRelationships</code> on an attribute of a Java class,
 the content will NOT be serialized automatically to <code>JSON:API relationships</code>. This is on purpose,
-please us the <code>JsonApiModelBuilder</code> to decide, which relationships and included objects you want to return.
+please use the <code>JsonApiModelBuilder</code> to decide, which relationships and included objects you want to return.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deserialization_of_jsonapi_types">Deserialization of JSON:API types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
+those fields are also filled during deserialization.
+This is also true for relationships, if the relationship entity contains an explicit <code>@JsonApiType</code>
+annotation.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class DirectorWithType {
+    private String id;
+    private String name;
+
+    @JsonApiType
+    private  String directorType;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithTypedDirectors extends Movie {
+    @JsonApiType
+    String myType;
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;DirectorWithType&gt; directors;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the following JSON</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "director-type-1"
+          },
+          {
+            "id": "2",
+            "type": "director-type-2"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to a <code>MovieWithTypedDirectors</code> where myType is "movies"
+and 2 (empty) <code>DirectorWithType</code> objects.
+The first <code>DirectorWithType</code> object with id = '1' and directorType = "director-type-1",
+the second <code>DirectorWithType</code> object with id = '2' and directorType = "director-type-2",</p>
 </div>
 </div>
 </div>
@@ -1208,7 +1289,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.13.0-SNAPSHOT<br>
-Last updated 2020-12-08 08:18:44 UTC
+Last updated 2020-12-08 08:48:01 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
