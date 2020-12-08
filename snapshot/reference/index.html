@@ -1049,11 +1049,13 @@ public class DirectorWithType {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class MovieWithTypedDirectors extends Movie {
+public class MovieWithTypedDirectors {
+    private String id;
+    private String title;
+
     @JsonApiType
     String myType;
 
@@ -1334,7 +1336,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.13.0-SNAPSHOT<br>
-Last updated 2020-12-08 08:48:01 UTC
+Last updated 2020-12-08 08:58:38 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

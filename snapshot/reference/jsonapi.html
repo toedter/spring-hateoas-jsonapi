@@ -999,11 +999,13 @@ public class DirectorWithType {
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class MovieWithTypedDirectors extends Movie {
+public class MovieWithTypedDirectors {
+    private String id;
+    private String title;
+
     @JsonApiType
     String myType;
 
@@ -1289,7 +1291,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.13.0-SNAPSHOT<br>
-Last updated 2020-12-08 08:48:01 UTC
+Last updated 2020-12-08 08:58:38 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
