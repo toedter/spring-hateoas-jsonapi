@@ -21,7 +21,6 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
@@ -29,11 +28,13 @@ import java.util.List;
 
 // tag::movie-with-typed-director[]
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class MovieWithTypedDirectors extends Movie {
+public class MovieWithTypedDirectors {
+    private String id;
+    private String title;
+
     @JsonApiType
     String myType;
 
