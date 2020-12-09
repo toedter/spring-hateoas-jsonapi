@@ -37,6 +37,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
@@ -359,7 +360,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_deserialize_single_movie_entity_model_with_one_relationship_and_relationship_type() throws Exception {
+    void should_deserialize_single_movie_entity_model_with_one_collection_relationship_and_relationship_type() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectors.class);
         File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
         EntityModel<MovieWithTypedDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
@@ -373,6 +374,22 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(directors.size()).isEqualTo(1);
         assertThat(directors.get(0).getId()).isEqualTo("1");
         assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_one_entity_relationship_and_relationship_type() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithSingleTypedDirector.class);
+        File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
+        EntityModel<MovieWithSingleTypedDirector> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithSingleTypedDirector movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        DirectorWithType director = movie.getDirector();
+        assertThat(director.getId()).isEqualTo("1");
+        assertThat(director.getDirectorType()).isEqualTo("director-type");
     }
 
     @Test

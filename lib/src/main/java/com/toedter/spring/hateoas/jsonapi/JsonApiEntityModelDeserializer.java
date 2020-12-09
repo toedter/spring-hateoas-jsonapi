@@ -112,6 +112,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
                                     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                             newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, data.get("id").toString());
+                                    JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                                            newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, data.get("type").toString());
                                     field.set(object, newInstance);
                                 }
                             }
