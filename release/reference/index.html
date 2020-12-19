@@ -15,8 +15,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 0.12.0,</span>
-<span id="revdate">2020-12-07</span>
+<span id="revnumber">version 0.13.0,</span>
+<span id="revdate">2020-12-19</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -32,6 +32,7 @@
 <li><a href="#Nesting">Nesting of JsonApiModels</a></li>
 <li><a href="#SparseFielsets">Sparse Fieldsets</a></li>
 <li><a href="#Creating">Creating Resources with HTTP POST</a></li>
+<li><a href="#_deserialization_of_jsonapi_types">Deserialization of JSON:API types</a></li>
 <li><a href="#polymorphy">Polymorphic Deserialization</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#errors">Error Handling</a></li>
@@ -168,7 +169,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.12.0&lt;/version&gt;
+    &lt;version&gt;0.13.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -177,11 +178,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.12.0'</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.13.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.13.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.14.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -753,7 +754,7 @@ and the builder could be used for the inclusion, like</p>
 <div class="sect2">
 <h3 id="Nesting">Nesting of JsonApiModels</h3>
 <div class="paragraph">
-<p>When using the model builder, <code>JsonApiModel</code>s themselves can be used as model and included
+<p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
 </div>
 <div class="listingblock">
@@ -777,7 +778,7 @@ final RepresentationModel&lt;?&gt; movieModel =
                 .model(movie)
                 .meta("movie-meta", "movie-meta-value")
                 .relationship("directors", director, directorRelationshipMeta)
-                .relationship("directors", relationshipMeta )
+                .relationship("directors", relationshipMeta)
                 .build();
 
 final RepresentationModel&lt;?&gt; jsonApiModel =
@@ -1013,10 +1014,91 @@ public class MovieWithDirectors extends Movie {
 <td class="content">
 If you use the annotation <code>JsonApiRelationships</code> on an attribute of a Java class,
 the content will NOT be serialized automatically to <code>JSON:API relationships</code>. This is on purpose,
-please us the <code>JsonApiModelBuilder</code> to decide, which relationships and included objects you want to return.
+please use the <code>JsonApiModelBuilder</code> to decide, which relationships and included objects you want to return.
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deserialization_of_jsonapi_types">Deserialization of JSON:API types</h3>
+<div class="paragraph">
+<p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
+those fields are also filled during deserialization.
+This is also true for relationships, if the relationship entity contains an explicit <code>@JsonApiType</code>
+annotation.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class DirectorWithType {
+    private String id;
+    private String name;
+
+    @JsonApiType
+    private  String directorType;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithTypedDirectors {
+    private String id;
+    private String title;
+
+    @JsonApiType
+    String myType;
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;DirectorWithType&gt; directors;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the following JSON</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "director-type-1"
+          },
+          {
+            "id": "2",
+            "type": "director-type-2"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to a <code>MovieWithTypedDirectors</code> where myType is "movies"
+and 2 (empty) <code>DirectorWithType</code> objects.
+The first <code>DirectorWithType</code> object with id = '1' and directorType = "director-type-1",
+the second <code>DirectorWithType</code> object with id = '2' and directorType = "director-type-2",</p>
 </div>
 </div>
 <div class="sect2">
@@ -1253,8 +1335,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.12.0<br>
-Last updated 2020-12-07 08:40:18 UTC
+Version 0.13.0<br>
+Last updated 2020-12-19 12:47:34 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
