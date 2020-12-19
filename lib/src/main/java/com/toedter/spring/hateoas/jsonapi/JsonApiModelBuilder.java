@@ -27,6 +27,8 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -144,8 +146,8 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the new data object will be added to the existing relationship.
      *
-     * @param name         must not be {@literal null}.
-     * @param dataObject   must not be {@literal null}.
+     * @param name       must not be {@literal null}.
+     * @param dataObject must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name,
@@ -168,8 +170,8 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the elements of the collection will be added to the existing relationship.
      *
-     * @param name         must not be {@literal null}.
-     * @param collection   must not be {@literal null}.
+     * @param name       must not be {@literal null}.
+     * @param collection must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name,
@@ -190,8 +192,8 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the new {@link EntityModel} will be added to the existing relationship.
      *
-     * @param name         must not be {@literal null}.
-     * @param entityModel  must not be {@literal null}.
+     * @param name        must not be {@literal null}.
+     * @param entityModel must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
@@ -271,8 +273,8 @@ public class JsonApiModelBuilder {
      * If there is already a relationship for the given name defined,
      * the meta will overwrite the existing relationship.
      *
-     * @param name must not be {@literal null}.
-     * @param dataObject must not be {@literal null}.
+     * @param name                   must not be {@literal null}.
+     * @param dataObject             must not be {@literal null}.
      * @param resourceIdentifierMeta can be {@literal null}.
      * @return will never be {@literal null}.
      */
@@ -322,7 +324,7 @@ public class JsonApiModelBuilder {
      * relationship to be rendered as an array rather than having to check for
      * null values or single objects.
      *
-     * @param name        must not be {@literal null}.
+     * @param name must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationshipWithDataArray(String name) {
@@ -510,26 +512,39 @@ public class JsonApiModelBuilder {
 
         List<Link> paginationLinks = new ArrayList<>();
 
+        String paramStart = "?";
+
+        try {
+            URL url = new URL(linkBase);
+            String query = url.getQuery();
+            if (query != null) {
+                paramStart = "&";
+            }
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(
+                    "LinkBase parameter must be a valid URL.");
+        }
+
         if (pageNumber > 0) {
-            Link firstLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=0&"
+            Link firstLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=0&"
                     + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.FIRST);
             paginationLinks.add(firstLink);
         }
 
         if (pageNumber > 0) {
-            Link prevLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (pageNumber - 1)
+            Link prevLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (pageNumber - 1)
                     + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.PREV);
             paginationLinks.add(prevLink);
         }
 
         if (pageNumber < totalPages - 1) {
-            Link nextLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (pageNumber + 1)
+            Link nextLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (pageNumber + 1)
                     + "&" + pageSizeRequestParam + "=" + (pageNumber + 1)).withRel(IanaLinkRelations.NEXT);
             paginationLinks.add(nextLink);
         }
 
         if (pageNumber < totalPages - 1) {
-            Link lastLink = Link.of(linkBase + "?" + pageNumberRequestParam + "=" + (totalPages - 1)
+            Link lastLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (totalPages - 1)
                     + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.LAST);
             paginationLinks.add(lastLink);
         }
@@ -548,7 +563,7 @@ public class JsonApiModelBuilder {
      * for the given JSON:API type is not part of the fields parameters.
      *
      * @param jsonapiType the JSON:API type
-     * @param fields the attributes that should be included
+     * @param fields      the attributes that should be included
      * @return ill never be {@literal null}.
      */
     public JsonApiModelBuilder fields(String jsonapiType, String... fields) {

@@ -296,6 +296,24 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_paged_movie_with_parametrized_page_links() throws Exception {
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+        Link selfLink = Link.of("http://localhost/movies").withSelfRel();
+        final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(new ArrayList<>(), pageMetadata, selfLink);
+
+        RepresentationModel<?> pagedJasonApiModel =
+                jsonApiModel()
+                        .model(pagedModel)
+                        .pageMeta()
+                        .pageLinks("http://localhost/movies?director=lucas")
+                        .build();
+
+        final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
+
+        compareWithFile(pagedModelJson, "pagedJsonApiModelWithPageLinksParameters.json");
+    }
+
+    @Test
     void should_build_single_movie_entity_model_with_meta() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> jsonApiModel =
@@ -305,7 +323,8 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
-    @Test // issue: #13
+    @Test
+        // issue: #13
     void should_build_with_meta_only() throws Exception {
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel().meta("x", "y").build();
@@ -425,6 +444,17 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_not_build_pagination_links_with_invalid_link_base() {
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(2, 1, 100, 50);
+        assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
+                .model(PagedModel.of(Collections.EMPTY_LIST, pageMetadata))
+                .pageMeta()
+                .pageLinks("httpx://test::8080")
+                .build());
+    }
+
+    @Test
     void should_not_build_with_invalid_null_value_relationship() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
         assertThrows(IllegalStateException.class, () -> jsonApiModel()
@@ -540,7 +570,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .model(movie)
                         .meta("movie-meta", "movie-meta-value")
                         .relationship("directors", director, directorRelationshipMeta)
-                        .relationship("directors", relationshipMeta )
+                        .relationship("directors", relationshipMeta)
                         .build();
 
         final RepresentationModel<?> jsonApiModel =

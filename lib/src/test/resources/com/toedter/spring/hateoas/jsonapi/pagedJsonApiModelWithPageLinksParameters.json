@@ -1,0 +1,18 @@
+{
+  "data": [],
+  "links": {
+    "self": "http://localhost/movies",
+    "first": "http://localhost/movies?director=lucas&page[number]=0&page[size]=2",
+    "prev": "http://localhost/movies?director=lucas&page[number]=0&page[size]=2",
+    "next": "http://localhost/movies?director=lucas&page[number]=2&page[size]=2",
+    "last": "http://localhost/movies?director=lucas&page[number]=49&page[size]=2"
+  },
+  "meta": {
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 50,
+      "totalElements": 100
+    }
+  }
+}
