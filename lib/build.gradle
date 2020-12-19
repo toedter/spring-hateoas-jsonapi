@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '0.13.0-SNAPSHOT'
+version = '0.13.0'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -33,7 +33,7 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation 'org.springframework.hateoas:spring-hateoas:1.2.0'
+    implementation 'org.springframework.hateoas:spring-hateoas:1.2.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.atteo:evo-inflector:1.2.2'
 
