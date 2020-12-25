@@ -27,9 +27,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
@@ -78,8 +81,13 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                 // expect collections to always be generic, like "List<Director>"
                                 if (genericType instanceof ParameterizedType) {
                                     ParameterizedType type = (ParameterizedType) genericType;
-                                    if (List.class.isAssignableFrom(field.getType())) {
-                                        List<Object> relationshipList = new ArrayList<>();
+                                    if (Collection.class.isAssignableFrom(field.getType())) {
+                                        Collection<Object> relationshipCollection;
+                                        if(Set.class.isAssignableFrom(field.getType())) {
+                                            relationshipCollection = new HashSet<>();
+                                        } else {
+                                            relationshipCollection = new ArrayList<>();
+                                        }
                                         Object data = ((HashMap<?, ?>) relationship).get("data");
                                         List<HashMap<String, String>> jsonApiRelationships;
                                         if (data instanceof List) {
@@ -99,10 +107,10 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                                     newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                                     newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, entry.get("type"));
-                                            relationshipList.add(newInstance);
+                                            relationshipCollection.add(newInstance);
                                         }
 
-                                        field.set(object, relationshipList);
+                                        field.set(object, relationshipCollection);
                                     }
                                 } else {
                                     // we expect a concrete type otherwise, like "Director"

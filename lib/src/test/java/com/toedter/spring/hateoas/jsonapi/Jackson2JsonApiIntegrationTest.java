@@ -38,6 +38,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
@@ -63,6 +64,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -360,7 +362,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_deserialize_single_movie_entity_model_with_one_collection_relationship_and_relationship_type() throws Exception {
+    void should_deserialize_single_movie_entity_model_with_one_list_relationship_and_relationship_type() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectors.class);
         File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
         EntityModel<MovieWithTypedDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
@@ -374,6 +376,23 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(directors.size()).isEqualTo(1);
         assertThat(directors.get(0).getId()).isEqualTo("1");
         assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
+    }
+
+    @Test
+    void should_deserialize_single_movie_entity_model_with_one_set_relationship_and_relationship_type() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectorSet.class);
+        File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
+        EntityModel<MovieWithTypedDirectorSet> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithTypedDirectorSet movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        Set<DirectorWithType> directors = movie.getDirectors();
+        assertThat(directors.size()).isEqualTo(1);
+//        assertThat(directors.get(0).getId()).isEqualTo("1");
+//        assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
     }
 
     @Test

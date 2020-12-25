@@ -353,6 +353,8 @@ and 2 (empty) `DirectorWithType` objects.
 The first `DirectorWithType` object with id = '1' and directorType = "director-type-1",
 the second `DirectorWithType` object with id = '2' and directorType = "director-type-2",
 
+NOTE: Currently, only `List` and `Set` are supported collection classes.
+
 [[polymorphy]]
 == Polymorphic Deserialization ==
 
