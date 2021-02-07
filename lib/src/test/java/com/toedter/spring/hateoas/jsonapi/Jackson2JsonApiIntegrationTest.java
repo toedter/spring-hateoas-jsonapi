@@ -40,9 +40,12 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphy.PolymorphicRelationEntity;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -684,6 +687,26 @@ class Jackson2JsonApiIntegrationTest {
         EntityModel<NonNullExample> entityModel = EntityModel.of(new NonNullExample());
         String json = mapper.writeValueAsString(entityModel);
         compareWithFile(json, "nonNullAnnotationExample.json");
+    }
+
+    @Test
+    @Disabled
+    void should_deserialize_polymorphic_relationships() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, PolymorphicRelationEntity.class);
+        File file = new ClassPathResource("polymorphicRelationships.json", getClass()).getFile();
+        EntityModel<MovieWithRating> entityModel = mapper.readValue(file, javaType);
+
+        System.out.println(entityModel);
+    }
+
+    @Test
+    void should_deserialize_class_without_attributes() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithoutAttributes.class);
+        File file = new ClassPathResource("movieWithoutAttributes.json", getClass()).getFile();
+        EntityModel<MovieWithoutAttributes> entityModel = mapper.readValue(file, javaType);
+        assertThat(entityModel.getContent().getId()).isEqualTo("1");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

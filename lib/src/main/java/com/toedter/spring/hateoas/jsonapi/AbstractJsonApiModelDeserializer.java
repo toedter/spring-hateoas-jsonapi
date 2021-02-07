@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
         implements ContextualDeserializer {
 
@@ -69,12 +71,27 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         if (data == null) {
             return null;
         }
+
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
+
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
         ObjectMapper mapper = new ObjectMapper();
-        final Object objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());    
-        JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.id, (String) data.get("id"));
-        JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.type, (String) data.get("type"));
+        Object objectFromProperties;
+        if( attributes != null) {
+            objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());
+        } else {
+            try {
+                objectFromProperties = rootType.getRawClass().getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                log.error("Cannot convert data to resource.");
+                e.printStackTrace();
+                return null;
+            }
+        }
+        JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.id, (String) data.get("id"));
+        JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
+                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.type, (String) data.get("type"));
         return objectFromProperties;
     }
 

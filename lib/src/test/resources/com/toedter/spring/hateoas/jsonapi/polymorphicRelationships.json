@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "poly123",
+    "type": "polymorphicRelationEntity",
+    "relationships": {
+      "superEntities": {
+        "data": [
+          {
+            "id": "456",
+            "type": "superEChild"
+          },
+          {
+            "id": "789",
+            "type": "superEChild2"
+          }
+        ]
+      }
+    }
+  }
+}

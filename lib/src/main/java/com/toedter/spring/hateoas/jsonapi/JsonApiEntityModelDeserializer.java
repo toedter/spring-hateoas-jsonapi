@@ -83,7 +83,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     ParameterizedType type = (ParameterizedType) genericType;
                                     if (Collection.class.isAssignableFrom(field.getType())) {
                                         Collection<Object> relationshipCollection;
-                                        if(Set.class.isAssignableFrom(field.getType())) {
+                                        if (Set.class.isAssignableFrom(field.getType())) {
                                             relationshipCollection = new HashSet<>();
                                         } else {
                                             relationshipCollection = new ArrayList<>();
