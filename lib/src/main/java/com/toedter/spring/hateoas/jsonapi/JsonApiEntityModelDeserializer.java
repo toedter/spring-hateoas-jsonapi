@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
@@ -26,6 +27,7 @@ import org.springframework.util.Assert;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -102,7 +104,12 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
                                             Class<?> typeArgClass = (Class<?>) typeArgument;
-                                            Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
+                                            ObjectMapper mapper = createObjectMapper(new JsonApiConfiguration());
+                                            String json = mapper.writeValueAsString(entry);
+                                            Object newInstance = mapper.readValue(json.getBytes(StandardCharsets.UTF_8), typeArgClass);
+
+                                            // Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
+
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                                     newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
@@ -139,5 +146,13 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
         return new JsonApiEntityModelDeserializer(type);
+    }
+
+    private ObjectMapper createObjectMapper(JsonApiConfiguration jsonApiConfiguration) {
+        JsonApiMediaTypeConfiguration configuration =
+                new JsonApiMediaTypeConfiguration(null, null);
+        ObjectMapper mapper = new ObjectMapper();
+        configuration.configureObjectMapper(mapper, jsonApiConfiguration);
+        return mapper;
     }
 }

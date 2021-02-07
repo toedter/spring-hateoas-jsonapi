@@ -19,7 +19,7 @@ package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "_type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
         @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")

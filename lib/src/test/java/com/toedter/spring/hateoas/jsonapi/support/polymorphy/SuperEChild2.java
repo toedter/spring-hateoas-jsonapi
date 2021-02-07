@@ -23,8 +23,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SuperEChild2 implements SuperEntity {
     @JsonApiId
-    public String id;
+    private String id;
 
     @JsonApiType
-    public String _type = null;
+    private String type = null;
+
+    private String extraAttribute = "";
 }

@@ -19,19 +19,22 @@ package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
 @NoArgsConstructor
 public class PolymorphicRelationEntity {
     @JsonApiId
-    public String id;
+    private String id;
 
     @JsonApiType
-    public String _type = null;
+    private String type = null;
 
     @JsonApiRelationships("superEntities")
-    public List<SuperEntity> relation = null;
-
+    @JsonIgnore
+    @Getter
+    private List<SuperEntity> relation = null;
 }

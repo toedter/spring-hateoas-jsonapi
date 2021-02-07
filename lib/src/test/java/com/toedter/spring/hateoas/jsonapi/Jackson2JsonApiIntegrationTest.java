@@ -42,10 +42,12 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphy.PolymorphicRelationEntity;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEChild;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEChild2;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEntity;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -690,14 +692,15 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    @Disabled
     void should_deserialize_polymorphic_relationships() throws Exception {
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, PolymorphicRelationEntity.class);
         File file = new ClassPathResource("polymorphicRelationships.json", getClass()).getFile();
-        EntityModel<MovieWithRating> entityModel = mapper.readValue(file, javaType);
+        EntityModel<PolymorphicRelationEntity> entityModel = mapper.readValue(file, javaType);
 
-        System.out.println(entityModel);
+        final List<SuperEntity> relation = entityModel.getContent().getRelation();
+        assertThat(relation.get(0).getClass()).isEqualTo(SuperEChild.class);
+        assertThat(relation.get(1).getClass()).isEqualTo(SuperEChild2.class);
     }
 
     @Test
