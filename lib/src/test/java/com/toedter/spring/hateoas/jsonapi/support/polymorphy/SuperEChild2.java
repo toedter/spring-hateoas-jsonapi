@@ -21,7 +21,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class SuperEChild2 implements SuperEntity {
+public class SuperEChild2 implements SuperEntity<String> {
     @JsonApiId
     private String id;
 
@@ -29,4 +29,9 @@ public class SuperEChild2 implements SuperEntity {
     private String type = null;
 
     private String extraAttribute = "";
+
+    @Override
+    public String getT() {
+        return null;
+    }
 }

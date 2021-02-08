@@ -698,7 +698,7 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("polymorphicRelationships.json", getClass()).getFile();
         EntityModel<PolymorphicRelationEntity> entityModel = mapper.readValue(file, javaType);
 
-        final List<SuperEntity> relation = entityModel.getContent().getRelation();
+        final List<SuperEntity<?>> relation = entityModel.getContent().getRelation();
         assertThat(relation.get(0).getClass()).isEqualTo(SuperEChild.class);
         assertThat(relation.get(1).getClass()).isEqualTo(SuperEChild2.class);
     }
