@@ -24,5 +24,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
         @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
 })
-public interface SuperEntity {
+public interface SuperEntity<T> {
+    T getT();
 }

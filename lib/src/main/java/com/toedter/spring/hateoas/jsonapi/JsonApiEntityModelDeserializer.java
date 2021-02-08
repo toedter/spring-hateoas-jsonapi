@@ -103,10 +103,9 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
-                                            Class<?> typeArgClass = (Class<?>) typeArgument;
                                             ObjectMapper mapper = createObjectMapper(new JsonApiConfiguration());
                                             String json = mapper.writeValueAsString(entry);
-                                            Object newInstance = mapper.readValue(json.getBytes(StandardCharsets.UTF_8), typeArgClass);
+                                            Object newInstance = mapper.readValue(json.getBytes(StandardCharsets.UTF_8), mapper.constructType(typeArgument));
 
                                             // Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
 
@@ -133,7 +132,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                 }
                             }
                         } catch (Exception e) {
-                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL, e);
                         }
                     }
                 }

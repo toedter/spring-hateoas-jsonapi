@@ -36,5 +36,5 @@ public class PolymorphicRelationEntity {
     @JsonApiRelationships("superEntities")
     @JsonIgnore
     @Getter
-    private List<SuperEntity> relation = null;
+    private List<SuperEntity<?>> relation = null;
 }

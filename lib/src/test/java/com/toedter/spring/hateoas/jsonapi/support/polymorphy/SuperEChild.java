@@ -20,11 +20,18 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @NoArgsConstructor
-public class SuperEChild implements SuperEntity {
+public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
     @JsonApiId
     private String id;
 
     @JsonApiType
     private String type = null;
+
+    @Override
+    public T getT() {
+        return null;
+    }
 }
