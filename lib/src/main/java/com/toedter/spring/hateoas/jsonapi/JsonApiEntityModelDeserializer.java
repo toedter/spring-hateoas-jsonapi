@@ -132,7 +132,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                 }
                             }
                         } catch (Exception e) {
-                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
+                            throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL, e);
                         }
                     }
                 }
