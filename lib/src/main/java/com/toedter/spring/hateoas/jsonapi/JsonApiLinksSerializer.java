@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     public JsonApiLinksSerializer() {
         super(Links.class);
     }
@@ -88,8 +90,9 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
         return "self".equals(link.getRel().value()) || getAttributes(link).size() == 0;
     }
 
+
     private Map<String, Object> getAttributes(Link link) {
-        @SuppressWarnings("unchecked") final Map<String, Object> attributeMap = new ObjectMapper().convertValue(link, Map.class);
+        @SuppressWarnings("unchecked") final Map<String, Object> attributeMap = objectMapper.convertValue(link, Map.class);
         attributeMap.remove("rel");
         attributeMap.remove("href");
         attributeMap.remove("template");

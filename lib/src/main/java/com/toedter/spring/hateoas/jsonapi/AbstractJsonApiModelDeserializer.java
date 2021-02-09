@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
         implements ContextualDeserializer {
 
+    private final ObjectMapper mapper = new ObjectMapper();
     protected final JavaType contentType;
 
     AbstractJsonApiModelDeserializer() {
@@ -75,7 +76,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
 
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
-        ObjectMapper mapper = new ObjectMapper();
         Object objectFromProperties;
         if( attributes != null) {
             objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());

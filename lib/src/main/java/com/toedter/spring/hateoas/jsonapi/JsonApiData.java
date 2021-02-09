@@ -60,6 +60,7 @@ class JsonApiData {
     Links links;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Map<String, Object> meta;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @JsonCreator
     public JsonApiData(
@@ -148,8 +149,7 @@ class JsonApiData {
         // This does not serialize attribute values but leaves the original objects
         Map<String, Object> attributeMapFromPropertyUtils = PropertyUtils.extractPropertyValues(content);
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> attributeMap = mapper.convertValue(content, Map.class);
+        Map<String, Object> attributeMap = objectMapper.convertValue(content, Map.class);
 
         // we want to use the map created by the object mapper to react on Jackson annotations like
         // @JsonInclude(JsonInclude.Include.NON_NULL)

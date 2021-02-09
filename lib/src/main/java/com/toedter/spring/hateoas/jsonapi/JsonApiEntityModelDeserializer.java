@@ -42,6 +42,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
         implements ContextualDeserializer {
 
     public static final String CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL = "Cannot deserialize input to EntityModel";
+    private final ObjectMapper objectMapper = createObjectMapper(new JsonApiConfiguration());
 
     public JsonApiEntityModelDeserializer() {
         super();
@@ -103,9 +104,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
-                                            ObjectMapper mapper = createObjectMapper(new JsonApiConfiguration());
-                                            String json = mapper.writeValueAsString(entry);
-                                            Object newInstance = mapper.readValue(json.getBytes(StandardCharsets.UTF_8), mapper.constructType(typeArgument));
+                                            String json = objectMapper.writeValueAsString(entry);
+                                            Object newInstance = objectMapper.readValue(json.getBytes(StandardCharsets.UTF_8), objectMapper.constructType(typeArgument));
 
                                             // Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
 
