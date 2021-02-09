@@ -19,6 +19,7 @@ package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+// tag::SuperEntity[]
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
@@ -27,3 +28,4 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public interface SuperEntity<T> {
     T getT();
 }
+// end::SuperEntity[]

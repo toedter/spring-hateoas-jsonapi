@@ -20,6 +20,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.NoArgsConstructor;
 
+// tag::SuperEChild2[]
 @NoArgsConstructor
 public class SuperEChild2 implements SuperEntity<String> {
     @JsonApiId
@@ -35,3 +36,4 @@ public class SuperEChild2 implements SuperEntity<String> {
         return null;
     }
 }
+// end::SuperEChild2[]

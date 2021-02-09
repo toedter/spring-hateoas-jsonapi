@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
+// tag::SuperEChild[]
 @NoArgsConstructor
 public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
     @JsonApiId
@@ -35,3 +36,4 @@ public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
         return null;
     }
 }
+// end::SuperEChild[]

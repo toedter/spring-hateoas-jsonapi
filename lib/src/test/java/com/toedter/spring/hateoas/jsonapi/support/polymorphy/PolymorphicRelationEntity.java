@@ -25,6 +25,7 @@ import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
+// tag::PolymorphicRelationEntity[]
 @NoArgsConstructor
 public class PolymorphicRelationEntity {
     @JsonApiId
@@ -38,3 +39,4 @@ public class PolymorphicRelationEntity {
     @Getter
     private List<SuperEntity<?>> relation = null;
 }
+// end::PolymorphicRelationEntity[]

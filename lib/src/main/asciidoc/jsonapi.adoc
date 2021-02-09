@@ -409,6 +409,42 @@ So the JSON of the serialized Java object (of class `MovieWithRating`) would the
 include::{test-resources-dir}/polymorphicMovie.json[]
 ----
 
+=== Polymorphic Deserialization of Relationships ===
+It is also possible to use the `@JsonSubTypes` annotation for polymorphic relationships.
+Here is an example:
+
+[source, java]
+----
+include::{test-dir}/support/polymorphy/PolymorphicRelationEntity.java[tags=PolymorphicRelationEntity]
+----
+
+[source, java]
+----
+include::{test-dir}/support/polymorphy/SuperEntity.java[tags=SuperEntity]
+----
+
+[source, java]
+----
+include::{test-dir}/support/polymorphy/SuperEChild.java[tags=SuperEChild]
+----
+
+[source, java]
+----
+include::{test-dir}/support/polymorphy/SuperEChild2.java[tags=SuperEChild2]
+----
+
+Then a JSON like
+
+[source, json]
+----
+include::{test-resources-dir}/polymorphicRelationships.json[]
+----
+
+would be deserialized to an `PolymorphicRelationEntity` with 2 relationships,
+the first one of Class `SuperEChild`, the second one of class `SuperEChild2`.
+
+NOTE: Right now there is the restriction, that the type attribute of both
+`SuperEChild` and `SuperEChild2` has to be `type`. E.g. `_type` would not work.
 
 [[configuration]]
 == Configuration ==
