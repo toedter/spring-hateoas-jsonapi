@@ -175,15 +175,15 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#included(java.lang.Object)">included</a></span>&#8203;(java.lang.Object&nbsp;object)</code></th>
 <td class="colLast">
 <div class="block">Adds the given <code>Object</code>
- to the included <code>EntityModel</code>s.</div>
+ to the included <code>RepresentationModel</code>s.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#included(org.springframework.hateoas.RepresentationModel)">included</a></span>&#8203;(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;representationModel)</code></th>
 <td class="colLast">
-<div class="block">Adds the given <code>EntityModel</code>
- to the included <code>EntityModel</code>s.</div>
+<div class="block">Adds the given <code>RepresentationModel</code>
+ to the included <code>RepresentationModel</code>s.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -653,9 +653,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>included</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;included&#8203;(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;representationModel)</pre>
-<div class="block">Adds the given <code>EntityModel</code>
- to the included <code>EntityModel</code>s.
- It will appear then top level JSON:API included values.</div>
+<div class="block">Adds the given <code>RepresentationModel</code>
+ to the included <code>RepresentationModel</code>s.
+ It will appear then top level in the JSON:API included entities.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>representationModel</code> - must not be null.</dd>
@@ -672,9 +672,9 @@ extends java.lang.Object</pre>
 <h4>included</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a>&nbsp;included&#8203;(java.lang.Object&nbsp;object)</pre>
 <div class="block">Adds the given <code>Object</code>
- to the included <code>EntityModel</code>s.
+ to the included <code>RepresentationModel</code>s.
  The object is automatically wrapped into an <code>EntityModel</code>.
- It will appear then top level JSON:API included values.</div>
+ It will appear then top level in the JSON:API included entities.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>object</code> - must not be null.</dd>
