@@ -329,7 +329,6 @@ public class JsonApiModelBuilder {
      */
     public JsonApiModelBuilder relationshipWithDataArray(String name) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
-        Assert.notNull(meta, "relationship meta object must not be null!");
 
         JsonApiRelationship jsonApiRelationship = relationships.get(name);
         if (jsonApiRelationship == null) {
@@ -403,6 +402,7 @@ public class JsonApiModelBuilder {
      * Adds the given {@link RepresentationModel}
      * to the {@literal included} {@link RepresentationModel}s.
      * It will appear then top level in the {@literal JSON:API included} entities.
+     * Duplicates with same {@literal id} and {@literal type} will be eliminated.
      *
      * @param representationModel must not be {@literal null}.
      * @return will never be {@literal null}.
@@ -417,12 +417,32 @@ public class JsonApiModelBuilder {
      * to the {@literal included} {@link RepresentationModel}s.
      * The object is automatically wrapped into an {@link EntityModel}.
      * It will appear then top level in the {@literal JSON:API included} entities.
+     * Duplicates with same {@literal id} and {@literal type} will be eliminated.
      *
      * @param object must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder included(Object object) {
         return this.included(EntityModel.of(object));
+    }
+
+    /**
+     * Adds the given {@link Collection}
+     * to the {@literal included} {@link RepresentationModel}s.
+     * The objects of the collection are automatically wrapped into an {@link EntityModel},
+     * if they are not already {@link RepresentationModel}s.
+     * The members of the collection will appear then top level in the {@literal JSON:API included} entities.
+     * Duplicates with same {@literal id} and {@literal type} will be eliminated.
+     *
+     * @param collection must not be {@literal null}.
+     * @return will never be {@literal null}.
+     */
+    public JsonApiModelBuilder included(Collection<?> collection) {
+        Assert.notNull(collection, "included data collection must not be null!");
+        for(Object object: collection) {
+            this.included(object);
+        }
+        return this;
     }
 
     /**
