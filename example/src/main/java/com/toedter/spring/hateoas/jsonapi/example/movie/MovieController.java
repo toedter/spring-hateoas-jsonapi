@@ -21,7 +21,6 @@ import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
@@ -100,11 +99,8 @@ public class MovieController {
         if (included != null && included.length == 1 && included[0].equals("directors")) {
             HashMap<Long, Director> directors = new HashMap<>();
             for (Movie movie : pagedResult.getContent()) {
-                for (Director director : movie.getDirectors()) {
-                    directors.put(director.getId(), director);
-                }
+                jsonApiModelBuilder.included(movie.getDirectors());
             }
-            directors.values().forEach(entry -> jsonApiModelBuilder.included(EntityModel.of(entry)));
         }
         // end::relationship-inclusion[]
 
