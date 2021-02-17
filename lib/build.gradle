@@ -25,15 +25,15 @@ configurations {
 dependencyManagement {
     dependencies {
         imports {
-            mavenBom 'org.springframework:spring-framework-bom:5.3.1'
-            mavenBom 'com.fasterxml.jackson:jackson-bom:2.11.3'
+            mavenBom 'org.springframework:spring-framework-bom:5.3.3'
+            mavenBom 'com.fasterxml.jackson:jackson-bom:2.11.4'
             mavenBom 'org.junit:junit-bom:5.7.0'
         }
     }
 }
 
 dependencies {
-    implementation 'org.springframework.hateoas:spring-hateoas:1.2.2'
+    implementation 'org.springframework.hateoas:spring-hateoas:1.2.4'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.atteo:evo-inflector:1.2.2'
 
