@@ -742,11 +742,8 @@ and the builder could be used for the inclusion, like</p>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
     HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
     for (Movie movie : pagedResult.getContent()) {
-        for (Director director : movie.getDirectors()) {
-            directors.put(director.getId(), director);
-        }
+        jsonApiModelBuilder.included(movie.getDirectors());
     }
-    directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
 }</code></pre>
 </div>
 </div>
@@ -1464,7 +1461,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.15.0-SNAPSHOT<br>
-Last updated 2021-02-17 16:30:24 UTC
+Last updated 2021-02-17 16:40:18 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
