@@ -13,7 +13,7 @@
 <div id="header">
 <h1>JSON:API</h1>
 <div class="details">
-<span id="revnumber">version 0.14.0</span>
+<span id="revnumber">version 0.15.0</span>
 </div>
 </div>
 <div id="content">
@@ -103,7 +103,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;0.14.0&lt;/version&gt;
+    &lt;version&gt;0.15.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -112,11 +112,11 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.14.0'</code></pre>
+<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.15.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>0.15.0-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>0.16.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a>
 as repository to your Maven or Gradle configuration.</p>
 </div>
@@ -684,13 +684,13 @@ and the builder could be used for the inclusion, like</p>
 <pre class="highlight"><code class="language-java" data-lang="java">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
     HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
     for (Movie movie : pagedResult.getContent()) {
-        for (Director director : movie.getDirectors()) {
-            directors.put(director.getId(), director);
-        }
+        jsonApiModelBuilder.included(movie.getDirectors());
     }
-    directors.values().forEach(entry -&gt; jsonApiModelBuilder.included(EntityModel.of(entry)));
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Duplicated included directors will be eliminated automatically.</p>
 </div>
 </div>
 </div>
@@ -1167,6 +1167,122 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_polymorphic_deserialization_of_relationships">Polymorphic Deserialization of Relationships</h3>
+<div class="paragraph">
+<p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
+Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class PolymorphicRelationEntity {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    @JsonApiRelationships("superEntities")
+    @JsonIgnore
+    @Getter
+    private List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
+        @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
+})
+public interface SuperEntity&lt;T&gt; {
+    T getT();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEntity&lt;T&gt; {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    @Override
+    public T getT() {
+        return null;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class SuperEChild2 implements SuperEntity&lt;String&gt; {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    private String extraAttribute = "";
+
+    @Override
+    public String getT() {
+        return null;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "poly123",
+    "type": "polymorphicRelationEntity",
+    "relationships": {
+      "superEntities": {
+        "data": [
+          {
+            "id": "456",
+            "type": "superEChild"
+          },
+          {
+            "id": "789",
+            "type": "superEChild2"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an <code>PolymorphicRelationEntity</code> with 2 relationships,
+the first one of Class <code>SuperEChild</code>, the second one of class <code>SuperEChild2</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Right now there is the restriction, that the type attribute of both
+<code>SuperEChild</code> and <code>SuperEChild2</code> has to be <code>type</code>. E.g. <code>_type</code> would not work.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1302,8 +1418,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.14.0<br>
-Last updated 2021-01-09 11:26:04 UTC
+Version 0.15.0<br>
+Last updated 2021-02-17 16:53:17 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
