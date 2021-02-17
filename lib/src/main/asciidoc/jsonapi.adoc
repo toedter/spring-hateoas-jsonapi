@@ -224,6 +224,8 @@ and the builder could be used for the inclusion, like
 include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusion]
 ----
 
+Duplicated included directors will be eliminated automatically.
+
 [[Nesting]]
 == Nesting of JsonApiModels ==
 
