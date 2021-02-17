@@ -378,7 +378,7 @@ public class JsonApiModelBuilder {
     private JsonApiRelationship addDataObject(
             @Nullable JsonApiRelationship jsonApiRelationship,
             Object dataObject,
-            Map<String, Object> resourceIdentifierMeta) {
+            @Nullable Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
             newRelationship = JsonApiRelationship.of(dataObject, resourceIdentifierMeta);
@@ -400,9 +400,9 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Adds the given {@link EntityModel}
-     * to the {@literal included} {@link EntityModel}s.
-     * It will appear then top level {@literal JSON:API included} values.
+     * Adds the given {@link RepresentationModel}
+     * to the {@literal included} {@link RepresentationModel}s.
+     * It will appear then top level in the {@literal JSON:API included} entities.
      *
      * @param representationModel must not be {@literal null}.
      * @return will never be {@literal null}.
@@ -414,9 +414,9 @@ public class JsonApiModelBuilder {
 
     /**
      * Adds the given {@link Object}
-     * to the {@literal included} {@link EntityModel}s.
+     * to the {@literal included} {@link RepresentationModel}s.
      * The object is automatically wrapped into an {@link EntityModel}.
-     * It will appear then top level {@literal JSON:API included} values.
+     * It will appear then top level in the {@literal JSON:API included} entities.
      *
      * @param object must not be {@literal null}.
      * @return will never be {@literal null}.

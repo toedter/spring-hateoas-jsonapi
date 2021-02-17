@@ -84,19 +84,28 @@ class JsonApiData {
     }
 
     public static List<JsonApiData> extractCollectionContent(
-            @Nullable CollectionModel<?> collectionModel,
+            CollectionModel<?> collectionModel,
             JsonApiConfiguration jsonApiConfiguration,
-            @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
+            @Nullable HashMap<String, Collection<String>> sparseFieldsets,
+            boolean eliminateDuplicates) {
 
-        List<JsonApiData> dataList = new ArrayList<>();
-        if (collectionModel != null) {
+        if (eliminateDuplicates) {
+            HashMap<String, JsonApiData> values = new HashMap<>();
+            for (Object entity : collectionModel.getContent()) {
+                Optional<JsonApiData> jsonApiData =
+                        extractContent(entity, false, jsonApiConfiguration, sparseFieldsets);
+                jsonApiData.ifPresent(apiData -> values.put(apiData.getId() + "." + apiData.getType(), apiData));
+            }
+            return new ArrayList<>(values.values());
+        } else {
+            List<JsonApiData> dataList = new ArrayList<>();
             for (Object entity : collectionModel.getContent()) {
                 Optional<JsonApiData> jsonApiData =
                         extractContent(entity, false, jsonApiConfiguration, sparseFieldsets);
                 jsonApiData.ifPresent(dataList::add);
             }
+            return dataList;
         }
-        return dataList;
     }
 
     public static Optional<JsonApiData> extractContent(

@@ -74,7 +74,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         Map<String, Object> embeddedMeta = null;
 
         if (collectionModel != null) {
-            data = JsonApiData.extractCollectionContent(collectionModel, jsonApiConfiguration, null);
+            data = JsonApiData.extractCollectionContent(
+                    collectionModel, jsonApiConfiguration, null, false);
         } else {
             if (value instanceof JsonApiModel
                     && ((JsonApiModel) value).getContent() != null
@@ -161,7 +162,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                     ((JsonApiModel) representationModel).getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
             return JsonApiData.extractCollectionContent(
-                    collectionModel, jsonApiConfiguration, ((JsonApiModel) representationModel).getSparseFieldsets());
+                    collectionModel, jsonApiConfiguration,
+                    ((JsonApiModel) representationModel).getSparseFieldsets(), true);
         }
         return null;
     }

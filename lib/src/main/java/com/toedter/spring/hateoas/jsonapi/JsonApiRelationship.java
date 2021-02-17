@@ -171,7 +171,7 @@ class JsonApiRelationship {
      * @return the JSON:API relationship
      */
     public static JsonApiRelationship of(Object object,
-                                         Map<String, Object> resourceIdentifierMeta) {
+                                         @Nullable Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
         jsonApiRelationship = jsonApiRelationship.addDataObject(object, resourceIdentifierMeta);
         return jsonApiRelationship;

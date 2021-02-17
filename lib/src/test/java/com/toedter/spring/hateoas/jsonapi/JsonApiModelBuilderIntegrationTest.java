@@ -584,4 +584,28 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithAllMetaLevels.json");
     }
+
+    @Test
+    void should_not_include_same_entity_twice() throws Exception {
+        Movie movie = new Movie("1", "The Matrix");
+        Movie relatedMovie = new Movie("2", "The Matrix 2");
+        Director director1 = new Director("1", "Lana Wachowski");
+        Director director2 = new Director("2", "Lilly Wachowski");
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", director1)
+                        .relationship("directors", director2)
+                        .relationship("relatedMovies", relatedMovie)
+                        .included(director1)
+                        .included(director2)
+                        .included(director2)
+                        .included(director1)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
+    }
+
 }
