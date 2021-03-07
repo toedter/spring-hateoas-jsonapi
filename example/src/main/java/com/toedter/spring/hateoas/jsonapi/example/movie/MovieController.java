@@ -19,8 +19,10 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
+import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +56,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequestMapping(value = RootController.API_BASE_PATH, produces = JSON_API_VALUE)
 public class MovieController {
 
-    private final MovieRepository repository;
+    private final MovieRepository movieRepository;
+    private final DirectorRepository directorRepository;
     private final MovieModelAssembler movieModelAssembler;
 
-    MovieController(MovieRepository repository, MovieModelAssembler movieModelAssembler) {
-        this.repository = repository;
+    MovieController(MovieRepository movieRepository, DirectorRepository directorRepository,
+                    MovieModelAssembler movieModelAssembler) {
+        this.movieRepository = movieRepository;
+        this.directorRepository = directorRepository;
         this.movieModelAssembler = movieModelAssembler;
     }
 
@@ -70,7 +76,7 @@ public class MovieController {
 
         final PageRequest pageRequest = PageRequest.of(page, size);
 
-        final Page<Movie> pagedResult = repository.findAll(pageRequest);
+        final Page<Movie> pagedResult = movieRepository.findAll(pageRequest);
 
         List<? extends RepresentationModel<?>> movieResources =
                 StreamSupport.stream(pagedResult.spliterator(), false)
@@ -110,8 +116,24 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    public ResponseEntity<?> newMovie(@RequestBody Movie movie) {
-        repository.save(movie);
+    public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movieModel) {
+        Movie movie = movieModel.getContent();
+        movieRepository.save(movie);
+
+        List<Director> directorsWithIds = movie.getDirectors();
+        List<Director> directors = new ArrayList<>();
+        movie.setDirectors(directors);
+
+        for (Director directorWithId : directorsWithIds) {
+            directorRepository.findById(directorWithId.getId()).map(director -> {
+                director.addMovie(movie);
+                directorRepository.save(director);
+                movie.addDirector(director);
+                return director;
+            });
+        }
+        movieRepository.save(movie);
+
         final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
 
         return movieRepresentationModel
@@ -133,7 +155,7 @@ public class MovieController {
             @PathVariable Long id,
             @RequestParam(value = "fields[movies]", required = false) String[] filterMovies) {
 
-        return repository.findById(id)
+        return movieRepository.findById(id)
                 .map(movie -> movieModelAssembler.toJsonApiModel(movie, filterMovies))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -142,7 +164,7 @@ public class MovieController {
     @GetMapping("/movies/{id}/directors")
     public ResponseEntity<? extends RepresentationModel<?>> findDirectors(@PathVariable Long id) {
 
-        return repository.findById(id)
+        return movieRepository.findById(id)
                 .map(movieModelAssembler::directorsToJsonApiModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -151,10 +173,10 @@ public class MovieController {
     @PatchMapping("/movies/{id}")
     public ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
 
-        Movie existingMovie = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
+        Movie existingMovie = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
         existingMovie.update(movie);
 
-        repository.save(existingMovie);
+        movieRepository.save(existingMovie);
         final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
 
         return movieRepresentationModel
@@ -172,13 +194,13 @@ public class MovieController {
 
     @DeleteMapping("/movies/{id}")
     public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
-        Optional<Movie> optional = repository.findById(id);
+        Optional<Movie> optional = movieRepository.findById(id);
         if (optional.isPresent()) {
             Movie movie = optional.get();
             for (Director director : movie.getDirectors()) {
                 director.deleteMovie(movie);
             }
-            repository.deleteById(id);
+            movieRepository.deleteById(id);
         }
 
         return ResponseEntity.noContent().build();
