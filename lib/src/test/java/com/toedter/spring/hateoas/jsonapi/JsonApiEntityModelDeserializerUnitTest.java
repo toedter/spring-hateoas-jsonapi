@@ -65,7 +65,7 @@ public class JsonApiEntityModelDeserializerUnitTest {
     }
 
     @Test
-    public void should_return_emtity_model_for_empty_jsonapi_document() {
+    public void should_return_entity_model_for_empty_jsonapi_document() {
         List<Object> list = new ArrayList<>();
         Object object = new Object();
         list.add(object);
