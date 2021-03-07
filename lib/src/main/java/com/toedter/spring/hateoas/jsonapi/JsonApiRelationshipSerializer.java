@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-public class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
+class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
     private final JsonApiConfiguration jsonApiConfiguration;
 
     @Getter
