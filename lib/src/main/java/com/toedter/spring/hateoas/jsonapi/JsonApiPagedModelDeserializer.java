@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
@@ -27,12 +28,12 @@ import java.util.List;
 class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
         implements ContextualDeserializer {
 
-    JsonApiPagedModelDeserializer() {
-        super();
+    JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper) {
+        super(jsonApiConfiguration, jsonApiMapper);
     }
 
-    protected JsonApiPagedModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType contentType) {
+        super(jsonApiConfiguration, jsonApiMapper, contentType);
     }
 
     @Override
@@ -42,7 +43,7 @@ class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<Pag
         return PagedModel.of(resources, null, links);
     }
 
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiPagedModelDeserializer(type);
+    protected JsonDeserializer<?> createJsonDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType type) {
+        return new JsonApiPagedModelDeserializer(jsonApiConfiguration, jsonApiMapper, type);
     }
 }

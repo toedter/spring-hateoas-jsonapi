@@ -41,16 +41,23 @@ import java.util.stream.Collectors;
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
         implements ContextualDeserializer {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper plainMapper = new ObjectMapper();
+
+    protected final JsonApiConfiguration jsonApiConfiguration;
+    protected final ObjectMapper jsonApiMapper;
     protected final JavaType contentType;
 
-    AbstractJsonApiModelDeserializer() {
-        this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
+    AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper) {
+        this(jsonApiConfiguration, jsonApiMapper, TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
     }
 
-    protected AbstractJsonApiModelDeserializer(JavaType contentType) {
+    protected AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType contentType) {
         super(contentType);
+        this.jsonApiConfiguration = jsonApiConfiguration;
+        this.jsonApiMapper = jsonApiMapper;
         this.contentType = contentType;
+
+        jsonApiConfiguration.customize(plainMapper);
     }
 
     @Override
@@ -78,7 +85,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
         Object objectFromProperties;
         if( attributes != null) {
-            objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());
+            objectFromProperties = plainMapper.convertValue(attributes, rootType.getRawClass());
         } else {
             try {
                 objectFromProperties = rootType.getRawClass().getDeclaredConstructor().newInstance();
@@ -111,8 +118,9 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) {
         JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-        return createJsonDeserializer(type);
+        return createJsonDeserializer(jsonApiConfiguration, jsonApiMapper, type);
     }
 
-    abstract protected JsonDeserializer<?> createJsonDeserializer(JavaType type);
+    abstract protected JsonDeserializer<?> createJsonDeserializer(JsonApiConfiguration jsonApiConfiguration,
+                                                                  ObjectMapper jsonApiMapper, JavaType type);
 }

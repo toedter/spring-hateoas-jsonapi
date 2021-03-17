@@ -27,7 +27,6 @@ import org.springframework.util.Assert;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,14 +41,13 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
         implements ContextualDeserializer {
 
     public static final String CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL = "Cannot deserialize input to EntityModel";
-    private final ObjectMapper objectMapper = createObjectMapper(new JsonApiConfiguration());
 
-    public JsonApiEntityModelDeserializer() {
-        super();
+    public JsonApiEntityModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper) {
+        super(jsonApiConfiguration, jsonApiMapper);
     }
 
-    protected JsonApiEntityModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiEntityModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType contentType) {
+        super(jsonApiConfiguration, jsonApiMapper, contentType);
     }
 
     @Override
@@ -104,10 +102,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
-                                            String json = objectMapper.writeValueAsString(entry);
-                                            Object newInstance = objectMapper.readValue(json.getBytes(StandardCharsets.UTF_8), objectMapper.constructType(typeArgument));
-
-                                            // Object newInstance = typeArgClass.getDeclaredConstructor().newInstance();
+                                            Object newInstance = jsonApiMapper.convertValue(entry, jsonApiMapper.constructType(typeArgument));
 
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                                     newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
@@ -143,15 +138,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     }
 
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiEntityModelDeserializer(type);
-    }
-
-    private ObjectMapper createObjectMapper(JsonApiConfiguration jsonApiConfiguration) {
-        JsonApiMediaTypeConfiguration configuration =
-                new JsonApiMediaTypeConfiguration(null, null);
-        ObjectMapper mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper, jsonApiConfiguration);
-        return mapper;
+    protected JsonDeserializer<?> createJsonDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType type) {
+        return new JsonApiEntityModelDeserializer(jsonApiConfiguration, jsonApiMapper, type);
     }
 }

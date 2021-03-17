@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -27,12 +28,12 @@ import java.util.List;
 class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserializer<CollectionModel<?>>
         implements ContextualDeserializer {
 
-    JsonApiCollectionModelDeserializer() {
-        super();
+    JsonApiCollectionModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper) {
+        super(jsonApiConfiguration, jsonApiMapper);
     }
 
-    protected JsonApiCollectionModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiCollectionModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType contentType) {
+        super(jsonApiConfiguration, jsonApiMapper, contentType);
     }
 
     @Override
@@ -41,7 +42,7 @@ class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserialize
         return CollectionModel.of(resources, links);
     }
 
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiCollectionModelDeserializer(type);
+    protected JsonDeserializer<?> createJsonDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType type) {
+        return new JsonApiCollectionModelDeserializer(jsonApiConfiguration, jsonApiMapper, type);
     }
 }

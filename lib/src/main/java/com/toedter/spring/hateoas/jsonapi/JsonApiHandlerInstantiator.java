@@ -17,9 +17,11 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.KeyDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
@@ -28,6 +30,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
@@ -38,9 +41,13 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
     @Nullable
     private final AutowireCapableBeanFactory beanFactory;
 
+    @Nullable
+    private final JsonApiConfiguration jsonApiConfiguration;
+
     public JsonApiHandlerInstantiator(
             JsonApiConfiguration jsonApiConfiguration, @Nullable AutowireCapableBeanFactory beanFactory) {
 
+        this.jsonApiConfiguration = jsonApiConfiguration;
         this.beanFactory = beanFactory;
 
         this.serializers.put(JsonApiRepresentationModelSerializer.class,
@@ -54,6 +61,17 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
 
         this.serializers.put(JsonApiRelationshipSerializer.class,
                 new JsonApiRelationshipSerializer(jsonApiConfiguration));
+
+        final ObjectMapper deserializerMapper = configureObjectMapper(new ObjectMapper());
+
+        this.serializers.put(JsonApiRepresentationModelDeserializer.class,
+                new JsonApiRepresentationModelDeserializer(jsonApiConfiguration, deserializerMapper));
+        this.serializers.put(JsonApiEntityModelDeserializer.class,
+                new JsonApiEntityModelDeserializer(jsonApiConfiguration, deserializerMapper));
+        this.serializers.put(JsonApiCollectionModelDeserializer.class,
+                new JsonApiCollectionModelDeserializer(jsonApiConfiguration, deserializerMapper));
+        this.serializers.put(JsonApiPagedModelDeserializer.class,
+                new JsonApiPagedModelDeserializer(jsonApiConfiguration, deserializerMapper));
     }
 
     @Override
@@ -79,6 +97,17 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
     @Override
     public TypeIdResolver typeIdResolverInstance(MapperConfig<?> config, Annotated annotated, Class<?> resolverClass) {
         return (TypeIdResolver) findInstance(resolverClass);
+    }
+
+    @NonNull
+    ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.registerModule(new Jackson2JsonApiModule());
+        mapper.setHandlerInstantiator(this);
+        if (jsonApiConfiguration != null) {
+            jsonApiConfiguration.customize(mapper);
+        }
+        return mapper;
     }
 
     private Object findInstance(Class<?> type) {

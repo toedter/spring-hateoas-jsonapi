@@ -119,6 +119,11 @@ public class WebMvcMovieController {
         return EntityModel.of(movie);
     }
 
+    @PostMapping("/movieWithLastSeen")
+    public ResponseEntity<?> newLastSeenMovie(@RequestBody EntityModel<MovieWithLastSeen> movie) {
+        return ResponseEntity.created(linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()).build();
+    }
+
     @PostMapping("/movies")
     public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) {
         int newMovieId = MOVIES.size() + 1;

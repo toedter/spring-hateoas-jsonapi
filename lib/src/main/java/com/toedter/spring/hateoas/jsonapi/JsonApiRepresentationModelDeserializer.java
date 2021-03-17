@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
@@ -31,12 +32,12 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
     public static final String CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL
             = "Cannot deserialize input to RepresentationModel";
 
-    public JsonApiRepresentationModelDeserializer() {
-        super();
+    public JsonApiRepresentationModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper) {
+        super(jsonApiConfiguration, jsonApiMapper);
     }
 
-    protected JsonApiRepresentationModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiRepresentationModelDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType contentType) {
+        super(jsonApiConfiguration, jsonApiMapper, contentType);
     }
 
     @Override
@@ -58,7 +59,7 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
         throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
     }
 
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiRepresentationModelDeserializer(type);
+    protected JsonDeserializer<?> createJsonDeserializer(JsonApiConfiguration jsonApiConfiguration, ObjectMapper jsonApiMapper, JavaType type) {
+        return new JsonApiRepresentationModelDeserializer(jsonApiConfiguration, jsonApiMapper, type);
     }
 }

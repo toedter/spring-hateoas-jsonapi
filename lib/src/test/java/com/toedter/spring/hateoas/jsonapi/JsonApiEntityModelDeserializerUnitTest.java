@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -37,7 +38,7 @@ public class JsonApiEntityModelDeserializerUnitTest {
 
     @BeforeEach
     void setUpModule() {
-        deserializer = new JsonApiEntityModelDeserializer();
+        deserializer = new JsonApiEntityModelDeserializer(new JsonApiConfiguration(), new ObjectMapper());
     }
 
     @Test

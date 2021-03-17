@@ -77,11 +77,6 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
     ObjectMapper configureObjectMapper(
             @NonNull ObjectMapper mapper,
             JsonApiConfiguration configuration) {
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.registerModule(new Jackson2JsonApiModule());
-        mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
-                configuration, beanFactory));
-        configuration.customize(mapper);
-        return mapper;
+        return new JsonApiHandlerInstantiator(configuration, beanFactory).configureObjectMapper(mapper);
     }
 }
