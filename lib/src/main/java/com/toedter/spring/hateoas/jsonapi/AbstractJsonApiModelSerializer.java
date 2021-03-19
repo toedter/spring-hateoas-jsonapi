@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -36,6 +37,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
 
     private final JsonApiConfiguration jsonApiConfiguration;
+    private final ObjectMapper objectMapper;
 
     private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {
         JsonApiDocumentWithoutSerializedData(JsonApiDocument jsonApiDocument) {
@@ -55,6 +57,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     protected AbstractJsonApiModelSerializer(Class<?> t, JsonApiConfiguration jsonApiConfiguration) {
         super(t, false);
         this.jsonApiConfiguration = jsonApiConfiguration;
+        this.objectMapper = new ObjectMapper();
+        jsonApiConfiguration.customize(objectMapper);
     }
 
     @Override
@@ -75,7 +79,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
         if (collectionModel != null) {
             data = JsonApiData.extractCollectionContent(
-                    collectionModel, jsonApiConfiguration, null, false);
+                    collectionModel, objectMapper, jsonApiConfiguration, null, false);
         } else {
             if (value instanceof JsonApiModel
                     && ((JsonApiModel) value).getContent() != null
@@ -83,14 +87,14 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                 JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
                 embeddedMeta = Objects.requireNonNull(content).getMetaData();
                 final Optional<JsonApiData> jsonApiData =
-                        JsonApiData.extractContent(content, true, jsonApiConfiguration, null);
+                        JsonApiData.extractContent(content, true, objectMapper, jsonApiConfiguration, null);
                 data = jsonApiData.orElse(null);
             } else {
                 if (value instanceof JsonApiModel) {
                     embeddedMeta = ((JsonApiModel) value).getMetaData();
                 }
                 final Optional<JsonApiData> jsonApiData =
-                        JsonApiData.extractContent(value, true, jsonApiConfiguration, null);
+                        JsonApiData.extractContent(value, true, objectMapper, jsonApiConfiguration, null);
                 data = jsonApiData.orElse(null);
             }
         }
@@ -162,7 +166,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                     ((JsonApiModel) representationModel).getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
             return JsonApiData.extractCollectionContent(
-                    collectionModel, jsonApiConfiguration,
+                    collectionModel, objectMapper, jsonApiConfiguration,
                     ((JsonApiModel) representationModel).getSparseFieldsets(), true);
         }
         return null;

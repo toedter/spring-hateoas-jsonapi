@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": "1",
+    "type": "moviewithcustomserializers",
+    "attributes": {
+      "title": "Star Wars",
+      "customSer": "custom: TEST"
+    }
+  }
+}
