@@ -23,6 +23,8 @@ import org.springframework.http.MediaType;
  */
 public class MediaTypes {
 
+	private MediaTypes() {}
+
 	/**
 	 * A String equivalent of the JSON:API media type
 	 */

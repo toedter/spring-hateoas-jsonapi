@@ -151,7 +151,7 @@ class JsonApiResourceIdentifier {
                 }
             }
 
-            // JPA @id annotation have lower priority than @JsonApiId annotations,
+            // JPA @id annotations have lower priority than @JsonApiId annotations,
             // this is why they are returned later in the game.
             if (jpaIdField != null) {
                 return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
