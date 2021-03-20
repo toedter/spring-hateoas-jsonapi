@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,11 +71,5 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
     @JsonUnwrapped
     public RepresentationModel<?> getContent() {
         return entity;
-    }
-
-    public Map<String, Object> getAndRemoveMetaData() {
-        final Map<String, Object> finalMetaData = this.metaData;
-        this.metaData = null;
-        return finalMetaData;
     }
 }
