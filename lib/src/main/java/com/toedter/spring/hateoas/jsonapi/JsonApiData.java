@@ -59,7 +59,6 @@ class JsonApiData {
     Links links;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     Map<String, Object> meta;
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @JsonCreator
     public JsonApiData(
@@ -76,10 +75,6 @@ class JsonApiData {
         this.relationships = relationships;
         this.links = links;
         this.meta = meta;
-    }
-
-    public JsonApiData() {
-        this(null, null, null, null, null, null);
     }
 
     public static List<JsonApiData> extractCollectionContent(
@@ -156,7 +151,6 @@ class JsonApiData {
         }
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
-        @SuppressWarnings("unchecked")
         Map<String, Object> attributeMap = objectMapper.convertValue(content, Map.class);
 
         attributeMap.remove("links");
