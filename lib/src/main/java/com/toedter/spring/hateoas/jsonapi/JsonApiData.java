@@ -85,6 +85,7 @@ class JsonApiData {
 
     public static List<JsonApiData> extractCollectionContent(
             CollectionModel<?> collectionModel,
+            ObjectMapper objectMapper,
             JsonApiConfiguration jsonApiConfiguration,
             @Nullable HashMap<String, Collection<String>> sparseFieldsets,
             boolean eliminateDuplicates) {
@@ -93,7 +94,7 @@ class JsonApiData {
             HashMap<String, JsonApiData> values = new HashMap<>();
             for (Object entity : collectionModel.getContent()) {
                 Optional<JsonApiData> jsonApiData =
-                        extractContent(entity, false, jsonApiConfiguration, sparseFieldsets);
+                        extractContent(entity, false, objectMapper, jsonApiConfiguration, sparseFieldsets);
                 jsonApiData.ifPresent(apiData -> values.put(apiData.getId() + "." + apiData.getType(), apiData));
             }
             return new ArrayList<>(values.values());
@@ -101,7 +102,7 @@ class JsonApiData {
             List<JsonApiData> dataList = new ArrayList<>();
             for (Object entity : collectionModel.getContent()) {
                 Optional<JsonApiData> jsonApiData =
-                        extractContent(entity, false, jsonApiConfiguration, sparseFieldsets);
+                        extractContent(entity, false, objectMapper, jsonApiConfiguration, sparseFieldsets);
                 jsonApiData.ifPresent(dataList::add);
             }
             return dataList;
@@ -111,6 +112,7 @@ class JsonApiData {
     public static Optional<JsonApiData> extractContent(
             @Nullable Object content,
             boolean isSingleEntity,
+            ObjectMapper objectMapper,
             JsonApiConfiguration jsonApiConfiguration,
             @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
 
@@ -155,18 +157,8 @@ class JsonApiData {
         }
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
-        // This does not serialize attribute values but leaves the original objects
-        Map<String, Object> attributeMapFromPropertyUtils = PropertyUtils.extractPropertyValues(content);
-
+        @SuppressWarnings("unchecked")
         Map<String, Object> attributeMap = objectMapper.convertValue(content, Map.class);
-
-        // we want to use the map created by the object mapper to react on Jackson annotations like
-        // @JsonInclude(JsonInclude.Include.NON_NULL)
-        for (String key : attributeMapFromPropertyUtils.keySet()) {
-            if (attributeMap.containsKey(key)) {
-                attributeMap.put(key, attributeMapFromPropertyUtils.get(key));
-            }
-        }
 
         attributeMap.remove("links");
         attributeMap.remove(idField.name);

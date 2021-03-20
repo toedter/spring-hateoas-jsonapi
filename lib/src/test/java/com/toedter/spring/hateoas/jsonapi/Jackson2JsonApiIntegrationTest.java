@@ -33,6 +33,7 @@ import com.toedter.spring.hateoas.jsonapi.support.Movie3;
 import com.toedter.spring.hateoas.jsonapi.support.Movie4;
 import com.toedter.spring.hateoas.jsonapi.support.Movie5;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithCustomSerializer;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
@@ -81,7 +82,12 @@ class Jackson2JsonApiIntegrationTest {
 
     @BeforeEach
     void setUpModule() {
-        mapper = createObjectMapper(new JsonApiConfiguration());
+        mapper = createObjectMapper(new JsonApiConfiguration().withObjectMapperCustomizer(
+                mapper -> {
+                    mapper.registerModule(new JavaTimeModule());
+                    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                }
+        ));
     }
 
     @Test
@@ -291,6 +297,15 @@ class Jackson2JsonApiIntegrationTest {
 
         String moviesJson = mapper.writeValueAsString(pagedModel);
         compareWithFile(moviesJson, "moviesPagedModel.json");
+    }
+
+    @Test
+    void should_serialize_single_movie_with_custom_serializer_entity_model() throws Exception {
+        MovieWithCustomSerializer movie = new MovieWithCustomSerializer("1", "Star Wars", "TEST");
+        EntityModel<MovieWithCustomSerializer> entityModel = EntityModel.of(movie);
+        String movieJson = mapper.writeValueAsString(entityModel);
+
+        compareWithFile(movieJson, "movieEntityModelWithCustomSerializer.json");
     }
 
     @Test
@@ -672,8 +687,6 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
         EntityModel<InstantExample> entityModel = EntityModel.of(new InstantExample());
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         String instantJson = mapper.writeValueAsString(entityModel);
         compareWithFile(instantJson, "instantWithCustomConfig.json");
     }
