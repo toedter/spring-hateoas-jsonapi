@@ -37,7 +37,7 @@ public class JsonApiEntityModelDeserializerUnitTest {
 
     @BeforeEach
     void setUpModule() {
-        deserializer = new JsonApiEntityModelDeserializer();
+        deserializer = new JsonApiEntityModelDeserializer(new JsonApiConfiguration());
     }
 
     @Test

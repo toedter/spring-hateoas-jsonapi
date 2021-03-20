@@ -126,7 +126,6 @@ public class WebFluxMovieController {
 
         return movie
                 .flatMap(resource -> {
-
                     int newMovieId = MOVIES.size() + 1;
                     assert resource.getContent() != null;
                     resource.getContent().setId("" + newMovieId);

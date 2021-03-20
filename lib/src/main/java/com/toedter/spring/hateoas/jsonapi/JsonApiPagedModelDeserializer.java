@@ -27,12 +27,12 @@ import java.util.List;
 class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
         implements ContextualDeserializer {
 
-    JsonApiPagedModelDeserializer() {
-        super();
+    public JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
+        super(jsonApiConfiguration);
     }
 
-    protected JsonApiPagedModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiPagedModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
+        super(contentType, jsonApiConfiguration);
     }
 
     @Override
@@ -43,6 +43,6 @@ class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<Pag
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiPagedModelDeserializer(type);
+        return new JsonApiPagedModelDeserializer(type, jsonApiConfiguration);
     }
 }

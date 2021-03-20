@@ -97,6 +97,8 @@ public class JsonApiConfiguration {
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
 
+    private ObjectMapper objectMapper;
+
     /**
      * Customizes the object mapper if a customizer was set with
      * {@literal withObjectMapperCustomizer}.
@@ -107,6 +109,20 @@ public class JsonApiConfiguration {
     public JsonApiConfiguration customize(ObjectMapper objectMapper) {
         this.objectMapperCustomizer.accept(objectMapper);
         return this;
+    }
+
+    /*
+     This method is used only internally by the deserializers
+     */
+    ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    /*
+      This method is used only internally by the deserializers
+     */
+    void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     /**

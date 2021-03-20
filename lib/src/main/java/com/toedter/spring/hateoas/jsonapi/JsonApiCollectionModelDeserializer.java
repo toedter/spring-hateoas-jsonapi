@@ -27,12 +27,12 @@ import java.util.List;
 class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserializer<CollectionModel<?>>
         implements ContextualDeserializer {
 
-    JsonApiCollectionModelDeserializer() {
-        super();
+    JsonApiCollectionModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
+        super(jsonApiConfiguration);
     }
 
-    protected JsonApiCollectionModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiCollectionModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
+        super(contentType, jsonApiConfiguration);
     }
 
     @Override
@@ -42,6 +42,6 @@ class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserialize
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiCollectionModelDeserializer(type);
+        return new JsonApiCollectionModelDeserializer(type, jsonApiConfiguration);
     }
 }

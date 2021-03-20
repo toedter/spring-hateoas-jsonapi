@@ -190,6 +190,17 @@ class JsonApiWebMvcIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_create_instant() throws Exception {
+        String input = readFile("movieWithLastSeen.json");
+
+        this.mockMvc.perform(post("/movieWithLastSeen")
+                .content(input)
+                .contentType(JSON_API))
+                .andExpect(status().isCreated())
+                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movieWithLastSeen"));
+    }
+
+    @Test
     void should_patch_movie() throws Exception {
 
         String input = readFile("patchMovie.json");

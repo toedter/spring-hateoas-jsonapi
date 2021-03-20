@@ -34,7 +34,7 @@ public class JsonApiRepresentationModelDeserializerUnitTest {
 
     @BeforeEach
     void setUpModule() {
-        deserializer = new JsonApiRepresentationModelDeserializer();
+        deserializer = new JsonApiRepresentationModelDeserializer(new JsonApiConfiguration());
     }
 
     @Test

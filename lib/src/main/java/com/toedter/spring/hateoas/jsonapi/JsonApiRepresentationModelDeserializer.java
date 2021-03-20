@@ -31,12 +31,12 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
     public static final String CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL
             = "Cannot deserialize input to RepresentationModel";
 
-    public JsonApiRepresentationModelDeserializer() {
-        super();
+    public JsonApiRepresentationModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
+        super(jsonApiConfiguration);
     }
 
-    protected JsonApiRepresentationModelDeserializer(JavaType contentType) {
-        super(contentType);
+    protected JsonApiRepresentationModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
+        super(contentType, jsonApiConfiguration);
     }
 
     @Override
@@ -59,6 +59,6 @@ class JsonApiRepresentationModelDeserializer extends AbstractJsonApiModelDeseria
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiRepresentationModelDeserializer(type);
+        return new JsonApiRepresentationModelDeserializer(type, jsonApiConfiguration);
     }
 }

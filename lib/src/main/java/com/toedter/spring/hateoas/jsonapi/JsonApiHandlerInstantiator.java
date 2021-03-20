@@ -54,6 +54,15 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
 
         this.serializers.put(JsonApiRelationshipSerializer.class,
                 new JsonApiRelationshipSerializer(jsonApiConfiguration));
+
+        this.serializers.put(JsonApiRepresentationModelDeserializer.class,
+                new JsonApiRepresentationModelDeserializer(jsonApiConfiguration));
+        this.serializers.put(JsonApiEntityModelDeserializer.class,
+                new JsonApiEntityModelDeserializer(jsonApiConfiguration));
+        this.serializers.put(JsonApiCollectionModelDeserializer.class,
+                new JsonApiCollectionModelDeserializer(jsonApiConfiguration));
+        this.serializers.put(JsonApiPagedModelDeserializer.class,
+                new JsonApiPagedModelDeserializer(jsonApiConfiguration));
     }
 
     @Override

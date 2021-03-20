@@ -175,6 +175,11 @@ public class WebMvcMovieController {
         return ResponseEntity.created(link.toUri()).build();
     }
 
+    @PostMapping("/movieWithLastSeen")
+    public ResponseEntity<?> newLastSeenMovie(@RequestBody EntityModel<MovieWithLastSeen> movie) {
+        return ResponseEntity.created(linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()).build();
+    }
+
     @PatchMapping("/movies/{id}")
     public ResponseEntity<?> partiallyUpdateMovie(@RequestBody EntityModel<Movie> movie,
                                                   @PathVariable Integer id) {

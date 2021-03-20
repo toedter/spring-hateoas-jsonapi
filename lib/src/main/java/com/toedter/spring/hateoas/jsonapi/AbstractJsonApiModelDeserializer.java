@@ -41,16 +41,25 @@ import java.util.stream.Collectors;
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
         implements ContextualDeserializer {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    protected final ObjectMapper objectMapper;
     protected final JavaType contentType;
+    protected final JsonApiConfiguration jsonApiConfiguration;
 
-    AbstractJsonApiModelDeserializer() {
-        this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]));
+    private final ObjectMapper plainObjectMapper;
+
+    AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
+        this(TypeFactory.defaultInstance().constructSimpleType(JsonApiDocument.class, new JavaType[0]),
+                jsonApiConfiguration);
     }
 
-    protected AbstractJsonApiModelDeserializer(JavaType contentType) {
+    protected AbstractJsonApiModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
         super(contentType);
         this.contentType = contentType;
+        this.jsonApiConfiguration = jsonApiConfiguration;
+        this.objectMapper = jsonApiConfiguration.getObjectMapper();
+
+        plainObjectMapper = new ObjectMapper();
+        jsonApiConfiguration.customize(plainObjectMapper);
     }
 
     @Override
@@ -68,7 +77,8 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
-    private @Nullable Object convertToResource(@Nullable HashMap<String, Object> data) {
+    private @Nullable
+    Object convertToResource(@Nullable HashMap<String, Object> data) {
         if (data == null) {
             return null;
         }
@@ -77,8 +87,8 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
         Object objectFromProperties;
-        if( attributes != null) {
-            objectFromProperties = mapper.convertValue(attributes, rootType.getRawClass());
+        if (attributes != null) {
+            objectFromProperties = plainObjectMapper.convertValue(attributes, rootType.getRawClass());
         } else {
             try {
                 objectFromProperties = rootType.getRawClass().getDeclaredConstructor().newInstance();

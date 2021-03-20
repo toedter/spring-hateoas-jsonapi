@@ -82,6 +82,7 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
         mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
                 configuration, beanFactory));
         configuration.customize(mapper);
+        configuration.setObjectMapper(mapper);
         return mapper;
     }
 }
