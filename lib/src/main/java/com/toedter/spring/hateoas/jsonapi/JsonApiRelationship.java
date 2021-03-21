@@ -103,7 +103,6 @@ class JsonApiRelationship {
             if (!(this.data instanceof Collection<?>)) {
                 dataList.add(this.data);
             } else {
-                @SuppressWarnings("unchecked")
                 Collection<Object> collectionData = (Collection<Object>) this.data;
                 dataList.addAll(collectionData);
             }
@@ -263,8 +262,15 @@ class JsonApiRelationship {
     List<JsonApiResourceIdentifier> toJsonApiResourceCollection(
             Collection<?> collection, JsonApiConfiguration jsonApiConfiguration) {
         List<JsonApiResourceIdentifier> dataList = new ArrayList<>();
+
+        // don't add duplicated with same json:api id and type
+        HashMap<String, JsonApiResourceIdentifier> values = new HashMap<>();
         for (Object object : collection) {
-            dataList.add(toJsonApiResource(object, jsonApiConfiguration));
+            JsonApiResourceIdentifier resourceIdentifier = toJsonApiResource(object, jsonApiConfiguration);
+            if(values.get(resourceIdentifier.getId() + "." + resourceIdentifier.getType()) == null) {
+                dataList.add(resourceIdentifier);
+                values.put(resourceIdentifier.getId() + "." + resourceIdentifier.getType(), resourceIdentifier);
+            }
         }
         return dataList;
     }

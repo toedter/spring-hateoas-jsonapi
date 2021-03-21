@@ -185,6 +185,26 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     }
 
     @Test
+    void should_build_single_movie_model_with_relationship_links_and_meta_as_first_element() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        HashMap<String, Object> meta = new HashMap<>();
+        meta.put("key", "value");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", meta)
+                        .relationship("directors",
+                                "http://movies/1/relationships/1",
+                                "http://movies/1/directors/1", Links.NONE)
+                        .relationship("directors", director)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
+    }
+
+    @Test
     void should_build_single_movie_model_with_many_relationships() throws Exception {
         Movie movie = new Movie("4", "The Matrix");
         Movie relatedMovie = new Movie("2", "The Matrix 2");
@@ -370,6 +390,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
     void should_build_single_movie_with_single_one_element_collection_relationship() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("3", "George Lucas");
+
         // tag::single-collection-relationship2[]
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
@@ -377,6 +398,21 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
                         .relationship("directors", Collections.singletonList(director))
                         .build();
         // end::single-collection-relationship2[]
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
+    }
+
+    @Test
+    void should_build_single_movie_with_two_one_element_collection_relationship() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("3", "George Lucas");
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(EntityModel.of(movie))
+                        .relationship("directors", Collections.singletonList(director))
+                        .relationship("directors", Collections.singletonList(director))
+                        .build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");

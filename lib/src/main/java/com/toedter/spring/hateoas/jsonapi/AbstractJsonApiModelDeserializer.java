@@ -93,9 +93,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             try {
                 objectFromProperties = rootType.getRawClass().getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                log.error("Cannot convert data to resource.");
-                e.printStackTrace();
-                return null;
+                throw new IllegalStateException("Cannot convert data to resource.");
             }
         }
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
