@@ -140,15 +140,11 @@ class JsonApiResourceIdentifier {
                         if (JPA_ID_ANNOTATION.equals(annotationName)) {
                             jpaIdMethod = method;
                         }
-                        if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
-                            if (method.getReturnType() != void.class) {
-                                return getResourceFieldForMethod(object, method, resourceField);
-                            }
-                        }
-                    } else if (JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
-                        if (method.getReturnType() != void.class) {
+                        if (JSONAPI_ID_ANNOTATION.equals(annotationName) && method.getReturnType() != void.class) {
                             return getResourceFieldForMethod(object, method, resourceField);
                         }
+                    } else if (JSONAPI_TYPE_ANNOTATION.equals(annotationName) && method.getReturnType() != void.class) {
+                        return getResourceFieldForMethod(object, method, resourceField);
                     }
                 }
             }
