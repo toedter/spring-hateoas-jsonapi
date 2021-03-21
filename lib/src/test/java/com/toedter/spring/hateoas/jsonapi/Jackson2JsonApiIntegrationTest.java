@@ -41,6 +41,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
+import com.toedter.spring.hateoas.jsonapi.support.MovieThrowingException;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphy.PolymorphicRelationEntity;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEChild;
@@ -118,7 +119,7 @@ class Jackson2JsonApiIntegrationTest {
             private final String title = "Star Wars";
 
             @Id
-            public String getMyId() {
+            public String retrieveMyId() {
                 return "1";
             }
         }
@@ -211,9 +212,16 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type() throws Exception {
+    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_fields() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
                 EntityModel.of(new Movie2("1", "Star Wars", "my-movies")));
+        compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
+    }
+
+    @Test
+    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_methods() throws Exception {
+        String jsonMovie = mapper.writeValueAsString(
+                EntityModel.of(new Movie3("1", "Star Wars", "my-movies")));
         compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
     }
 
@@ -411,8 +419,9 @@ class Jackson2JsonApiIntegrationTest {
 
         Set<DirectorWithType> directors = movie.getDirectors();
         assertThat(directors.size()).isEqualTo(1);
-//        assertThat(directors.get(0).getId()).isEqualTo("1");
-//        assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
+        DirectorWithType director = directors.iterator().next();
+        assertThat(director.getId()).isEqualTo("1");
+        assertThat(director.getDirectorType()).isEqualTo("director-type");
     }
 
     @Test
@@ -723,6 +732,18 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("movieWithoutAttributes.json", getClass()).getFile();
         EntityModel<MovieWithoutAttributes> entityModel = mapper.readValue(file, javaType);
         assertThat(entityModel.getContent().getId()).isEqualTo("1");
+    }
+
+    @Test
+    void should_not_deserialize_movie_with_wrong_annotation() throws Exception {
+
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieThrowingException.class);
+
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+            mapper.readValue(file, javaType);
+        });
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

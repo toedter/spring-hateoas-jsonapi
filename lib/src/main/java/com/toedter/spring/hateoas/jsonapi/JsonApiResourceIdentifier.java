@@ -123,8 +123,7 @@ class JsonApiResourceIdentifier {
                         if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
                             return new ResourceField(field.getName(), field.get(object).toString());
                         }
-                    } else if (resourceField == JsonApiResourceField.type
-                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
+                    } else if (JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
                         return new ResourceField(field.getName(), field.get(object).toString());
                     }
                 }
@@ -142,11 +141,14 @@ class JsonApiResourceIdentifier {
                             jpaIdMethod = method;
                         }
                         if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
+                            if (method.getReturnType() != void.class) {
+                                return getResourceFieldForMethod(object, method, resourceField);
+                            }
+                        }
+                    } else if (JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
+                        if (method.getReturnType() != void.class) {
                             return getResourceFieldForMethod(object, method, resourceField);
                         }
-                    } else if (resourceField == JsonApiResourceField.type
-                            && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
-                        return getResourceFieldForMethod(object, method, resourceField);
                     }
                 }
             }
@@ -192,14 +194,14 @@ class JsonApiResourceIdentifier {
     }
 
     private static ResourceField getResourceFieldForMethod(
-            Object object, Method jpaIdMethod, JsonApiResourceField resourceField)
+            Object object, Method jsonApiIdMethod, JsonApiResourceField resourceField)
             throws IllegalAccessException, InvocationTargetException {
-        final String methodName = jpaIdMethod.getName();
+        final String methodName = jsonApiIdMethod.getName();
         if (methodName.startsWith("get")) {
             String fieldName = StringUtils.uncapitalize(methodName.substring(3));
-            return new ResourceField(fieldName, jpaIdMethod.invoke(object).toString());
+            return new ResourceField(fieldName, jsonApiIdMethod.invoke(object).toString());
         }
-        return new ResourceField(resourceField.name(), jpaIdMethod.invoke(object).toString());
+        return new ResourceField(resourceField.name(), jsonApiIdMethod.invoke(object).toString());
     }
 
     static void setJsonApiResourceFieldAttributeForObject(Object object, JsonApiResourceField name, String value) {
@@ -221,7 +223,7 @@ class JsonApiResourceIdentifier {
                 }
             }
 
-            // first try annotation on methods
+            // secondly try annotation on methods
             final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
             for (Method method : declaredMethods) {
                 final Annotation[] annotations = method.getAnnotations();
@@ -235,9 +237,9 @@ class JsonApiResourceIdentifier {
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
                         isAnnotatedMethod = true;
                     }
-                    // if the method is a setter find the corresponding field if there is one
-                    final String methodName = method.getName();
-                    if (isAnnotatedMethod && methodName.startsWith("set")) {
+                    // if the method is a setter find the corresponding field if there is one,
+                    // as heuristic the method should take one parameter
+                    if (isAnnotatedMethod && method.getParameterCount() == 1) {
                         method.invoke(object, value);
                         return;
                     }
@@ -252,7 +254,8 @@ class JsonApiResourceIdentifier {
                 field.set(object, value);
             }
         } catch (Exception e) {
-            System.out.println("Cannot set JSON:API " + name + " on object of type " + object.getClass().getSimpleName());
+            throw new IllegalStateException("Cannot set JSON:API field" + name +
+                    " on object of type " + object.getClass().getSimpleName());
         }
     }
 }

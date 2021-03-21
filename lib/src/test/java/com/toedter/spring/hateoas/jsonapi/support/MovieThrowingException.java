@@ -17,43 +17,21 @@
 package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
-import com.toedter.spring.hateoas.jsonapi.JsonApiType;
-import lombok.AllArgsConstructor;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import lombok.Getter;
 
-@AllArgsConstructor
-public class Movie3 {
+@Getter
+@JsonApiTypeForClass("movies")
+public class MovieThrowingException {
     @JsonApiId
-    public String getMyId() {
-        return myId;
+    public void setId(String id) {
+        throw new RuntimeException();
     }
 
     @JsonApiId
-    public void setMyId(String myId) {
-        this.myId = myId;
+    public String getId() {
+        return "1";
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @JsonApiType
-    public String getType() {
-        return type;
-    }
-
-    @JsonApiType
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    private String myId;
-    private String title;
-    private String type;
-
-    public Movie3() {
-    }
+    private final String title = "Star Wars";
 }
