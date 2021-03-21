@@ -439,7 +439,7 @@ public class JsonApiModelBuilder {
      */
     public JsonApiModelBuilder included(Collection<?> collection) {
         Assert.notNull(collection, "included data collection must not be null!");
-        for(Object object: collection) {
+        for (Object object : collection) {
             this.included(object);
         }
         return this;
@@ -549,9 +549,7 @@ public class JsonApiModelBuilder {
             Link firstLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=0&"
                     + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.FIRST);
             paginationLinks.add(firstLink);
-        }
 
-        if (pageNumber > 0) {
             Link prevLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (pageNumber - 1)
                     + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.PREV);
             paginationLinks.add(prevLink);
@@ -561,9 +559,7 @@ public class JsonApiModelBuilder {
             Link nextLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (pageNumber + 1)
                     + "&" + pageSizeRequestParam + "=" + (pageNumber + 1)).withRel(IanaLinkRelations.NEXT);
             paginationLinks.add(nextLink);
-        }
 
-        if (pageNumber < totalPages - 1) {
             Link lastLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (totalPages - 1)
                     + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.LAST);
             paginationLinks.add(lastLink);
