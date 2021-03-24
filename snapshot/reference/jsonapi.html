@@ -555,7 +555,7 @@ List&lt;RepresentationModel&lt;?&gt;&gt; movies = new ArrayList&lt;&gt;();
 movies.add(jsonApiModel1);
 movies.add(jsonApiModel2);
 
-PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
 Link selfLink = Link.of("http://localhost/movies").withSelfRel();
 final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(movies, pageMetadata, selfLink);
 
@@ -645,16 +645,16 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=2",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=2",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=2",
-    "last": "http://localhost/movies?page[number]=49&amp;page[size]=2"
+    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
+    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
+    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
+    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
   },
   "meta": {
     "page": {
       "number": 1,
-      "size": 2,
-      "totalPages": 50,
+      "size": 10,
+      "totalPages": 10,
       "totalElements": 100
     }
   }
@@ -1419,7 +1419,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-03-22 08:26:49 UTC
+Last updated 2021-03-24 19:08:14 UTC
 </div>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
