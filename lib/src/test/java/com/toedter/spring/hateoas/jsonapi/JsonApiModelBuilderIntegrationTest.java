@@ -296,7 +296,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
         movies.add(jsonApiModel1);
         movies.add(jsonApiModel2);
 
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
         Link selfLink = Link.of("http://localhost/movies").withSelfRel();
         final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(movies, pageMetadata, selfLink);
 
@@ -317,7 +317,7 @@ class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
 
     @Test
     void should_build_paged_movie_with_parametrized_page_links() throws Exception {
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
         Link selfLink = Link.of("http://localhost/movies").withSelfRel();
         final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(new ArrayList<>(), pageMetadata, selfLink);
 

@@ -2,16 +2,16 @@
   "data": [],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?director=lucas&page[number]=0&page[size]=2",
-    "prev": "http://localhost/movies?director=lucas&page[number]=0&page[size]=2",
-    "next": "http://localhost/movies?director=lucas&page[number]=2&page[size]=2",
-    "last": "http://localhost/movies?director=lucas&page[number]=49&page[size]=2"
+    "first": "http://localhost/movies?director=lucas&page[number]=0&page[size]=10",
+    "prev": "http://localhost/movies?director=lucas&page[number]=0&page[size]=10",
+    "next": "http://localhost/movies?director=lucas&page[number]=2&page[size]=10",
+    "last": "http://localhost/movies?director=lucas&page[number]=9&page[size]=10"
   },
   "meta": {
     "page": {
       "number": 1,
-      "size": 2,
-      "totalPages": 50,
+      "size": 10,
+      "totalPages": 10,
       "totalElements": 100
     }
   }

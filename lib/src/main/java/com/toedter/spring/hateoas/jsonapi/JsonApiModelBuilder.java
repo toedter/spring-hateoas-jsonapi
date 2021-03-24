@@ -557,7 +557,7 @@ public class JsonApiModelBuilder {
 
         if (pageNumber < totalPages - 1) {
             Link nextLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (pageNumber + 1)
-                    + "&" + pageSizeRequestParam + "=" + (pageNumber + 1)).withRel(IanaLinkRelations.NEXT);
+                    + "&" + pageSizeRequestParam + "=" + pageSize).withRel(IanaLinkRelations.NEXT);
             paginationLinks.add(nextLink);
 
             Link lastLink = Link.of(linkBase + paramStart + pageNumberRequestParam + "=" + (totalPages - 1)
