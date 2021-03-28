@@ -77,7 +77,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
-    private @Nullable
+    @Nullable
     Object convertToResource(@Nullable HashMap<String, Object> data) {
         if (data == null) {
             return null;

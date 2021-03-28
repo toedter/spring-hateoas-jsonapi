@@ -27,11 +27,10 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-// end::import-builder[]
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiErrors Test")
-class JsonApiErrorsIntegrationTest extends AbstractJsonApiTest {
+class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
     private ObjectMapper mapper;
 
     @BeforeEach

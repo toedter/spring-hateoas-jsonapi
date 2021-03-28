@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Kai Toedter
  */
-abstract class AbstractJsonApiTest {
+abstract class JsonApiTestBase {
     void compareWithFile(String json, String fileName) throws Exception {
         String fileContent = readFile(fileName);
         assertThat(json).isEqualTo(fileContent);

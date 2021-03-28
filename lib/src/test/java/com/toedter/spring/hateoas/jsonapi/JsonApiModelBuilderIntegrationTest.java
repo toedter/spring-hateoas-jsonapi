@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Integration Test")
-class JsonApiModelBuilderIntegrationTest extends AbstractJsonApiTest {
+class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     private ObjectMapper mapper;
 
     @BeforeEach

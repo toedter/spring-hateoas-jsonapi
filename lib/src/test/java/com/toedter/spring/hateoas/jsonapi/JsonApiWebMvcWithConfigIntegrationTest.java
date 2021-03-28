@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ContextConfiguration
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApi WebMvc with Configuration Integration Test")
-class JsonApiWebMvcWithConfigIntegrationTest extends AbstractJsonApiTest {
+class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
     @Autowired
     WebApplicationContext context;
 

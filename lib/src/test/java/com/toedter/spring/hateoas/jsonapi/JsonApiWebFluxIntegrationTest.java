@@ -51,7 +51,7 @@ import static org.springframework.hateoas.config.EnableHypermediaSupport.Hyperme
 @ContextConfiguration
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApi Web Flux Integration Test")
-class JsonApiWebFluxIntegrationTest extends AbstractJsonApiTest {
+class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
     @Autowired
     WebTestClient testClient;
 
