@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>JSON:API</title>
+<link rel="stylesheet" href="css/spring.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body id="mediatypes.jsonapi" class="article">
+<div id="header">
+<h1>JSON:API</h1>
+<div class="details">
+<span id="revnumber">version 0.17.0-SNAPSHOT</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
+You can find a list of implementations and tools <a href="https://jsonapi.org/implementations/">here</a>.
+Answers to a few questions, e.g. related to HAL, you can find
+<a href="https://jsonapi.org/faq/#why-not-use-the-hal-specification">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Anytime a client supplies an <code>Accept</code> header with <code>application/vnd.api+json</code>, you can expect something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Shawshank Redemption",
+        "year": 1994,
+        "rating": 9.3
+      },
+      "relationships": {
+        "directors": {
+          "data": [
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ],
+          "links": {
+            "self": "http://localhost:8080/api/movies/1/relationships/directors",
+            "related": "http://localhost:8080/api/movies/1/directors"
+          }
+        }
+      },
+      "links": {
+        "self": "http://localhost:8080/api/movies/1"
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1",
+    "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
+    "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
+  },
+  "meta": {
+    "page": {
+      "number": 0,
+      "size": 1,
+      "totalPages": 250,
+      "totalElements": 250
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration_in_your_backends">Integration in your Backends</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
+</div>
+<div class="paragraph">
+<p>Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.toedter&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
+    &lt;version&gt;0.16.1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The latest published snapshot version is <code>0.17.0-SNAPSHOT</code>.
+If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">https://oss.sonatype.org/content/repositories/snapshots/</a>
+as repository to your Maven or Gradle configuration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_representation_models">Representation Models</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All Spring HATEOAS representation models are rendered as JSON:API.
+Consider a simple Movie Class as base for a Spring HATEOAS entity model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class Movie {
+    private String id;
+    private String title;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An <code>EntityModel.of(new Movie("1", "Star Wars"))</code> is then rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In JSON:API, the <code>id</code> field must be of type <code>String</code>.
+But in your model you can use any Class and <code>toString()</code> is used for conversion.
+So, if the <code>id</code> attribute of <code>Movie</code> would be of type <code>long</code>,
+the rendered JSON:API would be the same.
+The JSON:API <code>type</code> is automatically generated of the pluralized, lower case, simple class name.
+This is best practice, since then most likely the type matches the URL (end)
+of the corresponding REST collection resource.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can configure if you want to use non-pluralized class names, see <a href="#configuration">Configuration</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_annotations">Annotations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The goal of this implementation is to automate the mapping from/to JSON:API
+as convenient as possible.</p>
+</div>
+<div class="paragraph">
+<p>There are four new annotations provided by this project:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@JsonApiId</code> to mark a JSON:API <code>id</code></p>
+</li>
+<li>
+<p><code>@JsonApiType</code> to mark a field or method to provide a JSON:API <code>type</code></p>
+</li>
+<li>
+<p><code>@JsonApiTypeForClass</code> to mark class to provide a JSON:API <code>type</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>The JSON:API type is a required value of this annotation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>@JsonApiRelationships</code> to mark a JSON:API <code>relationship</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>This annotation is not used for serialization but for deserialization,
+see <a href="#Creating">Creating Resources with HTTP POST</a> for an example.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The use of these annotations is optional. For the mapping of the <code>id</code>, the
+following rules apply in order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the annotation <code>@JsonApiId</code> is used on a field</p>
+</li>
+<li>
+<p>the annotation <code>@JsonApiId</code> is used on a method</p>
+</li>
+<li>
+<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a field</p>
+</li>
+<li>
+<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a method</p>
+</li>
+<li>
+<p>the entity (base for representation models) provides an attribute <code>id</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For the mapping of the <code>type</code>, the
+following rules apply in order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the annotation <code>@JsonApiTypeForClass</code> is used on a class</p>
+</li>
+<li>
+<p>the annotation <code>@JsonApiType</code> is used on a field</p>
+</li>
+<li>
+<p>the annotation <code>@JsonApiType</code> is used on a method</p>
+</li>
+<li>
+<p>if no annotation is present, the pluralized, lower case, simple class name of the entity will be used</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can configure if you want to use non-pluralized class names, see <a href="#configuration">Configuration</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As an example, consider the class</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Movie2 {
+    @Id
+    private String myId;
+    private String title;
+    @JsonApiType
+    private String type;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, <code>EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))</code> will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "my-movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_jsonapi_builder">JSON:API Builder</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
+<code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Consider that you want to express the relationships of movies to their directors.
+A simple <code>Director</code> class could look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class Director {
+    private String id;
+    private String name;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can build a relationship from a movie to a director like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+Director director = new Director("1", "George Lucas");
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movie)
+                .relationship("directors", director)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "1",
+          "type": "directors"
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want the <code>directors</code> relationship always being rendered as an array,
+even if it is empty or contains only a single data element,
+you can build it like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(movie))
+                .relationshipWithDataArray("directors")
+                .relationship("directors", director)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "3",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also pass a Java <code>Collection</code> as data for a relationship.
+A collection will always be rendered as JSON array,
+even when it is empty or contains a single element.
+So,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(movie))
+                .relationship("directors", Collections.singletonList(director))
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be rendered exactly like the previous example.</p>
+</div>
+<div class="paragraph">
+<p>The builder also provides methods for adding links and meta to a relationship.
+Check out the <a href="../api/com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html">Javadoc API documentation</a>
+for more details.</p>
+</div>
+<div class="paragraph">
+<p>If you want to include the related resources in the JSON:API output,
+you can build included <code>director</code> resources like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
+Movie relatedMovie = new Movie("2", "The Matrix 2");
+Director director1 = new Director("1", "Lana Wachowski");
+Director director2 = new Director("2", "Lilly Wachowski");
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movie)
+                .relationship("directors", director1)
+                .relationship("directors", director2)
+                .relationship("relatedMovies", relatedMovie)
+                .included(director1)
+                .included(director2)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The representation model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "The Matrix"
+    },
+    "relationships": {
+      "relatedMovies": {
+        "data": {
+          "id": "2",
+          "type": "movies"
+        }
+      },
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "directors"
+          },
+          {
+            "id": "2",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      }
+    },
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Lilly Wachowski"
+      }
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows the creation of a more complex
+JSON:API specific representation model with a paged model as base.
+The builder supports adding both pagination metadata and pagination links.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
+Movie relatedMovie = new Movie("2", "The Matrix 2");
+Director director1 = new Director("1", "Lana Wachowski");
+Director director2 = new Director("2", "Lilly Wachowski");
+
+final RepresentationModel&lt;?&gt; jsonApiModel1 =
+        jsonApiModel()
+                .model(movie)
+                .relationship("directors", director1)
+                .relationship("directors", director2)
+                .relationship("relatedMovies", EntityModel.of(relatedMovie))
+                .build();
+
+Movie movie2 = new Movie("3", "Star Wars");
+Director director3 = new Director("3", "George Lucas");
+
+final RepresentationModel&lt;?&gt; jsonApiModel2 =
+        jsonApiModel()
+                .model(movie2)
+                .relationship("directors", director3)
+                .build();
+
+List&lt;RepresentationModel&lt;?&gt;&gt; movies = new ArrayList&lt;&gt;();
+movies.add(jsonApiModel1);
+movies.add(jsonApiModel2);
+
+PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
+Link selfLink = Link.of("http://localhost/movies").withSelfRel();
+final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(movies, pageMetadata, selfLink);
+
+RepresentationModel&lt;?&gt; pagedJasonApiModel =
+        jsonApiModel()
+                .model(pagedModel)
+                .included(director1)
+                .included(director2)
+                .included(director3)
+                .pageMeta()
+                .pageLinks("http://localhost/movies")
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Matrix"
+      },
+      "relationships": {
+        "relatedMovies": {
+          "data": {
+            "id": "2",
+            "type": "movies"
+          }
+        },
+        "directors": {
+          "data": [
+            {
+              "id": "1",
+              "type": "directors"
+            },
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "relationships": {
+        "directors": {
+          "data": {
+            "id": "3",
+            "type": "directors"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      }
+    },
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Lilly Wachowski"
+      }
+    },
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost/movies",
+    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
+    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
+    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
+    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+  },
+  "meta": {
+    "page": {
+      "number": 1,
+      "size": 10,
+      "totalPages": 10,
+      "totalElements": 100
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Inclusion">Inclusion of related Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is no direct support for automatically including related resources,
+but a REST controller could provide an optional request parameter like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "included", required = false) String[] included)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, within the controller implementation, this parameter could be interpreted,
+and the builder could be used for the inclusion, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
+    HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
+    for (Movie movie : pagedResult.getContent()) {
+        jsonApiModelBuilder.included(movie.getDirectors());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Duplicated included directors will be eliminated automatically.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Nesting">Nesting of JsonApiModels</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
+resources. Here is an example that also illustrates the different levels of meta.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Director director = new Director("3", "George Lucas");
+final RepresentationModel&lt;?&gt; directorModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .meta("director-meta", "director-meta-value")
+                .build();
+
+Map&lt;String, Object&gt; relationshipMeta = new HashMap&lt;&gt;();
+relationshipMeta.put("relationship-meta", "relationship-meta-value");
+
+Map&lt;String, Object&gt; directorRelationshipMeta = new HashMap&lt;&gt;();
+directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
+
+Movie movie = new Movie("1", "Star Wars");
+final RepresentationModel&lt;?&gt; movieModel =
+        jsonApiModel()
+                .model(movie)
+                .meta("movie-meta", "movie-meta-value")
+                .relationship("directors", director, directorRelationshipMeta)
+                .relationship("directors", relationshipMeta)
+                .build();
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movieModel)
+                .meta("top-level-meta", "top-level-meta-value")
+                .included(directorModel)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This model will be rendered as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "3",
+          "type": "directors",
+          "meta": {
+            "director-relationship-meta": "director-relationship-meta-value"
+          }
+        },
+        "meta": {
+          "relationship-meta": "relationship-meta-value"
+        }
+      }
+    },
+    "meta": {
+      "movie-meta": "movie-meta-value"
+    }
+  },
+  "included": [
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      },
+      "meta": {
+        "director-meta": "director-meta-value"
+      }
+    }
+  ],
+  "meta": {
+    "top-level-meta": "top-level-meta-value"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="SparseFielsets">Sparse Fieldsets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
+by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
+the attributes <code>name</code> and <code>born</code>, and a movie would have the attributes <code>title</code> and <code>rating</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
+director.setMovies(Collections.singletonList(movie));
+
+final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(EntityModel.of(director))
+                .fields("directors", "name")
+                .fields("movies", "title")
+                .relationship("movies", movie)
+                .included(movie)
+                .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So, only the name attribute of a director, and the title attribute
+of a movie would be serialized:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "3",
+    "type": "directors",
+    "attributes": {
+      "name": "George Lucas"
+    },
+    "relationships": {
+      "movies": {
+        "data": {
+          "id": "1",
+          "type": "movies"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
+that should be applied to a specific JSON:API type, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the following controller code, you could check the existence of these request parameters, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors != null) {
+    builder = builder.fields("directors", fieldsDirectors);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When adding sparse fieldsets to the builder, they will NOT automatically exclude added relationships.
+Relationships have to be added conditionally, like the inclusions, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+    builder = builder.relationship("movies", director.getMovies());
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Creating">Creating Resources with HTTP POST</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
+For example, a <code>POST</code> with the body:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "Batman Begins"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> automatically.
+You can also create REST resources that contain <code>JSON:API relationships</code>.
+You just have to annotate the underlying domain model class, with <code>JsonApiRelationships(&lt;relationship name&gt;)</code></p>
+</div>
+<div class="paragraph">
+<p>For example, a <code>POST</code> with the body:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "directors"
+          },
+          {
+            "id": "2",
+            "type": "directors"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> with a filled list of directors,
+where ONLY the id attribute of each director is set.
+The REST controller then has to interpret those relationships and bind the
+real director objects to the movie.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of a class using the annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithDirectors extends Movie {
+    @JsonApiType
+    String myType = "movies";
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;Director&gt; directors;
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you use the annotation <code>JsonApiRelationships</code> on an attribute of a Java class,
+the content will NOT be serialized automatically to <code>JSON:API relationships</code>. This is on purpose,
+please use the <code>JsonApiModelBuilder</code> to decide, which relationships and included objects you want to return.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deserialization_of_jsonapi_types">Deserialization of JSON:API types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
+those fields are also filled during deserialization.
+This is also true for relationships, if the relationship entity contains an explicit <code>@JsonApiType</code>
+annotation.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class DirectorWithType {
+    private String id;
+    private String name;
+
+    @JsonApiType
+    private  String directorType;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+public class MovieWithTypedDirectors {
+    private String id;
+    private String title;
+
+    @JsonApiType
+    String myType;
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;DirectorWithType&gt; directors;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the following JSON</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "director-type-1"
+          },
+          {
+            "id": "2",
+            "type": "director-type-2"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be deserialized to a <code>MovieWithTypedDirectors</code> where myType is "movies"
+and 2 (empty) <code>DirectorWithType</code> objects.
+The first <code>DirectorWithType</code> object with id = '1' and directorType = "director-type-1",
+the second <code>DirectorWithType</code> object with id = '2' and directorType = "director-type-2",</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Currently, only <code>List</code> and <code>Set</code> are supported collection classes.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="polymorphy">Polymorphic Deserialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can configure polymorphic deserialization on a 'per class' base,
+using some Jackson annotations. The following example illustrates this:</p>
+</div>
+<div class="paragraph">
+<p>Imagine a controller method like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@PostMapping("/movies")
+public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and a subclass of <code>Movie</code> that contains a rating, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+@Data
+@JsonApiTypeForClass("movies")
+public class MovieWithRating extends Movie {
+    private double rating;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You could now annotate the <code>Movie</code> class with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a HTTP POST to /movies with body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller
+method accepts the superclass <code>Movie</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+@-members will be introduced in JSON:API version 1.1.
+The above example will produce JSON that is not compliant with JSON:API 1.0.
+For JSON:API 1.0 compliance you could configure Jackson like
+<code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+From the JSON:API 1.1 spec:
+&#8230;&#8203;because @-Members must be ignored when interpreting that definition,
+an @-Member that occurs in an attributes object is not an attribute.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Important: The above mechanism is also used for serialization, so you could set
+the JSON:API <code>type</code> attribute (within data) to a more generic type, but still serialize the
+<code>@type</code> attribute to indicate the specialized type.
+So the JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "3",
+    "type": "movies",
+    "attributes": {
+      "@type": "movieWithRating",
+      "title": "Batman Begins",
+      "rating": 8.2
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/3"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_polymorphic_deserialization_of_relationships">Polymorphic Deserialization of Relationships</h3>
+<div class="paragraph">
+<p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
+Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class PolymorphicRelationEntity {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    @JsonApiRelationships("superEntities")
+    @JsonIgnore
+    @Getter
+    private List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
+        @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
+})
+public interface SuperEntity&lt;T&gt; {
+    T getT();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEntity&lt;T&gt; {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    @Override
+    public T getT() {
+        return null;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
+public class SuperEChild2 implements SuperEntity&lt;String&gt; {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    private String extraAttribute = "";
+
+    @Override
+    public String getT() {
+        return null;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "poly123",
+    "type": "polymorphicRelationEntity",
+    "relationships": {
+      "superEntities": {
+        "data": [
+          {
+            "id": "456",
+            "type": "superEChild"
+          },
+          {
+            "id": "789",
+            "type": "superEChild2"
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an <code>PolymorphicRelationEntity</code> with 2 relationships,
+the first one of Class <code>SuperEChild</code>, the second one of class <code>SuperEChild2</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Right now there is the restriction, that the type attribute of both
+<code>SuperEChild</code> and <code>SuperEChild2</code> has to be <code>type</code>. E.g. <code>_type</code> would not work.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration">Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several options how to change the output of the JSON:API rendering.</p>
+</div>
+<div class="paragraph">
+<p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
+Currently, you can configure</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if the JSON:API version should be rendered automatically, the default is <code>false</code>.</p>
+</li>
+<li>
+<p>if JSON:API types should be rendered as pluralized or non pluralized class names.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is pluralized.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if JSON:API types should be rendered as lower cased or original class names.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is lower cased.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if page information of a PagedModel should be rendered automatically as JSON:API meta object.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is <code>true</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
+representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
+should get the <code>JSON:API type</code> of the super class. See example below.</p>
+</li>
+<li>
+<p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Since the JSON:API recommendation contains square brackets in the request parameter names,
+make sure you provide the following configuration in your Spring <code>application.properties</code> when using Tomcat:
+<code>server.tomcat.relaxed-query-chars= [,]</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is an example how you would implement a JSON:API configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+            .withJsonApiVersionRendered(true)
+            .withPluralizedTypeRendered(false)
+            .withLowerCasedTypeRendered(false)
+            .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+            .withObjectMapperCustomizer(
+                    objectMapper -&gt; objectMapper.configure(
+                            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="errors">Error Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
+</div>
+<div class="paragraph">
+<p>Here is an example how to produce an error response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
+        JsonApiErrors.create().withError(
+                JsonApiError.create()
+                        .withAboutLink("http://movie-db.com/problem")
+                        .withTitle("Movie-based problem")
+                        .withStatus(HttpStatus.BAD_REQUEST.toString())
+                        .withDetail("This is a test case")));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result would be rendered as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "errors": [
+    {
+      "links": {
+        "about": "http://movie-db.com/problem"
+      },
+      "status": "400 BAD_REQUEST",
+      "title": "Movie-based problem",
+      "detail": "This is a test case"
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.17.0-SNAPSHOT<br>
+Last updated 2021-03-28 17:40:06 UTC
+</div>
+</div>
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+</body>
+</html>
