@@ -1,9 +1,0 @@
-[[fundamentals]]
-= Fundamentals
-
-For further understanding of this document, please be aware of both
-
-* the https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/[Spring HATEOAS documentation]
-* the https://jsonapi.org/format/[JSON:API Specification]
-
-The following documentation assumes that the reader knows above documents.

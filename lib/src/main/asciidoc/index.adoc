@@ -2,9 +2,23 @@
 Kai Tödter
 :revnumber: {version}
 :revdate: {localdate}
-:toc: left
+:doctype: book
+:docinfo: shared
 :hide-uri-scheme:
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:sectlinks:
+:sectnums:
 :source-highlighter: highlightjs
+:toc: left
+:toclevels: 5
+:code-dir: ../../../src/docs/java/com/toedter/spring/hateoas/jsonapi
+:resource-dir: json
+:test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
+:test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
+:example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
 
 This project provides JSON:API media type support for Spring HATEOAS.
 
@@ -12,5 +26,8 @@ This project provides JSON:API media type support for Spring HATEOAS.
 
 NOTE: Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
 
-include::fundamentals.adoc[leveloffset=+1]
-include::jsonapi.adoc[leveloffset=+1]
+include::introduction.adoc[leveloffset=+1]
+include::setup.adoc[leveloffset=+1]
+include::server-side-support.adoc[leveloffset=+1]
+include::configuration.adoc[leveloffset=+1]
+

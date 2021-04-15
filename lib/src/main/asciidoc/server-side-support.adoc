@@ -1,43 +1,13 @@
-[[mediatypes.jsonapi]]
-= JSON:API
 :code-dir: ../../../src/docs/java/com/toedter/spring/hateoas/jsonapi
 :resource-dir: json
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 :test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
 :example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
 
-https://jsonapi.org/[JSON:API] is a widely adapted hypermedia format.
-You can find a list of implementations and tools https://jsonapi.org/implementations/[here].
-Answers to a few questions, e.g. related to HAL, you can find
-https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
+[[server-side-support]]
+= Server Side support
 
-Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
-
-[source, json]
-----
-include::{resource-dir}/jsonapi-sample.json[]
-----
-
-== Integration in your Backends
-
-To enable the JSON:API media type you just need to add this module as a dependency to your project.
-
-Maven:
-[source,xml]
-<dependency>
-    <groupId>com.toedter</groupId>
-    <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>0.16.1</version>
-</dependency>
-
-Gradle:
-[source]
-implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'
-
-The latest published snapshot version is `0.17.0-SNAPSHOT`.
-If you want to try it out, please make sure to add https://oss.sonatype.org/content/repositories/snapshots/
-as repository to your Maven or Gradle configuration.
-
+[[representation-models]]
 == Representation Models
 
 All Spring HATEOAS representation models are rendered as JSON:API.
@@ -63,7 +33,8 @@ of the corresponding REST collection resource.
 
 NOTE: You can configure if you want to use non-pluralized class names, see <<configuration>>
 
-== Annotations ==
+[[annotations]]
+== Annotations
 
 The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.
@@ -111,7 +82,8 @@ Then, `EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))` will be rende
 include::{test-resources-dir}/movieEntityModelWithAnnotations.json[]
 ----
 
-== JSON:API Builder ==
+
+== JSON:API Builder
 
 If you want to use JSON:API `relationships` or `included` data, you can use the
 `JsonApiModelBuilder`. The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
@@ -207,8 +179,8 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
-[[Inclusion]]
-== Inclusion of related Resources ==
+[[inclusion]]
+== Inclusion of related Resources
 
 There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like
@@ -227,7 +199,7 @@ include::{example-code-dir}/movie/MovieController.java[tags=relationship-inclusi
 Duplicated included directors will be eliminated automatically.
 
 [[Nesting]]
-== Nesting of JsonApiModels ==
+== Nesting of JsonApiModels
 
 When using the model builder, ``JsonApiModel`` instances can be used as model and included
 resources. Here is an example that also illustrates the different levels of meta.
@@ -244,8 +216,8 @@ This model will be rendered as
 include::{test-resources-dir}/movieWithAllMetaLevels.json[]
 ----
 
-[[SparseFielsets]]
-== Sparse Fieldsets ==
+[[sparse-fielsets]]
+== Sparse Fieldsets
 
 Sparse fieldsets are supported for attributes within `data` and `included`. You can add sparse fieldsets
 by using the `JsonApiBuilder`. The following example illustrates the build, assuming a director would have
@@ -282,12 +254,12 @@ When adding sparse fieldsets to the builder, they will NOT automatically exclude
 Relationships have to be added conditionally, like the inclusions, for example:
 
 [source, java]
-if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies")) {
     builder = builder.relationship("movies", director.getMovies());
 }
 
 [[Creating]]
-== Creating Resources with HTTP POST ==
+== Creating Resources with HTTP POST
 
 To create new REST resources using HTTP POST, you can provide `JSON:API` formatted JSON as input.
 For example, a `POST` with the body:
@@ -448,39 +420,8 @@ the first one of Class `SuperEChild`, the second one of class `SuperEChild2`.
 NOTE: Right now there is the restriction, that the type attribute of both
 `SuperEChild` and `SuperEChild2` has to be `type`. E.g. `_type` would not work.
 
-[[configuration]]
-== Configuration ==
-
-There are several options how to change the output of the JSON:API rendering.
-
-For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
-Currently, you can configure
-
-* if the JSON:API version should be rendered automatically, the default is `false`.
-* if JSON:API types should be rendered as pluralized or non pluralized class names.
-** The default is pluralized.
-* if JSON:API types should be rendered as lower cased or original class names.
-** The default is lower cased.
-* if page information of a PagedModel should be rendered automatically as JSON:API meta object.
-** The default is `true`.
-* if a specific Java class should be rendered with a specific `JSON:API type`. This is useful when
-representation model classes should get the `JSON:API type` of the domain model or when derived classes
-should get the `JSON:API type` of the super class. See example below.
-* A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
-
-NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
-make sure you provide the following configuration in your Spring `application.properties` when using Tomcat:
-`server.tomcat.relaxed-query-chars= [,]`
-
-Here is an example how you would implement a JSON:API configuration:
-
-[source, java, indent=0]
-----
-include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
-----
-
-[[errors]]
-== Error Handling ==
+[[error-handling]]
+== Error Handling
 
 To create `JSON:API` compliant error messages, you can use `JsonApiErrors` and `JsonApiError`
 
@@ -497,17 +438,3 @@ The result would be rendered as:
 ----
 include::{test-resources-dir}/errorsMvcExample.json[]
 ----
-
-
-
-
-
-
-
-
-
-
-
-
-
-

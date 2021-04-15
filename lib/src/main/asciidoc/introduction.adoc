@@ -1,0 +1,29 @@
+:resource-dir: json
+
+[[introduction]]
+= Introduction
+
+[[fundamentals]]
+== Fundamentals
+
+For further understanding of this document, please be aware of both
+
+* the https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/[Spring HATEOAS documentation]
+* the https://jsonapi.org/format/[JSON:API Specification]
+
+The following documentation assumes that the reader knows above documents.
+
+[[jsonapi]]
+== JSON:API
+
+https://jsonapi.org/[JSON:API] is a widely adapted hypermedia format.
+You can find a list of implementations and tools https://jsonapi.org/implementations/[here].
+Answers to a few questions, e.g. related to HAL, you can find
+https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
+
+Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:
+
+[source, json]
+----
+include::{resource-dir}/jsonapi-sample.json[]
+----
