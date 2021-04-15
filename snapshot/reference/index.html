@@ -10,34 +10,43 @@
 <link rel="stylesheet" href="css/spring.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article toc2 toc-left">
+<body class="book toc2 toc-left">
 <div id="header">
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.17.0-SNAPSHOT,</span>
-<span id="revdate">2021-03-28</span>
+<span id="revdate">2021-04-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#fundamentals">Fundamentals</a></li>
-<li><a href="#mediatypes.jsonapi">JSON:API</a>
+<li><a href="#introduction">1. Introduction</a>
 <ul class="sectlevel2">
-<li><a href="#_integration_in_your_backends">Integration in your Backends</a></li>
-<li><a href="#_representation_models">Representation Models</a></li>
-<li><a href="#_annotations">Annotations</a></li>
-<li><a href="#_jsonapi_builder">JSON:API Builder</a></li>
-<li><a href="#Inclusion">Inclusion of related Resources</a></li>
-<li><a href="#Nesting">Nesting of JsonApiModels</a></li>
-<li><a href="#SparseFielsets">Sparse Fieldsets</a></li>
-<li><a href="#Creating">Creating Resources with HTTP POST</a></li>
-<li><a href="#_deserialization_of_jsonapi_types">Deserialization of JSON:API types</a></li>
-<li><a href="#polymorphy">Polymorphic Deserialization</a></li>
-<li><a href="#configuration">Configuration</a></li>
-<li><a href="#errors">Error Handling</a></li>
+<li><a href="#fundamentals">1.1. Fundamentals</a></li>
+<li><a href="#jsonapi">1.2. JSON:API</a></li>
 </ul>
 </li>
+<li><a href="#setup">2. Setup</a></li>
+<li><a href="#server-side-support">3. Server Side support</a>
+<ul class="sectlevel2">
+<li><a href="#representation-models">3.1. Representation Models</a></li>
+<li><a href="#annotations">3.2. Annotations</a></li>
+<li><a href="#jsonapi-builder">3.3. JSON:API Builder</a></li>
+<li><a href="#inclusion">3.4. Inclusion of related Resources</a></li>
+<li><a href="#Nesting">3.5. Nesting of JsonApiModels</a></li>
+<li><a href="#sparse-fielsets">3.6. Sparse Fieldsets</a></li>
+<li><a href="#Creating">3.7. Creating Resources with HTTP POST</a></li>
+<li><a href="#deserialization-of-jsonapi-types">3.8. Deserialization of JSON:API types</a></li>
+<li><a href="#polymorphy">3.9. Polymorphic Deserialization</a>
+<ul class="sectlevel3">
+<li><a href="#polymorphic-deserialization-of-relationships">3.9.1. Polymorphic Deserialization of Relationships</a></li>
+</ul>
+</li>
+<li><a href="#error-handling">3.10. Error Handling</a></li>
+</ul>
+</li>
+<li><a href="#configuration">4. Configuration</a></li>
 </ul>
 </div>
 </div>
@@ -65,8 +74,10 @@ Copies of this document may be made for your own use and for distribution to oth
 </div>
 </div>
 <div class="sect1">
-<h2 id="fundamentals">Fundamentals</h2>
+<h2 id="introduction"><a class="anchor" href="#introduction"></a><a class="link" href="#introduction">1. Introduction</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a><a class="link" href="#fundamentals">1.1. Fundamentals</a></h3>
 <div class="paragraph">
 <p>For further understanding of this document, please be aware of both</p>
 </div>
@@ -84,10 +95,8 @@ Copies of this document may be made for your own use and for distribution to oth
 <p>The following documentation assumes that the reader knows above documents.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="mediatypes.jsonapi">JSON:API</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="jsonapi"><a class="anchor" href="#jsonapi"></a><a class="link" href="#jsonapi">1.2. JSON:API</a></h3>
 <div class="paragraph">
 <p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
 You can find a list of implementations and tools <a href="https://jsonapi.org/implementations/">here</a>.
@@ -156,8 +165,12 @@ Answers to a few questions, e.g. related to HAL, you can find
 }</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_integration_in_your_backends">Integration in your Backends</h3>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setup"><a class="anchor" href="#setup"></a><a class="link" href="#setup">2. Setup</a></h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
@@ -187,8 +200,12 @@ If you want to try it out, please make sure to add <a href="https://oss.sonatype
 as repository to your Maven or Gradle configuration.</p>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a><a class="link" href="#server-side-support">3. Server Side support</a></h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_representation_models">Representation Models</h3>
+<h3 id="representation-models"><a class="anchor" href="#representation-models"></a><a class="link" href="#representation-models">3.1. Representation Models</a></h3>
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
 Consider a simple Movie Class as base for a Spring HATEOAS entity model:</p>
@@ -244,7 +261,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="_annotations">Annotations</h3>
+<h3 id="annotations"><a class="anchor" href="#annotations"></a><a class="link" href="#annotations">3.2. Annotations</a></h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.</p>
@@ -374,7 +391,7 @@ public class Movie2 {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_jsonapi_builder">JSON:API Builder</h3>
+<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a><a class="link" href="#jsonapi-builder">3.3. JSON:API Builder</a></h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
@@ -723,7 +740,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="Inclusion">Inclusion of related Resources</h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a><a class="link" href="#inclusion">3.4. Inclusion of related Resources</a></h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
@@ -752,7 +769,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Nesting">Nesting of JsonApiModels</h3>
+<h3 id="Nesting"><a class="anchor" href="#Nesting"></a><a class="link" href="#Nesting">3.5. Nesting of JsonApiModels</a></h3>
 <div class="paragraph">
 <p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
@@ -839,7 +856,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="SparseFielsets">Sparse Fieldsets</h3>
+<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a><a class="link" href="#sparse-fielsets">3.6. Sparse Fieldsets</a></h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
 by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
@@ -921,14 +938,14 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies")) {
     builder = builder.relationship("movies", director.getMovies());
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating">Creating Resources with HTTP POST</h3>
+<h3 id="Creating"><a class="anchor" href="#Creating"></a><a class="link" href="#Creating">3.7. Creating Resources with HTTP POST</a></h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
@@ -1021,7 +1038,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deserialization_of_jsonapi_types">Deserialization of JSON:API types</h3>
+<h3 id="deserialization-of-jsonapi-types"><a class="anchor" href="#deserialization-of-jsonapi-types"></a><a class="link" href="#deserialization-of-jsonapi-types">3.8. Deserialization of JSON:API types</a></h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1114,7 +1131,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy">Polymorphic Deserialization</h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a><a class="link" href="#polymorphy">3.9. Polymorphic Deserialization</a></h3>
 <div class="paragraph">
 <p>You can configure polymorphic deserialization on a 'per class' base,
 using some Jackson annotations. The following example illustrates this:</p>
@@ -1216,7 +1233,7 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_polymorphic_deserialization_of_relationships">Polymorphic Deserialization of Relationships</h4>
+<h4 id="polymorphic-deserialization-of-relationships"><a class="anchor" href="#polymorphic-deserialization-of-relationships"></a><a class="link" href="#polymorphic-deserialization-of-relationships">3.9.1. Polymorphic Deserialization of Relationships</a></h4>
 <div class="paragraph">
 <p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
 Here is an example:</p>
@@ -1333,7 +1350,49 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration">Configuration</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a><a class="link" href="#error-handling">3.10. Error Handling</a></h3>
+<div class="paragraph">
+<p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
+</div>
+<div class="paragraph">
+<p>Here is an example how to produce an error response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return ResponseEntity.badRequest().body(
+        JsonApiErrors.create().withError(
+                JsonApiError.create()
+                        .withAboutLink("http://movie-db.com/problem")
+                        .withTitle("Movie-based problem")
+                        .withStatus(HttpStatus.BAD_REQUEST.toString())
+                        .withDetail("This is a test case")));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result would be rendered as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "errors": [
+    {
+      "links": {
+        "about": "http://movie-db.com/problem"
+      },
+      "status": "400 BAD_REQUEST",
+      "title": "Movie-based problem",
+      "detail": "This is a test case"
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration"><a class="anchor" href="#configuration"></a><a class="link" href="#configuration">4. Configuration</a></h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>There are several options how to change the output of the JSON:API rendering.</p>
 </div>
@@ -1419,52 +1478,12 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="errors">Error Handling</h3>
-<div class="paragraph">
-<p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
-</div>
-<div class="paragraph">
-<p>Here is an example how to produce an error response:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return ResponseEntity.badRequest().body(
-        JsonApiErrors.create().withError(
-                JsonApiError.create()
-                        .withAboutLink("http://movie-db.com/problem")
-                        .withTitle("Movie-based problem")
-                        .withStatus(HttpStatus.BAD_REQUEST.toString())
-                        .withDetail("This is a test case")));</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The result would be rendered as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-  "errors": [
-    {
-      "links": {
-        "about": "http://movie-db.com/problem"
-      },
-      "status": "400 BAD_REQUEST",
-      "title": "Movie-based problem",
-      "detail": "This is a test case"
-    }
-  ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-03-28 17:40:06 UTC
+Last updated 2021-04-15 14:53:59 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
