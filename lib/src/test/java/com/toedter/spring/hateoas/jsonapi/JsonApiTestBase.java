@@ -23,13 +23,14 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Kai Toedter
  */
-abstract class JsonApiTestBase {
+public abstract class JsonApiTestBase {
     void compareWithFile(String json, String fileName) throws Exception {
         String fileContent = readFile(fileName);
         assertThat(json).isEqualTo(fileContent);
@@ -40,5 +41,9 @@ abstract class JsonApiTestBase {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         return objectMapper.readValue(file, JsonNode.class).toString();
+    }
+
+    InputStream getStream(String fileName) throws IOException {
+        return new ClassPathResource(fileName, getClass()).getInputStream();
     }
 }

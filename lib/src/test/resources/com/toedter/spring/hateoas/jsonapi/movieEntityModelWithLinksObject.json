@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "http://localhost/movies/1"
+    }
+  }
+}

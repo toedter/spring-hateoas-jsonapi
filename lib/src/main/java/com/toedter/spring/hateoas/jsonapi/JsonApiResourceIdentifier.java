@@ -250,8 +250,8 @@ class JsonApiResourceIdentifier {
                 field.set(object, value);
             }
         } catch (Exception e) {
-            throw new IllegalStateException("Cannot set JSON:API field" + name +
-                    " on object of type " + object.getClass().getSimpleName());
+            throw new IllegalStateException("Cannot set JSON:API field '" + name +
+                    "' on object of type " + object.getClass().getSimpleName());
         }
     }
 }

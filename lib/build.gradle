@@ -51,6 +51,7 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    testImplementation 'net.jadler:jadler-all:1.3.0'
 
     docs "io.spring.docresources:spring-doc-resources:0.2.2.RELEASE@zip"
 }

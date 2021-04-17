@@ -11,7 +11,7 @@
 == Representation Models
 
 All Spring HATEOAS representation models are rendered as JSON:API.
-Consider a simple Movie Class as base for a Spring HATEOAS entity model:
+Consider a simple Movie class as base for a Spring HATEOAS entity model:
 
 [source, java]
 ----
@@ -296,6 +296,7 @@ NOTE: If you use the annotation `JsonApiRelationships` on an attribute of a Java
 the content will NOT be serialized automatically to `JSON:API relationships`. This is on purpose,
 please use the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
 
+[[server-deserialization]]
 == Deserialization of JSON:API types ==
 
 If entities contain an explicit `@JsonApiType` field annotation,

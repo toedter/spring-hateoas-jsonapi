@@ -1,0 +1,53 @@
+:test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
+:test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
+
+[[client-side-support]]
+= Client Side support
+
+[[deserialization]]
+== Deserialization
+
+Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+models are supported.
+
+For example, a JSON structured like
+
+[source, json]
+include::{test-resources-dir}/movieEntityModelWithLinks.json[]
+
+would be deserialized to an object of class `EntityModel<Movie>`,
+where the `Movie` class looks like
+
+[source, java]
+----
+include::{test-dir}/support/Movie.java[tags=Movie]
+----
+
+Please be aware that the deserialization mechanism is currently not able to deserialize all types of
+complex JSON:API structures that can be build with JSON:API model builder.
+
+Examples for deserialization of relationships you find in the section <<server-deserialization>>.
+
+[[traverson]]
+== Traverson
+
+The hypermedia type `application/vnd.api+json` is currently not usable with the `Traverson`
+implementation provided through {spring-hateoas-url}[Spring HATEOAS].
+
+[[link-discovery]]
+== Link Discovery
+
+When working with hypermedia enabled representations, a common task is to find a link with a particular relation
+type in it.
+{spring-hateoas-url}[Spring HATEOAS] provides JsonPath-based implementations of the `LinkDiscoverer` interface
+for the configured hypermedia types.
+When using this library, an instance supporting this hypermedia type (`application/vnd.api+json`)
+is exposed as a Spring bean.
+
+Alternatively, you can set up and use an instance as follows
+(`source` is the exact JSON you saw in the <<deserialization>> section):
+
+[source,java, indent=0]
+----
+include::{test-dir}/JsonApiLinkDiscovererUnitTest.java[tags=link-discoverer]
+----
