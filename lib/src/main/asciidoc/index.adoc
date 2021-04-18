@@ -26,7 +26,17 @@ This project provides JSON:API media type support for Spring HATEOAS.
 
 (C) 2021 The original authors.
 
-NOTE: Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
+NOTE: Copies of this document may be made for your own use and for distribution to others, provided that you do not
+charge any fee for such copies and further provided that each copy contains this Copyright Notice,
+whether distributed in print or electronically.
+
+[project-meta]
+== Project Metadata
+
+* Version control: https://github.com/toedter/spring-hateoas-jsonapi
+* Bugtracker: https://github.com/toedter/spring-hateoas-jsonapi/issues
+* Release repository: Maven Central (https://repo1.maven.org/maven2)
+* Snapshot repository: https://oss.sonatype.org/content/repositories/snapshots/
 
 include::introduction.adoc[leveloffset=+1]
 include::setup.adoc[leveloffset=+1]
