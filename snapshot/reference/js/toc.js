@@ -12,7 +12,7 @@ if (toctitle != null) {
         headingSelector: 'h1, h2, h3, h4, h5',
         positionFixedSelector: 'body',
         fixedSidebarOffset: 90,
-        smoothScroll: false
+        scrollSmooth: false
     });
     if (!path.endsWith("index.html") && !path.endsWith("/")) {
         var link = document.createElement("a");
