@@ -7,16 +7,32 @@
 <meta name="generator" content="Asciidoctor 2.0.10">
 <meta name="author" content="Kai Tödter">
 <title>JSON:API for Spring HATEOAS</title>
-<link rel="stylesheet" href="css/spring.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script>
+    <script defer src="js/site.js"></script>
 </head>
-<body class="book toc2 toc-left">
+<body class="book toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
 <div id="header">
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.17.0-SNAPSHOT,</span>
-<span id="revdate">2021-04-18</span>
+<span id="revdate">2021-04-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -74,9 +90,7 @@
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Copies of this document may be made for your own use and for distribution to others, provided that you do not
-charge any fee for such copies and further provided that each copy contains this Copyright Notice,
-whether distributed in print or electronically.
+Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
 </td>
 </tr>
 </table>
@@ -84,7 +98,7 @@ whether distributed in print or electronically.
 </div>
 </div>
 <div class="sect1">
-<h2 id="project-metadata"><a class="anchor" href="#project-metadata"></a><a class="link" href="#project-metadata">Project Metadata</a></h2>
+<h2 id="project-metadata"><a class="anchor" href="#project-metadata"></a>Project Metadata</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -105,10 +119,10 @@ whether distributed in print or electronically.
 </div>
 </div>
 <div class="sect1">
-<h2 id="introduction"><a class="anchor" href="#introduction"></a><a class="link" href="#introduction">1. Introduction</a></h2>
+<h2 id="introduction"><a class="anchor" href="#introduction"></a>1. Introduction</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a><a class="link" href="#fundamentals">1.1. Fundamentals</a></h3>
+<h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
 <p>JSON:API for Spring HATEOAS is based on version 1.2.5 of Spring HATEOAS.
 For further understanding of this document, please be aware of both</p>
@@ -124,11 +138,13 @@ For further understanding of this document, please be aware of both</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following documentation assumes that the reader knows above documents.</p>
+<p>The following documentation assumes that the reader knows above documents.
+Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
+to expand the unfolded source code.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="jsonapi"><a class="anchor" href="#jsonapi"></a><a class="link" href="#jsonapi">1.2. JSON:API</a></h3>
+<h3 id="jsonapi"><a class="anchor" href="#jsonapi"></a>1.2. JSON:API</h3>
 <div class="paragraph">
 <p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
 You can find a list of implementations and tools <a href="https://jsonapi.org/implementations/">here</a>.
@@ -140,7 +156,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "jsonapi": {
     "version": "1.0"
   },
@@ -201,29 +217,25 @@ Answers to a few questions, e.g. related to HAL, you can find
 </div>
 </div>
 <div class="sect1">
-<h2 id="setup"><a class="anchor" href="#setup"></a><a class="link" href="#setup">2. Setup</a></h2>
+<h2 id="setup"><a class="anchor" href="#setup"></a>2. Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
-<div class="paragraph">
-<p>Maven:</p>
-</div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Maven</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
     &lt;version&gt;0.16.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Gradle:</p>
-</div>
-<div class="listingblock">
+<div class="listingblock secondary">
+<div class="title">Gradle</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'</code></pre>
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -234,24 +246,26 @@ as repository to your Maven or Gradle configuration.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a><a class="link" href="#server-side-support">3. Server Side support</a></h2>
+<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a>3. Server Side support</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="representation-models"><a class="anchor" href="#representation-models"></a><a class="link" href="#representation-models">3.1. Representation Models</a></h3>
+<h3 id="representation-models"><a class="anchor" href="#representation-models"></a>3.1. Representation Models</h3>
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
 Consider a simple Movie class as base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class Movie {
+
+</span><span class="fold-block">public class Movie {
     private String id;
     private String title;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,7 +273,7 @@ public class Movie {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -293,7 +307,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="annotations"><a class="anchor" href="#annotations"></a><a class="link" href="#annotations">3.2. Annotations</a></h3>
+<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.2. Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.</p>
@@ -392,17 +406,19 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Getter
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Movie2 {
+
+</span><span class="fold-block">public class Movie2 {
     @Id
     private String myId;
     private String title;
     @JsonApiType
     private String type;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -410,7 +426,7 @@ public class Movie2 {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "my-movies",
@@ -423,19 +439,19 @@ public class Movie2 {
 </div>
 </div>
 <div class="sect2">
-<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a><a class="link" href="#jsonapi-builder">3.3. JSON:API Builder</a></h3>
+<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.3. JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();</code></pre>
 </div>
 </div>
@@ -445,14 +461,16 @@ A simple <code>Director</code> class could look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class Director {
+
+</span><span class="fold-block">public class Director {
     private String id;
     private String name;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -460,8 +478,9 @@ public class Director {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "Star Wars");
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 Director director = new Director("1", "George Lucas");
+
 final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(movie)
@@ -474,7 +493,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -500,7 +519,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">final RepresentationModel&lt;?&gt; jsonApiModel =
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(EntityModel.of(movie))
                 .relationshipWithDataArray("directors")
@@ -513,7 +532,7 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -542,7 +561,7 @@ So,</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">final RepresentationModel&lt;?&gt; jsonApiModel =
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(EntityModel.of(movie))
                 .relationship("directors", Collections.singletonList(director))
@@ -563,7 +582,7 @@ you can build included <code>director</code> resources like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
 Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
@@ -584,7 +603,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -638,7 +657,7 @@ The builder supports adding both pagination metadata and pagination links.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Movie movie = new Movie("1", "The Matrix");
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "The Matrix");
 Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
@@ -684,7 +703,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": [
     {
       "id": "1",
@@ -772,14 +791,14 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="inclusion"><a class="anchor" href="#inclusion"></a><a class="link" href="#inclusion">3.4. Inclusion of related Resources</a></h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.4. Inclusion of related Resources</h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RequestParam(value = "included", required = false) String[] included)</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "included", required = false) String[] included)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -788,7 +807,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
+<pre class="highlight"><code class="language-java" data-lang="java">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
     HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
@@ -801,14 +820,14 @@ and the builder could be used for the inclusion, like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Nesting"><a class="anchor" href="#Nesting"></a><a class="link" href="#Nesting">3.5. Nesting of JsonApiModels</a></h3>
+<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.5. Nesting of JsonApiModels</h3>
 <div class="paragraph">
 <p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Director director = new Director("3", "George Lucas");
+<pre class="highlight"><code class="language-java" data-lang="java">Director director = new Director("3", "George Lucas");
 final RepresentationModel&lt;?&gt; directorModel =
         jsonApiModel()
                 .model(EntityModel.of(director))
@@ -843,7 +862,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -888,7 +907,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a><a class="link" href="#sparse-fielsets">3.6. Sparse Fieldsets</a></h3>
+<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.6. Sparse Fieldsets</h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
 by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
@@ -896,7 +915,7 @@ the attributes <code>name</code> and <code>born</code>, and a movie would have t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
+<pre class="highlight"><code class="language-java" data-lang="java">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
 DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
 director.setMovies(Collections.singletonList(movie));
 
@@ -916,7 +935,7 @@ of a movie would be serialized:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "3",
     "type": "directors",
@@ -950,7 +969,7 @@ that should be applied to a specific JSON:API type, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
 @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)</code></pre>
 </div>
 </div>
@@ -959,7 +978,7 @@ that should be applied to a specific JSON:API type, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors != null) {
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors != null) {
     builder = builder.fields("directors", fieldsDirectors);
 }</code></pre>
 </div>
@@ -970,21 +989,21 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies")) {
+<pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies")) {
     builder = builder.relationship("movies", director.getMovies());
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating"><a class="anchor" href="#Creating"></a><a class="link" href="#Creating">3.7. Creating Resources with HTTP POST</a></h3>
+<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.7. Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "type": "movies",
     "attributes": {
@@ -1004,7 +1023,7 @@ You just have to annotate the underlying domain model class, with <code>JsonApiR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "type": "movies",
     "attributes": {
@@ -1039,19 +1058,21 @@ real director objects to the movie.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class MovieWithDirectors extends Movie {
+
+</span><span class="fold-block">public class MovieWithDirectors extends Movie {
     @JsonApiType
     String myType = "movies";
 
     @JsonIgnore
     @JsonApiRelationships("directors")
     List&lt;Director&gt; directors;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1070,7 +1091,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a><a class="link" href="#server-deserialization">3.8. Deserialization of JSON:API types</a></h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.8. Deserialization of JSON:API types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1082,26 +1103,29 @@ annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class DirectorWithType {
+
+</span><span class="fold-block">public class DirectorWithType {
     private String id;
     private String name;
 
     @JsonApiType
     private  String directorType;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class MovieWithTypedDirectors {
+
+</span><span class="fold-block">public class MovieWithTypedDirectors {
     private String id;
     private String title;
 
@@ -1111,7 +1135,8 @@ public class MovieWithTypedDirectors {
     @JsonIgnore
     @JsonApiRelationships("directors")
     List&lt;DirectorWithType&gt; directors;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1119,7 +1144,7 @@ public class MovieWithTypedDirectors {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "type": "movies",
     "attributes": {
@@ -1163,7 +1188,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a><a class="link" href="#polymorphy">3.9. Polymorphic Deserialization</a></h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.9. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>You can configure polymorphic deserialization on a 'per class' base,
 using some Jackson annotations. The following example illustrates this:</p>
@@ -1173,7 +1198,7 @@ using some Jackson annotations. The following example illustrates this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@PostMapping("/movies")
+<pre class="highlight"><code class="language-java" data-lang="java">@PostMapping("/movies")
 public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...</code></pre>
 </div>
 </div>
@@ -1182,7 +1207,7 @@ public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; mo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 @Data
 @JsonApiTypeForClass("movies")
 public class MovieWithRating extends Movie {
@@ -1195,7 +1220,7 @@ public class MovieWithRating extends Movie {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+<pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
 })</code></pre>
@@ -1206,7 +1231,7 @@ public class MovieWithRating extends Movie {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "type": "movies",
     "attributes": {
@@ -1248,7 +1273,7 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "3",
     "type": "movies",
@@ -1265,14 +1290,14 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 </div>
 </div>
 <div class="sect3">
-<h4 id="polymorphic-deserialization-of-relationships"><a class="anchor" href="#polymorphic-deserialization-of-relationships"></a><a class="link" href="#polymorphic-deserialization-of-relationships">3.9.1. Polymorphic Deserialization of Relationships</a></h4>
+<h4 id="polymorphic-deserialization-of-relationships"><a class="anchor" href="#polymorphic-deserialization-of-relationships"></a>3.9.1. Polymorphic Deserialization of Relationships</h4>
 <div class="paragraph">
 <p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
 Here is an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class PolymorphicRelationEntity {
     @JsonApiId
     private String id;
@@ -1289,7 +1314,7 @@ public class PolymorphicRelationEntity {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+<pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
         @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
@@ -1301,7 +1326,7 @@ public interface SuperEntity&lt;T&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEntity&lt;T&gt; {
     @JsonApiId
     private String id;
@@ -1318,7 +1343,7 @@ public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEn
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@NoArgsConstructor
+<pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class SuperEChild2 implements SuperEntity&lt;String&gt; {
     @JsonApiId
     private String id;
@@ -1340,7 +1365,7 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "poly123",
     "type": "polymorphicRelationEntity",
@@ -1382,7 +1407,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a><a class="link" href="#error-handling">3.10. Error Handling</a></h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.10. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -1391,7 +1416,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return ResponseEntity.badRequest().body(
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
         JsonApiErrors.create().withError(
                 JsonApiError.create()
                         .withAboutLink("http://movie-db.com/problem")
@@ -1405,7 +1430,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "errors": [
     {
       "links": {
@@ -1423,10 +1448,10 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect1">
-<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a><a class="link" href="#client-side-support">4. Client Side support</a></h2>
+<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a>4. Client Side support</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="deserialization"><a class="anchor" href="#deserialization"></a><a class="link" href="#deserialization">4.1. Deserialization</a></h3>
+<h3 id="deserialization"><a class="anchor" href="#deserialization"></a>4.1. Deserialization</h3>
 <div class="paragraph">
 <p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
 models are supported.</p>
@@ -1436,7 +1461,7 @@ models are supported.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "id": "1",
     "type": "movies",
@@ -1456,14 +1481,16 @@ where the <code>Movie</code> class looks like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Data
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class Movie {
+
+</span><span class="fold-block">public class Movie {
     private String id;
     private String title;
-}</code></pre>
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1475,14 +1502,14 @@ complex JSON:API structures that can be build with JSON:API model builder.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="traverson"><a class="anchor" href="#traverson"></a><a class="link" href="#traverson">4.2. Traverson</a></h3>
+<h3 id="traverson"><a class="anchor" href="#traverson"></a>4.2. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
 implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/1.2.5/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="link-discovery"><a class="anchor" href="#link-discovery"></a><a class="link" href="#link-discovery">4.3. Link Discovery</a></h3>
+<h3 id="link-discovery"><a class="anchor" href="#link-discovery"></a>4.3. Link Discovery</h3>
 <div class="paragraph">
 <p>When working with hypermedia enabled representations, a common task is to find a link with a particular relation
 type in it.
@@ -1497,7 +1524,7 @@ is exposed as a Spring bean.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">LinkDiscoverer discoverer = new JsonApiLinkDiscoverer();
+<pre class="highlight"><code class="language-java" data-lang="java">LinkDiscoverer discoverer = new JsonApiLinkDiscoverer();
 Links links = discoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
@@ -1508,7 +1535,7 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");</cod
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration"><a class="anchor" href="#configuration"></a><a class="link" href="#configuration">5. Configuration</a></h2>
+<h2 id="configuration"><a class="anchor" href="#configuration"></a>5. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There are several options how to change the output of the JSON:API rendering.</p>
@@ -1581,7 +1608,7 @@ make sure you provide the following configuration in your Spring <code>applicati
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Bean
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
             .withJsonApiVersionRendered(true)
@@ -1600,13 +1627,11 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-04-18 09:46:05 UTC
+Last updated 2021-04-26 15:58:07 UTC
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
-<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
-<script type="text/javascript" src="js/toc.js"></script>
+</div>
+  </div>
+</div>
 </body>
 </html>
