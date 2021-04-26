@@ -28,11 +28,13 @@ import lombok.With;
 import java.util.List;
 
 // tag::Movie-with-directors[]
+// @fold:on
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+// @fold:off
 public class MovieWithDirectors extends Movie {
     @JsonApiType
     String myType = "movies";

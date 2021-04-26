@@ -22,10 +22,12 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 // tag::Movie[]
+// @fold:on
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+// @fold:off
 public class Movie {
     private String id;
     private String title;

@@ -22,10 +22,12 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 // tag::Director[]
+// @fold:on
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+// @fold:off
 public class Director {
     private String id;
     private String name;

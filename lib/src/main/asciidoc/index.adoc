@@ -9,9 +9,10 @@ Kai Tödter
 :idprefix:
 :idseparator: -
 :sectanchors:
-:sectlinks:
+//:sectlinks:
 :sectnums:
-:source-highlighter: highlightjs
+//:source-highlighter: highlightjs
+:fold: all
 :toc: left
 :toclevels: 5
 :code-dir: ../../../src/docs/java/com/toedter/spring/hateoas/jsonapi
@@ -26,9 +27,7 @@ This project provides JSON:API media type support for Spring HATEOAS.
 
 (C) 2021 The original authors.
 
-NOTE: Copies of this document may be made for your own use and for distribution to others, provided that you do not
-charge any fee for such copies and further provided that each copy contains this Copyright Notice,
-whether distributed in print or electronically.
+NOTE: Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
 
 [project-meta]
 == Project Metadata

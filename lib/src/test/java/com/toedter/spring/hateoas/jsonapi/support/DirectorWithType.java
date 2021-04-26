@@ -23,10 +23,12 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 // tag::director-with-type[]
+// @fold:on
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+// @fold:off
 public class DirectorWithType {
     private String id;
     private String name;

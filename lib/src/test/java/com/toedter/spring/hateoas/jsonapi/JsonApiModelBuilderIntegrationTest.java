@@ -117,6 +117,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
         // tag::build-relationship[]
         Movie movie = new Movie("1", "Star Wars");
         Director director = new Director("1", "George Lucas");
+
         final RepresentationModel<?> jsonApiModel =
                 jsonApiModel()
                         .model(movie)

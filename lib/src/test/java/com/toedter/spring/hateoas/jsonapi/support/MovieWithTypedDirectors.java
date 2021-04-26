@@ -27,10 +27,12 @@ import lombok.With;
 import java.util.List;
 
 // tag::movie-with-typed-director[]
+// @fold:on
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+// @fold:off
 public class MovieWithTypedDirectors {
     private String id;
     private String title;

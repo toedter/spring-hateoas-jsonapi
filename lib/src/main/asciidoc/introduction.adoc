@@ -13,6 +13,8 @@ For further understanding of this document, please be aware of both
 * the https://jsonapi.org/format/[JSON:API Specification]
 
 The following documentation assumes that the reader knows above documents.
+Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
+to expand the unfolded source code.
 
 [[jsonapi]]
 == JSON:API

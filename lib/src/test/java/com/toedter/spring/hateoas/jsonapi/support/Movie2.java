@@ -25,10 +25,12 @@ import lombok.Setter;
 import javax.persistence.Id;
 
 // tag::Movie[]
+// @fold:on
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+// @fold:off
 public class Movie2 {
     @Id
     private String myId;
