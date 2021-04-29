@@ -30,10 +30,9 @@ import java.util.Optional;
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 /**
- * {@link LinkDiscoverer} implementation based on HAL link structure.
+ * {@link LinkDiscoverer} implementation based on JSON:API link structure.
  *
  * @author Kai Toedter
- * @author Greg Turnquist
  */
 public class JsonApiLinkDiscoverer implements LinkDiscoverer {
 
