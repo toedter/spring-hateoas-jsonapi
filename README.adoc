@@ -9,8 +9,6 @@ This is an implementation of the media type `application/vnd.api+json` (JSON:API
 to be integrated in Spring HATEOAS. Goal is to use the existing Spring HATEOAS
 representation models to serialize/deserialize them according to the JSON:API spec (see https://jsonapi.org/)
 
-This project is work in progress, please stay tuned.
-
 While an advanced usage example is part of this project,
 you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-examples.
 

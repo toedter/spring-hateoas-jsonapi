@@ -23,7 +23,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Specifies the JSON:API type of a resource object.
+ * Specifies the JSON:API type for resource objects of this class.
  *
  * @author Kai Toedter
  */
