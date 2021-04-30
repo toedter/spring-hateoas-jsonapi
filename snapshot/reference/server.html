@@ -38,7 +38,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
-Consider a simple Movie class as base for a Spring HATEOAS entity model:</p>
+Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -126,7 +126,7 @@ as convenient as possible.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>This annotation is not used for serialization but for deserialization,
+<p>This annotation is not used for serialization but deserialization,
 see <a href="#Creating">Creating Resources with HTTP POST</a> for an example.</p>
 </li>
 </ul>
@@ -442,7 +442,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="paragraph">
 <p>The following example shows the creation of a more complex
-JSON:API specific representation model with a paged model as base.
+JSON:API specific representation model with a paged model as the base.
 The builder supports adding both pagination metadata and pagination links.</p>
 </div>
 <div class="listingblock">
@@ -616,7 +616,7 @@ and the builder could be used for the inclusion, like</p>
 <h2 id="Nesting"><a class="anchor" href="#Nesting"></a>Nesting of JsonApiModels</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
+<p>When using the model builder, <code>JsonApiModel</code> instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
 </div>
 <div class="listingblock">
@@ -895,7 +895,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
-This is also true for relationships, if the relationship entity contains an explicit <code>@JsonApiType</code>
+This is also true for relationships if the relationship entity contains an explicit <code>@JsonApiType</code>
 annotation.</p>
 </div>
 <div class="paragraph">
@@ -1029,7 +1029,7 @@ public class MovieWithRating extends Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>Then a HTTP POST to /movies with body</p>
+<p>Then an HTTP POST to /movies with body</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1046,8 +1046,7 @@ public class MovieWithRating extends Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller
-method accepts the superclass <code>Movie</code>.</p>
+<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller method accepts the superclass <code>Movie</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1190,7 +1189,7 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to an <code>PolymorphicRelationEntity</code> with 2 relationships,
+<p>would be deserialized to a <code>PolymorphicRelationEntity</code> with 2 relationships,
 the first one of Class <code>SuperEChild</code>, the second one of class <code>SuperEChild2</code>.</p>
 </div>
 <div class="admonitionblock note">
@@ -1216,7 +1215,7 @@ Right now there is the restriction, that the type attribute of both
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
 <div class="paragraph">
-<p>Here is an example how to produce an error response:</p>
+<p>Here is an example of how to produce an error response:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1254,7 +1253,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-04-30 04:52:04 UTC
+Last updated 2021-04-30 16:49:55 UTC
 </div>
 </div>
 </div>

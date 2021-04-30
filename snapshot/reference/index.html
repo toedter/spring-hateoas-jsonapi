@@ -140,7 +140,7 @@ For further understanding of this document, please be aware of both</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following documentation assumes that the reader knows above documents.
+<p>The following documentation assumes that the reader knows the above documents.
 Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
 to expand the unfolded source code.</p>
 </div>
@@ -243,7 +243,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <div class="paragraph">
 <p>The latest published snapshot version is <code>0.17.0-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
-as repository to your Maven or Gradle configuration.</p>
+as a repository to your Maven or Gradle configuration.</p>
 </div>
 </div>
 </div>
@@ -254,7 +254,7 @@ as repository to your Maven or Gradle configuration.</p>
 <h3 id="representation-models"><a class="anchor" href="#representation-models"></a>3.1. Representation Models</h3>
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
-Consider a simple Movie class as base for a Spring HATEOAS entity model:</p>
+Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -340,7 +340,7 @@ as convenient as possible.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>This annotation is not used for serialization but for deserialization,
+<p>This annotation is not used for serialization but deserialization,
 see <a href="#Creating">Creating Resources with HTTP POST</a> for an example.</p>
 </li>
 </ul>
@@ -654,7 +654,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 <div class="paragraph">
 <p>The following example shows the creation of a more complex
-JSON:API specific representation model with a paged model as base.
+JSON:API specific representation model with a paged model as the base.
 The builder supports adding both pagination metadata and pagination links.</p>
 </div>
 <div class="listingblock">
@@ -824,7 +824,7 @@ and the builder could be used for the inclusion, like</p>
 <div class="sect2">
 <h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.5. Nesting of JsonApiModels</h3>
 <div class="paragraph">
-<p>When using the model builder, <code>JsonApiModel</code> instances can be used as model and included
+<p>When using the model builder, <code>JsonApiModel</code> instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
 </div>
 <div class="listingblock">
@@ -1097,7 +1097,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
-This is also true for relationships, if the relationship entity contains an explicit <code>@JsonApiType</code>
+This is also true for relationships if the relationship entity contains an explicit <code>@JsonApiType</code>
 annotation.</p>
 </div>
 <div class="paragraph">
@@ -1229,7 +1229,7 @@ public class MovieWithRating extends Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>Then a HTTP POST to /movies with body</p>
+<p>Then an HTTP POST to /movies with body</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1246,8 +1246,7 @@ public class MovieWithRating extends Movie {
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller
-method accepts the superclass <code>Movie</code>.</p>
+<p>would be deserialized to an object of class <code>MovieWithRating</code>, even though the controller method accepts the superclass <code>Movie</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1390,7 +1389,7 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to an <code>PolymorphicRelationEntity</code> with 2 relationships,
+<p>would be deserialized to a <code>PolymorphicRelationEntity</code> with 2 relationships,
 the first one of Class <code>SuperEChild</code>, the second one of class <code>SuperEChild2</code>.</p>
 </div>
 <div class="admonitionblock note">
@@ -1414,7 +1413,7 @@ Right now there is the restriction, that the type attribute of both
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
 <div class="paragraph">
-<p>Here is an example how to produce an error response:</p>
+<p>Here is an example of how to produce an error response:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1497,7 +1496,7 @@ where the <code>Movie</code> class looks like</p>
 </div>
 <div class="paragraph">
 <p>Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be build with JSON:API model builder.</p>
+complex JSON:API structures that can be built with JSON:API model builder.</p>
 </div>
 <div class="paragraph">
 <p>Examples for deserialization of relationships you find in the section <a href="#server-deserialization">Deserialization of JSON:API types</a>.</p>
@@ -1513,7 +1512,7 @@ implementation provided through <a href="https://docs.spring.io/spring-hateoas/d
 <div class="sect2">
 <h3 id="link-discovery"><a class="anchor" href="#link-discovery"></a>4.3. Link Discovery</h3>
 <div class="paragraph">
-<p>When working with hypermedia enabled representations, a common task is to find a link with a particular relation
+<p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
 <a href="https://docs.spring.io/spring-hateoas/docs/1.2.5/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
@@ -1540,7 +1539,7 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");</cod
 <h2 id="configuration"><a class="anchor" href="#configuration"></a>5. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are several options how to change the output of the JSON:API rendering.</p>
+<p>There are several options for how to change the output of the JSON:API rendering.</p>
 </div>
 <div class="paragraph">
 <p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
@@ -1562,17 +1561,17 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if JSON:API types should be rendered as lower cased or original class names.</p>
+<p>if JSON:API types should be rendered as lowercased or original class names.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The default is lower cased.</p>
+<p>The default is lowercased.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta object.</p>
+<p>if page information of a PagedModel should be rendered automatically as JSON:API meta-object.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1584,7 +1583,7 @@ Currently, you can configure</p>
 <li>
 <p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
 representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
-should get the <code>JSON:API type</code> of the super class. See example below.</p>
+should get the <code>JSON:API type</code> of the superclass. See the example below.</p>
 </li>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
@@ -1606,7 +1605,7 @@ make sure you provide the following configuration in your Spring <code>applicati
 </table>
 </div>
 <div class="paragraph">
-<p>Here is an example how you would implement a JSON:API configuration:</p>
+<p>Here is an example of how you would implement a JSON:API configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1629,7 +1628,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-04-30 04:52:04 UTC
+Last updated 2021-04-30 16:49:55 UTC
 </div>
 </div>
 </div>
