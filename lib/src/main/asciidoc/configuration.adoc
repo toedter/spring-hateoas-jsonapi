@@ -3,7 +3,7 @@
 [[configuration]]
 = Configuration =
 
-There are several options how to change the output of the JSON:API rendering.
+There are several options for how to change the output of the JSON:API rendering.
 
 For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
 Currently, you can configure
@@ -11,20 +11,20 @@ Currently, you can configure
 * if the JSON:API version should be rendered automatically, the default is `false`.
 * if JSON:API types should be rendered as pluralized or non pluralized class names.
 ** The default is pluralized.
-* if JSON:API types should be rendered as lower cased or original class names.
-** The default is lower cased.
-* if page information of a PagedModel should be rendered automatically as JSON:API meta object.
+* if JSON:API types should be rendered as lowercased or original class names.
+** The default is lowercased.
+* if page information of a PagedModel should be rendered automatically as JSON:API meta-object.
 ** The default is `true`.
 * if a specific Java class should be rendered with a specific `JSON:API type`. This is useful when
 representation model classes should get the `JSON:API type` of the domain model or when derived classes
-should get the `JSON:API type` of the super class. See example below.
+should get the `JSON:API type` of the superclass. See the example below.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
 make sure you provide the following configuration in your Spring `application.properties` when using Tomcat:
 `server.tomcat.relaxed-query-chars= [,]`
 
-Here is an example how you would implement a JSON:API configuration:
+Here is an example of how you would implement a JSON:API configuration:
 
 [source, java, indent=0]
 ----

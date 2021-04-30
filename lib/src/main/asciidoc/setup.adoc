@@ -21,4 +21,4 @@ implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'
 
 The latest published snapshot version is `0.17.0-SNAPSHOT`.
 If you want to try it out, please make sure to add https://oss.sonatype.org/content/repositories/snapshots/
-as repository to your Maven or Gradle configuration.
+as a repository to your Maven or Gradle configuration.

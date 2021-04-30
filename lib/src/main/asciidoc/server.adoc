@@ -11,7 +11,7 @@
 == Representation Models
 
 All Spring HATEOAS representation models are rendered as JSON:API.
-Consider a simple Movie class as base for a Spring HATEOAS entity model:
+Consider a simple Movie class as the base for a Spring HATEOAS entity model:
 
 [source, java]
 ----
@@ -46,7 +46,7 @@ There are four new annotations provided by this project:
 * `@JsonApiTypeForClass` to mark class to provide a JSON:API `type`
 ** The JSON:API type is a required value of this annotation
 * `@JsonApiRelationships` to mark a JSON:API `relationship`
-** This annotation is not used for serialization but for deserialization,
+** This annotation is not used for serialization but deserialization,
 see <<Creating>> for an example.
 
 The use of these annotations is optional. For the mapping of the `id`, the
@@ -164,7 +164,7 @@ include::{test-resources-dir}/movieJsonApiModelWithManyRelationshipsAndIncluded.
 ----
 
 The following example shows the creation of a more complex
-JSON:API specific representation model with a paged model as base.
+JSON:API specific representation model with a paged model as the base.
 The builder supports adding both pagination metadata and pagination links.
 
 [source, java, indent=0]
@@ -201,7 +201,7 @@ Duplicated included directors will be eliminated automatically.
 [[Nesting]]
 == Nesting of JsonApiModels
 
-When using the model builder, ``JsonApiModel`` instances can be used as model and included
+When using the model builder, ``JsonApiModel`` instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.
 
 [source, java, indent=0]
@@ -301,7 +301,7 @@ please use the `JsonApiModelBuilder` to decide, which relationships and included
 
 If entities contain an explicit `@JsonApiType` field annotation,
 those fields are also filled during deserialization.
-This is also true for relationships, if the relationship entity contains an explicit `@JsonApiType`
+This is also true for relationships if the relationship entity contains an explicit `@JsonApiType`
 annotation.
 
 Consider the following classes:
@@ -357,14 +357,13 @@ You could now annotate the `Movie` class with:
     @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
 })
 
-Then a HTTP POST to /movies with body
+Then an HTTP POST to /movies with body
 [source, json]
 ----
 include::{test-resources-dir}/postMovieWithRating.json[]
 ----
 
-would be deserialized to an object of class `MovieWithRating`, even though the controller
-method accepts the superclass `Movie`.
+would be deserialized to an object of class `MovieWithRating`, even though the controller method accepts the superclass `Movie`.
 
 NOTE: @-members will be introduced in JSON:API version 1.1.
 The above example will produce JSON that is not compliant with JSON:API 1.0.
@@ -415,7 +414,7 @@ Then a JSON like
 include::{test-resources-dir}/polymorphicRelationships.json[]
 ----
 
-would be deserialized to an `PolymorphicRelationEntity` with 2 relationships,
+would be deserialized to a `PolymorphicRelationEntity` with 2 relationships,
 the first one of Class `SuperEChild`, the second one of class `SuperEChild2`.
 
 NOTE: Right now there is the restriction, that the type attribute of both
@@ -426,7 +425,7 @@ NOTE: Right now there is the restriction, that the type attribute of both
 
 To create `JSON:API` compliant error messages, you can use `JsonApiErrors` and `JsonApiError`
 
-Here is an example how to produce an error response:
+Here is an example of how to produce an error response:
 
 [source, java, indent=0]
 ----

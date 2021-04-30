@@ -24,7 +24,7 @@ include::{test-dir}/support/Movie.java[tags=Movie]
 ----
 
 Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be build with JSON:API model builder.
+complex JSON:API structures that can be built with JSON:API model builder.
 
 Examples for deserialization of relationships you find in the section <<server-deserialization>>.
 
@@ -37,7 +37,7 @@ implementation provided through {spring-hateoas-url}[Spring HATEOAS].
 [[link-discovery]]
 == Link Discovery
 
-When working with hypermedia enabled representations, a common task is to find a link with a particular relation
+When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
 {spring-hateoas-url}[Spring HATEOAS] provides JsonPath-based implementations of the `LinkDiscoverer` interface
 for the configured hypermedia types.

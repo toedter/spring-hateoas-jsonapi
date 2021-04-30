@@ -7,7 +7,7 @@ image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", l
 = JSON:API for Spring HATEOAS
 
 This is an implementation of the media type `application/vnd.api+json` (JSON:API)
-to be integrated in Spring HATEOAS. Goal is to use the existing Spring HATEOAS
+to be integrated with Spring HATEOAS. The goal is to use the existing Spring HATEOAS
 representation models to serialize/deserialize them according to the JSON:API spec (see https://jsonapi.org/)
 
 While an advanced usage example is part of this project,
@@ -40,7 +40,7 @@ implementation 'com.toedter:spring-hateoas-jsonapi:0.16.1'
 The latest published snapshot version is `0.17.0-SNAPSHOT`.
 If you want to try it out,
 please make sure to add `https://oss.sonatype.org/content/repositories/snapshots/`
-as repository to your Maven or Gradle configuration.
+as a repository to your Maven or Gradle configuration.
 
 == Running the Example
 
@@ -50,7 +50,7 @@ as repository to your Maven or Gradle configuration.
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&included=directors&fields[movies]=title,year,rating,directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&included=directors&fields[movies]=title,year,rating,directors++]
  in your Web browser
 
-The (pretty printed) rendered result is:
+The (pretty-printed) rendered result is:
 
 [source,json]
 {
