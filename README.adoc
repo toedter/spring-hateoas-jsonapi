@@ -21,7 +21,7 @@ Here you find the documentation for the latest release and the current snapshot:
 | 0.17.0-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
 |===
 
-== Integration in your Backends
+== Integration with your Backends
 
 To enable the JSON:API media type you just need to add this module as a dependency to your project.
 
