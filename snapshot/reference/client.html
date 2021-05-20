@@ -7,8 +7,8 @@
 <meta name="generator" content="Asciidoctor 2.0.10">
 <title>Client Side support</title>
 <link rel="stylesheet" href="css/site.css">
-<script src="js/setup.js"></script>
-    <script defer src="js/site.js"></script>
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
 </head>
 <body id="client-side-support" class="article"><div id="banner-container" class="container" role="banner">
   <div id="banner" class="contained" role="banner">
@@ -116,7 +116,8 @@ is exposed as a Spring bean.</p>
 Links links = discoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
-assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");</code></pre>
+assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
+</code></pre>
 </div>
 </div>
 </div>
@@ -125,7 +126,7 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");</cod
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-05-05 20:43:00 UTC
+Last updated 2021-05-20 13:20:43 UTC
 </div>
 </div>
 </div>

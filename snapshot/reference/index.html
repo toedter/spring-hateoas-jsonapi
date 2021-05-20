@@ -8,8 +8,8 @@
 <meta name="author" content="Kai Tödter">
 <title>JSON:API for Spring HATEOAS</title>
 <link rel="stylesheet" href="css/site.css">
-<script src="js/setup.js"></script>
-    <script defer src="js/site.js"></script>
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
 </head>
 <body class="book toc2 toc-left"><div id="banner-container" class="container" role="banner">
   <div id="banner" class="contained" role="banner">
@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.17.0-SNAPSHOT,</span>
-<span id="revdate">2021-05-05</span>
+<span id="revdate">2021-05-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -448,13 +448,15 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
-final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();</code></pre>
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -487,7 +489,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
         jsonApiModel()
                 .model(movie)
                 .relationship("directors", director)
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -526,7 +529,8 @@ you can build it like:</p>
                 .model(EntityModel.of(movie))
                 .relationshipWithDataArray("directors")
                 .relationship("directors", director)
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -567,7 +571,8 @@ So,</p>
         jsonApiModel()
                 .model(EntityModel.of(movie))
                 .relationship("directors", Collections.singletonList(director))
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -597,7 +602,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
                 .relationship("relatedMovies", relatedMovie)
                 .included(director1)
                 .included(director2)
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -697,7 +703,8 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
                 .included(director3)
                 .pageMeta()
                 .pageLinks("http://localhost/movies")
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -800,7 +807,8 @@ but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "included", required = false) String[] included)</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "included", required = false) String[] included)
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -814,7 +822,8 @@ and the builder could be used for the inclusion, like</p>
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
     }
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -856,7 +865,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
                 .model(movieModel)
                 .meta("top-level-meta", "top-level-meta-value")
                 .included(directorModel)
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -928,7 +938,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
                 .fields("movies", "title")
                 .relationship("movies", movie)
                 .included(movie)
-                .build();</code></pre>
+                .build();
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -972,7 +983,8 @@ that should be applied to a specific JSON:API type, like:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
-@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)</code></pre>
+@RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors)
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -982,7 +994,8 @@ that should be applied to a specific JSON:API type, like:</p>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors != null) {
     builder = builder.fields("directors", fieldsDirectors);
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -993,7 +1006,8 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies")) {
     builder = builder.relationship("movies", director.getMovies());
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 </div>
@@ -1201,7 +1215,8 @@ using some Jackson annotations. The following example illustrates this:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@PostMapping("/movies")
-public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...</code></pre>
+public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1214,7 +1229,8 @@ public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; mo
 @JsonApiTypeForClass("movies")
 public class MovieWithRating extends Movie {
     private double rating;
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1225,7 +1241,8 @@ public class MovieWithRating extends Movie {
 <pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = MovieWithRating.class, name = "movieWithRating")
-})</code></pre>
+})
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1310,7 +1327,8 @@ public class PolymorphicRelationEntity {
     @JsonIgnore
     @Getter
     private List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1322,7 +1340,8 @@ public class PolymorphicRelationEntity {
 })
 public interface SuperEntity&lt;T&gt; {
     T getT();
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1339,7 +1358,8 @@ public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEn
     public T getT() {
         return null;
     }
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1358,7 +1378,8 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
     public String getT() {
         return null;
     }
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1423,7 +1444,8 @@ Right now there is the restriction, that the type attribute of both
                         .withAboutLink("http://movie-db.com/problem")
                         .withTitle("Movie-based problem")
                         .withStatus(HttpStatus.BAD_REQUEST.toString())
-                        .withDetail("This is a test case")));</code></pre>
+                        .withDetail("This is a test case")));
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1529,7 +1551,8 @@ is exposed as a Spring bean.</p>
 Links links = discoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
-assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");</code></pre>
+assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
+</code></pre>
 </div>
 </div>
 </div>
@@ -1619,7 +1642,8 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 </div>
@@ -1628,7 +1652,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.17.0-SNAPSHOT<br>
-Last updated 2021-05-05 20:43:00 UTC
+Last updated 2021-05-20 13:20:43 UTC
 </div>
 </div>
 </div>
