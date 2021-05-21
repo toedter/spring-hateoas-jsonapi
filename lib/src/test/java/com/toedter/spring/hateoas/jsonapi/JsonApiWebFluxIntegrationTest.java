@@ -17,11 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.toedter.spring.hateoas.jsonapi.support.WebFluxMovieController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +37,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType.HAL;
 
 /**
  * @author Kai Toedter
@@ -172,7 +167,7 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
     @Configuration
     @WebAppConfiguration
     @EnableWebFlux
-    @EnableHypermediaSupport(type = HAL)
+    @EnableHypermediaSupport(type = {})
     static class TestConfig {
         @Bean
         WebFluxMovieController movieController() {
