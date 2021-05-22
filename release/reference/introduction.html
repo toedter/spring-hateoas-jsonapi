@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Introduction</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body id="introduction" class="article"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<h1>Introduction</h1>
+<div class="details">
+<span id="revnumber">version 0.17.0</span>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="fundamentals"><a class="anchor" href="#fundamentals"></a>Fundamentals</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>JSON:API for Spring HATEOAS is based on version {spring-hateoas-version} of Spring HATEOAS.
+For further understanding of this document, please be aware of both</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the {spring-hateoas-url}[Spring HATEOAS documentation]</p>
+</li>
+<li>
+<p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following documentation assumes that the reader knows the above documents.
+Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
+to expand the unfolded source code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jsonapi"><a class="anchor" href="#jsonapi"></a>JSON:API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
+You can find a list of implementations and tools <a href="https://jsonapi.org/implementations/">here</a>.
+Answers to a few questions, e.g. related to HAL, you can find
+<a href="https://jsonapi.org/faq/#why-not-use-the-hal-specification">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Anytime a client supplies an <code>Accept</code> header with <code>application/vnd.api+json</code>, you can expect something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Shawshank Redemption",
+        "year": 1994,
+        "rating": 9.3
+      },
+      "relationships": {
+        "directors": {
+          "data": [
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ],
+          "links": {
+            "self": "http://localhost:8080/api/movies/1/relationships/directors",
+            "related": "http://localhost:8080/api/movies/1/directors"
+          }
+        }
+      },
+      "links": {
+        "self": "http://localhost:8080/api/movies/1"
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Frank Darabont"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1",
+    "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
+    "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
+  },
+  "meta": {
+    "page": {
+      "number": 0,
+      "size": 1,
+      "totalPages": 250,
+      "totalElements": 250
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.17.0<br>
+Last updated 2021-05-22 09:25:03 UTC
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
