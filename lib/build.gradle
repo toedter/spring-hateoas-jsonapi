@@ -11,7 +11,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'com.toedter'
-version = '0.17.0'
+version = '0.18.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
