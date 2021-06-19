@@ -91,6 +91,5 @@ public class Movie {
         if (updatedMovie.rank != 0) {
             this.rank = updatedMovie.rank;
         }
-
     }
 }

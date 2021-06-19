@@ -36,9 +36,10 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.empty;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @author Kai Toedter
@@ -77,5 +78,36 @@ public class JsonApiSpringBootMockMvcIntegrationTest {
                 .andExpect(jsonPath("$.data.attributes.year", is(2020)))
                 .andExpect(jsonPath("$.data.attributes.rating", is(9.3)))
                 .andExpect(jsonPath("$.links.self", is("http://localhost/api/movies/1")));
+    }
+
+
+    @Test
+    void should_post_movie() throws Exception {
+        String movieJson = "{\n" +
+                "\t\"data\": {\n" +
+                "\t\t\"type\": \"movies\",\n" +
+                "\t\t\"attributes\": {\n" +
+                "\t\t\t\"title\": \"Test Movie\",\n" +
+                "\t\t\t\"year\": 2021,\n" +
+                "\t\t\t\"imdbId\": \"imdb\",\n" +
+                "\t\t\t\"rating\": 6.5,\n" +
+                "\t\t\t\"rank\": 5\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}";
+
+        Mockito.when(movieRepository.save(any())).thenAnswer(i -> {
+            Movie movie = (Movie) i.getArguments()[0];
+            movie.setId(42L);
+            return movie;
+        });
+
+        this.mockMvc
+                .perform(post("/api/movies")
+                        .contentType(JSON_API)
+                        .content(movieJson))
+                .andExpect(status().isCreated())
+                .andExpect(header().stringValues("location", "http://localhost/api/movies/42"))
+                .andReturn();
     }
 }

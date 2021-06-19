@@ -20,19 +20,12 @@ import com.toedter.spring.hateoas.jsonapi.MediaTypes;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,5 +82,32 @@ public class JsonApiSpringBootRestTemplateIntegrationTest {
                         + "/api/movies/427\"}}";
 
         assertThat(response.getBody()).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void should_post_movie() {
+        String movieJson = "{\n" +
+                "\t\"data\": {\n" +
+                "\t\t\"type\": \"movies\",\n" +
+                "\t\t\"attributes\": {\n" +
+                "\t\t\t\"title\": \"Test Movie\",\n" +
+                "\t\t\t\"year\": 2021,\n" +
+                "\t\t\t\"imdbId\": \"imdb\",\n" +
+                "\t\t\t\"rating\": 6.5,\n" +
+                "\t\t\t\"rank\": 5\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}";
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaTypes.JSON_API_VALUE);
+        headers.set("Content-Type", MediaTypes.JSON_API_VALUE);
+
+        final HttpEntity<String> entity = new HttpEntity<>(movieJson, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity("/api/movies/", entity, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getHeaders().containsKey("Location")).isTrue();
     }
 }
