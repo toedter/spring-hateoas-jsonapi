@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
@@ -58,6 +59,9 @@ public class JsonApiWebMvcIntegrationTest {
 
     @MockBean
     private DirectorRepository directorRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void should_get_single_movie() throws Exception {
@@ -111,3 +115,4 @@ public class JsonApiWebMvcIntegrationTest {
                 .andReturn();
     }
 }
+
