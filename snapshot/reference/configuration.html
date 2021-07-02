@@ -56,11 +56,11 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if JSON:API types should be rendered as lowercased or original class names.</p>
+<p>if JSON:API types should be rendered as lowercase or original class names.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The default is lowercased.</p>
+<p>The default is lowercase.</p>
 </li>
 </ul>
 </div>
@@ -76,9 +76,13 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
-representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
-should get the <code>JSON:API type</code> of the superclass. See the example below.</p>
+<p>if a specific Java class should be rendered with a specific JSON:API type. This is useful when
+representation model classes should get the JSON:API type of the domain model or when derived classes
+should get the JSON:API type of the superclass. See the example below.</p>
+</li>
+<li>
+<p>if the above "Java class to JSON:API type" mapping should also be used for deserialization.
+This is very useful for polymorphic use cases.</p>
 </li>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
@@ -111,6 +115,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+            .withTypeForClassUsedForDeserialization(true)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -122,7 +127,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.18.0-SNAPSHOT<br>
-Last updated 2021-07-02 12:48:53 UTC
+Last updated 2021-07-02 15:18:28 UTC
 </div>
 </div>
 </div>

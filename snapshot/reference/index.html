@@ -57,7 +57,8 @@
 <li><a href="#server-deserialization">3.8. Deserialization of JSON:API types</a></li>
 <li><a href="#polymorphy">3.9. Polymorphic Deserialization</a>
 <ul class="sectlevel3">
-<li><a href="#polymorphic-deserialization-of-relationships">3.9.1. Polymorphic Deserialization of Relationships</a></li>
+<li><a href="#polymorphic-deserialization-with-jackson-annotations">3.9.1. Polymorphic Deserialization with Jackson Annotations</a></li>
+<li><a href="#polymorphic-deserialization-of-relationships">3.9.2. Polymorphic Deserialization of Relationships</a></li>
 </ul>
 </li>
 <li><a href="#error-handling">3.10. Error Handling</a></li>
@@ -1206,8 +1207,59 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 <div class="sect2">
 <h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.9. Polymorphic Deserialization</h3>
 <div class="paragraph">
-<p>You can configure polymorphic deserialization on a 'per class' base,
-using some Jackson annotations. The following example illustrates this:</p>
+<p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
+assigning a JSON:API type to a Java class and then also switching on, that the mappings should
+also be used for deserialization, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Java" data-lang="Java">@Bean
+JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+            .withTypeForClass(MovieSubclass.class, "my-movies")
+            .withTypeForClassUsedForDeserialization(true));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a POST to a controller method like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@PostMapping("/movies")
+public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; movie) { ...
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>with JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">{
+  "data": {
+    "type": "my-movies",
+    "attributes": {
+      "title": "Batman Begins"
+    }
+  }
+}
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Be aware that this mechanism overrides
+the default deserialization to an object of the class given by the REST controller method&#8217;s signature. So, if the controller accepts an
+<code>EntityModel&lt;Movie&gt;</code>, you could potentially post a JSON that the creates an <code>EntityModel&lt;Director&gt;</code> and
+enters the controller&#8217;s method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.</p>
+</div>
+<div class="sect3">
+<h4 id="polymorphic-deserialization-with-jackson-annotations"><a class="anchor" href="#polymorphic-deserialization-with-jackson-annotations"></a>3.9.1. Polymorphic Deserialization with Jackson Annotations</h4>
+<div class="paragraph">
+<p>If you want that the JSON:API type is always the same (e.g. "movies"),
+but you still want to support polymorphism,
+you can also configure polymorphic deserialization
+on a 'per class' base, using some Jackson annotations. The following example illustrates this:</p>
 </div>
 <div class="paragraph">
 <p>Imagine a controller method like</p>
@@ -1250,16 +1302,15 @@ public class MovieWithRating extends Movie {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
+<pre class="highlight"><code class="language-java" data-lang="java">{
   "data": {
-    "type": "movies",
+    "type": "my-movies",
     "attributes": {
-      "@type": "movieWithRating",
-      "title": "Batman Begins",
-      "rating": 8.2
+      "title": "Batman Begins"
     }
   }
-}</code></pre>
+}
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1307,8 +1358,9 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="polymorphic-deserialization-of-relationships"><a class="anchor" href="#polymorphic-deserialization-of-relationships"></a>3.9.1. Polymorphic Deserialization of Relationships</h4>
+<h4 id="polymorphic-deserialization-of-relationships"><a class="anchor" href="#polymorphic-deserialization-of-relationships"></a>3.9.2. Polymorphic Deserialization of Relationships</h4>
 <div class="paragraph">
 <p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
 Here is an example:</p>
@@ -1584,11 +1636,11 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if JSON:API types should be rendered as lowercased or original class names.</p>
+<p>if JSON:API types should be rendered as lowercase or original class names.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The default is lowercased.</p>
+<p>The default is lowercase.</p>
 </li>
 </ul>
 </div>
@@ -1604,9 +1656,13 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if a specific Java class should be rendered with a specific <code>JSON:API type</code>. This is useful when
-representation model classes should get the <code>JSON:API type</code> of the domain model or when derived classes
-should get the <code>JSON:API type</code> of the superclass. See the example below.</p>
+<p>if a specific Java class should be rendered with a specific JSON:API type. This is useful when
+representation model classes should get the JSON:API type of the domain model or when derived classes
+should get the JSON:API type of the superclass. See the example below.</p>
+</li>
+<li>
+<p>if the above "Java class to JSON:API type" mapping should also be used for deserialization.
+This is very useful for polymorphic use cases.</p>
 </li>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
@@ -1639,6 +1695,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+            .withTypeForClassUsedForDeserialization(true)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -1652,7 +1709,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.18.0-SNAPSHOT<br>
-Last updated 2021-07-02 12:48:53 UTC
+Last updated 2021-07-02 15:18:28 UTC
 </div>
 </div>
 </div>
