@@ -154,6 +154,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">G</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getClassForType(java.lang.String)">getClassForType(String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">Returns the class
+ for a given type, when the class was added with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass(java.lang.Class,java.lang.String)"><code>JsonApiConfiguration.withTypeForClass(Class, String)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getCode()">getCode()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Gets an application-specific error code, expressed as a string value.</div>
@@ -241,12 +246,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPageMetaAutomaticallyCreated()">isPageMetaAutomaticallyCreated()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isPluralizedTypeRendered()">isPluralizedTypeRendered()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isTypeForClassUsedForDeserialization()">isTypeForClassUsedForDeserialization()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
 </dd>
 </dl>
 <a id="I:J">
@@ -509,7 +518,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPageMetaAutomaticallyCreated(boolean)">withPageMetaAutomaticallyCreated(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withPluralizedTypeRendered(boolean)">withPluralizedTypeRendered(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
@@ -537,6 +546,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates a mapping for a given class to get the JSON:API resource object type
  when rendered.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClassUsedForDeserialization(boolean)">withTypeForClassUsedForDeserialization(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
 </dd>
 </dl>
 <a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="allpackages-index.html">All&nbsp;Packages</a></div>

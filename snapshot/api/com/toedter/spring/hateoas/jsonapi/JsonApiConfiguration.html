@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,6 +185,14 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>java.lang.Class&lt;?&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getClassForType(java.lang.String)">getClassForType</a></span>&#8203;(java.lang.String&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Returns the class
+ for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTypeForClass(java.lang.Class)">getTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz)</code></th>
 <td class="colLast">
@@ -192,50 +200,57 @@ extends java.lang.Object</pre>
  for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isJsonApiVersionRendered()">isJsonApiVersionRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLowerCasedTypeRendered()">isLowerCasedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPageMetaAutomaticallyCreated()">isPageMetaAutomaticallyCreated</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPluralizedTypeRendered()">isPluralizedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTypeForClassUsedForDeserialization()">isTypeForClassUsedForDeserialization</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withJsonApiVersionRendered(boolean)">withJsonApiVersionRendered</a></span>&#8203;(boolean&nbsp;jsonApiVersionRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withLowerCasedTypeRendered(boolean)">withLowerCasedTypeRendered</a></span>&#8203;(boolean&nbsp;lowerCasedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withObjectMapperCustomizer(java.util.function.Consumer)">withObjectMapperCustomizer</a></span>&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</code></th>
 <td class="colLast">
@@ -243,28 +258,35 @@ extends java.lang.Object</pre>
  for serialization.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPageMetaAutomaticallyCreated(boolean)">withPageMetaAutomaticallyCreated</a></span>&#8203;(boolean&nbsp;pageMetaAutomaticallyCreated)</code></th>
 <td class="colLast">
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPluralizedTypeRendered(boolean)">withPluralizedTypeRendered</a></span>&#8203;(boolean&nbsp;pluralizedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClass(java.lang.Class,java.lang.String)">withTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz,
                 java.lang.String&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Creates a mapping for a given class to get the JSON:API resource object type
  when rendered.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClassUsedForDeserialization(boolean)">withTypeForClassUsedForDeserialization</a></span>&#8203;(boolean&nbsp;typeForClassUsedForDeserialization)</code></th>
+<td class="colLast">
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
 </td>
 </tr>
 </table>
@@ -360,6 +382,24 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clazz</code> - must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>can return null.</dd>
+</dl>
+</li>
+</ul>
+<a id="getClassForType(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassForType</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.String&nbsp;type)</pre>
+<div class="block">Returns the class
+ for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>can return null.</dd>
 </dl>
@@ -478,7 +518,7 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <li class="blockList">
 <h4>withPageMetaAutomaticallyCreated</h4>
 <pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withPageMetaAutomaticallyCreated&#8203;(boolean&nbsp;pageMetaAutomaticallyCreated)</pre>
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -495,11 +535,41 @@ public&nbsp;java.lang.String&nbsp;getTypeForClass&#8203;(java.lang.Class&lt;?&gt
 <li class="blockList">
 <h4>isPageMetaAutomaticallyCreated</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isPageMetaAutomaticallyCreated()</pre>
-<div class="block">Indicates if page meta data (rendered as top level JSON:API meta)
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is true.</dd>
+</dl>
+</li>
+</ul>
+<a id="withTypeForClassUsedForDeserialization(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withTypeForClassUsedForDeserialization</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withTypeForClassUsedForDeserialization&#8203;(boolean&nbsp;typeForClassUsedForDeserialization)</pre>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>typeForClassUsedForDeserialization</code> - The new value of this configuration's typeForClassUsedForDeserialization</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</li>
+</ul>
+<a id="isTypeForClassUsedForDeserialization()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isTypeForClassUsedForDeserialization</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isTypeForClassUsedForDeserialization()</pre>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The default is false.</dd>
 </dl>
 </li>
 </ul>
