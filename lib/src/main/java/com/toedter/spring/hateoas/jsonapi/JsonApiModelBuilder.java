@@ -626,7 +626,7 @@ public class JsonApiModelBuilder {
         final PagedModel.PageMetadata metadata = ((PagedModel<?>) model).getMetadata();
 
         if (metadata == null) {
-            throw new IllegalStateException("PagedModel object must contain page meta data.");
+            throw new IllegalStateException("PagedModel object must contain page metadata.");
         }
 
         return metadata;

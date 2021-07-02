@@ -135,11 +135,19 @@ class JsonApiData {
             return Optional.empty();
         }
 
+        // when running with code coverage in IDEs,
+        // some additional fields might be introduced.
+        // Those should be ignored.
         final Field[] fields = getAllDeclaredFields(content.getClass());
-        if (fields.length == 0
-                || (content instanceof RepresentationModel<?> && fields.length == 1)
-                || (content instanceof RepresentationModel<?> && fields.length == 2
-                && ("$jacocoData".equals(fields[0].getName()) || "$jacocoData".equals(fields[1].getName())))) {
+        boolean validFieldFound = false;
+        for(Field field: fields) {
+            if(!"$jacocoData".equals(field.getName()) && !"__$lineHits$__".equals(field.getName())
+                    && (!(content instanceof RepresentationModel && "links".equals(field.getName())))) {
+                validFieldFound = true;
+                break;
+            }
+        }
+        if (!validFieldFound) {
             return Optional.empty();
         }
 

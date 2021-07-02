@@ -35,6 +35,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
+        assertThat(new JsonApiConfiguration().isTypeForClassUsedForDeserialization()).isFalse();
     }
 
     @Test
@@ -56,6 +57,12 @@ class JsonApiConfigurationUnitTest {
     void should_set_page_meta_auotomatically_created() {
         assertThat(new JsonApiConfiguration().withPageMetaAutomaticallyCreated(false)
                 .isPageMetaAutomaticallyCreated()).isFalse();
+    }
+
+    @Test
+    void should_set_type_for_class_used_for_deserialization() {
+        assertThat(new JsonApiConfiguration().withTypeForClassUsedForDeserialization(true)
+                .isTypeForClassUsedForDeserialization()).isTrue();
     }
 
     @Test

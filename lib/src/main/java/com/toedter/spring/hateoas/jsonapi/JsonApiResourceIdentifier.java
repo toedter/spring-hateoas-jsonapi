@@ -185,7 +185,7 @@ class JsonApiResourceIdentifier {
             }
             return new ResourceField(TYPE, jsonApiType);
         } catch (Exception e) {
-            throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+            throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID + "::: " + object);
         }
     }
 

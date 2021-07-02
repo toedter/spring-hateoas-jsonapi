@@ -126,8 +126,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                     doc = doc.withMeta(metaData);
                 } else {
                     final Map<String, Object> meta = doc.getMeta();
-                    // add/override with meta data created with builder
-                    // this will override the previous generated page meta data, if the key is the same
+                    // add/override with metadata created with builder
+                    // this will override the previous generated page metadata, if the key is the same
                     for (Map.Entry<?, ?> entry : metaData.entrySet()) {
                         meta.put(entry.getKey().toString(), entry.getValue());
                     }

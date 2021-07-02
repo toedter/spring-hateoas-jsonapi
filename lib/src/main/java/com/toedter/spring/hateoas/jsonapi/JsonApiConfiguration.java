@@ -75,7 +75,7 @@ public class JsonApiConfiguration {
     private final boolean jsonApiVersionRendered;
 
     /**
-     * Indicates if page meta data (rendered as top level JSON:API meta)
+     * Indicates if page metadata (rendered as top level JSON:API meta)
      * for a paged model is created automatically.
      *
      * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
@@ -84,6 +84,16 @@ public class JsonApiConfiguration {
     @With
     @Getter
     private final boolean pageMetaAutomaticallyCreated;
+
+    /**
+     * Indicates if the Java class to JSON:API mapping created with {@link JsonApiConfiguration}
+     *
+     * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
+     * @return The default is {@literal true}.
+     */
+    @With
+    @Getter
+    private final boolean typeForClassUsedForDeserialization;
 
     /**
      * You can pass a lambda expression to customize the ObjectMapper used
@@ -158,6 +168,26 @@ public class JsonApiConfiguration {
     }
 
     /**
+     * Returns the {@literal class}
+     * for a given type, when the class was added with {@link #withTypeForClass(Class, String)}.
+     *
+     * @param type must not be {@literal null}.
+     * @return can return {@literal null}.
+     */
+    public @Nullable
+    Class<?> getClassForType(String type) {
+        Assert.notNull(type, "type must not be null!");
+        if(this.typeForClass.containsValue(type)) {
+            for (Map.Entry<Class<?>, String> entry : this.typeForClass.entrySet()) {
+                if(entry.getValue().equals(type)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
@@ -166,6 +196,7 @@ public class JsonApiConfiguration {
         this.jsonApiVersionRendered = false;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
+        this.typeForClassUsedForDeserialization = false;
         this.objectMapperCustomizer = objectMapper -> {
         }; // Default to no action.
     }

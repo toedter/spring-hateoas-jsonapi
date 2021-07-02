@@ -161,7 +161,7 @@ publishing {
     }
 }
 
-// we don't publish the gradle module meta data
+// we don't publish the gradle module metadata
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
 }

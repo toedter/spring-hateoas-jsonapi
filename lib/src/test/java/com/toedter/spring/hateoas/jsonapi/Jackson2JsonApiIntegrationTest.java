@@ -84,11 +84,13 @@ class Jackson2JsonApiIntegrationTest {
     @BeforeEach
     void setUpModule() {
         mapper = createObjectMapper(new JsonApiConfiguration().withObjectMapperCustomizer(
-                mapper -> {
-                    mapper.registerModule(new JavaTimeModule());
-                    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-                }
-        ));
+                        mapper -> {
+                            mapper.registerModule(new JavaTimeModule());
+                            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                        }
+                )
+                .withTypeForClass(Movie5.class, "my-movies")
+                .withTypeForClassUsedForDeserialization(true));
     }
 
     @Test
@@ -602,6 +604,17 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_entity_model_with_annotated_type_on_class() throws Exception {
+        JavaType movieType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        File file = new ClassPathResource("movieEntityModelWithAnnotations.json", getClass()).getFile();
+        EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
+
+        assertThat(movieEntityModel.getContent()).isInstanceOf(Movie5.class);
+    }
+
+
+    @Test
     void should_serialize_movies_with_long_id() throws Exception {
         MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
         EntityModel<MovieWithLongId> entityModel =
@@ -720,7 +733,7 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("polymorphicRelationships.json", getClass()).getFile();
         EntityModel<PolymorphicRelationEntity> entityModel = mapper.readValue(file, javaType);
 
-        final List<SuperEntity<?>> relation = entityModel.getContent().getRelation();
+        final List<SuperEntity<?>> relation = Objects.requireNonNull(entityModel.getContent()).getRelation();
         assertThat(relation.get(0).getClass()).isEqualTo(SuperEChild.class);
         assertThat(relation.get(1).getClass()).isEqualTo(SuperEChild2.class);
     }
@@ -731,11 +744,11 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithoutAttributes.class);
         File file = new ClassPathResource("movieWithoutAttributes.json", getClass()).getFile();
         EntityModel<MovieWithoutAttributes> entityModel = mapper.readValue(file, javaType);
-        assertThat(entityModel.getContent().getId()).isEqualTo("1");
+        assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo("1");
     }
 
     @Test
-    void should_not_deserialize_movie_with_wrong_annotation() throws Exception {
+    void should_not_deserialize_movie_with_wrong_annotation() {
 
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieThrowingException.class);
