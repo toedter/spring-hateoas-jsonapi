@@ -88,8 +88,8 @@ public class JsonApiConfiguration {
     /**
      * Indicates if the Java class to JSON:API mapping created with {@link JsonApiConfiguration}
      *
-     * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
-     * @return The default is {@literal true}.
+     * @param typeForClassUsedForDeserialization The new value of this configuration's typeForClassUsedForDeserialization
+     * @return The default is {@literal false}.
      */
     @With
     @Getter
