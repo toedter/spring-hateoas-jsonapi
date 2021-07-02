@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
+package com.toedter.spring.hateoas.jsonapi.support.polymorphism;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
-import java.util.Collection;
+import java.util.List;
 
-// tag::SuperEChild[]
+// tag::PolymorphicRelationEntity[]
 @NoArgsConstructor
-public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
+public class PolymorphicRelationEntity {
     @JsonApiId
     private String id;
 
     @JsonApiType
     private String type = null;
 
-    @Override
-    public T getT() {
-        return null;
-    }
+    @JsonApiRelationships("superEntities")
+    @JsonIgnore
+    @Getter
+    private List<SuperEntity<?>> relation = null;
 }
-// end::SuperEChild[]
+// end::PolymorphicRelationEntity[]

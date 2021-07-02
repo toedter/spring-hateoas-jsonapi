@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
+package com.toedter.spring.hateoas.jsonapi.support.polymorphism;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;

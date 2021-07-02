@@ -1,0 +1,12 @@
+{
+  "data": {
+    "id": "3",
+    "type": "my-movies",
+    "attributes": {
+      "title": "Batman Begins"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/3"
+  }
+}

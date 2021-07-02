@@ -133,8 +133,22 @@ public class WebMvcMovieController {
         return ResponseEntity.created(link.toUri()).build();
     }
 
-    @PostMapping("/moviesWithPolymorphy")
-    public ResponseEntity<?> newMovieWithPolymorphy(@RequestBody EntityModel<MovieWithJsonTypeInfo> movie) {
+    @PostMapping("/moviesWithJsonApiTypePolymorphism")
+    public ResponseEntity<?> newMovieWithJsonApiTypePolymorphism(@RequestBody EntityModel<Movie> movie) {
+        int newMovieId = MOVIES.size() + 1;
+        String newMovieIdString = "" + newMovieId;
+        Movie movieContent = movie.getContent();
+        assert movieContent != null;
+        movieContent.setId(newMovieIdString);
+        MOVIES.put(newMovieId, movieContent);
+
+        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
+
+        return ResponseEntity.created(link.toUri()).build();
+    }
+
+    @PostMapping("/moviesWithPolymorphism")
+    public ResponseEntity<?> newMovieWithPolymorphism(@RequestBody EntityModel<MovieWithJsonTypeInfo> movie) {
         int newMovieId = MOVIES.size() + 1;
         String newMovieIdString = "" + newMovieId;
         MovieWithJsonTypeInfo movieContent = movie.getContent();

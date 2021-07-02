@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package com.toedter.spring.hateoas.jsonapi.support.polymorphy;
+package com.toedter.spring.hateoas.jsonapi.support.polymorphism;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import lombok.NoArgsConstructor;
 
-// tag::SuperEntity[]
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
-        @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
-})
-public interface SuperEntity<T> {
-    T getT();
+import java.util.Collection;
+
+// tag::SuperEChild[]
+@NoArgsConstructor
+public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
+    @JsonApiId
+    private String id;
+
+    @JsonApiType
+    private String type = null;
+
+    @Override
+    public T getT() {
+        return null;
+    }
 }
-// end::SuperEntity[]
+// end::SuperEChild[]

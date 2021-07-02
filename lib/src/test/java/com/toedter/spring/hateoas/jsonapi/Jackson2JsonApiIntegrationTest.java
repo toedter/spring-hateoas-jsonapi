@@ -43,10 +43,10 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieThrowingException;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
-import com.toedter.spring.hateoas.jsonapi.support.polymorphy.PolymorphicRelationEntity;
-import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEChild;
-import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEChild2;
-import com.toedter.spring.hateoas.jsonapi.support.polymorphy.SuperEntity;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelationEntity;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
+import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -607,7 +607,7 @@ class Jackson2JsonApiIntegrationTest {
     void should_deserialize_entity_model_with_annotated_type_on_class() throws Exception {
         JavaType movieType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
-        File file = new ClassPathResource("movieEntityModelWithAnnotations.json", getClass()).getFile();
+        File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
 
         assertThat(movieEntityModel.getContent()).isInstanceOf(Movie5.class);

@@ -18,6 +18,8 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.toedter.spring.hateoas.jsonapi.support.Movie2;
+import com.toedter.spring.hateoas.jsonapi.support.Movie5;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -104,13 +106,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         String input = readFile("postMovie.json");
 
         this.mockMvc.perform(post("/movies")
-                .content(input)
-                .contentType(JSON_API))
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
 
         String movieJson = this.mockMvc.perform(get("/movies/3")
-                .accept(JSON_API))
+                        .accept(JSON_API))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -124,14 +126,14 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
 
         String input = readFile("postMovieWithRating.json");
 
-        this.mockMvc.perform(post("/moviesWithPolymorphy")
-                .content(input)
-                .contentType(JSON_API))
+        this.mockMvc.perform(post("/moviesWithPolymorphism")
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
 
         String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                .accept(JSON_API))
+                        .accept(JSON_API))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -141,18 +143,52 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
     }
 
     @Test
+    void should_create_new_polymorphic_movie_with_custom_type() throws Exception {
+
+        String input = readFile("postMovieWithCustomType.json");
+
+        this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
+                        .content(input)
+                        .contentType(JSON_API))
+                .andExpect(status().isCreated())
+                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
+
+        String movieJson = this.mockMvc.perform(get("/movies/3")
+                        .accept(JSON_API))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        compareWithFile(movieJson, "polymorphicMovieWithCustomType.json");
+    }
+
+    @Test
+    void should_not_create_new_polymorphic_movie_with_custom_type() {
+        Assertions.assertThrows(Exception.class, () -> {
+            String input = readFile("postMovieWithCustomType2.json");
+
+            this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
+                            .content(input)
+                            .contentType(JSON_API))
+                    .andExpect(status().isCreated())
+                    .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
+        });
+    }
+
+    @Test
     void should_create_new_movie_with_relationships() throws Exception {
 
         String input = readFile("postMovieWithTwoRelationships.json");
 
         this.mockMvc.perform(post("/moviesWithDirectors")
-                .content(input)
-                .contentType(JSON_API))
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
 
         String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                .accept(JSON_API))
+                        .accept(JSON_API))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -167,13 +203,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         String input = readFile("postMovieWithOneRelationship.json");
 
         this.mockMvc.perform(post("/moviesWithSingleDirector")
-                .content(input)
-                .contentType(JSON_API))
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
 
         String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                .accept(JSON_API))
+                        .accept(JSON_API))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -187,8 +223,8 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         String input = readFile("movieWithLastSeen.json");
 
         this.mockMvc.perform(post("/movieWithLastSeen")
-                .content(input)
-                .contentType(JSON_API))
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isCreated())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movieWithLastSeen"));
     }
@@ -199,13 +235,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         String input = readFile("patchMovie.json");
 
         this.mockMvc.perform(patch("/movies/1")
-                .content(input)
-                .contentType(JSON_API))
+                        .content(input)
+                        .contentType(JSON_API))
                 .andExpect(status().isNoContent())
                 .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/1"));
 
         String movieJson = this.mockMvc.perform(get("/movies/1")
-                .accept(JSON_API))
+                        .accept(JSON_API))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -249,7 +285,10 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
                     .withObjectMapperCustomizer(objectMapper -> {
                         objectMapper.registerModule(new JavaTimeModule());
                         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-                    });
+                    })
+                    .withTypeForClass(Movie5.class, "my-movies")
+                    .withTypeForClass(Movie2.class, "my-movies-2")
+                    .withTypeForClassUsedForDeserialization(true);
         }
     }
 }

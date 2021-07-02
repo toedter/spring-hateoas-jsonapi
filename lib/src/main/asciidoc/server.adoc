@@ -333,8 +333,40 @@ NOTE: Currently, only `List` and `Set` are supported collection classes.
 [[polymorphy]]
 == Polymorphic Deserialization ==
 
-You can configure polymorphic deserialization on a 'per class' base,
-using some Jackson annotations. The following example illustrates this:
+The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
+assigning a JSON:API type to a Java class and then also switching on, that the mappings should
+also be used for deserialization, e.g.
+
+[source, Java]
+@Bean
+JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+            .withTypeForClass(MovieSubclass.class, "my-movies")
+            .withTypeForClassUsedForDeserialization(true));
+}
+
+Then a POST to a controller method like
+[source, java]
+@PostMapping("/movies")
+public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) { ...
+
+with JSON like
+[source, java, indent=0]
+----
+include::{test-resources-dir}/postMovieWithCustomType.json[]
+----
+
+would be deserialized to a Java class of type `MovieSubclass`. Be aware that this mechanism overrides
+the default deserialization to an object of the class given by the REST controller method's signature. So, if the controller accepts an
+`EntityModel<Movie>`, you could potentially post a JSON that the creates an `EntityModel<Director>` and
+enters the controller's method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.
+
+=== Polymorphic Deserialization with Jackson Annotations ===
+
+If you want that the JSON:API type is always the same (e.g. "movies"),
+but you still want to support polymorphism,
+you can also configure polymorphic deserialization
+on a 'per class' base, using some Jackson annotations. The following example illustrates this:
 
 Imagine a controller method like
 [source, java]
@@ -358,9 +390,9 @@ You could now annotate the `Movie` class with:
 })
 
 Then an HTTP POST to /movies with body
-[source, json]
+[source, java, indent=0]
 ----
-include::{test-resources-dir}/postMovieWithRating.json[]
+include::{test-resources-dir}/postMovieWithCustomType.json[]
 ----
 
 would be deserialized to an object of class `MovieWithRating`, even though the controller method accepts the superclass `Movie`.
@@ -389,22 +421,22 @@ Here is an example:
 
 [source, java]
 ----
-include::{test-dir}/support/polymorphy/PolymorphicRelationEntity.java[tags=PolymorphicRelationEntity]
+include::{test-dir}/support/polymorphism/PolymorphicRelationEntity.java[tags=PolymorphicRelationEntity]
 ----
 
 [source, java]
 ----
-include::{test-dir}/support/polymorphy/SuperEntity.java[tags=SuperEntity]
+include::{test-dir}/support/polymorphism/SuperEntity.java[tags=SuperEntity]
 ----
 
 [source, java]
 ----
-include::{test-dir}/support/polymorphy/SuperEChild.java[tags=SuperEChild]
+include::{test-dir}/support/polymorphism/SuperEChild.java[tags=SuperEChild]
 ----
 
 [source, java]
 ----
-include::{test-dir}/support/polymorphy/SuperEChild2.java[tags=SuperEChild2]
+include::{test-dir}/support/polymorphism/SuperEChild2.java[tags=SuperEChild2]
 ----
 
 Then a JSON like

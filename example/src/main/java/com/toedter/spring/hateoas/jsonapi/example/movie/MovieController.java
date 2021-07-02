@@ -115,9 +115,12 @@ public class MovieController {
         return ResponseEntity.ok(pagedJsonApiModel);
     }
 
+    // tag::new-movie[]
     @PostMapping("/movies")
     public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movieModel) {
+    // end::new-movie[]
         Movie movie = movieModel.getContent();
+        assert movie != null;
         movieRepository.save(movie);
 
         List<Director> directorsWithIds = movie.getDirectors();

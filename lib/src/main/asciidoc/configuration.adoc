@@ -11,13 +11,15 @@ Currently, you can configure
 * if the JSON:API version should be rendered automatically, the default is `false`.
 * if JSON:API types should be rendered as pluralized or non pluralized class names.
 ** The default is pluralized.
-* if JSON:API types should be rendered as lowercased or original class names.
-** The default is lowercased.
+* if JSON:API types should be rendered as lowercase or original class names.
+** The default is lowercase.
 * if page information of a PagedModel should be rendered automatically as JSON:API meta-object.
 ** The default is `true`.
-* if a specific Java class should be rendered with a specific `JSON:API type`. This is useful when
-representation model classes should get the `JSON:API type` of the domain model or when derived classes
-should get the `JSON:API type` of the superclass. See the example below.
+* if a specific Java class should be rendered with a specific JSON:API type. This is useful when
+representation model classes should get the JSON:API type of the domain model or when derived classes
+should get the JSON:API type of the superclass. See the example below.
+* if the above "Java class to JSON:API type" mapping should also be used for deserialization.
+This is very useful for polymorphic use cases.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
