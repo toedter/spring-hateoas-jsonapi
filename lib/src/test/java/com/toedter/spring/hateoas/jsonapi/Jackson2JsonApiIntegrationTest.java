@@ -25,24 +25,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.toedter.spring.hateoas.jsonapi.support.Director;
-import com.toedter.spring.hateoas.jsonapi.support.DirectorWithType;
-import com.toedter.spring.hateoas.jsonapi.support.Movie;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithGetters;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotationsDerived;
-import com.toedter.spring.hateoas.jsonapi.support.MovieDerivedWithTypeForClass;
-import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithCustomSerializer;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
-import com.toedter.spring.hateoas.jsonapi.support.MovieThrowingException;
-import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
+import com.toedter.spring.hateoas.jsonapi.support.*;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelationEntity;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
@@ -90,6 +73,7 @@ class Jackson2JsonApiIntegrationTest {
                         }
                 )
                 .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
+                .withTypeForClass(DirectorWithEmail.class,  "directors-with-email")
                 .withTypeForClassUsedForDeserialization(true));
     }
 
@@ -613,6 +597,21 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movieEntityModel.getContent()).isInstanceOf(MovieDerivedWithTypeForClass.class);
     }
 
+    @Test
+    void should_deserialize_movie_with_polymorphic_directors_relationships() throws Exception {
+        JavaType movieType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("postMovieWithTwoRelationshipsWithPolymorphicTypes.json", getClass()).getFile();
+        EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
+
+        assertThat(movieEntityModel.getContent()).isInstanceOf(MovieWithDirectors.class);
+
+        MovieWithDirectors movieWithDirectors = (MovieWithDirectors) movieEntityModel.getContent();
+        assert movieWithDirectors != null;
+        assertThat(movieWithDirectors.getDirectors().get(0)).isInstanceOf(Director.class);
+        assertThat(movieWithDirectors.getDirectors().get(1)).isInstanceOf(DirectorWithEmail.class);
+    }
+
 
     @Test
     void should_serialize_movies_with_long_id() throws Exception {
@@ -749,7 +748,6 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_not_deserialize_movie_with_wrong_annotation() {
-
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieThrowingException.class);
 

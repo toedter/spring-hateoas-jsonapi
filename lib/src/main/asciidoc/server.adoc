@@ -72,7 +72,7 @@ As an example, consider the class
 
 [source, java]
 ----
-include::{test-dir}/support/Movie2.java[tags=Movie]
+include::{test-dir}/support/MovieWithAnnotations.java[tags=Movie]
 ----
 
 Then, `EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))` will be rendered as
@@ -361,10 +361,37 @@ the default deserialization to an object of the class given by the REST controll
 `EntityModel<Movie>`, you could potentially post a JSON that the creates an `EntityModel<Director>` and
 enters the controller's method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.
 
-=== Polymorphic Deserialization with Jackson Annotations ===
+The same mechanism can also be used to deserialize polymorphic relationships.
 
-If you want that the JSON:API type is always the same (e.g. "movies"),
-but you still want to support polymorphism,
+Consider the following class:
+
+[source, java]
+----
+include::{test-dir}/support/MovieWithDirectors.java[tags=Movie-with-directors]
+----
+
+and a `JsonApiConfiguration` that looks like
+[source, Java]
+@Bean
+JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withTypeForClass(DirectorWithEmail.class,  "directors-with-email")
+        .withTypeForClassUsedForDeserialization(true));
+}
+
+Then an HTTP POST to /movies with body
+[source, java, indent=0]
+----
+include::{test-resources-dir}/postMovieWithTwoRelationshipsWithPolymorphicTypes.json[]
+----
+
+would create 2 directors in the `directors` list, both empty except for the `id` field.
+But the first director would be an instance of class `Director`,
+while the second director would be an instance of class `DirectorWithEmail`.
+
+=== Jackson Annotations ===
+
+If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
 on a 'per class' base, using some Jackson annotations. The following example illustrates this:
 
@@ -415,8 +442,7 @@ So the JSON of the serialized Java object (of class `MovieWithRating`) would the
 include::{test-resources-dir}/polymorphicMovie.json[]
 ----
 
-=== Polymorphic Deserialization of Relationships ===
-It is also possible to use the `@JsonSubTypes` annotation for polymorphic relationships.
+It is also possible to use Jackson's `@JsonSubTypes` annotation for polymorphic relationships.
 Here is an example:
 
 [source, java]

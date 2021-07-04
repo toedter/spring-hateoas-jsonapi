@@ -101,7 +101,10 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
                                         for (HashMap<String, String> entry : jsonApiRelationships) {
-                                            String json = objectMapper.writeValueAsString(entry);
+                                            Class<?> entryType = jsonApiConfiguration.getClassForType(entry.get("type"));
+                                            if (entryType != null) {
+                                                typeArgument = entryType;
+                                            }
                                             Object newInstance = objectMapper.convertValue(entry, objectMapper.constructType(typeArgument));
 
                                             JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
