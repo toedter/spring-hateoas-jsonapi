@@ -16,13 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
-import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@JsonApiTypeForClass("my-movies")
-public class Movie5 extends Movie {
-    public Movie5(String id, String title) {
-        super(id, title);
-    }
+public class MovieWithAnnotationsDerived extends MovieWithAnnotations {
 }

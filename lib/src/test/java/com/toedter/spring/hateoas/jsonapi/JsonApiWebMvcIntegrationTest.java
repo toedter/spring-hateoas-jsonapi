@@ -18,8 +18,8 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.toedter.spring.hateoas.jsonapi.support.Movie2;
-import com.toedter.spring.hateoas.jsonapi.support.Movie5;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
+import com.toedter.spring.hateoas.jsonapi.support.MovieDerivedWithTypeForClass;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -286,8 +286,8 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
                         objectMapper.registerModule(new JavaTimeModule());
                         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
                     })
-                    .withTypeForClass(Movie5.class, "my-movies")
-                    .withTypeForClass(Movie2.class, "my-movies-2")
+                    .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
+                    .withTypeForClass(MovieWithAnnotations.class, "my-movies-2")
                     .withTypeForClassUsedForDeserialization(true);
         }
     }

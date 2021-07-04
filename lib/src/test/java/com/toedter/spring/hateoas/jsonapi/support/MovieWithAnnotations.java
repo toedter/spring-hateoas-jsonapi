@@ -16,44 +16,26 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
-import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Id;
+
+// tag::Movie[]
+// @fold:on
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-public class Movie3 {
-    @JsonApiId
-    public String getMyId() {
-        return myId;
-    }
-
-    @JsonApiId
-    public void setMyId(String myId) {
-        this.myId = myId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @JsonApiType
-    public String getType() {
-        return type;
-    }
-
-    @JsonApiType
-    public void setType(String type) {
-        this.type = type;
-    }
-
+// @fold:off
+public class MovieWithAnnotations {
+    @Id
     private String myId;
     private String title;
+    @JsonApiType
     private String type;
-
-    public Movie3() {
-    }
 }
+// end::Movie[]

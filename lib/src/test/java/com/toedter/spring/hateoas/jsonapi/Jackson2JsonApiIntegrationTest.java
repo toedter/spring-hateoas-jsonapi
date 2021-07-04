@@ -28,10 +28,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithType;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
-import com.toedter.spring.hateoas.jsonapi.support.Movie2;
-import com.toedter.spring.hateoas.jsonapi.support.Movie3;
-import com.toedter.spring.hateoas.jsonapi.support.Movie4;
-import com.toedter.spring.hateoas.jsonapi.support.Movie5;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithGetters;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotationsDerived;
+import com.toedter.spring.hateoas.jsonapi.support.MovieDerivedWithTypeForClass;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithCustomSerializer;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
@@ -89,7 +89,7 @@ class Jackson2JsonApiIntegrationTest {
                             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
                         }
                 )
-                .withTypeForClass(Movie5.class, "my-movies")
+                .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
                 .withTypeForClassUsedForDeserialization(true));
     }
 
@@ -216,21 +216,21 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_fields() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
-                EntityModel.of(new Movie2("1", "Star Wars", "my-movies")));
+                EntityModel.of(new MovieWithAnnotations("1", "Star Wars", "my-movies")));
         compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_methods() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
-                EntityModel.of(new Movie3("1", "Star Wars", "my-movies")));
+                EntityModel.of(new MovieWithGetters("1", "Star Wars", "my-movies")));
         compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_type_on_class() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
-                EntityModel.of(new Movie5("1", "Star Wars")));
+                EntityModel.of(new MovieDerivedWithTypeForClass("1", "Star Wars")));
         compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
     }
 
@@ -480,11 +480,11 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_deserialize_single_movie_entity_model_with_field_annotation() throws Exception {
-        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie2.class);
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithAnnotations.class);
         File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
-        EntityModel<Movie2> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+        EntityModel<MovieWithAnnotations> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
-        Movie2 movie = movieEntityModel.getContent();
+        MovieWithAnnotations movie = movieEntityModel.getContent();
         assert movie != null;
         assertThat(movie.getMyId()).isEqualTo("1");
         assertThat(movie.getType()).isEqualTo("movies");
@@ -497,11 +497,11 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_deserialize_derived_class_with_field_annotation() throws Exception {
-        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie4.class);
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithAnnotationsDerived.class);
         File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
-        EntityModel<Movie4> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+        EntityModel<MovieWithAnnotationsDerived> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
-        Movie4 movie = movieEntityModel.getContent();
+        MovieWithAnnotationsDerived movie = movieEntityModel.getContent();
         assert movie != null;
         assertThat(movie.getMyId()).isEqualTo("1");
         assertThat(movie.getType()).isEqualTo("movies");
@@ -514,11 +514,11 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_deserialize_single_movie_entity_model_with_method_annotation() throws Exception {
-        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie3.class);
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithGetters.class);
         File file = new ClassPathResource("movieEntityModelWithLinks.json", getClass()).getFile();
-        EntityModel<Movie3> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+        EntityModel<MovieWithGetters> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
-        Movie3 movie = movieEntityModel.getContent();
+        MovieWithGetters movie = movieEntityModel.getContent();
         assert movie != null;
         assertThat(movie.getMyId()).isEqualTo("1");
         assertThat(movie.getType()).isEqualTo("movies");
@@ -610,7 +610,7 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
 
-        assertThat(movieEntityModel.getContent()).isInstanceOf(Movie5.class);
+        assertThat(movieEntityModel.getContent()).isInstanceOf(MovieDerivedWithTypeForClass.class);
     }
 
 
