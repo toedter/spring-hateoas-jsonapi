@@ -419,7 +419,7 @@ You could now annotate the `Movie` class with:
 Then an HTTP POST to /movies with body
 [source, java, indent=0]
 ----
-include::{test-resources-dir}/postMovieWithCustomType.json[]
+include::{test-resources-dir}/polymorphicMovie.json[]
 ----
 
 would be deserialized to an object of class `MovieWithRating`, even though the controller method accepts the superclass `Movie`.
