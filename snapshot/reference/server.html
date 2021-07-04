@@ -194,8 +194,19 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Unresolved directive in server.adoc - include::../../../src/test/java/com/toedter/spring/hateoas/jsonapi/support/Movie2.java[tags=Movie]
-</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
+</span><span class="fold-block">public class MovieWithAnnotations {
+    @Id
+    private String myId;
+    private String title;
+    @JsonApiType
+    private String type;
+}
+</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1041,11 +1052,83 @@ the default deserialization to an object of the class given by the REST controll
 <code>EntityModel&lt;Movie&gt;</code>, you could potentially post a JSON that the creates an <code>EntityModel&lt;Director&gt;</code> and
 enters the controller&#8217;s method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.</p>
 </div>
-<div class="sect2">
-<h3 id="_polymorphic_deserialization_with_jackson_annotations"><a class="anchor" href="#_polymorphic_deserialization_with_jackson_annotations"></a>Polymorphic Deserialization with Jackson Annotations</h3>
 <div class="paragraph">
-<p>If you want that the JSON:API type is always the same (e.g. "movies"),
-but you still want to support polymorphism,
+<p>The same mechanism can also be used to deserialize polymorphic relationships.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+
+</span><span class="fold-block">public class MovieWithDirectors extends Movie {
+    @JsonApiType
+    String myType = "movies";
+
+    @JsonIgnore
+    @JsonApiRelationships("directors")
+    List&lt;Director&gt; directors;
+}
+</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and a <code>JsonApiConfiguration</code> that looks like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Java" data-lang="Java">@Bean
+JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withTypeForClass(DirectorWithEmail.class,  "directors-with-email")
+        .withTypeForClassUsedForDeserialization(true));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then an HTTP POST to /movies with body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "directors"
+          },
+          {
+            "id": "2",
+            "type": "directors-with-email"
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would create 2 directors in the <code>directors</code> list, both empty except for the <code>id</code> field.
+But the first director would be an instance of class <code>Director</code>,
+while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="_jackson_annotations"><a class="anchor" href="#_jackson_annotations"></a>Jackson Annotations</h3>
+<div class="paragraph">
+<p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
 on a 'per class' base, using some Jackson annotations. The following example illustrates this:</p>
 </div>
@@ -1146,11 +1229,8 @@ So the JSON of the serialized Java object (of class <code>MovieWithRating</code>
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_polymorphic_deserialization_of_relationships"><a class="anchor" href="#_polymorphic_deserialization_of_relationships"></a>Polymorphic Deserialization of Relationships</h3>
 <div class="paragraph">
-<p>It is also possible to use the <code>@JsonSubTypes</code> annotation for polymorphic relationships.
+<p>It is also possible to use Jackson&#8217;s <code>@JsonSubTypes</code> annotation for polymorphic relationships.
 Here is an example:</p>
 </div>
 <div class="listingblock">
@@ -1315,7 +1395,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 0.18.0-SNAPSHOT<br>
-Last updated 2021-07-04 07:32:45 UTC
+Last updated 2021-07-04 14:00:12 UTC
 </div>
 </div>
 </div>
