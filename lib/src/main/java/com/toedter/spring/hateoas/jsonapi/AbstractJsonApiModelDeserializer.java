@@ -79,14 +79,22 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
         Object objectFromProperties;
         JavaType rootType = JacksonHelper.findRootType(this.contentType);
+        Class<?> clazz = null;
+
+        if (jsonApiConfiguration.isTypeForClassUsedForDeserialization()) {
             String type = (String) data.get("type");
-            Class<?> clazz = null;
-            if(type != null && jsonApiConfiguration.isTypeForClassUsedForDeserialization()) {
+            if (type != null) {
                 clazz = jsonApiConfiguration.getClassForType(type);
+                if (clazz != null && !rootType.getRawClass().isAssignableFrom(clazz)) {
+                    throw new IllegalArgumentException(clazz + " is not assignable to " + rootType.getRawClass());
+                }
             }
-            if (clazz == null) {
-                clazz = rootType.getRawClass();
-            }
+        }
+
+        if (clazz == null) {
+            clazz = rootType.getRawClass();
+        }
+
         if (attributes != null) {
             objectFromProperties = plainObjectMapper.convertValue(attributes, clazz);
         } else {
@@ -96,6 +104,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
                 throw new IllegalStateException("Cannot convert data to resource.");
             }
         }
+
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                 objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.id, (String) data.get("id"));
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(

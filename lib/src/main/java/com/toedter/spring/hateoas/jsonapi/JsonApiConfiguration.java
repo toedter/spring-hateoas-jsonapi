@@ -144,7 +144,6 @@ public class JsonApiConfiguration {
      * @return a clone of this object, except with this updated property
      */
     public JsonApiConfiguration withTypeForClass(Class<?> clazz, String type) {
-
         Assert.notNull(clazz, "class must not be null!");
         Assert.notNull(type, "type must not be null!");
 

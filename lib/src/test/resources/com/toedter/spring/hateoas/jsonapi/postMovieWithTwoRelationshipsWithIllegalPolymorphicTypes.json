@@ -1,0 +1,22 @@
+{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": [
+          {
+            "id": "1",
+            "type": "my-movies"
+          },
+          {
+            "id": "2",
+            "type": "directors-with-email"
+          }
+        ]
+      }
+    }
+  }
+}

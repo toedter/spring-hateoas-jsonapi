@@ -73,7 +73,7 @@ class Jackson2JsonApiIntegrationTest {
                         }
                 )
                 .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
-                .withTypeForClass(DirectorWithEmail.class,  "directors-with-email")
+                .withTypeForClass(DirectorWithEmail.class, "directors-with-email")
                 .withTypeForClassUsedForDeserialization(true));
     }
 
@@ -612,6 +612,26 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movieWithDirectors.getDirectors().get(1)).isInstanceOf(DirectorWithEmail.class);
     }
 
+    @Test
+    void should_not_deserialize_movie_with_non_polymorphic_type() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            JavaType movieType =
+                    mapper.getTypeFactory().constructParametricType(EntityModel.class, Director.class);
+            File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
+            EntityModel<Director> movieEntityModel = mapper.readValue(file, movieType);
+        });
+    }
+
+    @Test
+    void should_not_deserialize_movie_with_illegal_polymorphic_relationships() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            JavaType movieType =
+                    mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+            File file = new ClassPathResource("postMovieWithTwoRelationshipsWithIllegalPolymorphicTypes.json",
+                    getClass()).getFile();
+            EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
+        });
+    }
 
     @Test
     void should_serialize_movies_with_long_id() throws Exception {

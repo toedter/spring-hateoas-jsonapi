@@ -357,9 +357,9 @@ include::{test-resources-dir}/postMovieWithCustomType.json[]
 ----
 
 would be deserialized to a Java class of type `MovieSubclass`. Be aware that this mechanism overrides
-the default deserialization to an object of the class given by the REST controller method's signature. So, if the controller accepts an
-`EntityModel<Movie>`, you could potentially post a JSON that the creates an `EntityModel<Director>` and
-enters the controller's method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.
+the default deserialization to an object of the class given by the REST controller method's signature.
+The deserializer checks if the mapped Java type is assignable to the originally required Java type,
+otherwise an `IllegalArgumentException` is thrown.
 
 The same mechanism can also be used to deserialize polymorphic relationships.
 
