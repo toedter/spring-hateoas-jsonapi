@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 0.18.0-SNAPSHOT,</span>
-<span id="revdate">2021-07-04</span>
+<span id="revdate">2021-07-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1248,9 +1248,9 @@ public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; mo
 </div>
 <div class="paragraph">
 <p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Be aware that this mechanism overrides
-the default deserialization to an object of the class given by the REST controller method&#8217;s signature. So, if the controller accepts an
-<code>EntityModel&lt;Movie&gt;</code>, you could potentially post a JSON that the creates an <code>EntityModel&lt;Director&gt;</code> and
-enters the controller&#8217;s method with it. Then your implementation has to take care of those cases and probably might throw a class cast exception.</p>
+the default deserialization to an object of the class given by the REST controller method&#8217;s signature.
+The deserializer checks if the mapped Java type is assignable to the originally required Java type,
+otherwise an <code>IllegalArgumentException</code> is thrown.</p>
 </div>
 <div class="paragraph">
 <p>The same mechanism can also be used to deserialize polymorphic relationships.</p>
@@ -1779,7 +1779,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 0.18.0-SNAPSHOT<br>
-Last updated 2021-07-04 17:56:04 UTC
+Last updated 2021-07-05 06:46:49 UTC
 </div>
 </div>
 </div>
