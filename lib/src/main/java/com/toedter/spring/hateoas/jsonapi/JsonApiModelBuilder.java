@@ -440,7 +440,11 @@ public class JsonApiModelBuilder {
     public JsonApiModelBuilder included(Collection<?> collection) {
         Assert.notNull(collection, "included data collection must not be null!");
         for (Object object : collection) {
-            this.included(object);
+            if(object instanceof RepresentationModel<?>) {
+                this.included((RepresentationModel<?>) object);
+            } else {
+                this.included(object);
+            }
         }
         return this;
     }

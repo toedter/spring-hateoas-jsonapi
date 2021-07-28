@@ -670,4 +670,29 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
         compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
     }
 
+    @Test
+    void should_not_include_same_entity_twice_when_added_as_collection_of_entity_models() throws Exception {
+        Movie movie = new Movie("1", "The Matrix");
+        Movie relatedMovie = new Movie("2", "The Matrix 2");
+        Director director1 = new Director("1", "Lana Wachowski");
+        Director director2 = new Director("2", "Lilly Wachowski");
+        List<EntityModel<Director>> directors = new ArrayList<>();
+        directors.add(EntityModel.of(director1));
+        directors.add(EntityModel.of(director1));
+        directors.add(EntityModel.of(director2));
+        directors.add(EntityModel.of(director2));
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", director1)
+                        .relationship("directors", director2)
+                        .relationship("relatedMovies", relatedMovie)
+                        .included(directors)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
+    }
+
 }
