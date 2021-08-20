@@ -552,6 +552,26 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_movies_collection_model_without_links() throws Exception {
+        JavaType moviesCollectionModelType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, Movie.class);
+        File file = new ClassPathResource("moviesCollectionModelWithoutLinks.json", getClass()).getFile();
+        CollectionModel<Movie> movieCollectionModel = mapper.readValue(file, moviesCollectionModelType);
+        Collection<Movie> movieCollection = movieCollectionModel.getContent();
+
+        final Iterator<Movie> iterator = movieCollection.iterator();
+        Movie movie1 = iterator.next();
+        assertThat(movie1.getId()).isEqualTo("1");
+        assertThat(movie1.getTitle()).isEqualTo("Star Wars");
+        Movie movie2 = iterator.next();
+        assertThat(movie2.getId()).isEqualTo("2");
+        assertThat(movie2.getTitle()).isEqualTo("Avengers");
+
+        Links links = movieCollectionModel.getLinks();
+        assertThat(links.isEmpty()).isTrue();
+    }
+
+    @Test
     void should_deserialize_movies_paged_model() throws Exception {
         JavaType moviesPagedModelType =
                 mapper.getTypeFactory().constructParametricType(PagedModel.class, Movie.class);

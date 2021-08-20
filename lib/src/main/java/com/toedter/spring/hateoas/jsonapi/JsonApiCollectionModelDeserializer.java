@@ -38,6 +38,9 @@ class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserialize
     @Override
     protected CollectionModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
         Links links = doc.getLinks();
+        if(links == null) {
+            return CollectionModel.of(resources);
+        }
         return CollectionModel.of(resources, links);
     }
 
