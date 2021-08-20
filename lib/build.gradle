@@ -48,7 +48,7 @@ dependencies {
     testImplementation 'org.springframework:spring-webflux'
     testImplementation 'org.slf4j:slf4j-api:1.7.32'
     testImplementation 'org.slf4j:jcl-over-slf4j:1.7.32'
-    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.5'
     testImplementation 'org.assertj:assertj-core:3.19.0'
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
