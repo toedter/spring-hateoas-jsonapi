@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '1.0.2-SNAPSHOT'
+version = '1.0.2'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
     // if you want to use the released version, use
-    // implementation 'com.toedter:spring-hateoas-jsonapi:1.0.1'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:1.0.2'
     implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
