@@ -589,6 +589,29 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_movies_paged_model_with_page_meta() throws Exception {
+        JavaType moviesPagedModelType =
+                mapper.getTypeFactory().constructParametricType(PagedModel.class, Movie.class);
+        File file = new ClassPathResource("moviesPagedModel.json", getClass()).getFile();
+        PagedModel<Movie> moviePagedModel = mapper.readValue(file, moviesPagedModelType);
+        Collection<Movie> movieCollection = moviePagedModel.getContent();
+
+        final Iterator<Movie> iterator = movieCollection.iterator();
+        Movie movie1 = iterator.next();
+        assertThat(movie1.getId()).isEqualTo("1");
+        assertThat(movie1.getTitle()).isEqualTo("Star Wars");
+        Movie movie2 = iterator.next();
+        assertThat(movie2.getId()).isEqualTo("2");
+        assertThat(movie2.getTitle()).isEqualTo("Avengers");
+
+        PagedModel.PageMetadata metadata = moviePagedModel.getMetadata();
+        assertThat(metadata.getNumber()).isEqualTo(1);
+        assertThat(metadata.getSize()).isEqualTo(2);
+        assertThat(metadata.getTotalPages()).isEqualTo(2);
+        assertThat(metadata.getTotalElements()).isEqualTo(2);
+    }
+
+    @Test
     void should_deserialize_empty_model_with_complex_link() throws Exception {
         File file = new ClassPathResource("emptyModelWithComplexLink.json", getClass()).getFile();
         RepresentationModel<?> movieEntityModel = mapper.readValue(file, RepresentationModel.class);

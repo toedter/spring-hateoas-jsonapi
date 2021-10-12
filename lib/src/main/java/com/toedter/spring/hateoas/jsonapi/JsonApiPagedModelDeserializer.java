@@ -18,14 +18,18 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 
 import java.util.List;
+import java.util.Map;
 
 class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
         implements ContextualDeserializer {
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
         super(jsonApiConfiguration);
@@ -39,7 +43,20 @@ class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<Pag
     protected PagedModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
         Links links = doc.getLinks();
 
-        return PagedModel.of(resources, null, links);
+        PagedModel.PageMetadata pageMetadata = null;
+        if (doc.getMeta() != null) {
+            Map<String, Long> pageMeta = (Map<String, Long>) doc.getMeta().get("page");
+            if (pageMeta != null) {
+                pageMetadata = new PagedModel.PageMetadata(
+                        ((Number) pageMeta.get("size")).longValue(),
+                        ((Number) pageMeta.get("number")).longValue(),
+                        ((Number) pageMeta.get("totalElements")).longValue(),
+                        ((Number) pageMeta.get("totalPages")).longValue()
+                );
+            }
+        }
+
+        return PagedModel.of(resources, pageMetadata, links);
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
