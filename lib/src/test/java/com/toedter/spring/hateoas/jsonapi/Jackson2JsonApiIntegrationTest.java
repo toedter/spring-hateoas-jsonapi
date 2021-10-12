@@ -18,12 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.toedter.spring.hateoas.jsonapi.support.*;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelationEntity;
@@ -31,30 +26,14 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
 import lombok.Getter;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.*;
 
 import javax.persistence.Id;
 import java.io.File;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -849,6 +828,23 @@ class Jackson2JsonApiIntegrationTest {
             File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
             mapper.readValue(file, javaType);
         });
+    }
+    @Test
+    void should_serialize_UUID() throws Exception {
+        EntityModel<MovieWithUUID> entityModel =
+                EntityModel.of(
+                        new MovieWithUUID(UUID.fromString("00000000-0001-e240-0000-00002f08ba38"), "Star Wars"));
+        String json = mapper.writeValueAsString(entityModel);
+        compareWithFile(json, "movieWithUUID.json");
+    }
+
+    @Test
+    void should_deserialize_UUID() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUID.class);
+        File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
+        EntityModel<MovieWithUUID> entityModel = mapper.readValue(file, javaType);
+        assertThat(entityModel.getContent().getId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
