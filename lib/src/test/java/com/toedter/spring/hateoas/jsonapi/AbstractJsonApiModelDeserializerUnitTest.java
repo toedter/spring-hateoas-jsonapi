@@ -82,7 +82,7 @@ public class AbstractJsonApiModelDeserializerUnitTest {
         JavaType javaType = TypeFactory.defaultInstance().constructSimpleType(TestWitNoConstructor.class, new JavaType[0]);
         testJsonApiDeserializer = new TestJsonApiDeserializer(javaType, new JsonApiConfiguration());
 
-        Assertions.assertThrows(IllegalStateException.class, () -> testJsonApiDeserializer.convertToResource(data));
+        Assertions.assertThrows(IllegalStateException.class, () -> testJsonApiDeserializer.convertToResource(data, false));
     }
 
 }

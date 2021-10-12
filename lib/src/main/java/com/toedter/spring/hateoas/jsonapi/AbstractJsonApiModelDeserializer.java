@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 
@@ -56,21 +58,29 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        boolean isEntityModelCollection = false;
+        if (this instanceof JsonApiPagedModelDeserializer || this instanceof JsonApiCollectionModelDeserializer) {
+            JavaType javaType = contentType.containedType(0);
+            if (javaType.getRawClass() == EntityModel.class) {
+                isEntityModelCollection = true;
+            }
+        }
         JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
         if (doc.getData() != null && doc.getData() instanceof Collection<?>) {
+            final boolean isEntityModelCollectionFinal = isEntityModelCollection;
             List<HashMap<String, Object>> collection = (List<HashMap<String, Object>>) doc.getData();
             List<Object> resources = collection.stream()
-                    .map(this::convertToResource)
+                    .map(x -> this.convertToResource(x, isEntityModelCollectionFinal))
                     .collect(Collectors.toList());
             return convertToRepresentationModel(resources, doc);
         }
         HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
-        final Object objectFromProperties = convertToResource(data);
+        final Object objectFromProperties = convertToResource(data, false);
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
     @Nullable
-    Object convertToResource(@Nullable HashMap<String, Object> data) {
+    Object convertToResource(@Nullable HashMap<String, Object> data, boolean wrapInEntityModel) {
         if (data == null) {
             return null;
         }
@@ -109,6 +119,12 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
                 objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.id, (String) data.get("id"));
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                 objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.type, (String) data.get("type"));
+
+        if (wrapInEntityModel) {
+            Links links = this.objectMapper.convertValue(data.get("links"), Links.class);
+            return EntityModel.of(objectFromProperties, links);
+        }
+
         return objectFromProperties;
     }
 

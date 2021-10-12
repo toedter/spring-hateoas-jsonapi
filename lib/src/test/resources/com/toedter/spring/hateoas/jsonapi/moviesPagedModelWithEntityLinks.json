@@ -1,0 +1,35 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0076759/?ref_=ttls_li_tt"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movies",
+      "attributes": {
+        "title": "Avengers"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0848228/?ref_=fn_al_tt_1"
+      }
+    }
+  ],
+  "links": {
+    "next": "http://localhost/movies?page[number]=2&page[size]=2"
+  },
+  "meta": {
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 2,
+      "totalElements": 2
+    }
+  }
+}
