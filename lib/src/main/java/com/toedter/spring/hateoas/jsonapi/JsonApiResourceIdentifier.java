@@ -214,7 +214,7 @@ class JsonApiResourceIdentifier {
                             || JSONAPI_ID_ANNOTATION.equals(annotationName))
                             || (name == JsonApiResourceField.type
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName))) {
-                        field.set(object, value);
+                        setFieldValue(object, value, field);
                         return;
                     }
                 }
@@ -237,7 +237,11 @@ class JsonApiResourceIdentifier {
                     // if the method is a setter find the corresponding field if there is one,
                     // as heuristic the method should take one parameter
                     if (isAnnotatedMethod && method.getParameterCount() == 1) {
-                        method.invoke(object, value);
+                        if(method.getParameterTypes()[0] == UUID.class) {
+                            method.invoke(object, UUID.fromString(value));
+                        } else {
+                            method.invoke(object, value);
+                        }
                         return;
                     }
                 }
@@ -248,15 +252,19 @@ class JsonApiResourceIdentifier {
                 Field field = findField(object.getClass(), name.name());
                 //noinspection ConstantConditions
                 field.setAccessible(true);
-                if(field.getType() == UUID.class) {
-                    field.set(object, UUID.fromString(value));
-                } else {
-                    field.set(object, value);
-                }
+                setFieldValue(object, value, field);
             }
         } catch (Exception e) {
             throw new IllegalStateException("Cannot set JSON:API field '" + name +
                     "' on object of type " + object.getClass().getSimpleName());
+        }
+    }
+
+    private static void setFieldValue(Object object, String value, Field field) throws IllegalAccessException {
+        if(field.getType() == UUID.class) {
+            field.set(object, UUID.fromString(value));
+        } else {
+            field.set(object, value);
         }
     }
 }

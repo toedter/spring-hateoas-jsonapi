@@ -25,7 +25,7 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelati
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
-import lombok.Getter;
+import lombok.*;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
@@ -845,6 +845,24 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
         EntityModel<MovieWithUUID> entityModel = mapper.readValue(file, javaType);
         assertThat(entityModel.getContent().getId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
+    }
+
+    @Test
+    void should_deserialize_UUID_with_annotation() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUIDAnnotation.class);
+        File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
+        EntityModel<MovieWithUUIDAnnotation> entityModel = mapper.readValue(file, javaType);
+        assertThat(entityModel.getContent().getMyId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
+    }
+
+    @Test
+    void should_deserialize_UUID_with_method() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUIDMethod.class);
+        File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
+        EntityModel<MovieWithUUIDMethod> entityModel = mapper.readValue(file, javaType);
+        assertThat(entityModel.getContent().getMyId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
