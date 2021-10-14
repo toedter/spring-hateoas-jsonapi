@@ -622,6 +622,31 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_movies_collection_model_with_entity_links() throws Exception {
+        JavaType movieEntityModelType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        JavaType moviesPagedModelType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, movieEntityModelType);
+
+        File file = new ClassPathResource("moviesPagedModelWithEntityLinks.json", getClass()).getFile();
+        CollectionModel<EntityModel<Movie>> movieCollectionModel = mapper.readValue(file, moviesPagedModelType);
+        Collection<EntityModel<Movie>> movieCollection = movieCollectionModel.getContent();
+
+        final Iterator<EntityModel<Movie>> iterator = movieCollection.iterator();
+        EntityModel<Movie> movie1 = iterator.next();
+        assertThat(movie1.getContent().getId()).isEqualTo("1");
+        assertThat(movie1.getContent().getTitle()).isEqualTo("Star Wars");
+        assertThat(movie1.getLink("imdb").get().getHref())
+                .isEqualTo("https://www.imdb.com/title/tt0076759/?ref_=ttls_li_tt");
+
+        EntityModel<Movie> movie2 = iterator.next();
+        assertThat(movie2.getContent().getId()).isEqualTo("2");
+        assertThat(movie2.getContent().getTitle()).isEqualTo("Avengers");
+        assertThat(movie2.getLink("imdb").get().getHref())
+                .isEqualTo("https://www.imdb.com/title/tt0848228/?ref_=fn_al_tt_1");
+    }
+
+    @Test
     void should_deserialize_empty_model_with_complex_link() throws Exception {
         File file = new ClassPathResource("emptyModelWithComplexLink.json", getClass()).getFile();
         RepresentationModel<?> movieEntityModel = mapper.readValue(file, RepresentationModel.class);
