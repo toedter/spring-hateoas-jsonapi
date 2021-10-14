@@ -330,6 +330,41 @@ the second `DirectorWithType` object with id = '2' and directorType = "director-
 
 NOTE: Currently, only `List` and `Set` are supported collection classes.
 
+[[collection-model-deserialization]]
+== Deserialization of PagedModels ==
+
+While a server implementation of HTTP POST and PATCH takes single resources as input,
+it is sometimes handy to be able to deserialize collection models and paged models. This is
+useful if a service consumes results of other services that produce JSON:API responses.
+
+Here is an example of a serialized `PagedModel`.
+
+[source, json]
+----
+include::{test-resources-dir}/moviesPagedModelWithEntityLinks.json[]
+----
+
+If you deserialize the above JSON to a `PagedModel<EntityModel<Movie>>>`: The page meta information will be deserialized, as well as the links in both movie entity models.
+The same mechanism would work also for `CollectionModel<EntityModel<Movie>>>`.
+
+[[uuid]]
+== UUID Deserialization ==
+
+UUIDs (`java.util.UUID`) are supported natively for deserialization.
+So a JSON like
+
+[source, json]
+----
+include::{test-resources-dir}/movieWithUUID.json[]
+----
+
+would be correctly deserialized to an object of class
+
+[source, java, indent=0]
+----
+include::{test-dir}/support/MovieWithUUID.java[tags=movie-with-uuid]
+----
+
 [[polymorphy]]
 == Polymorphic Deserialization ==
 

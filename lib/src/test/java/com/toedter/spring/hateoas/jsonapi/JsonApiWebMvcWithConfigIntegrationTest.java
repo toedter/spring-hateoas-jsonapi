@@ -108,6 +108,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
                     .withLowerCasedTypeRendered(false)
                     .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
                     .withTypeForClassUsedForDeserialization(true)
+                    .withEmptyAttributesObjectSerialized(false)
                     .withObjectMapperCustomizer(
                             objectMapper -> objectMapper.configure(
                                     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));

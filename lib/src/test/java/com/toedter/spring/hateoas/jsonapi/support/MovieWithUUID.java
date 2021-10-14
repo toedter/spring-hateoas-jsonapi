@@ -24,12 +24,16 @@ import lombok.With;
 
 import java.util.UUID;
 
+// tag::movie-with-uuid[]
+// @fold:on
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
 @JsonApiTypeForClass("movies")
+// @fold:off
 public class MovieWithUUID {
     private UUID id;
     private String title;
 }
+// end::movie-with-uuid[]

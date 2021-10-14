@@ -20,6 +20,9 @@ representation model classes should get the JSON:API type of the domain model or
 should get the JSON:API type of the superclass. See the example below.
 * if the above "Java class to JSON:API type" mapping should also be used for deserialization.
 This is very useful for polymorphic use cases.
+* if empty attributes should be serialized as an empty JSON object, like `"attributes": {}`.
+** The default is `true`.
+** If set to false, no "attributes" key is serialized if attributes are empty.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
