@@ -890,6 +890,32 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(entityModel.getContent().getMyId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
     }
 
+    @Test
+    void should_not_serialize_empty_attributes_when_configured() throws Exception {
+        MovieWithoutAttributes movie = new MovieWithoutAttributes();
+        movie.setId("1");
+        EntityModel<MovieWithoutAttributes> entityModel = EntityModel.of(movie);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withEmptyAttributesObjectSerialized(false)
+                .withTypeForClass(MovieWithoutAttributes.class, "movies"));
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithNoAttributesObject.json");
+    }
+
+    @Test
+    void should_serialize_non_empty_attributes_when_configured_with_empty_attributes_false() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withEmptyAttributesObjectSerialized(false));
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModel.json");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();

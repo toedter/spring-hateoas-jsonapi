@@ -87,6 +87,7 @@ public class JsonApiConfiguration {
 
     /**
      * Indicates if the Java class to JSON:API mapping created with {@link JsonApiConfiguration}
+     * is also used during deserialization.
      *
      * @param typeForClassUsedForDeserialization The new value of this configuration's typeForClassUsedForDeserialization
      * @return The default is {@literal false}.
@@ -187,6 +188,25 @@ public class JsonApiConfiguration {
     }
 
     /**
+     * Indicates if empty attributes are serialized as empty object.
+     * <p>
+     * If set to true, empty attributes are serialized as
+     * <code>
+     * { "data": { "id": "1", "type": "movies", "attributes": {} } }
+     * </code>
+     * </p>
+     * <p>
+     * If set to false, attributes are not serialized, like
+     * { "data": { "id": "1", "type": "movies" } }
+     * </p>
+     * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
+     * @return The default is {@literal true}.
+     */
+    @With
+    @Getter
+    private final boolean emptyAttributesObjectSerialized;
+
+    /**
      * Creates a new default {@link JsonApiConfiguration}.
      */
     public JsonApiConfiguration() {
@@ -196,6 +216,7 @@ public class JsonApiConfiguration {
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
         this.typeForClassUsedForDeserialization = false;
+        this.emptyAttributesObjectSerialized = true;
         this.objectMapperCustomizer = objectMapper -> {
         }; // Default to no action.
     }

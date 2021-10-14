@@ -23,29 +23,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Value;
 import lombok.With;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
-@Value
 @Getter(onMethod_ = {@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -75,6 +61,20 @@ class JsonApiData {
         this.relationships = relationships;
         this.links = links;
         this.meta = meta;
+    }
+
+    private static class JsonApiDataWithoutSerializedAttributes extends JsonApiData {
+        JsonApiDataWithoutSerializedAttributes(JsonApiData jsonApiData) {
+            super(jsonApiData.id, jsonApiData.type, null,
+                    jsonApiData.relationships, jsonApiData.links, jsonApiData.meta);
+        }
+
+        @Override
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public @Nullable
+        Map<String, Object> getAttributes() {
+            return null;
+        }
     }
 
     public static List<JsonApiData> extractCollectionContent(
@@ -183,12 +183,19 @@ class JsonApiData {
                 }
             }
         }
-        final Map<String, Object> finalContentObject = attributeMap;
 
-        return Optional.of(content)
-                .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
-                .map(it -> new JsonApiData(
-                        finalId, finalType, finalContentObject, finalRelationships, finalLinks, finalMetaData));
+        JsonApiData jsonApiData = new JsonApiData(
+                finalId, finalType, attributeMap, finalRelationships, finalLinks, finalMetaData);
+
+        if(attributeMap.size() > 0 || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
+            return Optional.of(content)
+                    .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
+                    .map(it -> jsonApiData);
+        } else {
+            return Optional.of(content)
+                    .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
+                    .map(it -> new JsonApiDataWithoutSerializedAttributes(jsonApiData));
+        }
     }
 
     static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(

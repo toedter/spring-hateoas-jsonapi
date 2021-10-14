@@ -42,6 +42,7 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
     public JsonApiConfiguration jsonApiConfiguration() {
         return new JsonApiConfiguration()
                 .withJsonApiVersionRendered(true)
+                .withEmptyAttributesObjectSerialized(false)
                 .withObjectMapperCustomizer(objectMapper -> {
                     // put your additional object mapper config here
                     objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
