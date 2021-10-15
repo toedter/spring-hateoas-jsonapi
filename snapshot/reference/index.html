@@ -809,7 +809,7 @@ but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "included", required = false) String[] included)
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "include", required = false) String[] include)
 </code></pre>
 </div>
 </div>
@@ -819,7 +819,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if (included != null &amp;&amp; included.length == 1 &amp;&amp; included[0].equals("directors")) {
+<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals("directors")) {
     HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
@@ -1887,7 +1887,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 1.1.1-SNAPSHOT<br>
-Last updated 2021-10-15 08:41:38 UTC
+Last updated 2021-10-15 11:45:42 UTC
 </div>
 </div>
 </div>
