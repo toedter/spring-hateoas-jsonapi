@@ -58,7 +58,7 @@ public class DirectorController {
     public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "included", required = false) String[] included,
+            @RequestParam(value = "include", required = false) String[] include,
             @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
             @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
 
@@ -88,7 +88,7 @@ public class DirectorController {
         }
 
         final JsonApiModelBuilder finalJsonApiModelBuilder = jsonApiModelBuilder;
-        if (included != null && included.length == 1 && included[0].equals("movies")) {
+        if (include != null && include.length == 1 && include[0].equals("movies")) {
             HashMap<Long, Movie> movies = new HashMap<>();
             for (Director director : pagedResult.getContent()) {
                 for (Movie movie : director.getMovies()) {

@@ -71,7 +71,7 @@ public class MovieController {
     public ResponseEntity<RepresentationModel<?>> findAll(
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size,
-            @RequestParam(value = "included", required = false) String[] included,
+            @RequestParam(value = "include", required = false) String[] include,
             @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies) {
 
         final PageRequest pageRequest = PageRequest.of(page, size);
@@ -102,7 +102,7 @@ public class MovieController {
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
         // tag::relationship-inclusion[]
-        if (included != null && included.length == 1 && included[0].equals("directors")) {
+        if (include != null && include.length == 1 && include[0].equals("directors")) {
             HashMap<Long, Director> directors = new HashMap<>();
             for (Movie movie : pagedResult.getContent()) {
                 jsonApiModelBuilder.included(movie.getDirectors());

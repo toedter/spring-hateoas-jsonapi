@@ -186,7 +186,7 @@ There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like
 
 [source, java]
-@RequestParam(value = "included", required = false) String[] included)
+@RequestParam(value = "include", required = false) String[] include)
 
 Then, within the controller implementation, this parameter could be interpreted,
 and the builder could be used for the inclusion, like
