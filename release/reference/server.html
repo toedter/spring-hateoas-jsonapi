@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.0.2</span>
+<span id="revnumber">version 1.1.0</span>
 </div>
 </div>
 <div id="content">
@@ -1003,6 +1003,102 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect1">
+<h2 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>Deserialization of PagedModels</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While a server implementation of HTTP POST and PATCH takes single resources as input,
+it is sometimes handy to be able to deserialize collection models and paged models. This is
+useful if a service consumes results of other services that produce JSON:API responses.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of a serialized <code>PagedModel</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0076759/?ref_=ttls_li_tt"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movies",
+      "attributes": {
+        "title": "Avengers"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0848228/?ref_=fn_al_tt_1"
+      }
+    }
+  ],
+  "links": {
+    "next": "http://localhost/movies?page[number]=2&amp;page[size]=2"
+  },
+  "meta": {
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 2,
+      "totalElements": 2
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you deserialize the above JSON to a <code>PagedModel&lt;EntityModel&lt;Movie&gt;&gt;&gt;</code>: The page meta information will be deserialized, as well as the links in both movie entity models.
+The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;Movie&gt;&gt;&gt;</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="uuid"><a class="anchor" href="#uuid"></a>UUID Deserialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
+So a JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "00000000-0001-e240-0000-00002f08ba38",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be correctly deserialized to an object of class</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+@JsonApiTypeForClass("movies")
+
+</span><span class="fold-block">public class MovieWithUUID {
+    private UUID id;
+    private String title;
+}
+</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="polymorphy"><a class="anchor" href="#polymorphy"></a>Polymorphic Deserialization</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1396,8 +1492,8 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.2<br>
-Last updated 2021-08-21 12:41:30 UTC
+Version 1.1.0<br>
+Last updated 2021-10-15 08:21:14 UTC
 </div>
 </div>
 </div>

@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Configuration</h1>
 <div class="details">
-<span id="revnumber">version 1.0.2</span>
+<span id="revnumber">version 1.1.0</span>
 </div>
 </div>
 <div id="content">
@@ -85,6 +85,19 @@ should get the JSON:API type of the superclass. See the example below.</p>
 This is very useful for polymorphic use cases.</p>
 </li>
 <li>
+<p>if empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is <code>true</code>.</p>
+</li>
+<li>
+<p>If set to false, no "attributes" key is serialized if attributes are empty.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
 </li>
 </ul>
@@ -116,6 +129,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
             .withTypeForClassUsedForDeserialization(true)
+            .withEmptyAttributesObjectSerialized(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -126,8 +140,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.2<br>
-Last updated 2021-08-21 12:41:30 UTC
+Version 1.1.0<br>
+Last updated 2021-10-15 08:21:14 UTC
 </div>
 </div>
 </div>

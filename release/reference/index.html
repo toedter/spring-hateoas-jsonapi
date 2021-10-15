@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 1.0.2,</span>
-<span id="revdate">2021-08-21</span>
+<span id="revnumber">version 1.1.0,</span>
+<span id="revdate">2021-10-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -55,12 +55,14 @@
 <li><a href="#sparse-fielsets">3.6. Sparse Fieldsets</a></li>
 <li><a href="#Creating">3.7. Creating Resources with HTTP POST</a></li>
 <li><a href="#server-deserialization">3.8. Deserialization of JSON:API types</a></li>
-<li><a href="#polymorphy">3.9. Polymorphic Deserialization</a>
+<li><a href="#collection-model-deserialization">3.9. Deserialization of PagedModels</a></li>
+<li><a href="#uuid">3.10. UUID Deserialization</a></li>
+<li><a href="#polymorphy">3.11. Polymorphic Deserialization</a>
 <ul class="sectlevel3">
-<li><a href="#jackson-annotations">3.9.1. Jackson Annotations</a></li>
+<li><a href="#jackson-annotations">3.11.1. Jackson Annotations</a></li>
 </ul>
 </li>
-<li><a href="#error-handling">3.10. Error Handling</a></li>
+<li><a href="#error-handling">3.12. Error Handling</a></li>
 </ul>
 </li>
 <li><a href="#client-side-support">4. Client Side support</a>
@@ -230,18 +232,18 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;1.0.2&lt;/version&gt;
+    &lt;version&gt;1.1.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock secondary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.0.2'</code></pre>
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.1.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>1.0.3-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>1.1.1-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as a repository to your Maven or Gradle configuration.</p>
 </div>
@@ -1204,7 +1206,99 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.9. Polymorphic Deserialization</h3>
+<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.9. Deserialization of PagedModels</h3>
+<div class="paragraph">
+<p>While a server implementation of HTTP POST and PATCH takes single resources as input,
+it is sometimes handy to be able to deserialize collection models and paged models. This is
+useful if a service consumes results of other services that produce JSON:API responses.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of a serialized <code>PagedModel</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0076759/?ref_=ttls_li_tt"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movies",
+      "attributes": {
+        "title": "Avengers"
+      },
+      "links": {
+        "imdb": "https://www.imdb.com/title/tt0848228/?ref_=fn_al_tt_1"
+      }
+    }
+  ],
+  "links": {
+    "next": "http://localhost/movies?page[number]=2&amp;page[size]=2"
+  },
+  "meta": {
+    "page": {
+      "number": 1,
+      "size": 2,
+      "totalPages": 2,
+      "totalElements": 2
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you deserialize the above JSON to a <code>PagedModel&lt;EntityModel&lt;Movie&gt;&gt;&gt;</code>: The page meta information will be deserialized, as well as the links in both movie entity models.
+The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;Movie&gt;&gt;&gt;</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.10. UUID Deserialization</h3>
+<div class="paragraph">
+<p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
+So a JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "00000000-0001-e240-0000-00002f08ba38",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be correctly deserialized to an object of class</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+@JsonApiTypeForClass("movies")
+
+</span><span class="fold-block">public class MovieWithUUID {
+    private UUID id;
+    private String title;
+}
+</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.11. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
 assigning a JSON:API type to a Java class and then also switching on, that the mappings should
@@ -1326,7 +1420,7 @@ But the first director would be an instance of class <code>Director</code>,
 while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
 </div>
 <div class="sect3">
-<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.9.1. Jackson Annotations</h4>
+<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.11.1. Jackson Annotations</h4>
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
@@ -1551,7 +1645,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.10. Error Handling</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.12. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -1735,6 +1829,19 @@ should get the JSON:API type of the superclass. See the example below.</p>
 This is very useful for polymorphic use cases.</p>
 </li>
 <li>
+<p>if empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is <code>true</code>.</p>
+</li>
+<li>
+<p>If set to false, no "attributes" key is serialized if attributes are empty.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
 </li>
 </ul>
@@ -1766,6 +1873,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
             .withTypeForClassUsedForDeserialization(true)
+            .withEmptyAttributesObjectSerialized(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -1778,8 +1886,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.2<br>
-Last updated 2021-08-21 12:41:30 UTC
+Version 1.1.0<br>
+Last updated 2021-10-15 08:21:14 UTC
 </div>
 </div>
 </div>
