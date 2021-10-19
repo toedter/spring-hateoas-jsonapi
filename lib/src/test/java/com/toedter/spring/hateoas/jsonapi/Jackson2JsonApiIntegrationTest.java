@@ -916,6 +916,42 @@ class Jackson2JsonApiIntegrationTest {
         compareWithFile(movieJson, "movieEntityModel.json");
     }
 
+    @Test
+    void should_deserialize_movie_with_primitive_long_id() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithLongId.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        EntityModel<MovieWithLongId> entityModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo(1);
+    }
+
+    @Test
+    void should_deserialize_movie_with_long_object_id() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithLongObjectId.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        EntityModel<MovieWithLongObjectId> entityModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo(1);
+    }
+
+    @Test
+    void should_deserialize_movie_with_primitive_int_id() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithIntId.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        EntityModel<MovieWithIntId> entityModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo(1);
+    }
+
+    @Test
+    void should_deserialize_movie_with_integer_object_id() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithIntegerObjectId.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
+        EntityModel<MovieWithIntegerObjectId> entityModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo(1);
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();

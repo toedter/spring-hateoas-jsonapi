@@ -237,7 +237,7 @@ class JsonApiResourceIdentifier {
                     // if the method is a setter find the corresponding field if there is one,
                     // as heuristic the method should take one parameter
                     if (isAnnotatedMethod && method.getParameterCount() == 1) {
-                        if(method.getParameterTypes()[0] == UUID.class) {
+                        if (method.getParameterTypes()[0] == UUID.class) {
                             method.invoke(object, UUID.fromString(value));
                         } else {
                             method.invoke(object, value);
@@ -261,10 +261,19 @@ class JsonApiResourceIdentifier {
     }
 
     private static void setFieldValue(Object object, String value, Field field) throws IllegalAccessException {
-        if(field.getType() == UUID.class) {
-            field.set(object, UUID.fromString(value));
+        Class<?> type = field.getType();
+
+        if (type != String.class) {
+            if (type == Long.TYPE || type == Long.class) {
+                field.set(object, Long.parseLong(value));
+            } else if (type == Integer.TYPE || type == Integer.class) {
+                field.set(object, Integer.parseInt(value));
+            } else if (type == UUID.class) {
+                field.set(object, UUID.fromString(value));
+            }
         } else {
             field.set(object, value);
         }
     }
+
 }
