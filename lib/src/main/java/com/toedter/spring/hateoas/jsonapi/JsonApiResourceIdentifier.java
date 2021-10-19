@@ -260,7 +260,7 @@ class JsonApiResourceIdentifier {
         }
     }
 
-    private static void setFieldValue(Object object, String value, Field field) throws IllegalAccessException {
+    private static void setFieldValue(Object object, @Nullable String value, Field field) throws IllegalAccessException {
         Class<?> type = field.getType();
 
         if (type != String.class && value != null) {
