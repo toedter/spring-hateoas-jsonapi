@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
@@ -149,8 +151,8 @@ public class MovieController {
                         throw new RuntimeException(e);
                     }
                 })
-                .map(uri -> ResponseEntity.created(uri).build())
-                .orElse(ResponseEntity.badRequest().body("Unable to create " + movie));
+                .map(uri -> ResponseEntity.created(uri).body(movieRepresentationModel))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create " + movie));
     }
 
     @GetMapping("/movies/{id}")
@@ -174,13 +176,14 @@ public class MovieController {
     }
 
     @PatchMapping("/movies/{id}")
-    public ResponseEntity<?> updateMoviePartially(@RequestBody Movie movie, @PathVariable Long id) {
+    public ResponseEntity<?> updateMoviePartially(@RequestBody EntityModel<Movie> movieModel, @PathVariable Long id) {
 
         Movie existingMovie = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
+        Movie movie = movieModel.getContent();
         existingMovie.update(movie);
 
         movieRepository.save(existingMovie);
-        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(movie, null);
+        final RepresentationModel<?> movieRepresentationModel = movieModelAssembler.toJsonApiModel(existingMovie, null);
 
         return movieRepresentationModel
                 .getLink(IanaLinkRelations.SELF)
