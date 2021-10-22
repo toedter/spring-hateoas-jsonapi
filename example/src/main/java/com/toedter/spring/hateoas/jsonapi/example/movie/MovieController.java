@@ -158,12 +158,22 @@ public class MovieController {
     @GetMapping("/movies/{id}")
     public ResponseEntity<? extends RepresentationModel<?>> findOne(
             @PathVariable Long id,
+            @RequestParam(value = "include", required = false) String[] include,
             @RequestParam(value = "fields[movies]", required = false) String[] filterMovies) {
 
         return movieRepository.findById(id)
-                .map(movie -> movieModelAssembler.toJsonApiModel(movie, filterMovies))
+                .map(movie -> setInclude(movie, include, filterMovies))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
+        RepresentationModel<?> model = movieModelAssembler.toJsonApiModel(movie, filterMovies);
+        JsonApiModelBuilder builder = jsonApiModel().model(model);
+        if (include != null && include.length == 1 && include[0].equals("directors")) {
+            movie.getDirectors().forEach(entry -> builder.included(EntityModel.of(entry)));
+        }
+        return builder.build();
     }
 
     @GetMapping("/movies/{id}/directors")

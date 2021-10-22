@@ -36,7 +36,7 @@ class MovieModelAssembler {
     private static final String DIRECTORS = "directors";
 
     public RepresentationModel<?> toJsonApiModel(Movie movie, String[] fieldsMovies) {
-        Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId(), null)).withSelfRel();
+        Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId(), null, null)).withSelfRel();
         String href = selfLink.getHref();
         selfLink = selfLink.withHref(href.substring(0,href.indexOf("{")));
 
