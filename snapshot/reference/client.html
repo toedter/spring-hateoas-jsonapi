@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Client Side support</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body id="client-side-support" class="article"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<h1>Client Side support</h1>
+<div class="details">
+<span id="revnumber">version 1.1.2-SNAPSHOT</span>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="deserialization"><a class="anchor" href="#deserialization"></a>Deserialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+models are supported.</p>
+</div>
+<div class="paragraph">
+<p>For example, a JSON structured like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an object of class <code>EntityModel&lt;Movie&gt;</code>,
+where the <code>Movie</code> class looks like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+
+</span><span class="fold-block">public class Movie {
+    private String id;
+    private String title;
+}
+</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please be aware that the deserialization mechanism is currently not able to deserialize all types of
+complex JSON:API structures that can be built with JSON:API model builder.</p>
+</div>
+<div class="paragraph">
+<p>Examples for deserialization of relationships you find in the section <a href="#server-deserialization">[server-deserialization]</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="traverson"><a class="anchor" href="#traverson"></a>Traverson</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
+implementation provided through {spring-hateoas-url}[Spring HATEOAS].</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="link-discovery"><a class="anchor" href="#link-discovery"></a>Link Discovery</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
+type in it.
+{spring-hateoas-url}[Spring HATEOAS] provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+for the configured hypermedia types.
+When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
+is exposed as a Spring bean.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can set up and use an instance as follows
+(<code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">LinkDiscoverer discoverer = new JsonApiLinkDiscoverer();
+Links links = discoverer.findLinksWithRel(SELF, source);
+
+assertThat(links.hasLink("self")).isTrue();
+assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 1.1.2-SNAPSHOT<br>
+Last updated 2021-10-22 06:32:24 UTC
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
