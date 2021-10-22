@@ -106,10 +106,20 @@ public class DirectorController {
     @GetMapping("/directors/{id}")
     public ResponseEntity<? extends RepresentationModel<?>> findOne(
             @PathVariable Long id,
+            @RequestParam(value = "include", required = false) String[] include,
             @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
         return repository.findById(id)
-                .map(director -> directorModelAssembler.toJsonApiModel(director, fieldsDirectors))
+                .map(director -> setInclude(director, include, fieldsDirectors))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private RepresentationModel<?> setInclude(Director director, String[] include, String[] fieldsDirectors) {
+        RepresentationModel<?> model = directorModelAssembler.toJsonApiModel(director, fieldsDirectors);
+        JsonApiModelBuilder builder = jsonApiModel().model(model);
+        if (include != null && include.length == 1 && include[0].equals("movies")) {
+            director.getMovies().forEach(entry -> builder.included(EntityModel.of(entry)));
+        }
+        return builder.build();
     }
 }

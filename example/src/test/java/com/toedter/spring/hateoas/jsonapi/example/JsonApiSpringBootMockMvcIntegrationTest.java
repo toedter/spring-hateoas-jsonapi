@@ -16,9 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
+import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
+import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -36,6 +38,7 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,6 +80,32 @@ public class JsonApiSpringBootMockMvcIntegrationTest {
                 .andExpect(jsonPath("$.data.attributes.title", is("Test Movie")))
                 .andExpect(jsonPath("$.data.attributes.year", is(2020)))
                 .andExpect(jsonPath("$.data.attributes.rating", is(9.3)))
+                .andExpect(jsonPath("$.links.self", is("http://localhost/api/movies/1")));
+    }
+
+    @Test
+    void should_get_single_movie_with_include() throws Exception {
+
+        Movie movie = new Movie("12345", "Test Movie", 2020, 9.3, 17, null);
+        movie.setId(1L);
+        Director director = new Director(2L, "Good Director", Collections.singletonList(movie));
+        movie.addDirector(director);
+
+        Mockito.when(movieRepository.findById(1L))
+            .thenReturn(Optional.of(movie));
+
+        this.mockMvc
+                .perform(get("/api/movies/1?include=directors").accept(JSON_API))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jsonapi", is(not(empty()))))
+                .andExpect(jsonPath("$.jsonapi.version", is("1.0")))
+                .andExpect(jsonPath("$.data.id", is("1")))
+                .andExpect(jsonPath("$.data.type", is("movies")))
+                .andExpect(jsonPath("$.data.attributes.title", is("Test Movie")))
+                .andExpect(jsonPath("$.data.attributes.year", is(2020)))
+                .andExpect(jsonPath("$.data.attributes.rating", is(9.3)))
+                .andExpect(jsonPath("$.included", hasSize(1)))
+                .andExpect(jsonPath("$.included[0].attributes.name", is("Good Director")))
                 .andExpect(jsonPath("$.links.self", is("http://localhost/api/movies/1")));
     }
 

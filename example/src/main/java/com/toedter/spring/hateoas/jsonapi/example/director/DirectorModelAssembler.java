@@ -35,7 +35,7 @@ class DirectorModelAssembler {
     private static final String MOVIES = "movies";
 
     public RepresentationModel<?> toJsonApiModel(Director director, String[] fieldsDirectors) {
-        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null)).withSelfRel();
+        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null, null)).withSelfRel();
 
         Link directorsLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
         Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel("directors");
