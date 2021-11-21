@@ -107,7 +107,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             doc = doc.withJsonapi(new JsonApiJsonApi());
         }
 
-        if (collectionModel instanceof PagedModel) {
+        if (jsonApiConfiguration.isPageMetaAutomaticallyCreated() && collectionModel instanceof PagedModel) {
             JsonApiModel model =
                     (JsonApiModel) JsonApiModelBuilder.jsonApiModel().model(collectionModel).pageMeta().build();
             Map<String, Object> metaData = model.getMetaData();

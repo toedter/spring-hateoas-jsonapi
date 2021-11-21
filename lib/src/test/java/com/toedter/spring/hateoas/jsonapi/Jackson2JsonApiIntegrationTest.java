@@ -256,7 +256,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_movie_paged_model() throws Exception {
+    void should_serialize_movie_paged_model_with_automatically_created_page_meta() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         Movie movie2 = new Movie("2", "Avengers");
         List<Movie> movies = new ArrayList<>();
@@ -270,6 +270,26 @@ class Jackson2JsonApiIntegrationTest {
 
         String moviesJson = mapper.writeValueAsString(pagedModel);
         compareWithFile(moviesJson, "moviesPagedModel.json");
+    }
+
+    @Test
+    void should_serialize_movie_paged_model_with_no_page_meta() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        Movie movie2 = new Movie("2", "Avengers");
+        List<Movie> movies = new ArrayList<>();
+        movies.add(movie1);
+        movies.add(movie2);
+
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(2, 1, 2, 2);
+        Link nextLink = Link.of("http://localhost/movies?page[number]=2&page[size]=2").withRel(IanaLinkRelations.NEXT);
+        final PagedModel<Movie> pagedModel = PagedModel.of(movies, pageMetadata, nextLink);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withPageMetaAutomaticallyCreated(false));
+
+        String moviesJson = mapper.writeValueAsString(pagedModel);
+        compareWithFile(moviesJson, "moviesPagedModelWithoutMeta.json");
     }
 
     @Test

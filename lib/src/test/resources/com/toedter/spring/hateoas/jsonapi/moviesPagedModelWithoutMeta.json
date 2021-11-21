@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movies",
+      "attributes": {
+        "title": "Avengers"
+      }
+    }
+  ],
+  "links": {
+    "next": "http://localhost/movies?page[number]=2&page[size]=2"
+  }
+}
