@@ -78,7 +78,7 @@ public class JsonApiConfiguration {
      * Indicates if page metadata (rendered as top level JSON:API meta)
      * for a paged model is created automatically.
      *
-     * @param pageMetaAutomaticallyCreated The new value of this configuration's paginationLinksAutomaticallyCreated
+     * @param pageMetaAutomaticallyCreated The new value of this configuration's pageMetaAutomaticallyCreated
      * @return The default is {@literal true}.
      */
     @With
