@@ -60,8 +60,7 @@ class JsonApiMediaTypeConfigurationUnitTest {
         assertThat(objectMapper.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)).isFalse();
         assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)).isFalse();
         assertThat(objectMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)).isFalse();
-        assertThat(objectMapper.getRegisteredModuleIds().
-                contains("com.toedter.spring.hateoas.jsonapi.Jackson2JsonApiModule")).isTrue();
+        assertThat(objectMapper.getRegisteredModuleIds().contains("json-api-module")).isTrue();
     }
 
 }
