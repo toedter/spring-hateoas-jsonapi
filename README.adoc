@@ -95,9 +95,9 @@ The (pretty-printed) rendered result is:
     }
   ],
   "links": {
-    "self": "http://localhost:8080/api/movies?page[number]=0&page[size]=1",
-    "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",
-    "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
+     "self": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=0&page[size]=1",
+     "next": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=1&page[size]=1",
+     "last": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=249&page[size]=1"
   },
   "meta": {
     "page": {

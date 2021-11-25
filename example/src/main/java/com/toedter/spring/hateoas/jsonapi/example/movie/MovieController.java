@@ -22,31 +22,16 @@ import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -85,9 +70,14 @@ public class MovieController {
                         .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
                         .collect(Collectors.toList());
 
-        Link selfLink = linkTo(MovieController.class).slash(
-                "movies?page[number]=" + pagedResult.getNumber()
-                        + "&page[size]=" + pagedResult.getSize()).withSelfRel();
+        String includeParams = Arrays.toString(include);
+        String movieFieldParams = Arrays.toString(fieldsMovies);
+        String paginationParams = "?fields[movies]=" + movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
+        paginationParams += "&include=" + includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
+
+        Link selfLink = linkTo(MovieController.class).slash("movies" + paginationParams
+                + "&page[number]=" + pagedResult.getNumber()
+                + "&page[size]=" + pagedResult.getSize()).withSelfRel();
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(
@@ -99,7 +89,8 @@ public class MovieController {
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
                 PagedModel.of(movieResources, pageMetadata);
 
-        String pageLinksBase = linkTo(MovieController.class).slash("movies").withSelfRel().getHref();
+        String pageLinksBase =
+                linkTo(MovieController.class).slash("movies").withSelfRel().getHref() + paginationParams;
         final JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
@@ -120,7 +111,7 @@ public class MovieController {
     // tag::new-movie[]
     @PostMapping("/movies")
     public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movieModel) {
-    // end::new-movie[]
+        // end::new-movie[]
         Movie movie = movieModel.getContent();
         assert movie != null;
         movieRepository.save(movie);

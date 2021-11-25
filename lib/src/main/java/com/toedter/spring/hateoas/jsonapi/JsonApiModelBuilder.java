@@ -546,7 +546,7 @@ public class JsonApiModelBuilder {
             }
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException(
-                    "LinkBase parameter must be a valid URL.");
+                    "linkBase parameter must be a valid URL.");
         }
 
         if (pageNumber > 0) {
