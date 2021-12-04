@@ -53,16 +53,17 @@
 <li><a href="#inclusion">3.4. Inclusion of related Resources</a></li>
 <li><a href="#Nesting">3.5. Nesting of JsonApiModels</a></li>
 <li><a href="#sparse-fielsets">3.6. Sparse Fieldsets</a></li>
-<li><a href="#Creating">3.7. Creating Resources with HTTP POST</a></li>
-<li><a href="#server-deserialization">3.8. Deserialization of JSON:API types</a></li>
-<li><a href="#collection-model-deserialization">3.9. Deserialization of PagedModels</a></li>
-<li><a href="#uuid">3.10. UUID Deserialization</a></li>
-<li><a href="#polymorphy">3.11. Polymorphic Deserialization</a>
+<li><a href="#affordances">3.7. Spring HATEOAS Affordances</a></li>
+<li><a href="#Creating">3.8. Creating Resources with HTTP POST</a></li>
+<li><a href="#server-deserialization">3.9. Deserialization of JSON:API types</a></li>
+<li><a href="#collection-model-deserialization">3.10. Deserialization of PagedModels</a></li>
+<li><a href="#uuid">3.11. UUID Deserialization</a></li>
+<li><a href="#polymorphy">3.12. Polymorphic Deserialization</a>
 <ul class="sectlevel3">
-<li><a href="#jackson-annotations">3.11.1. Jackson Annotations</a></li>
+<li><a href="#jackson-annotations">3.12.1. Jackson Annotations</a></li>
 </ul>
 </li>
-<li><a href="#error-handling">3.12. Error Handling</a></li>
+<li><a href="#error-handling">3.13. Error Handling</a></li>
 </ul>
 </li>
 <li><a href="#client-side-support">4. Client Side support</a>
@@ -1014,7 +1015,107 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.7. Creating Resources with HTTP POST</h3>
+<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.7. Spring HATEOAS Affordances</h3>
+<div class="paragraph">
+<p>Spring HATEOAS provides a generic, media type independent API for
+<a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances">affordances</a>.
+Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
+information. This library provide a new <strong>experimental</strong> configuration, the render Spring HATEOAS affordances as
+JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
+that can be serialized by Spring HATEOAS out of the box.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows the usage of Spring HATEOAS affordances.
+First you have to enable this experimental feature in the configuration, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Java" data-lang="Java">new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
+   JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final Affordance newMovieAffordance =
+        afford(methodOn(MovieController.class).newMovie(null));
+
+Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
+        + "page[number]=" + pagedResult.getNumber()
+        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The rendered result of the self link would then be</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "links": {
+    "self": {
+      "href": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=10",
+      "meta": {
+        "affordances": [
+          {
+            "name": "newMovie",
+            "link": {
+              "rel": "newMovie",
+              "href": "http://localhost:8080/api/movies"
+            },
+            "httpMethod": "POST",
+            "inputProperties": [
+              {
+                "name": "imdbId",
+                "type": "text",
+                "required": false
+              },
+              {
+                "name": "rank",
+                "type": "number",
+                "required": false
+              },
+              {
+                "name": "rating",
+                "type": "number",
+                "required": false
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "year",
+                "type": "number",
+                "required": false
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.8. Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
@@ -1109,7 +1210,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.8. Deserialization of JSON:API types</h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.9. Deserialization of JSON:API types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1206,7 +1307,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.9. Deserialization of PagedModels</h3>
+<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.10. Deserialization of PagedModels</h3>
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
 it is sometimes handy to be able to deserialize collection models and paged models. This is
@@ -1260,7 +1361,7 @@ The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;M
 </div>
 </div>
 <div class="sect2">
-<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.10. UUID Deserialization</h3>
+<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.11. UUID Deserialization</h3>
 <div class="paragraph">
 <p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
 So a JSON like</p>
@@ -1298,7 +1399,7 @@ So a JSON like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.11. Polymorphic Deserialization</h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.12. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
 assigning a JSON:API type to a Java class and then also switching on, that the mappings should
@@ -1420,7 +1521,7 @@ But the first director would be an instance of class <code>Director</code>,
 while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
 </div>
 <div class="sect3">
-<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.11.1. Jackson Annotations</h4>
+<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.12.1. Jackson Annotations</h4>
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
@@ -1645,7 +1746,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.12. Error Handling</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.13. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -1887,7 +1988,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 1.1.2-SNAPSHOT<br>
-Last updated 2021-12-04 11:25:08 UTC
+Last updated 2021-12-04 12:58:15 UTC
 </div>
 </div>
 </div>
