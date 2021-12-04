@@ -70,17 +70,31 @@ public class MovieController {
                         .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
                         .collect(Collectors.toList());
 
-        String includeParams = Arrays.toString(include);
-        String movieFieldParams = Arrays.toString(fieldsMovies);
-        String paginationParams = "?fields[movies]=" + movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
-        paginationParams += "&include=" + includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
+        String uriParams = "?";
+        if (fieldsMovies != null) {
 
+            String movieFieldParams = Arrays.toString(fieldsMovies);
+            uriParams = "?fields[movies]=" +
+                    movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
+        }
+
+        if (include != null) {
+            String includeParams = Arrays.toString(include);
+            if(!uriParams.equals("?")) {
+                uriParams += "&";
+            }
+            uriParams += "include=" +
+                    includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
+        }
+
+        // tag::affordance[]
         final Affordance newMovieAffordance =
                 afford(methodOn(MovieController.class).newMovie(null));
 
-        Link selfLink = linkTo(MovieController.class).slash("movies" + paginationParams
-                + "&page[number]=" + pagedResult.getNumber()
+        Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
+                + "page[number]=" + pagedResult.getNumber()
                 + "&page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        // end::affordance[]
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(
@@ -92,8 +106,12 @@ public class MovieController {
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
                 PagedModel.of(movieResources, pageMetadata);
 
+        if(uriParams.equals("?")) {
+            uriParams = "";
+        }
+
         String pageLinksBase =
-                linkTo(MovieController.class).slash("movies").withSelfRel().getHref() + paginationParams;
+                linkTo(MovieController.class).slash("movies").withSelfRel().getHref() + uriParams;
         final JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
