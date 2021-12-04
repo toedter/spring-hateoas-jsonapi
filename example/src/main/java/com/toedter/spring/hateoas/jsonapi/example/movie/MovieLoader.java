@@ -62,7 +62,7 @@ class MovieLoader {
                     if (director == null) {
                         director = new Director(directorName.trim());
                     }
-                    log.info("adding movie: " + movie.getTitle() + " to " + directorName.trim());
+                    log.info("adding movie \"" + movie.getTitle() + "\" to director \"" + directorName.trim() + "\".");
                     director.addMovie(movie);
                     directorRepository.save(director);
                     movie.addDirector(director);

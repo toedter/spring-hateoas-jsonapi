@@ -18,16 +18,14 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 
 @Component
 @Slf4j
@@ -46,9 +44,15 @@ class MovieModelAssembler {
         String relationshipSelfLink = selfLink.getHref() + "/relationships/" + DIRECTORS;
         String relationshipRelatedLink = selfLink.getHref() + "/" + DIRECTORS;
 
+        final Affordance updatePartiallyAffordance =
+                afford(methodOn(MovieController.class).updateMoviePartially(EntityModel.of(movie), movie.getId()));
+
+        final Affordance deleteAffordance =
+                afford(methodOn(MovieController.class).deleteMovie(movie.getId()));
+
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(movie)
-                .link(selfLink);
+                .link(selfLink.andAffordance(updatePartiallyAffordance).andAffordance(deleteAffordance));
 
         if (fieldsMovies != null) {
             builder = builder.fields("movies", fieldsMovies);

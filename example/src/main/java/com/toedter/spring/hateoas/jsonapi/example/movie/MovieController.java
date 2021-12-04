@@ -37,7 +37,7 @@ import java.util.stream.StreamSupport;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(value = RootController.API_BASE_PATH, produces = JSON_API_VALUE)
@@ -75,9 +75,12 @@ public class MovieController {
         String paginationParams = "?fields[movies]=" + movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
         paginationParams += "&include=" + includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
 
+        final Affordance newMovieAffordance =
+                afford(methodOn(MovieController.class).newMovie(null));
+
         Link selfLink = linkTo(MovieController.class).slash("movies" + paginationParams
                 + "&page[number]=" + pagedResult.getNumber()
-                + "&page[size]=" + pagedResult.getSize()).withSelfRel();
+                + "&page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(

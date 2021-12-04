@@ -115,6 +115,7 @@ java {
 
 javadoc {
     options.overview = 'src/main/javadoc/overview.html'
+    exclude 'org/springframework/hateoas/mediatype/hal/forms/**'
 }
 
 publishing {

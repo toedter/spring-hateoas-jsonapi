@@ -26,15 +26,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class MoviesDemoApplication implements WebMvcConfigurer {
     public static void main(String... args) {
-        // when deployed as a docker container to Heroku
-        // Heroku sets the PORT environment variable
-        // The DYNO environment variable is just to make sure to run in an Heroku environment
-        String herokuPort = System.getenv().get("PORT");
-        String herokuDyno = System.getenv().get("DYNO");
-        if (herokuPort != null && herokuDyno != null) {
-            System.getProperties().put("server.port", herokuPort);
-        }
-
         SpringApplication.run(MoviesDemoApplication.class, args);
     }
 
@@ -47,5 +38,7 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
                     // put your additional object mapper config here
                     objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
                 });
+                // Experimental feature:
+                // .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
     }
 }

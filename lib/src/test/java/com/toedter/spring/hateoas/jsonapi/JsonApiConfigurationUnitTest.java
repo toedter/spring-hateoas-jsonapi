@@ -36,6 +36,8 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
         assertThat(new JsonApiConfiguration().isTypeForClassUsedForDeserialization()).isFalse();
+        assertThat(new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta())
+                .isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
     }
 
     @Test
@@ -80,5 +82,12 @@ class JsonApiConfigurationUnitTest {
                         mapper -> objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT))
                 .customize(objectMapper);
         assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)).isTrue();
+    }
+
+    @Test
+    void should_set_affordance_type() {
+        assertThat(new JsonApiConfiguration()
+                .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS)
+                .getAffordancesRenderedAsLinkMeta()).isEqualTo(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
     }
 }

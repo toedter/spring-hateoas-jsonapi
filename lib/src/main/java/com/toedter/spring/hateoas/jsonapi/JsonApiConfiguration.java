@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+
 /**
  * JSON:API specific configuration.
  *
@@ -35,6 +36,7 @@ import java.util.function.Consumer;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonApiConfiguration {
+    public enum AffordanceType {NONE, SPRING_HATEOAS, HAL_FORMS}
 
     /**
      * Indicates if the JSON:API type attribute of resource objects is pluralized.
@@ -95,6 +97,20 @@ public class JsonApiConfiguration {
     @With
     @Getter
     private final boolean typeForClassUsedForDeserialization;
+
+    /**
+     * Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
+     * This feature is experimental, please don't use it in production yet.
+     * The format of the affordances will probably change. Currently, only a proprietary
+     * format ({@literal SPRING_HATEOAS}) derived from the internal affordance model
+     * and {@literal HAL-FORMS} _templates are supported.
+     *
+     * @param affordancesRenderedAsLinkMeta The new value of this configuration's affordancesRenderedAsLinkMeta
+     * @return The list of {#link AffordanceType}. The default is NONE, so no affordances will be rendered.
+     */
+    @With
+    @Getter
+    private final AffordanceType affordancesRenderedAsLinkMeta;
 
     /**
      * You can pass a lambda expression to customize the ObjectMapper used
@@ -177,9 +193,9 @@ public class JsonApiConfiguration {
     public @Nullable
     Class<?> getClassForType(String type) {
         Assert.notNull(type, "type must not be null!");
-        if(this.typeForClass.containsValue(type)) {
+        if (this.typeForClass.containsValue(type)) {
             for (Map.Entry<Class<?>, String> entry : this.typeForClass.entrySet()) {
-                if(entry.getValue().equals(type)) {
+                if (entry.getValue().equals(type)) {
                     return entry.getKey();
                 }
             }
@@ -199,6 +215,7 @@ public class JsonApiConfiguration {
      * If set to false, attributes are not serialized, like
      * { "data": { "id": "1", "type": "movies" } }
      * </p>
+     *
      * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
      * @return The default is {@literal true}.
      */
@@ -217,6 +234,7 @@ public class JsonApiConfiguration {
         this.typeForClass = new LinkedHashMap<>();
         this.typeForClassUsedForDeserialization = false;
         this.emptyAttributesObjectSerialized = true;
+        this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
         this.objectMapperCustomizer = objectMapper -> {
         }; // Default to no action.
     }

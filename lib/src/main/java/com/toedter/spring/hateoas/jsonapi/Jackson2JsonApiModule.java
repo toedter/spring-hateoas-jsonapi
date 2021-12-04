@@ -20,11 +20,8 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.*;
+import org.springframework.lang.Nullable;
 
 /**
  * Jackson {@link SimpleModule} for {@literal JSON:API} serializers and deserializers.
@@ -33,7 +30,7 @@ import org.springframework.hateoas.RepresentationModel;
  */
 public class Jackson2JsonApiModule extends SimpleModule {
 
-    public Jackson2JsonApiModule() {
+    public Jackson2JsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
 
         super("json-api-module",
                 new Version(1, 0, 0, null,
@@ -45,9 +42,18 @@ public class Jackson2JsonApiModule extends SimpleModule {
         setMixInAnnotation(CollectionModel.class, CollectionModelMixin.class);
         setMixInAnnotation(PagedModel.class, PagedModelMixin.class);
 
-        // Links has no default constructor so we cannot use a Mixin
-        addSerializer(Links.class, new JsonApiLinksSerializer());
+        // Links class has no default constructor, so we cannot use a Mixin
+        JsonApiLinksSerializer jsonApiLinksSerializer = new JsonApiLinksSerializer();
+        if(jsonApiConfiguration != null) {
+            jsonApiLinksSerializer.setJsonApiConfiguration(jsonApiConfiguration);
+        }
+        addSerializer(Links.class, jsonApiLinksSerializer);
+
         addDeserializer(Links.class, new JsonApiLinksDeserializer());
+    }
+
+    public Jackson2JsonApiModule() {
+        this(null);
     }
 
     @JsonSerialize(using = JsonApiEntityModelSerializer.class)
