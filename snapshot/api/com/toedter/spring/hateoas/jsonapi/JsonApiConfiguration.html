@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -139,6 +139,29 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -185,6 +208,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAffordancesRenderedAsLinkMeta()">getAffordancesRenderedAsLinkMeta</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.Class&lt;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getClassForType(java.lang.String)">getClassForType</a></span>&#8203;(java.lang.String&nbsp;type)</code></th>
 <td class="colLast">
@@ -192,7 +222,7 @@ extends java.lang.Object</pre>
  for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTypeForClass(java.lang.Class)">getTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz)</code></th>
 <td class="colLast">
@@ -200,28 +230,28 @@ extends java.lang.Object</pre>
  for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEmptyAttributesObjectSerialized()">isEmptyAttributesObjectSerialized</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isJsonApiVersionRendered()">isJsonApiVersionRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLowerCasedTypeRendered()">isLowerCasedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPageMetaAutomaticallyCreated()">isPageMetaAutomaticallyCreated</a></span>()</code></th>
 <td class="colLast">
@@ -229,14 +259,14 @@ extends java.lang.Object</pre>
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPluralizedTypeRendered()">isPluralizedTypeRendered</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTypeForClassUsedForDeserialization()">isTypeForClassUsedForDeserialization</a></span>()</code></th>
 <td class="colLast">
@@ -244,28 +274,35 @@ extends java.lang.Object</pre>
  is also used during deserialization.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)">withAffordancesRenderedAsLinkMeta</a></span>&#8203;(<a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></th>
+<td class="colLast">
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withEmptyAttributesObjectSerialized(boolean)">withEmptyAttributesObjectSerialized</a></span>&#8203;(boolean&nbsp;emptyAttributesObjectSerialized)</code></th>
 <td class="colLast">
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withJsonApiVersionRendered(boolean)">withJsonApiVersionRendered</a></span>&#8203;(boolean&nbsp;jsonApiVersionRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withLowerCasedTypeRendered(boolean)">withLowerCasedTypeRendered</a></span>&#8203;(boolean&nbsp;lowerCasedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withObjectMapperCustomizer(java.util.function.Consumer)">withObjectMapperCustomizer</a></span>&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</code></th>
 <td class="colLast">
@@ -273,7 +310,7 @@ extends java.lang.Object</pre>
  for serialization.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPageMetaAutomaticallyCreated(boolean)">withPageMetaAutomaticallyCreated</a></span>&#8203;(boolean&nbsp;pageMetaAutomaticallyCreated)</code></th>
 <td class="colLast">
@@ -281,14 +318,14 @@ extends java.lang.Object</pre>
  for a paged model is created automatically.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withPluralizedTypeRendered(boolean)">withPluralizedTypeRendered</a></span>&#8203;(boolean&nbsp;pluralizedTypeRendered)</code></th>
 <td class="colLast">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClass(java.lang.Class,java.lang.String)">withTypeForClass</a></span>&#8203;(java.lang.Class&lt;?&gt;&nbsp;clazz,
                 java.lang.String&nbsp;type)</code></th>
@@ -297,7 +334,7 @@ extends java.lang.Object</pre>
  when rendered.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTypeForClassUsedForDeserialization(boolean)">withTypeForClassUsedForDeserialization</a></span>&#8203;(boolean&nbsp;typeForClassUsedForDeserialization)</code></th>
 <td class="colLast">
@@ -591,6 +628,44 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 </dl>
 </li>
 </ul>
+<a id="withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withAffordancesRenderedAsLinkMeta</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withAffordancesRenderedAsLinkMeta&#8203;(<a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</pre>
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
+ This feature is experimental, please don't use it in production yet.
+ The format of the affordances will probably change. Currently, only a proprietary
+ format (SPRING_HATEOAS) derived from the internal affordance model
+ and HAL-FORMS _templates are supported.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>affordancesRenderedAsLinkMeta</code> - The new value of this configuration's affordancesRenderedAsLinkMeta</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</li>
+</ul>
+<a id="getAffordancesRenderedAsLinkMeta()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAffordancesRenderedAsLinkMeta</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;getAffordancesRenderedAsLinkMeta()</pre>
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
+ This feature is experimental, please don't use it in production yet.
+ The format of the affordances will probably change. Currently, only a proprietary
+ format (SPRING_HATEOAS) derived from the internal affordance model
+ and HAL-FORMS _templates are supported.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The list of {#link AffordanceType}. The default is NONE, so no affordances will be rendered.</dd>
+</dl>
+</li>
+</ul>
 <a id="withObjectMapperCustomizer(java.util.function.Consumer)">
 <!--   -->
 </a>
@@ -709,7 +784,7 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
