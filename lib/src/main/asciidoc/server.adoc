@@ -258,6 +258,82 @@ if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies"))
     builder = builder.relationship("movies", director.getMovies());
 }
 
+[[affordances]]
+== Spring HATEOAS Affordances
+
+Spring HATEOAS provides a generic, media type independent API for
+https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances[affordances].
+Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
+information. This library provide a new *experimental* configuration, the render Spring HATEOAS affordances as
+JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
+that can be serialized by Spring HATEOAS out of the box.
+
+The following example shows the usage of Spring HATEOAS affordances.
+First you have to enable this experimental feature in the configuration, like
+
+[source, Java]
+new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
+   JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
+
+Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like
+
+[source, java, , indent=0]
+----
+include::{example-code-dir}/movie/MovieController.java[tags=affordance]
+----
+
+The rendered result of the self link would then be
+
+[source, json]
+{
+  "links": {
+    "self": {
+      "href": "http://localhost:8080/api/movies?page[number]=0&page[size]=10",
+      "meta": {
+        "affordances": [
+          {
+            "name": "newMovie",
+            "link": {
+              "rel": "newMovie",
+              "href": "http://localhost:8080/api/movies"
+            },
+            "httpMethod": "POST",
+            "inputProperties": [
+              {
+                "name": "imdbId",
+                "type": "text",
+                "required": false
+              },
+              {
+                "name": "rank",
+                "type": "number",
+                "required": false
+              },
+              {
+                "name": "rating",
+                "type": "number",
+                "required": false
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "year",
+                "type": "number",
+                "required": false
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+
+IMPORTANT: This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
+
 [[Creating]]
 == Creating Resources with HTTP POST
 
