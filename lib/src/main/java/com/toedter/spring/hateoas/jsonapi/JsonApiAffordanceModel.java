@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.hateoas.AffordanceModel;
@@ -45,6 +46,7 @@ class JsonApiAffordanceModel extends AffordanceModel {
         String type;
 
         @With
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         boolean required;
 
         PropertyData() {

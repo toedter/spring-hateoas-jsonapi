@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
 
     // if you want to use the released version, use
     // implementation 'com.toedter:spring-hateoas-jsonapi:1.1.1'

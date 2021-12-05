@@ -285,54 +285,50 @@ include::{example-code-dir}/movie/MovieController.java[tags=affordance]
 The rendered result of the self link would then be
 
 [source, json]
-{
-  "links": {
-    "self": {
-      "href": "http://localhost:8080/api/movies?page[number]=0&page[size]=10",
-      "meta": {
-        "affordances": [
-          {
-            "name": "newMovie",
-            "link": {
-              "rel": "newMovie",
-              "href": "http://localhost:8080/api/movies"
+"links": {
+  "self": {
+    "href": "http://localhost:8080/api/movies?page[number]=0&page[size]=10",
+    "meta": {
+      "affordances": [
+        {
+          "name": "newMovie",
+          "link": {
+            "rel": "newMovie",
+            "href": "http://localhost:8080/api/movies"
+          },
+          "httpMethod": "POST",
+          "inputProperties": [
+            {
+              "name": "imdbId",
+              "type": "text",
             },
-            "httpMethod": "POST",
-            "inputProperties": [
-              {
-                "name": "imdbId",
-                "type": "text",
-                "required": false
-              },
-              {
-                "name": "rank",
-                "type": "number",
-                "required": false
-              },
-              {
-                "name": "rating",
-                "type": "number",
-                "required": false
-              },
-              {
-                "name": "title",
-                "type": "text",
-                "required": true
-              },
-              {
-                "name": "year",
-                "type": "number",
-                "required": false
-              }
-            ]
-          }
-        ]
-      }
+            {
+              "name": "rank",
+              "type": "number",
+            },
+            {
+              "name": "rating",
+              "type": "number",
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "year",
+              "type": "number",
+            }
+          ]
+        }
+      ]
     }
   }
 }
 
 IMPORTANT: This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
+
+NOTE: If you want to get property information like required, you have to include a dependency to `javax.validation:validation-api` and annotate the required fields with `@NotNull`
 
 [[Creating]]
 == Creating Resources with HTTP POST
