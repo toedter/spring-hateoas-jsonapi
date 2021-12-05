@@ -27,7 +27,7 @@ configurations {
 dependencyManagement {
     dependencies {
         imports {
-            mavenBom 'org.springframework:spring-framework-bom:5.3.12'
+            mavenBom 'org.springframework:spring-framework-bom:5.3.13'
             mavenBom 'com.fasterxml.jackson:jackson-bom:2.13.0'
             mavenBom 'org.junit:junit-bom:5.8.1'
         }
