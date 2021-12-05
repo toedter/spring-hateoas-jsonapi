@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 1.1.2-SNAPSHOT,</span>
-<span id="revdate">2021-12-04</span>
+<span id="revdate">2021-12-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1053,49 +1053,43 @@ Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "links": {
-    "self": {
-      "href": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=10",
-      "meta": {
-        "affordances": [
-          {
-            "name": "newMovie",
-            "link": {
-              "rel": "newMovie",
-              "href": "http://localhost:8080/api/movies"
+<pre class="highlight"><code class="language-json" data-lang="json">"links": {
+  "self": {
+    "href": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=10",
+    "meta": {
+      "affordances": [
+        {
+          "name": "newMovie",
+          "link": {
+            "rel": "newMovie",
+            "href": "http://localhost:8080/api/movies"
+          },
+          "httpMethod": "POST",
+          "inputProperties": [
+            {
+              "name": "imdbId",
+              "type": "text",
             },
-            "httpMethod": "POST",
-            "inputProperties": [
-              {
-                "name": "imdbId",
-                "type": "text",
-                "required": false
-              },
-              {
-                "name": "rank",
-                "type": "number",
-                "required": false
-              },
-              {
-                "name": "rating",
-                "type": "number",
-                "required": false
-              },
-              {
-                "name": "title",
-                "type": "text",
-                "required": true
-              },
-              {
-                "name": "year",
-                "type": "number",
-                "required": false
-              }
-            ]
-          }
-        ]
-      }
+            {
+              "name": "rank",
+              "type": "number",
+            },
+            {
+              "name": "rating",
+              "type": "number",
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "year",
+              "type": "number",
+            }
+          ]
+        }
+      ]
     }
   }
 }</code></pre>
@@ -1109,6 +1103,18 @@ Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
 </td>
 <td class="content">
 This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you want to get property information like required, you have to include a dependency to <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>
 </td>
 </tr>
 </table>
@@ -1988,7 +1994,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 1.1.2-SNAPSHOT<br>
-Last updated 2021-12-04 13:40:44 UTC
+Last updated 2021-12-05 10:20:12 UTC
 </div>
 </div>
 </div>
