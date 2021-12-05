@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.1.1</span>
+<span id="revnumber">version 1.2.0</span>
 </div>
 </div>
 <div id="content">
@@ -807,6 +807,114 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 </div>
 <div class="sect1">
+<h2 id="affordances"><a class="anchor" href="#affordances"></a>Spring HATEOAS Affordances</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring HATEOAS provides a generic, media type independent API for
+<a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances">affordances</a>.
+Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
+information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
+JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
+that can be serialized by Spring HATEOAS out of the box.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows the usage of Spring HATEOAS affordances.
+First you have to enable this experimental feature in the configuration, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Java" data-lang="Java">new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
+   JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final Affordance newMovieAffordance =
+        afford(methodOn(MovieController.class).newMovie(null));
+
+Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
+        + "page[number]=" + pagedResult.getNumber()
+        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The rendered result of the self link would then be</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">"links": {
+  "self": {
+    "href": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=10",
+    "meta": {
+      "affordances": [
+        {
+          "name": "newMovie",
+          "link": {
+            "rel": "newMovie",
+            "href": "http://localhost:8080/api/movies"
+          },
+          "httpMethod": "POST",
+          "inputProperties": [
+            {
+              "name": "imdbId",
+              "type": "text",
+            },
+            {
+              "name": "rank",
+              "type": "number",
+            },
+            {
+              "name": "rating",
+              "type": "number",
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "year",
+              "type": "number",
+            }
+          ]
+        }
+      ]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you want to get property information like required, you have to include a dependency to <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="Creating"><a class="anchor" href="#Creating"></a>Creating Resources with HTTP POST</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1492,8 +1600,8 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.1<br>
-Last updated 2021-10-22 06:17:36 UTC
+Version 1.2.0<br>
+Last updated 2021-12-05 10:28:28 UTC
 </div>
 </div>
 </div>
