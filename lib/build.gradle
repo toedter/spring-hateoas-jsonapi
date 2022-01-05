@@ -27,9 +27,9 @@ configurations {
 dependencyManagement {
     dependencies {
         imports {
-            mavenBom 'org.springframework:spring-framework-bom:5.3.13'
-            mavenBom 'com.fasterxml.jackson:jackson-bom:2.13.0'
-            mavenBom 'org.junit:junit-bom:5.8.1'
+            mavenBom 'org.springframework:spring-framework-bom:5.3.14'
+            mavenBom 'com.fasterxml.jackson:jackson-bom:2.13.1'
+            mavenBom 'org.junit:junit-bom:5.8.2'
         }
     }
 }
@@ -48,7 +48,7 @@ dependencies {
     testImplementation 'org.springframework:spring-webflux'
     testImplementation 'org.slf4j:slf4j-api:1.7.32'
     testImplementation 'org.slf4j:jcl-over-slf4j:1.7.32'
-    testImplementation 'ch.qos.logback:logback-classic:1.2.7'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.9'
     testImplementation 'org.assertj:assertj-core:3.19.0'
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'javax.persistence:javax.persistence-api:2.2'
