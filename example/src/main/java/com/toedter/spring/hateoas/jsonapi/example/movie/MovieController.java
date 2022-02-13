@@ -112,6 +112,7 @@ public class MovieController {
 
         String pageLinksBase =
                 linkTo(MovieController.class).slash("movies").withSelfRel().getHref() + uriParams;
+
         final JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
