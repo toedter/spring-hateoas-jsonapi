@@ -55,7 +55,7 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     testImplementation 'net.jadler:jadler-all:1.3.0'
 
-    docs "io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.2"
+    docs "io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.3"
 }
 
 test {
