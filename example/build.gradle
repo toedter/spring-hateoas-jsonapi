@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '1.2.1-SNAPSHOT'
+version = '1.2.1'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -24,7 +24,7 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
 
     // if you want to use the released version, use
-    // implementation 'com.toedter:spring-hateoas-jsonapi:1.2.0'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:1.2.1'
     implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
