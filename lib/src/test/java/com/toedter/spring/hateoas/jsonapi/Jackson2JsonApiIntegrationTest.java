@@ -972,6 +972,19 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(Objects.requireNonNull(entityModel.getContent()).getId()).isEqualTo(1);
     }
 
+    @Test
+    void should_serialize_type_attribute_when_type_for_class_is_used() throws Exception {
+        @Getter
+        @JsonApiTypeForClass(value = "MyClassType")
+        class Movie {
+            private Long id = 1L;
+            private String type = "MyObjectType";
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieWithTypeAttribute.json");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();

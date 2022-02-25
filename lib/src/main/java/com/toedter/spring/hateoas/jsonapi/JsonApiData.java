@@ -163,7 +163,11 @@ class JsonApiData {
 
         attributeMap.remove("links");
         attributeMap.remove(idField.name);
-        attributeMap.remove(typeField.name);
+
+        // fix #164
+        if(!content.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
+            attributeMap.remove(typeField.name);
+        }
 
         Links finalLinks = links;
         String finalId = idField.value;
