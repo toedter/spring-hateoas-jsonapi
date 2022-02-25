@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 the original author or authors.
+ * Copyright 2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,7 @@ public class JsonApiSpringBootMockMvcIntegrationTest {
                 "\t\t\"type\": \"movies\",\n" +
                 "\t\t\"attributes\": {\n" +
                 "\t\t\t\"title\": \"Test Movie\",\n" +
-                "\t\t\t\"year\": 2021,\n" +
+                "\t\t\t\"year\": 2022,\n" +
                 "\t\t\t\"imdbId\": \"imdb\",\n" +
                 "\t\t\t\"rating\": 6.5,\n" +
                 "\t\t\t\"rank\": 5\n" +
