@@ -122,6 +122,9 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
         if (wrapInEntityModel) {
             Links links = this.objectMapper.convertValue(data.get("links"), Links.class);
+            if( links == null ) {
+                links = Links.NONE;
+            }
             return EntityModel.of(objectFromProperties, links);
         }
 

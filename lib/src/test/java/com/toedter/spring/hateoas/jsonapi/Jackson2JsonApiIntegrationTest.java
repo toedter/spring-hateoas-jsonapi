@@ -985,6 +985,25 @@ class Jackson2JsonApiIntegrationTest {
         compareWithFile(jsonMovie, "movieWithTypeAttribute.json");
     }
 
+    @Test
+    void should_deserialize_collection_model_without_links() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, Movie.class);
+        File file = new ClassPathResource("moviesCollectionModelWithoutLinks.json", getClass()).getFile();
+        CollectionModel<Movie> collectionModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+    }
+
+    @Test
+    void should_deserialize_collection_model_of_entity_models_without_links() throws Exception {
+        JavaType innerType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
+        File file = new ClassPathResource("moviesCollectionModelWithoutLinks.json", getClass()).getFile();
+        CollectionModel<EntityModel<Movie>> collectionModel = mapper.readValue(file, javaType);
+        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
