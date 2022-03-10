@@ -6,7 +6,7 @@
       "title": "Star Wars"
     },
     "meta": {
-      "x": "y"
+      "metaProperty": "metaValue"
     }
   }
 }

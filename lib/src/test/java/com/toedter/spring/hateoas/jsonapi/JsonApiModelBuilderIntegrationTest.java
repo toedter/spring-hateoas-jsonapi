@@ -338,7 +338,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     void should_build_single_movie_entity_model_with_meta() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         final RepresentationModel<?> jsonApiModel =
-                jsonApiModel().model(EntityModel.of(movie)).meta("x", "y").build();
+                jsonApiModel().model(EntityModel.of(movie)).meta("metaProperty", "metaValue").build();
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");

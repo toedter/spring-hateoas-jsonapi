@@ -1004,6 +1004,36 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
     }
 
+    @Test
+    void should_serialize_jsonapimeta_field_annotation() throws Exception {
+        @Getter
+        class Movie {
+            private Long id = 1L;
+            private String title = "Star Wars";
+            @JsonApiMeta
+            private String metaProperty = "metaValue";
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
+    void should_serialize_jsonapimeta_method_annotation() throws Exception {
+        @Getter
+        class Movie {
+            private Long id = 1L;
+            private String title = "Star Wars";
+            @JsonApiMeta
+            public String getMetaProperty() {
+                return "metaValue";
+            }
+        }
+
+        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(jsonMovie, "movieEntityModelWithMeta.json");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();

@@ -20,14 +20,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
@@ -140,8 +143,8 @@ class JsonApiData {
         // Those should be ignored.
         final Field[] fields = getAllDeclaredFields(content.getClass());
         boolean validFieldFound = false;
-        for(Field field: fields) {
-            if(!"$jacocoData".equals(field.getName()) && !"__$lineHits$__".equals(field.getName())
+        for (Field field : fields) {
+            if (!"$jacocoData".equals(field.getName()) && !"__$lineHits$__".equals(field.getName())
                     && (!(content instanceof RepresentationModel && "links".equals(field.getName())))) {
                 validFieldFound = true;
                 break;
@@ -159,13 +162,14 @@ class JsonApiData {
         }
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
-        Map<String, Object> attributeMap = objectMapper.convertValue(content, Map.class);
+        JavaType mapType = objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);
+        Map<String, Object> attributeMap = objectMapper.convertValue(content, mapType);
 
         attributeMap.remove("links");
         attributeMap.remove(idField.name);
 
         // fix #164
-        if(!content.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
+        if (!content.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
             attributeMap.remove(typeField.name);
         }
 
@@ -173,7 +177,6 @@ class JsonApiData {
         String finalId = idField.value;
         String finalType = typeField.value;
         Map<String, JsonApiRelationship> finalRelationships = relationships;
-        Map<String, Object> finalMetaData = metaData;
 
         // apply sparse fieldsets
         if (sparseFieldsets != null) {
@@ -188,10 +191,47 @@ class JsonApiData {
             }
         }
 
+        // extract annotated meta data
+        for (Field field : content.getClass().getDeclaredFields()) {
+            if (field.getAnnotation(JsonApiMeta.class) != null) {
+                attributeMap.remove(field.getName());
+                try {
+                    field.setAccessible(true);
+                    if (metaData == null) {
+                        metaData = new HashMap<>();
+                    }
+                    metaData.put(field.getName(), field.get(content));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        for (Method method : content.getClass().getDeclaredMethods()) {
+            if (method.getAnnotation(JsonApiMeta.class) != null) {
+                try {
+                    method.setAccessible(true);
+                    if (metaData == null) {
+                        metaData = new HashMap<>();
+                    }
+                    String methodName = method.getName();
+                    if (methodName.startsWith("get")) {
+                        methodName = StringUtils.uncapitalize(methodName.substring(3));
+                    }
+                    attributeMap.remove(methodName);
+                    metaData.put(methodName, method.invoke(content));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Map<String, Object> finalMetaData = metaData;
+
         JsonApiData jsonApiData = new JsonApiData(
                 finalId, finalType, attributeMap, finalRelationships, finalLinks, finalMetaData);
 
-        if(attributeMap.size() > 0 || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
+        if (attributeMap.size() > 0 || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
             return Optional.of(content)
                     .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                     .map(it -> jsonApiData);
