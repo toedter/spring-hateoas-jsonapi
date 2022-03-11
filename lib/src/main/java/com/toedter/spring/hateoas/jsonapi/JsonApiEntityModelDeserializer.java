@@ -22,8 +22,10 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -138,7 +140,6 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             }
 
             // handling meta deserialization
-
             Object meta = ((HashMap<?, ?>) doc.getData()).get("meta");
             if (meta != null) {
                 for (Field field : content.getClass().getDeclaredFields()) {
@@ -152,7 +153,22 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                 }
                             }
                         } catch (IllegalAccessException e) {
-                            e.printStackTrace();
+                            throw new IllegalArgumentException("Cannot set JSON:API meta data for annotated field: "
+                                    + field.getName(), e);
+                        }
+                    }
+                }
+                for (Method method : content.getClass().getDeclaredMethods()) {
+                    if (method.getAnnotation(JsonApiMeta.class) != null) {
+                        try {
+                            method.setAccessible(true);
+                            // a setter is expected to return void
+                            if (method.getReturnType() == void.class) {
+                                method.invoke(content);
+                            }
+                        } catch (Exception e) {
+                            throw new IllegalArgumentException("Cannot set JSON:API meta data for annotated method: "
+                                    + method.getName(), e);
                         }
                     }
                 }

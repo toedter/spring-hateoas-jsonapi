@@ -177,7 +177,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_fields() throws Exception {
+    void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_and_meta_fields() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
                 EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")));
         compareWithFile(jsonMovie, "movieEntityModelWithThreeAnnotations.json");
@@ -186,8 +186,8 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_methods() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
-                EntityModel.of(new MovieWithGetters("1", "Star Wars", "my-movies")));
-        compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
+                EntityModel.of(new MovieWithGetters("1", "Star Wars", "my-movies", "metaValue")));
+        compareWithFile(jsonMovie, "movieEntityModelWithThreeAnnotations.json");
     }
 
     @Test
@@ -504,7 +504,7 @@ class Jackson2JsonApiIntegrationTest {
         MovieWithGetters movie = movieEntityModel.getContent();
         assert movie != null;
         assertThat(movie.getMyId()).isEqualTo("1");
-        assertThat(movie.getType()).isEqualTo("movies");
+        assertThat(movie.getMyType()).isEqualTo("movies");
         assertThat(movie.getTitle()).isEqualTo("Star Wars");
 
         Links links = movieEntityModel.getLinks();

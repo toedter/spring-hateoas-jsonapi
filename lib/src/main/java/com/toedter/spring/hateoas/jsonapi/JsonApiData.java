@@ -219,8 +219,10 @@ class JsonApiData {
                     if (methodName.startsWith("get")) {
                         methodName = StringUtils.uncapitalize(methodName.substring(3));
                     }
-                    attributeMap.remove(methodName);
-                    metaData.put(methodName, method.invoke(content));
+                    if (method.getReturnType() != void.class) {
+                        attributeMap.remove(methodName);
+                        metaData.put(methodName, method.invoke(content));
+                    }
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Cannot get JSON:API meta data from annotated method: "
                             + method.getName(), e);

@@ -17,6 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiMeta;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
 import lombok.AllArgsConstructor;
 
@@ -41,18 +42,29 @@ public class MovieWithGetters {
     }
 
     @JsonApiType
-    public String getType() {
-        return type;
+    public String getMyType() {
+        return myType;
     }
 
     @JsonApiType
-    public void setType(String type) {
-        this.type = type;
+    public void setMyType(String myType) {
+        this.myType = myType;
+    }
+
+    @JsonApiMeta
+    public String getMyMeta() {
+        return myMeta;
+    }
+
+    @JsonApiMeta
+    public void setMyMeta(String myMeta) {
+        this.myMeta = myMeta;
     }
 
     private String myId;
     private String title;
-    private String type;
+    private String myType;
+    private String myMeta;
 
     public MovieWithGetters() {
     }
