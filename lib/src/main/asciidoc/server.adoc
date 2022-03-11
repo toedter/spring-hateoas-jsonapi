@@ -48,6 +48,8 @@ There are four new annotations provided by this project:
 * `@JsonApiRelationships` to mark a JSON:API `relationship`
 ** This annotation is not used for serialization but deserialization,
 see <<Creating>> for an example.
+* `@JsonApiMeta` to mark a field or method to provide a JSON:API `meta` information
+** This annotation works for serialization and deserialization.
 
 The use of these annotations is optional. For the mapping of the `id`, the
 following rules apply in order:
@@ -75,11 +77,11 @@ As an example, consider the class
 include::{test-dir}/support/MovieWithAnnotations.java[tags=Movie]
 ----
 
-Then, `EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))` will be rendered as
+Then, `EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")))` will be rendered as
 
 [source, json]
 ----
-include::{test-resources-dir}/movieEntityModelWithAnnotations.json[]
+include::{test-resources-dir}/movieEntityModelWithThreeAnnotations.json[]
 ----
 
 

@@ -179,8 +179,8 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_fields() throws Exception {
         String jsonMovie = mapper.writeValueAsString(
-                EntityModel.of(new MovieWithAnnotations("1", "Star Wars", "my-movies")));
-        compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
+                EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")));
+        compareWithFile(jsonMovie, "movieEntityModelWithThreeAnnotations.json");
     }
 
     @Test
@@ -1032,6 +1032,16 @@ class Jackson2JsonApiIntegrationTest {
 
         String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
         compareWithFile(jsonMovie, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
+    void should_deserialize_jsonapimeta_method_annotation() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithMetaAnnotation.class);
+        File file = new ClassPathResource("movieEntityModelWithMeta.json", getClass()).getFile();
+        EntityModel<MovieWithMetaAnnotation> entityModel = mapper.readValue(file, javaType);
+
+        assertThat(entityModel.getContent().getMetaProperty()).isEqualTo("metaValue");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

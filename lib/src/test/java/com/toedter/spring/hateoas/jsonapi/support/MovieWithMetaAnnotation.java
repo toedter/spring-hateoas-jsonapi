@@ -17,30 +17,20 @@
 package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiMeta;
-import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.With;
 
-import javax.persistence.Id;
-
-// tag::Movie[]
-// @fold:on
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-// @fold:off
-public class MovieWithAnnotations {
-    @Id
-    private String myId;
-    @JsonApiType
-    private String type;
-
+@With
+@JsonApiTypeForClass("movies")
+public class MovieWithMetaAnnotation {
+    private Long id = 1L;
+    private String title = "Star Wars";
     @JsonApiMeta
-    private String myMeta;
-
-    private String title;
+    private String metaProperty = "xxx";
 }
-// end::Movie[]

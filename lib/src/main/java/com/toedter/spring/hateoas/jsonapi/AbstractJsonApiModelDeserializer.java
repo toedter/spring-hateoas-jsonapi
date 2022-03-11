@@ -28,6 +28,7 @@ import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         }
         HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
         final Object objectFromProperties = convertToResource(data, false);
+
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
@@ -122,7 +124,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
         if (wrapInEntityModel) {
             Links links = this.objectMapper.convertValue(data.get("links"), Links.class);
-            if( links == null ) {
+            if (links == null) {
                 links = Links.NONE;
             }
             return EntityModel.of(objectFromProperties, links);

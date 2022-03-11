@@ -202,7 +202,8 @@ class JsonApiData {
                     }
                     metaData.put(field.getName(), field.get(content));
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new IllegalArgumentException("Cannot get JSON:API meta data from annotated property: "
+                            + field.getName(), e);
                 }
             }
         }
@@ -221,7 +222,8 @@ class JsonApiData {
                     attributeMap.remove(methodName);
                     metaData.put(methodName, method.invoke(content));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new IllegalArgumentException("Cannot get JSON:API meta data from annotated method: "
+                            + method.getName(), e);
                 }
             }
         }

@@ -26,13 +26,7 @@ import org.springframework.util.Assert;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
@@ -66,10 +60,10 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             HashMap<String, Object> relationships =
                     (HashMap<String, Object>) ((HashMap<String, Object>) doc.getData()).get("relationships");
 
+            Object content = entityModel.getContent();
             if (relationships != null) {
 
-                Object object = entityModel.getContent();
-                @SuppressWarnings("ConstantConditions") final Field[] declaredFields = getAllDeclaredFields(object.getClass());
+                @SuppressWarnings("ConstantConditions") final Field[] declaredFields = getAllDeclaredFields(content.getClass());
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
                     JsonApiRelationships relationshipsAnnotation = field.getAnnotation(JsonApiRelationships.class);
@@ -121,7 +115,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             relationshipCollection.add(newInstance);
                                         }
 
-                                        field.set(object, relationshipCollection);
+                                        field.set(content, relationshipCollection);
                                     }
                                 } else {
                                     // we expect a concrete type otherwise, like "Director"
@@ -133,7 +127,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, data.get("id").toString());
                                     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
                                             newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, data.get("type").toString());
-                                    field.set(object, newInstance);
+                                    field.set(content, newInstance);
                                 }
                             }
                         } catch (Exception e) {
@@ -142,6 +136,28 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                     }
                 }
             }
+
+            // handling meta deserialization
+
+            Object meta = ((HashMap<?, ?>) doc.getData()).get("meta");
+            if (meta != null) {
+                for (Field field : content.getClass().getDeclaredFields()) {
+                    if (field.getAnnotation(JsonApiMeta.class) != null) {
+                        try {
+                            field.setAccessible(true);
+                            if (meta instanceof Map) {
+                                Object metaValue = ((Map<?,?>) meta).get(field.getName());
+                                if (metaValue != null) {
+                                    field.set(content, metaValue);
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
             return entityModel;
         }
         throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);

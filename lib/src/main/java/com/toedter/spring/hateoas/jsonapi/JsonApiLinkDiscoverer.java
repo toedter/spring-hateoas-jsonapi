@@ -121,7 +121,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
             }
 			return Links.NONE;
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException("Cannot get links from JSON", e);
         }
     }
 
@@ -142,7 +142,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
             return Links.NONE;
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("Cannot get links from InputStream", e);
         }
     }
 }
