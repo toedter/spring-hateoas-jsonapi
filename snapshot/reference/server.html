@@ -132,6 +132,16 @@ see <a href="#Creating">Creating Resources with HTTP POST</a> for an example.</p
 </ul>
 </div>
 </li>
+<li>
+<p><code>@JsonApiMeta</code> to mark a field or method to provide a JSON:API <code>meta</code> information</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This annotation works for serialization and deserialization.</p>
+</li>
+</ul>
+</div>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -202,15 +212,19 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </span><span class="fold-block">public class MovieWithAnnotations {
     @Id
     private String myId;
-    private String title;
     @JsonApiType
     private String type;
+
+    @JsonApiMeta
+    private String myMeta;
+
+    private String title;
 }
 </span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then, <code>EntityModel.of(new Movie2("1", "Star Wars", "my-movies")))</code> will be rendered as</p>
+<p>Then, <code>EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")))</code> will be rendered as</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -220,6 +234,9 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
     "type": "my-movies",
     "attributes": {
       "title": "Star Wars"
+    },
+    "meta": {
+      "myMeta": "metaValue"
     }
   }
 }</code></pre>
@@ -1601,7 +1618,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 1.2.2-SNAPSHOT<br>
-Last updated 2022-03-10 13:46:42 UTC
+Last updated 2022-03-11 12:00:52 UTC
 </div>
 </div>
 </div>
