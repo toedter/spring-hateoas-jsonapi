@@ -23,6 +23,14 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class MovieWithGetters {
+    private String myId;
+    private String title;
+    private String myType;
+    private String myMeta;
+
+    public MovieWithGetters() {
+    }
+
     @JsonApiId
     public String getMyId() {
         return myId;
@@ -59,13 +67,5 @@ public class MovieWithGetters {
     @JsonApiMeta
     public void setMyMeta(String myMeta) {
         this.myMeta = myMeta;
-    }
-
-    private String myId;
-    private String title;
-    private String myType;
-    private String myMeta;
-
-    public MovieWithGetters() {
     }
 }

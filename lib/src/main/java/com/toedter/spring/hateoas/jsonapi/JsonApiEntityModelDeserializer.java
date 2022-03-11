@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
