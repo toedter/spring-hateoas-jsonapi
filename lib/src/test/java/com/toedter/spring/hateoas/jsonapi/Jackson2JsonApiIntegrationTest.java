@@ -1035,11 +1035,21 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_deserialize_jsonapimeta_method_annotation() throws Exception {
+    void should_deserialize_jsonapimeta_field_annotation() throws Exception {
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithMetaAnnotation.class);
         File file = new ClassPathResource("movieEntityModelWithMeta.json", getClass()).getFile();
         EntityModel<MovieWithMetaAnnotation> entityModel = mapper.readValue(file, javaType);
+
+        assertThat(entityModel.getContent().getMetaProperty()).isEqualTo("metaValue");
+    }
+
+    @Test
+    void should_deserialize_jsonapimeta_method_annotation() throws Exception {
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithMethodMetaAnnotation.class);
+        File file = new ClassPathResource("movieEntityModelWithMeta.json", getClass()).getFile();
+        EntityModel<MovieWithMethodMetaAnnotation> entityModel = mapper.readValue(file, javaType);
 
         assertThat(entityModel.getContent().getMetaProperty()).isEqualTo("metaValue");
     }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -162,8 +163,16 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                         try {
                             method.setAccessible(true);
                             // a setter is expected to return void
-                            if (method.getReturnType() == void.class) {
-                                method.invoke(content);
+                            if (method.getReturnType() == void.class && meta instanceof Map) {
+                                String methodName = method.getName();
+                                if (methodName.startsWith("set")) {
+                                    methodName = StringUtils.uncapitalize(methodName.substring(3));
+                                }
+
+                                Object metaValue = ((Map<?,?>) meta).get(methodName);
+                                if (metaValue != null) {
+                                    method.invoke(content, metaValue);
+                                }
                             }
                         } catch (Exception e) {
                             throw new IllegalArgumentException("Cannot set JSON:API meta data for annotated method: "
