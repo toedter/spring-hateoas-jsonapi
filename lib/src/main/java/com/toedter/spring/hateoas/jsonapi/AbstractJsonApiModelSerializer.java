@@ -118,10 +118,6 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             // in some cases we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
             if (embeddedMeta != metaData || data == null) {
-                if (metaData == null) {
-                    metaData = embeddedMeta;
-                }
-
                 if (doc.getMeta() == null) {
                     doc = doc.withMeta(metaData);
                 } else {
