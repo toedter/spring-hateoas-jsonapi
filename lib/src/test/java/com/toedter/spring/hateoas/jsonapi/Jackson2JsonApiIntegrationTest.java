@@ -29,6 +29,8 @@ import lombok.*;
 import org.junit.jupiter.api.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.mediatype.Affordances;
+import org.springframework.http.HttpMethod;
 
 import javax.persistence.Id;
 import java.io.File;
@@ -36,6 +38,7 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("Jackson2JsonApi Integration Test")
@@ -73,8 +76,8 @@ class Jackson2JsonApiIntegrationTest {
             private final String title = "Star Wars";
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -89,8 +92,8 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -105,8 +108,8 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -121,8 +124,8 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -143,8 +146,8 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -156,8 +159,8 @@ class Jackson2JsonApiIntegrationTest {
             private final String title = "Star Wars";
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
@@ -172,29 +175,29 @@ class Jackson2JsonApiIntegrationTest {
             private final String title = "Star Wars";
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModel.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_and_meta_fields() throws Exception {
-        String jsonMovie = mapper.writeValueAsString(
+        String movieJson = mapper.writeValueAsString(
                 EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")));
-        compareWithFile(jsonMovie, "movieEntityModelWithThreeAnnotations.json");
+        compareWithFile(movieJson, "movieEntityModelWithThreeAnnotations.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_methods() throws Exception {
-        String jsonMovie = mapper.writeValueAsString(
+        String movieJson = mapper.writeValueAsString(
                 EntityModel.of(new MovieWithGetters("1", "Star Wars", "my-movies", "metaValue")));
-        compareWithFile(jsonMovie, "movieEntityModelWithThreeAnnotations.json");
+        compareWithFile(movieJson, "movieEntityModelWithThreeAnnotations.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_type_on_class() throws Exception {
-        String jsonMovie = mapper.writeValueAsString(
+        String movieJson = mapper.writeValueAsString(
                 EntityModel.of(new MovieDerivedWithTypeForClass("1", "Star Wars")));
-        compareWithFile(jsonMovie, "movieEntityModelWithAnnotations.json");
+        compareWithFile(movieJson, "movieEntityModelWithAnnotations.json");
     }
 
     @Test
@@ -981,8 +984,8 @@ class Jackson2JsonApiIntegrationTest {
             private String type = "MyObjectType";
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieWithTypeAttribute.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieWithTypeAttribute.json");
     }
 
     @Test
@@ -1014,8 +1017,8 @@ class Jackson2JsonApiIntegrationTest {
             private String metaProperty = "metaValue";
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModelWithMeta.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
     @Test
@@ -1030,8 +1033,8 @@ class Jackson2JsonApiIntegrationTest {
             }
         }
 
-        String jsonMovie = mapper.writeValueAsString(EntityModel.of(new Movie()));
-        compareWithFile(jsonMovie, "movieEntityModelWithMeta.json");
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
     @Test
@@ -1052,6 +1055,38 @@ class Jackson2JsonApiIntegrationTest {
         EntityModel<MovieWithMethodMetaAnnotation> entityModel = mapper.readValue(file, javaType);
 
         assertThat(entityModel.getContent().getMetaProperty()).isEqualTo("metaValue");
+    }
+
+    @Test
+    void should_serialize_affordance_with_proprietary_format() throws Exception {
+        Link link = Affordances.of(Link.of("/"))
+                .afford(HttpMethod.POST)
+                .withInputAndOutput(Movie.class) //
+                .withName("create-movie") //
+                .toLink();
+
+        RepresentationModel<?> movieModel = CollectionModel.of(Collections.singletonList(new Movie("1", "New Movie")), link);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS));
+        String moviesJson = mapper.writeValueAsString(movieModel);
+        compareWithFile(moviesJson, "moviesCollectionModelWithAffordances.json");
+    }
+
+    @Test
+    void should_serialize_affordance_with_hal_forms_format() throws Exception {
+        Link link = Affordances.of(Link.of("/"))
+                .afford(HttpMethod.POST)
+                .withInputAndOutput(Movie.class) //
+                .withName("create-movie") //
+                .toLink();
+
+        RepresentationModel<?> movieModel = CollectionModel.of(Collections.singletonList(new Movie("1", "New Movie")), link);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.HAL_FORMS));
+        String moviesJson = mapper.writeValueAsString(movieModel);
+        compareWithFile(moviesJson, "moviesCollectionModelWithHalFormsAffordances.json");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "New Movie"
+      }
+    }
+  ],
+  "links": {
+    "self": {
+      "href": "/",
+      "meta": {
+        "affordances": [
+          {
+            "name": "create-movie",
+            "link": {
+              "rel": "self",
+              "href": "/"
+            },
+            "httpMethod": "POST",
+            "inputProperties": [
+              {
+                "name": "id",
+                "type": "text"
+              },
+              {
+                "name": "title",
+                "type": "text"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "New Movie"
+      }
+    }
+  ],
+  "links": {
+    "self": {
+      "href": "/",
+      "meta": {
+        "_templates": {
+          "default": {
+            "method": "POST",
+            "properties": [
+              {
+                "name": "id",
+                "type": "text"
+              },
+              {
+                "name": "title",
+                "type": "text"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

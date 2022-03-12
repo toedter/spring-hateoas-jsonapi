@@ -43,8 +43,7 @@ public class HalFormsTemplateBuilderWrapper {
 		try {
 			return halFormsTemplatePropertyWriter.value(bean, null, null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalArgumentException("Cannot write HAL-FORMS template.", e);
 		}
-		return null;
 	}
 }
