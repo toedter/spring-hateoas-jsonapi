@@ -74,6 +74,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @DisplayName("JsonApi RestTemplate Integration Test")
 class RestTemplateIntegrationTest {
 
+    @Autowired
+    RestTemplate template;
+    MockRestServiceServer server;
+
     @Configuration
     @EnableHypermediaSupport(type = {})
     static class Config {
@@ -89,10 +93,6 @@ class RestTemplateIntegrationTest {
             return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
         }
     }
-
-    @Autowired
-    RestTemplate template;
-    MockRestServiceServer server;
 
     @BeforeEach
     void setUp() {
