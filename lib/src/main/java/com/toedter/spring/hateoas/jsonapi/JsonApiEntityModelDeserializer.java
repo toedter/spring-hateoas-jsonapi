@@ -142,7 +142,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             // handling meta deserialization
             Object meta = ((HashMap<?, ?>) doc.getData()).get("meta");
             if (meta != null) {
-                for (Field field : content.getClass().getDeclaredFields()) {
+                for (Field field : getAllDeclaredFields(content.getClass())) {
                     if (field.getAnnotation(JsonApiMeta.class) != null) {
                         try {
                             field.setAccessible(true);
