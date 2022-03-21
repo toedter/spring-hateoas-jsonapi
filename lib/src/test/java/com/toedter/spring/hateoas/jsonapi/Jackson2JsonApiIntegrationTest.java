@@ -877,6 +877,7 @@ class Jackson2JsonApiIntegrationTest {
             mapper.readValue(file, javaType);
         });
     }
+
     @Test
     void should_serialize_UUID() throws Exception {
         EntityModel<MovieWithUUID> entityModel =
@@ -1027,6 +1028,7 @@ class Jackson2JsonApiIntegrationTest {
         class Movie {
             private Long id = 1L;
             private String title = "Star Wars";
+
             @JsonApiMeta
             public String getMetaProperty() {
                 return "metaValue";
@@ -1087,6 +1089,23 @@ class Jackson2JsonApiIntegrationTest {
                 .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.HAL_FORMS));
         String moviesJson = mapper.writeValueAsString(movieModel);
         compareWithFile(moviesJson, "moviesCollectionModelWithHalFormsAffordances.json");
+    }
+
+    @Test
+    void should_deserialize_collection_model_of_entity_models_with_relationships() throws Exception {
+        JavaType innerType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
+        File file = new ClassPathResource("moviesPagedJsonApiModelWithIncluded.json", getClass()).getFile();
+        CollectionModel<EntityModel<MovieWithDirectors>> collectionModel = mapper.readValue(file, javaType);
+
+        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+        Iterator<EntityModel<MovieWithDirectors>> iterator = collectionModel.getContent().iterator();
+        EntityModel<MovieWithDirectors> entityModel = iterator.next();
+        assertThat(entityModel.getContent().getDirectors().get(0).getId()).isEqualTo("1");
+        assertThat(entityModel.getContent().getDirectors().get(1).getId()).isEqualTo("2");
+        entityModel = iterator.next();
+        assertThat(entityModel.getContent().getDirectors().get(0).getId()).isEqualTo("3");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {

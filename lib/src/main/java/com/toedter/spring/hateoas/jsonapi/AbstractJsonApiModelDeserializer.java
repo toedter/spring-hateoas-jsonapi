@@ -127,7 +127,12 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             if (links == null) {
                 links = Links.NONE;
             }
-            return EntityModel.of(objectFromProperties, links);
+            JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =
+                    new JsonApiEntityModelDeserializer(jsonApiConfiguration);
+            JsonApiDocument jsonApiDocument = new JsonApiDocument(null, data, null, null, links, null);
+            EntityModel<?> entityModel = jsonApiEntityModelDeserializer.convertToRepresentationModel(
+                    Collections.singletonList(objectFromProperties), jsonApiDocument);
+            return entityModel;
         }
 
         return objectFromProperties;
