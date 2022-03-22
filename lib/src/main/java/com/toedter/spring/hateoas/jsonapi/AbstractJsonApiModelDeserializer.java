@@ -28,7 +28,6 @@ import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,18 +70,19 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             final boolean isEntityModelCollectionFinal = isEntityModelCollection;
             List<HashMap<String, Object>> collection = (List<HashMap<String, Object>>) doc.getData();
             List<Object> resources = collection.stream()
-                    .map(x -> this.convertToResource(x, isEntityModelCollectionFinal))
+                    .map(data -> this.convertToResource(data, isEntityModelCollectionFinal, doc, null, false))
                     .collect(Collectors.toList());
             return convertToRepresentationModel(resources, doc);
         }
         HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
-        final Object objectFromProperties = convertToResource(data, false);
+        final Object objectFromProperties = convertToResource(data, false, doc, null, false);
 
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
     @Nullable
-    Object convertToResource(@Nullable HashMap<String, Object> data, boolean wrapInEntityModel) {
+    Object convertToResource(@Nullable HashMap<String, Object> data, boolean wrapInEntityModel,
+                             @Nullable JsonApiDocument doc, @Nullable JavaType javaType, boolean useDataForCreation) {
         if (data == null) {
             return null;
         }
@@ -90,15 +90,21 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
 
         Object objectFromProperties;
-        JavaType rootType = JacksonHelper.findRootType(this.contentType);
+        JavaType rootType = javaType;
+        if (rootType == null) {
+            rootType = JacksonHelper.findRootType(this.contentType);
+        }
         Class<?> clazz = null;
 
         if (jsonApiConfiguration.isTypeForClassUsedForDeserialization()) {
-            String type = (String) data.get("type");
-            if (type != null) {
-                clazz = jsonApiConfiguration.getClassForType(type);
+            String jsonApiType = (String) data.get("type");
+            if (jsonApiType != null) {
+                clazz = jsonApiConfiguration.getClassForType(jsonApiType);
                 if (clazz != null && !rootType.getRawClass().isAssignableFrom(clazz)) {
                     throw new IllegalArgumentException(clazz + " is not assignable to " + rootType.getRawClass());
+                }
+                if (clazz != null) {
+                    rootType = objectMapper.constructType(clazz);
                 }
             }
         }
@@ -108,10 +114,19 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         }
 
         if (attributes != null) {
-            objectFromProperties = plainObjectMapper.convertValue(attributes, clazz);
+            // we have to use the plain object mapper to not get in conflict with links deserialization
+            objectFromProperties = plainObjectMapper.convertValue(attributes, rootType);
         } else {
             try {
-                objectFromProperties = clazz.getDeclaredConstructor().newInstance();
+                if (useDataForCreation) {
+                    // we have to use the "real" object mapper due to polymorphic deserialization using Jackson
+                    objectFromProperties = objectMapper.convertValue(data, rootType);
+                } else {
+                    if (clazz == null) {
+                        clazz = rootType.getRawClass();
+                    }
+                    objectFromProperties = clazz.getDeclaredConstructor().newInstance();
+                }
             } catch (Exception e) {
                 throw new IllegalStateException("Cannot convert data to resource.");
             }
@@ -129,7 +144,8 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             }
             JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =
                     new JsonApiEntityModelDeserializer(jsonApiConfiguration);
-            JsonApiDocument jsonApiDocument = new JsonApiDocument(null, data, null, null, links, null);
+            JsonApiDocument jsonApiDocument =
+                    new JsonApiDocument(null, data, null, null, links, doc.getIncluded());
             EntityModel<?> entityModel = jsonApiEntityModelDeserializer.convertToRepresentationModel(
                     Collections.singletonList(objectFromProperties), jsonApiDocument);
             return entityModel;

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -85,35 +86,25 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             relationshipCollection = new ArrayList<>();
                                         }
                                         Object data = ((HashMap<?, ?>) relationship).get("data");
-                                        List<HashMap<String, String>> jsonApiRelationships;
+                                        List<HashMap<String, Object>> jsonApiRelationships;
                                         if (data instanceof List) {
-                                            jsonApiRelationships = (List<HashMap<String, String>>) data;
+                                            jsonApiRelationships = (List<HashMap<String, Object>>) data;
                                         } else if (data instanceof HashMap) {
-                                            HashMap<String, String> castedData = (HashMap<String, String>) data;
+                                            HashMap<String, Object> castedData = (HashMap<String, Object>) data;
                                             jsonApiRelationships = Collections.singletonList(castedData);
                                         } else {
                                             throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
                                         }
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
-                                        for (HashMap<String, String> entry : jsonApiRelationships) {
-                                            if (jsonApiConfiguration.isTypeForClassUsedForDeserialization()) {
-                                                Class<?> entryType = jsonApiConfiguration.getClassForType(entry.get("type"));
-                                                if (entryType != null) {
-                                                    Class<?> clazz = (Class<?>) typeArgument;
-                                                    if (!clazz.isAssignableFrom(entryType)) {
-                                                        throw new IllegalArgumentException(entryType + " is not assignable to "
-                                                                + typeArgument + ".");
-                                                    }
-                                                    typeArgument = entryType;
-                                                }
+                                        for (HashMap<String, Object> entry : jsonApiRelationships) {
+                                            String id = entry.get("id").toString();
+                                            String jsonApiType = entry.get("type").toString();
+                                            Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
+                                            if (attributes != null) {
+                                                entry.put("attributes", attributes);
                                             }
-                                            Object newInstance = objectMapper.convertValue(entry, objectMapper.constructType(typeArgument));
-
-                                            JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                                                    newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, entry.get("id"));
-                                            JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                                                    newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, entry.get("type"));
+                                            Object newInstance = convertToResource(entry, false, doc, objectMapper.constructType(typeArgument), true);
                                             relationshipCollection.add(newInstance);
                                         }
 
@@ -121,14 +112,15 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     }
                                 } else {
                                     // we expect a concrete type otherwise, like "Director"
-                                    Class<?> clazz = Class.forName(genericType.getTypeName());
-                                    Object newInstance = clazz.getDeclaredConstructor().newInstance();
                                     HashMap<String, Object> data =
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
-                                    JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                                            newInstance, JsonApiResourceIdentifier.JsonApiResourceField.id, data.get("id").toString());
-                                    JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                                            newInstance, JsonApiResourceIdentifier.JsonApiResourceField.type, data.get("type").toString());
+                                    String id = data.get("id").toString();
+                                    String jsonApiType = data.get("type").toString();
+                                    Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
+                                    if (attributes != null) {
+                                        data.put("attributes", attributes);
+                                    }
+                                    Object newInstance = convertToResource(data, false, doc, objectMapper.constructType(genericType), true);
                                     field.set(content, newInstance);
                                 }
                             }
@@ -147,7 +139,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                         try {
                             field.setAccessible(true);
                             if (meta instanceof Map) {
-                                Object metaValue = ((Map<?,?>) meta).get(field.getName());
+                                Object metaValue = ((Map<?, ?>) meta).get(field.getName());
                                 if (metaValue != null) {
                                     field.set(content, metaValue);
                                 }
@@ -169,7 +161,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     methodName = StringUtils.uncapitalize(methodName.substring(3));
                                 }
 
-                                Object metaValue = ((Map<?,?>) meta).get(methodName);
+                                Object metaValue = ((Map<?, ?>) meta).get(methodName);
                                 if (metaValue != null) {
                                     method.invoke(content, metaValue);
                                 }
@@ -190,5 +182,20 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
         return new JsonApiEntityModelDeserializer(type, jsonApiConfiguration);
+    }
+
+    protected @Nullable Map<String, Object> findIncludedAttributesForRelationshipObject(
+            String id, String type, @Nullable JsonApiDocument doc) {
+
+        if (doc == null || doc.getIncluded() == null) {
+            return null;
+        }
+
+        for (JsonApiData jsonApiData : doc.getIncluded()) {
+            if (id.equals(jsonApiData.getId()) && type.equals(jsonApiData.getType())) {
+                return jsonApiData.getAttributes();
+            }
+        }
+        return null;
     }
 }

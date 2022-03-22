@@ -1092,7 +1092,7 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_deserialize_collection_model_of_entity_models_with_relationships() throws Exception {
+    void should_deserialize_collection_model_of_entity_models_with_relationships_and_included() throws Exception {
         JavaType innerType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
@@ -1102,10 +1102,16 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
         Iterator<EntityModel<MovieWithDirectors>> iterator = collectionModel.getContent().iterator();
         EntityModel<MovieWithDirectors> entityModel = iterator.next();
-        assertThat(entityModel.getContent().getDirectors().get(0).getId()).isEqualTo("1");
-        assertThat(entityModel.getContent().getDirectors().get(1).getId()).isEqualTo("2");
+        Director director = entityModel.getContent().getDirectors().get(0);
+        assertThat(director.getId()).isEqualTo("1");
+        assertThat(director.getName()).isEqualTo("Lana Wachowski");
+        Director director2 = entityModel.getContent().getDirectors().get(1);
+        assertThat(director2.getId()).isEqualTo("2");
+        assertThat(director2.getName()).isEqualTo("Lilly Wachowski");
         entityModel = iterator.next();
-        assertThat(entityModel.getContent().getDirectors().get(0).getId()).isEqualTo("3");
+        Director director3 = entityModel.getContent().getDirectors().get(0);
+        assertThat(director3.getId()).isEqualTo("3");
+        assertThat(director3.getName()).isEqualTo("George Lucas");
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
