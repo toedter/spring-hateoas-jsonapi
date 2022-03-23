@@ -78,6 +78,7 @@ class RestTemplateIntegrationTest {
     RestTemplate template;
     MockRestServiceServer server;
 
+    // tag::restTemplateConfig[]
     @Configuration
     @EnableHypermediaSupport(type = {})
     static class Config {
@@ -93,6 +94,7 @@ class RestTemplateIntegrationTest {
             return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
         }
     }
+    // end::restTemplateConfig[]
 
     @BeforeEach
     void setUp() {
@@ -134,7 +136,7 @@ class RestTemplateIntegrationTest {
 
     @Test
     void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
-        String jsonResult = createJsonStringFromFile("movieWithAllMetaLevels.json");
+        String jsonResult = createJsonStringFromFile("movieWithIncludedRelationships.json");
         server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
         ResponseEntity<EntityModel<MovieWithDirectors>> response =

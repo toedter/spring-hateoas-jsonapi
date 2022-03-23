@@ -24,9 +24,36 @@ include::{test-dir}/support/Movie.java[tags=Movie]
 ----
 
 Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be built with JSON:API model builder.
+complex JSON:API structures that can be built with JSON:API model builder, but a few things can already be done:
 
-Examples for deserialization of relationships you find in the section <<server-deserialization>>.
+* Deserialized meta
+* Deserializing included resources into the relationship DTOs
+
+For example, a JSON like
+
+[source, json]
+include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
+
+would be deserialized in a `CollectionModel<EntityModel<MovieWithDirectors>>`, so that all the names
+of the directors are set on the Java side.
+
+NOTE: `CollectionModel<MovieWithDirectors>` would NOT resolve the director names, because deserialization
+of JSON:API specific things like relationships only work with Spring HATEOAS representation models.
+
+More examples for deserialization of relationships you find in the section <<server-deserialization>>.
+
+[[resttemplate]]
+== RestTemplate
+
+If you want to write a client that deserializes server responses into Java objects,
+you can use RestTemplate, but with a little extra configuration.
+The following example shows how such a configuration can look like:
+
+[source,java, indent=0]
+----
+include::{test-dir}/RestTemplateIntegrationTest.java[tags=restTemplateConfig]
+----
+
 
 [[traverson]]
 == Traverson

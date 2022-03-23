@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": {
+          "id": "3",
+          "type": "directors"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
+    }
+  ]
+}

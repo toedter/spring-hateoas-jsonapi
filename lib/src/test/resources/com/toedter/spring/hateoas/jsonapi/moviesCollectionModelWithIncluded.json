@@ -1,0 +1,69 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Matrix"
+      },
+      "relationships": {
+        "relatedMovies": {
+          "data": {
+            "id": "2",
+            "type": "movies"
+          }
+        },
+        "directors": {
+          "data": [
+            {
+              "id": "1",
+              "type": "directors"
+            },
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "relationships": {
+        "directors": {
+          "data": {
+            "id": "3",
+            "type": "directors"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      }
+    },
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Lilly Wachowski"
+      }
+    },
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
+    }
+  ]
+}

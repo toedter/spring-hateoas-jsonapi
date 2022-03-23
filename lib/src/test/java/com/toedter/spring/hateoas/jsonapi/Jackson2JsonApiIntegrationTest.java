@@ -1096,7 +1096,7 @@ class Jackson2JsonApiIntegrationTest {
         JavaType innerType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
-        File file = new ClassPathResource("moviesPagedJsonApiModelWithIncluded.json", getClass()).getFile();
+        File file = new ClassPathResource("moviesCollectionModelWithIncluded.json", getClass()).getFile();
         CollectionModel<EntityModel<MovieWithDirectors>> collectionModel = mapper.readValue(file, javaType);
 
         assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
@@ -1117,7 +1117,7 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
         JavaType javaType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
-        File file = new ClassPathResource("movieWithAllMetaLevels.json", getClass()).getFile();
+        File file = new ClassPathResource("movieWithIncludedRelationships.json", getClass()).getFile();
         EntityModel<MovieWithDirectors> entityModel = mapper.readValue(file, javaType);
 
         Director director = entityModel.getContent().getDirectors().get(0);
