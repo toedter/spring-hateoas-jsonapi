@@ -108,6 +108,7 @@ class RestTemplateIntegrationTest {
                 template.exchange("/movie", HttpMethod.GET, null,
                         new EntityModelType<Movie>() {
                         });
+
         EntityModel<Movie> entityModel = response.getBody();
         assertThat(entityModel.getLink("self")).isPresent();
 
@@ -125,10 +126,28 @@ class RestTemplateIntegrationTest {
                 template.exchange("/movie", HttpMethod.GET, null,
                         new EntityModelType<MovieWithDirectors>() {
                         });
+
         EntityModel<MovieWithDirectors> entityModel = response.getBody();
         MovieWithDirectors movie = entityModel.getContent();
         assertThat(movie.getDirectors().get(0).getId()).isEqualTo("1");
     }
+
+    @Test
+    void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
+        String jsonResult = createJsonStringFromFile("movieWithAllMetaLevels.json");
+        server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+
+        ResponseEntity<EntityModel<MovieWithDirectors>> response =
+                template.exchange("/movie", HttpMethod.GET, null,
+                        new EntityModelType<MovieWithDirectors>() {
+                        });
+
+        EntityModel<MovieWithDirectors> entityModel = response.getBody();
+        MovieWithDirectors movie = entityModel.getContent();
+        assertThat(movie.getDirectors().get(0).getId()).isEqualTo("3");
+        assertThat(movie.getDirectors().get(0).getName()).isEqualTo("George Lucas");
+    }
+
 
     private String createJsonStringFromFile(String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();

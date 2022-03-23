@@ -1114,6 +1114,17 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(director3.getName()).isEqualTo("George Lucas");
     }
 
+    @Test
+    void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("movieWithAllMetaLevels.json", getClass()).getFile();
+        EntityModel<MovieWithDirectors> entityModel = mapper.readValue(file, javaType);
+
+        Director director = entityModel.getContent().getDirectors().get(0);
+        assertThat(director.getId()).isEqualTo("3");
+        assertThat(director.getName()).isEqualTo("George Lucas");
+    }
+
     private void compareWithFile(String json, String fileName) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
