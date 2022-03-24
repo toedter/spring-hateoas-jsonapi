@@ -38,7 +38,7 @@ would be deserialized in a `CollectionModel<EntityModel<MovieWithDirectors>>`, s
 of the directors are set on the Java side.
 
 NOTE: `CollectionModel<MovieWithDirectors>` would NOT resolve the director names, because deserialization
-of JSON:API specific things like relationships only work with Spring HATEOAS representation models.
+of JSON:API specific things like relationships only works with Spring HATEOAS representation models.
 
 More examples for deserialization of relationships you find in the section <<server-deserialization>>.
 
