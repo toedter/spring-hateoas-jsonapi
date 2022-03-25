@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.toedter.spring.hateoas.jsonapi;
 
+package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public abstract class JsonApiTestBase {
     String readFile(String fileName) throws IOException {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         return objectMapper.readValue(file, JsonNode.class).toString();
     }
 

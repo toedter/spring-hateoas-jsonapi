@@ -7,11 +7,11 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.6.4' apply false
+    id 'org.springframework.boot' version '2.6.5' apply false
 }
 
 group = 'com.toedter'
-version = '1.3.1-SNAPSHOT'
+version = '1.4.0'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -65,7 +65,7 @@ jar {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.enabled true
+        xml.required = true
     }
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {
