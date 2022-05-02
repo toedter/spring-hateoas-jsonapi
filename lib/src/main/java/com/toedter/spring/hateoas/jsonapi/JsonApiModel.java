@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class JsonApiModel extends RepresentationModel<JsonApiModel> {
+public class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     private final RepresentationModel<?> entity;
 
