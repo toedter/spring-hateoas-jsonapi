@@ -179,6 +179,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiMediaTypeConfiguration.html#getJacksonModule()">getJacksonModule()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiMediaTypeConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiMediaTypeConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getJsonApiIdNotSerializedForValue()">getJsonApiIdNotSerializedForValue()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getLinks()">getLinks()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Gets a links object containing the following members:
@@ -218,7 +222,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">H</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html#HAL_FORMS">HAL_FORMS</a></span> - com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Affordances will be rendered as link meta (HAL-FORMS format).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#hashCode()">hashCode()</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -279,9 +285,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Jackson <code>SimpleModule</code> for JSON:API serializers and deserializers.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/Jackson2JsonApiModule.html#%3Cinit%3E()">Jackson2JsonApiModule()</a></span> - Constructor for class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/Jackson2JsonApiModule.html" title="class in com.toedter.spring.hateoas.jsonapi">Jackson2JsonApiModule</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Creates a new Jackson2JsonApiModule without <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/Jackson2JsonApiModule.html#%3Cinit%3E(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration)">Jackson2JsonApiModule(JsonApiConfiguration)</a></span> - Constructor for class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/Jackson2JsonApiModule.html" title="class in com.toedter.spring.hateoas.jsonapi">Jackson2JsonApiModule</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Creates a new Jackson2JsonApiModule with a given <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/MediaTypes.html#JSON_API">JSON_API</a></span> - Static variable in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/MediaTypes.html" title="class in com.toedter.spring.hateoas.jsonapi">MediaTypes</a></dt>
 <dd>
 <div class="block">Public constant media type for <code>application/vnd.api+json</code>.</div>
@@ -299,7 +309,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Creates a new default <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiConfiguration.AffordanceType</span></a> - Enum in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The list of possible affordance types, used by <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)"><code>JsonApiConfiguration.withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)</code></a></div>
+</dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><span class="typeNameLink">JsonApiError</span></a> - Class in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
 <div class="block">Class to build a single JSON:API compliant error.</div>
@@ -409,7 +421,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">N</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html#NONE">NONE</a></span> - com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Default, affordances will NOT be rendered as link meta.</div>
+</dd>
 </dl>
 <a id="I:P">
 <!--   -->
@@ -482,7 +496,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">S</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html#SPRING_HATEOAS">SPRING_HATEOAS</a></span> - com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Affordances will be rendered as link meta (proprietary format).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiLinkDiscoverer.html#supports(org.springframework.http.MediaType)">supports(MediaType)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiLinkDiscoverer.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiLinkDiscoverer</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -545,6 +561,10 @@ the order they are declared.</div>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#withId(java.lang.String)">withId(String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiIdNotSerializedForValue(java.lang.String)">withJsonApiIdNotSerializedForValue(String)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiVersionRendered(boolean)">withJsonApiVersionRendered(boolean)</a></span> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
