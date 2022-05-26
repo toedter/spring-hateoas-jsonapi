@@ -157,7 +157,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="JsonApiConfiguration.AffordanceType.html" title="enum in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></span></code></th>
 <td class="colLast">
-<div class="block">The list of possible affordance types, used by <a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)"><code>withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)</code></a></div>
+<div class="block">The list of possible affordance types.</div>
 </td>
 </tr>
 </table>
@@ -544,12 +544,12 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <div class="block">Indicates if the JSON:API version is rendered.
  <p>
  If set to true, each rendered JSON:API document will start with
-
- <code>
+ </p>
+ <pre>
  "jsonapi": {
     "version": "1.0"
  }
- </code></div>
+ </pre></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jsonApiVersionRendered</code> - The new value of this configuration's jsonApiVersionRendered</dd>
@@ -568,12 +568,12 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <div class="block">Indicates if the JSON:API version is rendered.
  <p>
  If set to true, each rendered JSON:API document will start with
-
- <code>
+ </p>
+ <pre>
  "jsonapi": {
     "version": "1.0"
  }
- </code></div>
+ </pre></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is false.</dd>
@@ -693,19 +693,27 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
  <p>
  If set to true, empty attributes are serialized as
  </p>
- <p>
- <code>
- { "data": { "id": "1", "type": "movies", "attributes": {} } }
- </code>
- </p>
+ <pre>
+ {
+   "data": {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+      }
+   }
+ }
+ </pre>
  <p>
  If set to false, attributes are not serialized,
  </p>
- <p>
- <code>
- { "data": { "id": "1", "type": "movies" } }
- </code>
- </p></div>
+ <pre>
+ {
+   "data": {
+      "id": "1",
+      "type": "movies"
+   }
+ }
+ </pre></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>emptyAttributesObjectSerialized</code> - The new value of this configuration's emptyAttributesObjectSerialized</dd>
@@ -725,19 +733,27 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
  <p>
  If set to true, empty attributes are serialized as
  </p>
- <p>
- <code>
- { "data": { "id": "1", "type": "movies", "attributes": {} } }
- </code>
- </p>
+ <pre>
+ {
+   "data": {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+      }
+   }
+ }
+ </pre>
  <p>
  If set to false, attributes are not serialized,
  </p>
- <p>
- <code>
- { "data": { "id": "1", "type": "movies" } }
- </code>
- </p></div>
+ <pre>
+ {
+   "data": {
+      "id": "1",
+      "type": "movies"
+   }
+ }
+ </pre></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is true.</dd>
@@ -754,12 +770,16 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.
  For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
  the serialized JSON would look like
- <p>
- <code>
- { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
- </code>
- </p>
- for a POST request.</div>
+ <pre>
+ {
+   "data": {
+      "type": "movies",
+      "attributes": {
+         "title": "Star Wars"
+       }
+    }
+ }
+ </pre></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jsonApiIdNotSerializedForValue</code> - The value of the JSON:API resource id that is ignored for serialization</dd>
@@ -778,12 +798,16 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.
  For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
  the serialized JSON would look like
- <p>
- <code>
- { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
- </code>
- </p>
- for a POST request.</div>
+ <pre>
+ {
+   "data": {
+      "type": "movies",
+      "attributes": {
+         "title": "Star Wars"
+       }
+    }
+ }
+ </pre></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is null.</dd>
