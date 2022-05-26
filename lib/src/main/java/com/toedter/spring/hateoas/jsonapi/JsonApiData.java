@@ -169,10 +169,9 @@ class JsonApiData {
         attributeMap.remove(idField.name);
 
         // fix #60
-        if(jsonApiConfiguration.getJsonApiIdNotSerializedForValue() != null) {
-            if(jsonApiConfiguration.getJsonApiIdNotSerializedForValue().equals(idField.value)) {
-                idField = new JsonApiResourceIdentifier.ResourceField(idField.name, null);
-            }
+        if (jsonApiConfiguration.getJsonApiIdNotSerializedForValue() != null
+                && jsonApiConfiguration.getJsonApiIdNotSerializedForValue().equals(idField.value)) {
+            idField = new JsonApiResourceIdentifier.ResourceField(idField.name, null);
         }
 
         // fix #53

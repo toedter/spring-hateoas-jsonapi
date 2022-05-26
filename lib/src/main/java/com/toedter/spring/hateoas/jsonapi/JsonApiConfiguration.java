@@ -131,6 +131,50 @@ public class JsonApiConfiguration {
     private final AffordanceType affordancesRenderedAsLinkMeta;
 
     /**
+     * Indicates if empty attributes are serialized as empty object.
+     * <p>
+     * If set to true, empty attributes are serialized as
+     * </p>
+     * <p>
+     * <code>
+     * { "data": { "id": "1", "type": "movies", "attributes": {} } }
+     * </code>
+     * </p>
+     * <p>
+     * If set to false, attributes are not serialized,
+     * </p>
+     * <p>
+     * <code>
+     * { "data": { "id": "1", "type": "movies" } }
+     * </code>
+     * </p>
+     *
+     * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
+     * @return The default is {@literal true}.
+     */
+    @With
+    @Getter
+    private final boolean emptyAttributesObjectSerialized;
+
+    /**
+     * If you want to create JSON for a POST request that does not contain the {@literal id} attribute.
+     * For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
+     * the serialized JSON would look like
+     * <p>
+     * <code>
+     * { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
+     * </code>
+     * </p>
+     * for a POST request.
+     *
+     * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for serialization
+     * @return The default is {@literal null}.
+     */
+    @With
+    @Getter
+    private final String jsonApiIdNotSerializedForValue;
+
+    /**
      * You can pass a lambda expression to customize the ObjectMapper used
      * for serialization.
      *
@@ -220,50 +264,6 @@ public class JsonApiConfiguration {
         }
         return null;
     }
-
-    /**
-     * Indicates if empty attributes are serialized as empty object.
-     * <p>
-     * If set to true, empty attributes are serialized as
-     * </p>
-     * <p>
-     * <code>
-     * { "data": { "id": "1", "type": "movies", "attributes": {} } }
-     * </code>
-     * </p>
-     * <p>
-     * If set to false, attributes are not serialized,
-     * </p>
-     * <p>
-     * <code>
-     * { "data": { "id": "1", "type": "movies" } }
-     * </code>
-     * </p>
-     *
-     * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
-     * @return The default is {@literal true}.
-     */
-    @With
-    @Getter
-    private final boolean emptyAttributesObjectSerialized;
-
-    /**
-     * If you want to create JSON for a POST request that does not contain the {@literal id} attribute.
-     * For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
-     * the serialized JSON would look like
-     * <p>
-     * <code>
-     * { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
-     * </code>
-     * </p>
-     * for a POST request.
-     *
-     * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for serialization
-     * @return The default is {@literal null}.
-     */
-    @With
-    @Getter
-    private final String jsonApiIdNotSerializedForValue;
 
     /**
      * Creates a new default {@link JsonApiConfiguration}.
