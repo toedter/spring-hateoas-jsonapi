@@ -30,6 +30,11 @@ import org.springframework.lang.Nullable;
  */
 public class Jackson2JsonApiModule extends SimpleModule {
 
+    /**
+     * Creates a new {@literal Jackson2JsonApiModule} with a given {@link JsonApiConfiguration}.
+     *
+     * @param jsonApiConfiguration the {@link JsonApiConfiguration}
+     */
     public Jackson2JsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
 
         super("json-api-module",
@@ -52,6 +57,9 @@ public class Jackson2JsonApiModule extends SimpleModule {
         addDeserializer(Links.class, new JsonApiLinksDeserializer());
     }
 
+    /**
+     * Creates a new {@literal Jackson2JsonApiModule} without {@link JsonApiConfiguration}.
+     */
     public Jackson2JsonApiModule() {
         this(null);
     }

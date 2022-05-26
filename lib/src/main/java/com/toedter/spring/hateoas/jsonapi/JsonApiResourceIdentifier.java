@@ -47,8 +47,8 @@ import static org.springframework.util.ReflectionUtils.getAllDeclaredMethods;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JsonApiResourceIdentifier {
-    public static final String JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID =
-            "JSON:API resource object must have property \"id\".";
+    public static final String CANNOT_COMPUTE_JSON_API_RESOURCE_ID =
+            "Cannot compute JSON:API resource id.";
     public static final String JSONAPI_ID_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiId";
     public static final String JSONAPI_TYPE_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiType";
     public static final String JPA_ID_ANNOTATION = "javax.persistence.Id";
@@ -82,7 +82,7 @@ class JsonApiResourceIdentifier {
         final String name;
         final String value;
 
-        public ResourceField(String name, String value) {
+        public ResourceField(String name, @Nullable String value) {
             this.name = name;
             this.value = value;
         }
@@ -167,7 +167,7 @@ class JsonApiResourceIdentifier {
                 field.setAccessible(true);
                 final Object id = field.get(object);
                 if (id == null) {
-                    throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID);
+                    throw new IllegalStateException(CANNOT_COMPUTE_JSON_API_RESOURCE_ID);
                 }
                 return new ResourceField(ID, id.toString());
             }
@@ -186,7 +186,7 @@ class JsonApiResourceIdentifier {
             }
             return new ResourceField(TYPE, jsonApiType);
         } catch (Exception e) {
-            throw new IllegalStateException(JSON_API_RESOURCE_OBJECT_MUST_HAVE_PROPERTY_ID + "::: " + object);
+            throw new IllegalStateException(CANNOT_COMPUTE_JSON_API_RESOURCE_ID + "::: " + object);
         }
     }
 

@@ -168,7 +168,14 @@ class JsonApiData {
         attributeMap.remove("links");
         attributeMap.remove(idField.name);
 
-        // fix #164
+        // fix #60
+        if(jsonApiConfiguration.getJsonApiIdNotSerializedForValue() != null) {
+            if(jsonApiConfiguration.getJsonApiIdNotSerializedForValue().equals(idField.value)) {
+                idField = new JsonApiResourceIdentifier.ResourceField(idField.name, null);
+            }
+        }
+
+        // fix #53
         if (!content.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
             attributeMap.remove(typeField.name);
         }

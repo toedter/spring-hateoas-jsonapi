@@ -36,7 +36,25 @@ import java.util.function.Consumer;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonApiConfiguration {
-    public enum AffordanceType {NONE, SPRING_HATEOAS, HAL_FORMS}
+    /**
+     * The list of possible affordance types, used by {@link withAffordancesRenderedAsLinkMeta}
+     */
+    @SuppressWarnings("JavadocReference")
+    public enum AffordanceType {
+        /**
+         * Default, affordances will NOT be rendered as link meta.
+         */
+        NONE,
+        /**
+         * Affordances will be rendered as link meta (proprietary format).
+         * The format is close to the internal Spring HATEOAS internal model.
+         */
+        SPRING_HATEOAS,
+        /**
+         * Affordances will be rendered as link meta (HAL-FORMS format).
+         * See <a href="https://rwcbook.github.io/hal-forms/#templates-element">https://rwcbook.github.io/hal-forms/#templates-element</a>.
+         */
+        HAL_FORMS}
 
     /**
      * Indicates if the JSON:API type attribute of resource objects is pluralized.
@@ -65,7 +83,7 @@ public class JsonApiConfiguration {
      *
      * <code>
      * "jsonapi": {
-     * "version": "1.0"
+     *    "version": "1.0"
      * }
      * </code>
      *
@@ -106,7 +124,7 @@ public class JsonApiConfiguration {
      * and {@literal HAL-FORMS} _templates are supported.
      *
      * @param affordancesRenderedAsLinkMeta The new value of this configuration's affordancesRenderedAsLinkMeta
-     * @return The list of {#link AffordanceType}. The default is NONE, so no affordances will be rendered.
+     * @return The list of {@link AffordanceType}. The default is NONE, so no affordances will be rendered.
      */
     @With
     @Getter
@@ -207,13 +225,19 @@ public class JsonApiConfiguration {
      * Indicates if empty attributes are serialized as empty object.
      * <p>
      * If set to true, empty attributes are serialized as
+     * </p>
+     * <p>
      * <code>
      * { "data": { "id": "1", "type": "movies", "attributes": {} } }
      * </code>
      * </p>
      * <p>
-     * If set to false, attributes are not serialized, like
+     * If set to false, attributes are not serialized,
+     * </p>
+     * <p>
+     * <code>
      * { "data": { "id": "1", "type": "movies" } }
+     * </code>
      * </p>
      *
      * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
@@ -222,6 +246,24 @@ public class JsonApiConfiguration {
     @With
     @Getter
     private final boolean emptyAttributesObjectSerialized;
+
+    /**
+     * If you want to create JSON for a POST request that does not contain the {@literal id} attribute.
+     * For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
+     * the serialized JSON would look like
+     * <p>
+     * <code>
+     * { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
+     * </code>
+     * </p>
+     * for a POST request.
+     *
+     * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for serialization
+     * @return The default is {@literal null}.
+     */
+    @With
+    @Getter
+    private final String jsonApiIdNotSerializedForValue;
 
     /**
      * Creates a new default {@link JsonApiConfiguration}.
@@ -234,6 +276,7 @@ public class JsonApiConfiguration {
         this.typeForClass = new LinkedHashMap<>();
         this.typeForClassUsedForDeserialization = false;
         this.emptyAttributesObjectSerialized = true;
+        this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
         this.objectMapperCustomizer = objectMapper -> {
         }; // Default to no action.

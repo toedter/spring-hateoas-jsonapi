@@ -314,6 +314,17 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_movie_without_id() throws Exception {
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withJsonApiIdNotSerializedForValue("doNotSerialize"));
+
+        Movie movie = new Movie("doNotSerialize", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithoutId.json");
+    }
+
+    @Test
     void should_not_serialize_movie_without_id_and_link() {
         Assertions.assertThrows(JsonMappingException.class, () -> {
             Movie movie = new Movie(null, "Star Wars");
@@ -925,7 +936,7 @@ class Jackson2JsonApiIntegrationTest {
                 .withTypeForClass(MovieWithoutAttributes.class, "movies"));
 
         String movieJson = mapper.writeValueAsString(entityModel);
-        compareWithFile(movieJson, "movieEntityModelWithNoAttributesObject.json");
+        compareWithFile(movieJson, "movieEntityModelWithoutAttributesObject.json");
     }
 
     @Test
