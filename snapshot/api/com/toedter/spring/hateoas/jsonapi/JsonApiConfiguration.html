@@ -682,23 +682,6 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 </dl>
 </li>
 </ul>
-<a id="withObjectMapperCustomizer(java.util.function.Consumer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>withObjectMapperCustomizer</h4>
-<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withObjectMapperCustomizer&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</pre>
-<div class="block">You can pass a lambda expression to customize the ObjectMapper used
- for serialization.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>objectMapperCustomizer</code> - the ObjectMapper customizer</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
-</dl>
-</li>
-</ul>
 <a id="withEmptyAttributesObjectSerialized(boolean)">
 <!--   -->
 </a>
@@ -788,7 +771,7 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <a id="getJsonApiIdNotSerializedForValue()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getJsonApiIdNotSerializedForValue</h4>
 <pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getJsonApiIdNotSerializedForValue()</pre>
@@ -804,6 +787,23 @@ public&nbsp;java.lang.Class&lt;?&gt;&nbsp;getClassForType&#8203;(java.lang.Strin
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The default is null.</dd>
+</dl>
+</li>
+</ul>
+<a id="withObjectMapperCustomizer(java.util.function.Consumer)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>withObjectMapperCustomizer</h4>
+<pre class="methodSignature">public&nbsp;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&nbsp;withObjectMapperCustomizer&#8203;(java.util.function.Consumer&lt;com.fasterxml.jackson.databind.ObjectMapper&gt;&nbsp;objectMapperCustomizer)</pre>
+<div class="block">You can pass a lambda expression to customize the ObjectMapper used
+ for serialization.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>objectMapperCustomizer</code> - the ObjectMapper customizer</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
 </li>
 </ul>
