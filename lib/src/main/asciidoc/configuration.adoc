@@ -13,7 +13,7 @@ Currently, you can configure
 ** The default is pluralized.
 * if JSON:API types should be rendered as lowercase or original class names.
 ** The default is lowercase.
-* if page information of a PagedModel should be rendered automatically as JSON:API meta-object.
+* if page information of a PagedModel should be rendered automatically as JSON:API meta.
 ** The default is `true`.
 * if a specific Java class should be rendered with a specific JSON:API type. This is useful when
 representation model classes should get the JSON:API type of the domain model or when derived classes
@@ -23,6 +23,7 @@ This is very useful for polymorphic use cases.
 * if empty attributes should be serialized as an empty JSON object, like `"attributes": {}`.
 ** The default is `true`.
 ** If set to false, no "attributes" key is serialized if attributes are empty.
+* A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
 NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
