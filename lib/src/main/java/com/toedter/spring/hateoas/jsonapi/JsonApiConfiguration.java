@@ -37,7 +37,8 @@ import java.util.function.Consumer;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonApiConfiguration {
     /**
-     * The list of possible affordance types, used by {@link withAffordancesRenderedAsLinkMeta}
+     * The list of possible affordance types.
+     * Those affordance types are used by {@link withAffordancesRenderedAsLinkMeta}.
      */
     @SuppressWarnings("JavadocReference")
     public enum AffordanceType {
@@ -80,12 +81,12 @@ public class JsonApiConfiguration {
      * Indicates if the JSON:API version is rendered.
      * <p>
      * If set to true, each rendered JSON:API document will start with
-     *
-     * <code>
+     * </p>
+     * <pre>
      * "jsonapi": {
      *    "version": "1.0"
      * }
-     * </code>
+     * </pre>
      *
      * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
      * @return The default is {@literal false}.
@@ -135,19 +136,27 @@ public class JsonApiConfiguration {
      * <p>
      * If set to true, empty attributes are serialized as
      * </p>
-     * <p>
-     * <code>
-     * { "data": { "id": "1", "type": "movies", "attributes": {} } }
-     * </code>
-     * </p>
+     * <pre>
+     * {
+     *   "data": {
+     *      "id": "1",
+     *      "type": "movies",
+     *      "attributes": {
+     *      }
+     *   }
+     * }
+     * </pre>
      * <p>
      * If set to false, attributes are not serialized,
      * </p>
-     * <p>
-     * <code>
-     * { "data": { "id": "1", "type": "movies" } }
-     * </code>
-     * </p>
+     * <pre>
+     * {
+     *   "data": {
+     *      "id": "1",
+     *      "type": "movies"
+     *   }
+     * }
+     * </pre>
      *
      * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
      * @return The default is {@literal true}.
@@ -160,12 +169,16 @@ public class JsonApiConfiguration {
      * If you want to create JSON for a POST request that does not contain the {@literal id} attribute.
      * For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
      * the serialized JSON would look like
-     * <p>
-     * <code>
-     * { "data": { "type": "movies", "attributes": { "title": "Star Wars" } } }
-     * </code>
-     * </p>
-     * for a POST request.
+     * <pre>
+     * {
+     *   "data": {
+     *      "type": "movies",
+     *      "attributes": {
+     *         "title": "Star Wars"
+     *       }
+     *    }
+     * }
+     * </pre>
      *
      * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for serialization
      * @return The default is {@literal null}.
