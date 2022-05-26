@@ -30,5 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE})
 @Retention(RUNTIME)
 public @interface JsonApiTypeForClass {
+
+    /**
+     * The JSON:API type for resource objects of this class.
+     */
     String value();
 }

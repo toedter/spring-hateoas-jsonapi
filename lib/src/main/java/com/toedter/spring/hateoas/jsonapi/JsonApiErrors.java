@@ -31,18 +31,39 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class JsonApiErrors {
+    /**
+     * Gets list of {@link JsonApiError} objects.
+     *
+     * @return list of {@link JsonApiError} objects.
+     */
     @Getter
     private final List<JsonApiError> errors = new ArrayList<>();
 
+    /**
+     * Creates {@literal JsonApiErrors} with initial {@link JsonApiError}.
+     *
+     * @param jsonApiError the initial {@link JsonApiError}
+     */
     public JsonApiErrors(JsonApiError jsonApiError) {
         errors.add(jsonApiError);
     }
 
+    /**
+     * Adds an {@link JsonApiError} to the list.
+     *
+     * @param jsonApiError the {@link JsonApiError} to be added.
+     * @return this {@link JsonApiErrors} object.
+     */
     public JsonApiErrors withError(JsonApiError jsonApiError) {
         errors.add(jsonApiError);
         return this;
     }
 
+    /**
+     * Creates empty {@link JsonApiErrors}.
+     *
+     * @return A new {@link JsonApiErrors} object.
+     */
     public static JsonApiErrors create() {
         return new JsonApiErrors();
     }

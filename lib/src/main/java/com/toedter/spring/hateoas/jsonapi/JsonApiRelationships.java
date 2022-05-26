@@ -35,6 +35,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface JsonApiRelationships {
+
+    /**
+     * The name of the relationship.
+     */
     String value();
 }
 
