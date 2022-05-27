@@ -250,9 +250,12 @@ class JsonApiResourceIdentifier {
             // then try field directly
             if (name == JsonApiResourceField.id) {
                 Field field = findField(object.getClass(), name.name());
-                //noinspection ConstantConditions
-                field.setAccessible(true);
-                setFieldValue(object, value, field);
+                if (field != null) {
+                    field.setAccessible(true);
+                    setFieldValue(object, value, field);
+                } else {
+                    throw new NullPointerException();
+                }
             }
         } catch (Exception e) {
             throw new IllegalStateException("Cannot set JSON:API field '" + name +

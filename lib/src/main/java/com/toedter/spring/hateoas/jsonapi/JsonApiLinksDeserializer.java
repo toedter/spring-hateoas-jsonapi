@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
+import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
     }
 
     @Override
+    @Nullable
     public JsonDeserializer<Object> getContentDeserializer() {
         return null;
     }

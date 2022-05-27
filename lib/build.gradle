@@ -10,6 +10,7 @@ plugins {
     id 'signing'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.7.0' apply false
+    id 'org.sonarqube' version '3.3'
 }
 
 group = 'com.toedter'
@@ -51,7 +52,7 @@ dependencies {
     testImplementation 'javax.persistence:javax.persistence-api'
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-    docs "io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.3"
+    docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.3'
 }
 
 test {
@@ -82,25 +83,25 @@ task doc {
 
     doLast {
         copy {
-            from "$buildDir/docs/javadoc"
-            into "$buildDir/docs/gh-pages/snapshot/api"
+            from '$buildDir/docs/javadoc'
+            into '$buildDir/docs/gh-pages/snapshot/api'
             filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
         }
 
         copy {
-            from "$buildDir/docs/asciidoc"
-            into "$buildDir/docs/gh-pages/snapshot/reference"
+            from '$buildDir/docs/asciidoc'
+            into '$buildDir/docs/gh-pages/snapshot/reference'
         }
     }
 }
 
 asciidoctor {
-    configurations "docs"
-    sourceDir "src/main/asciidoc/"
+    configurations 'docs'
+    sourceDir 'src/main/asciidoc/'
     baseDirFollowsSourceFile()
     attributes 'version': "${project.version}", 'fold': 'tags'
     outputOptions {
-        backends "spring-html"
+        backends 'spring-html'
     }
 }
 
@@ -149,7 +150,7 @@ publishing {
                 username System.getenv('OSSRH_USERNAME')
                 password System.getenv('OSSRH_PASSWORD')
             }
-            if (project.version.endsWith("-SNAPSHOT")) {
+            if (project.version.endsWith('-SNAPSHOT')) {
                 url 'https://oss.sonatype.org/content/repositories/snapshots/'
             } else {
                 url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
@@ -164,8 +165,17 @@ tasks.withType(GenerateModuleMetadata) {
 }
 
 signing {
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
+    def signingKey = findProperty('signingKey')
+    def signingPassword = findProperty('signingPassword')
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'JSON:API for Spring HATEOAS'
+        property 'sonar.projectKey', 'toedter_spring-hateoas-jsonapi'
+        property 'sonar.organization', 'toedter'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+    }
 }

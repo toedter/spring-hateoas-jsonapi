@@ -57,6 +57,7 @@ class JsonApiDocument {
     @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
+    @Nullable
     private final Links links;
 
     @Getter

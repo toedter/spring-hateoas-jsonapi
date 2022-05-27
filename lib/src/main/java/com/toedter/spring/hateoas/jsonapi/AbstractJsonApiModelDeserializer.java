@@ -145,10 +145,10 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =
                     new JsonApiEntityModelDeserializer(jsonApiConfiguration);
             JsonApiDocument jsonApiDocument =
-                    new JsonApiDocument(null, data, null, null, links, doc.getIncluded());
-            EntityModel<?> entityModel = jsonApiEntityModelDeserializer.convertToRepresentationModel(
+                    new JsonApiDocument(null, data, null, null, links,
+                            doc != null ? doc.getIncluded() : null);
+            return jsonApiEntityModelDeserializer.convertToRepresentationModel(
                     Collections.singletonList(objectFromProperties), jsonApiDocument);
-            return entityModel;
         }
 
         return objectFromProperties;

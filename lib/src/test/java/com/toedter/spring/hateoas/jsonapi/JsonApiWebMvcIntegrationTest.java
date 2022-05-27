@@ -164,16 +164,14 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
     }
 
     @Test
-    void should_not_create_new_polymorphic_movie_with_custom_type() {
-        Assertions.assertThrows(Exception.class, () -> {
-            String input = readFile("postMovieWithCustomType2.json");
+    void should_not_create_new_polymorphic_movie_with_custom_type() throws Exception {
 
-            this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
-                            .content(input)
-                            .contentType(JSON_API))
-                    .andExpect(status().isCreated())
-                    .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-        });
+        String input = readFile("postMovieWithCustomType2.json");
+
+        Assertions.assertThrows(Exception.class, () ->
+                this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
+                        .content(input)
+                        .contentType(JSON_API)));
     }
 
     @Test
