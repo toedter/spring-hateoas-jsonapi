@@ -41,7 +41,6 @@ jobs:
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build doc sonarqube publish
       - name: Archive reports (for lib only)
@@ -56,7 +55,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./lib/build
       - name: Deploy doc to Github pages
-        uses: peaceiris/actions-gh-pages@v3.7.0-8
+        uses: peaceiris/actions-gh-pages@v3.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./lib/build/docs/gh-pages/snapshot
