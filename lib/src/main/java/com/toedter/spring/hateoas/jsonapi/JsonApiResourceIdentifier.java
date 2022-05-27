@@ -89,21 +89,21 @@ class JsonApiResourceIdentifier {
     }
 
     static ResourceField getId(Object object, JsonApiConfiguration jsonApiConfiguration) {
-        return getResourceField(JsonApiResourceField.id, object, jsonApiConfiguration);
+        return getResourceField(JsonApiResourceField.ID, object, jsonApiConfiguration);
     }
 
     static ResourceField getType(Object object, JsonApiConfiguration jsonApiConfiguration) {
-        return getResourceField(JsonApiResourceField.type, object, jsonApiConfiguration);
+        return getResourceField(JsonApiResourceField.TYPE, object, jsonApiConfiguration);
     }
 
-    enum JsonApiResourceField {id, type}
+    enum JsonApiResourceField {ID, TYPE}
 
     static private ResourceField getResourceField(
             JsonApiResourceField resourceField, Object object, JsonApiConfiguration jsonApiConfiguration) {
 
         try {
             // check Class based JSON:API type annotation
-            if (resourceField == JsonApiResourceField.type
+            if (resourceField == JsonApiResourceField.TYPE
                     && object.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
                 JsonApiTypeForClass annotation = object.getClass().getAnnotation(JsonApiTypeForClass.class);
                 return new ResourceField(TYPE, annotation.value());
@@ -117,7 +117,7 @@ class JsonApiResourceIdentifier {
                 final Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if (resourceField == JsonApiResourceField.id) {
+                    if (resourceField == JsonApiResourceField.ID) {
                         if (JPA_ID_ANNOTATION.equals(annotationName)) {
                             jpaIdField = field;
                         }
@@ -137,7 +137,7 @@ class JsonApiResourceIdentifier {
                 final Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if (resourceField == JsonApiResourceField.id) {
+                    if (resourceField == JsonApiResourceField.ID) {
                         if (JPA_ID_ANNOTATION.equals(annotationName)) {
                             jpaIdMethod = method;
                         }
@@ -160,7 +160,7 @@ class JsonApiResourceIdentifier {
                 return getResourceFieldForMethod(object, jpaIdMethod, resourceField);
             }
 
-            if (resourceField == JsonApiResourceField.id) {
+            if (resourceField == JsonApiResourceField.ID) {
                 // then try field "id"
                 Field field = ReflectionUtils.findField(object.getClass(), ID);
                 //noinspection ConstantConditions
@@ -210,9 +210,9 @@ class JsonApiResourceIdentifier {
                 final Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
-                    if (name == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                    if (name == JsonApiResourceField.ID && (JPA_ID_ANNOTATION.equals(annotationName)
                             || JSONAPI_ID_ANNOTATION.equals(annotationName))
-                            || (name == JsonApiResourceField.type
+                            || (name == JsonApiResourceField.TYPE
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName))) {
                         setFieldValue(object, value, field);
                         return;
@@ -227,10 +227,10 @@ class JsonApiResourceIdentifier {
                 for (Annotation annotation : annotations) {
                     final String annotationName = annotation.annotationType().getCanonicalName();
                     boolean isAnnotatedMethod = false;
-                    if (name == JsonApiResourceField.id && (JPA_ID_ANNOTATION.equals(annotationName)
+                    if (name == JsonApiResourceField.ID && (JPA_ID_ANNOTATION.equals(annotationName)
                             || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
                         isAnnotatedMethod = true;
-                    } else if (name == JsonApiResourceField.type
+                    } else if (name == JsonApiResourceField.TYPE
                             && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
                         isAnnotatedMethod = true;
                     }
@@ -248,13 +248,13 @@ class JsonApiResourceIdentifier {
             }
 
             // then try field directly
-            if (name == JsonApiResourceField.id) {
-                Field field = findField(object.getClass(), name.name());
+            if (name == JsonApiResourceField.ID) {
+                Field field = findField(object.getClass(), name.name().toLowerCase());
                 if (field != null) {
                     field.setAccessible(true);
                     setFieldValue(object, value, field);
                 } else {
-                    throw new NullPointerException();
+                    throw new RuntimeException();
                 }
             }
         } catch (Exception e) {

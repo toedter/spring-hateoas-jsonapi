@@ -109,10 +109,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             }
         }
 
-        if (clazz == null) {
-            clazz = rootType.getRawClass();
-        }
-
         if (attributes != null) {
             // we have to use the plain object mapper to not get in conflict with links deserialization
             objectFromProperties = plainObjectMapper.convertValue(attributes, rootType);
@@ -133,9 +129,9 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         }
 
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.id, (String) data.get("id"));
+                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.ID, (String) data.get("id"));
         JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.type, (String) data.get("type"));
+                objectFromProperties, JsonApiResourceIdentifier.JsonApiResourceField.TYPE, (String) data.get("type"));
 
         if (wrapInEntityModel) {
             Links links = this.objectMapper.convertValue(data.get("links"), Links.class);
