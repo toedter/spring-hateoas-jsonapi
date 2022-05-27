@@ -83,14 +83,14 @@ task doc {
 
     doLast {
         copy {
-            from '$buildDir/docs/javadoc'
-            into '$buildDir/docs/gh-pages/snapshot/api'
+            from "$buildDir/docs/javadoc"
+            into "$buildDir/docs/gh-pages/snapshot/api"
             filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
         }
 
         copy {
-            from '$buildDir/docs/asciidoc'
-            into '$buildDir/docs/gh-pages/snapshot/reference'
+            from "$buildDir/docs/asciidoc"
+            into "$buildDir/docs/gh-pages/snapshot/reference"
         }
     }
 }
