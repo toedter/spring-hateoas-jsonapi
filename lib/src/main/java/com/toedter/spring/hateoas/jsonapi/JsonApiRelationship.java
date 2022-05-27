@@ -135,40 +135,14 @@ class JsonApiRelationship {
         return this;
     }
 
-    /**
-     * Creates a JSON:API relationship from an entity model
-     * It must be possible to extract the JSON:API id of this object,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
-     *
-     * @param entityModel the base for the relationship
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(EntityModel<?> entityModel) {
         return JsonApiRelationship.of(entityModel.getContent());
     }
 
-    /**
-     * Creates a JSON:API relationship from an object.
-     * It must be possible to extract the JSON:API id of this object,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
-     *
-     * @param object the base for the relationship
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(Object object) {
         return new JsonApiRelationship(object, null, null);
     }
 
-    /**
-     * Creates a JSON:API relationship from an object and adds the meta
-     * to the (resource identifier) object itself, not the relationship
-     * It must be possible to extract the JSON:API id of this object,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
-     *
-     * @param object the base for the relationship
-     * @param resourceIdentifierMeta the meta of the (resource identifier) object
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(Object object,
                                          @Nullable Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
@@ -176,43 +150,18 @@ class JsonApiRelationship {
         return jsonApiRelationship;
     }
 
-    /**
-     * Creates a JSON:API relationship from a collection of objects.
-     * It must be possible to extract the JSON:API id of each element of this collection,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
-     *
-     * @param collection the base for the relationship
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(Collection<?> collection) {
         return new JsonApiRelationship(collection, null, null);
     }
 
-    /**
-     * Creates a JSON:API relationship from links
-     *
-     * @param links the links for the relationship
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(Links links) {
         return new JsonApiRelationship(null, links, null);
     }
 
-    /**
-     * Creates a JSON:API relationship from meta
-     *
-     * @param meta the meta information for the relationship
-     * @return the JSON:API relationship
-     */
     public static JsonApiRelationship of(Map<String, Object> meta) {
         return new JsonApiRelationship(null, null, meta);
     }
 
-    /**
-     * Validates against the JSON:API 1.0 specification.
-     *
-     * @return true, if the jsonApiRelationship is valid
-     */
     @JsonIgnore
     public boolean isValid() {
 
@@ -254,7 +203,7 @@ class JsonApiRelationship {
 
         // JsonApiResource.getId and getType will throw IllegalStateExceptions
         // if id or type cannot be retrieved.
-        Object id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
+        String id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
         String type = JsonApiResourceIdentifier.getType(data, jsonApiConfiguration).value;
         return new JsonApiResourceIdentifier(id, type, meta);
     }
