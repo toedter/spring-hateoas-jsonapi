@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 1.4.0,</span>
-<span id="revdate">2022-03-25</span>
+<span id="revnumber">version 1.5.0,</span>
+<span id="revdate">2022-05-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -69,7 +69,11 @@
 <li><a href="#client-side-support">4. Client Side support</a>
 <ul class="sectlevel2">
 <li><a href="#deserialization">4.1. Deserialization</a></li>
-<li><a href="#resttemplate">4.2. RestTemplate</a></li>
+<li><a href="#resttemplate">4.2. RestTemplate</a>
+<ul class="sectlevel3">
+<li><a href="#postWithNoId">4.2.1. Creating POST requests without serialized JSON:API id</a></li>
+</ul>
+</li>
 <li><a href="#traverson">4.3. Traverson</a></li>
 <li><a href="#link-discovery">4.4. Link Discovery</a></li>
 </ul>
@@ -130,13 +134,13 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <div class="sect2">
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
-<p>JSON:API for Spring HATEOAS is based on version 1.4.1 of Spring HATEOAS.
+<p>JSON:API for Spring HATEOAS is based on version 1.5.0 of Spring HATEOAS.
 For further understanding of this document, please be aware of both</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/1.4.1/reference/html/">Spring HATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/1.5.0/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -234,19 +238,19 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;1.4.0&lt;/version&gt;
+    &lt;version&gt;1.5.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock secondary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.4.0'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.5.0'
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>1.4.1-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>1.5.1-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as a repository to your Maven or Gradle configuration.</p>
 </div>
@@ -2048,12 +2052,52 @@ static class Config {
 </code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>4.2.1. Creating POST requests without serialized JSON:API id</h4>
+<div class="paragraph">
+<p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you specify a configuration like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">new JsonApiConfiguration().withJsonApiIdNotSerializedForValue("doNotSerialize"));
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and create a Movie DTO with this id, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("doNotSerialize", "Star Wars");
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the resulting JSON would look like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="traverson"><a class="anchor" href="#traverson"></a>4.3. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/1.4.1/reference/html/">Spring HATEOAS</a>.</p>
+implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/1.5.0/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2061,7 +2105,7 @@ implementation provided through <a href="https://docs.spring.io/spring-hateoas/d
 <div class="paragraph">
 <p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
-<a href="https://docs.spring.io/spring-hateoas/docs/1.4.1/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+<a href="https://docs.spring.io/spring-hateoas/docs/1.5.0/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
 When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
 is exposed as a Spring bean.</p>
@@ -2119,7 +2163,7 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta-object.</p>
+<p>if page information of a PagedModel should be rendered automatically as JSON:API meta.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2149,6 +2193,9 @@ This is very useful for polymorphic use cases.</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p>
 </li>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
@@ -2183,6 +2230,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
             .withTypeForClassUsedForDeserialization(true)
             .withEmptyAttributesObjectSerialized(false)
+            .withJsonApiIdNotSerializedForValue("-1")
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -2195,8 +2243,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.4.0<br>
-Last updated 2022-03-25 11:39:29 UTC
+Version 1.5.0<br>
+Last updated 2022-05-28 09:27:26 UTC
 </div>
 </div>
 </div>

@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Client Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.4.0</span>
+<span id="revnumber">version 1.5.0</span>
 </div>
 </div>
 <div id="content">
@@ -232,6 +232,46 @@ static class Config {
 </code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>Creating POST requests without serialized JSON:API id</h3>
+<div class="paragraph">
+<p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you specify a configuration like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">new JsonApiConfiguration().withJsonApiIdNotSerializedForValue("doNotSerialize"));
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and create a Movie DTO with this id, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("doNotSerialize", "Star Wars");
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the resulting JSON would look like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -273,8 +313,8 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.4.0<br>
-Last updated 2022-03-25 11:39:29 UTC
+Version 1.5.0<br>
+Last updated 2022-05-28 09:27:26 UTC
 </div>
 </div>
 </div>

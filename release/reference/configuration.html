@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Configuration</h1>
 <div class="details">
-<span id="revnumber">version 1.4.0</span>
+<span id="revnumber">version 1.5.0</span>
 </div>
 </div>
 <div id="content">
@@ -66,7 +66,7 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta-object.</p>
+<p>if page information of a PagedModel should be rendered automatically as JSON:API meta.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -96,6 +96,9 @@ This is very useful for polymorphic use cases.</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">[postWithNoId]</a>.</p>
 </li>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
@@ -130,6 +133,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
             .withTypeForClassUsedForDeserialization(true)
             .withEmptyAttributesObjectSerialized(false)
+            .withJsonApiIdNotSerializedForValue("-1")
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -140,8 +144,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.4.0<br>
-Last updated 2022-03-25 11:39:29 UTC
+Version 1.5.0<br>
+Last updated 2022-05-28 09:27:26 UTC
 </div>
 </div>
 </div>
