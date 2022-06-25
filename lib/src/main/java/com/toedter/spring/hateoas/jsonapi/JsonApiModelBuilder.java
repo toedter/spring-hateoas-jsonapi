@@ -610,14 +610,14 @@ public class JsonApiModelBuilder {
     }
 
     /**
-     * Converts a JsonApiModel into an {@link EntityModel<T>}. This only works if the builder.model() was
-     * called either with an object of class T or an object of class {@link EntityModel<T>}. In these cases, all
-     * JSON:API specific things will be lost in the resulting {@link EntityModel<T>}, but will be fully serialized,
+     * Converts a JsonApiModel into an {@link EntityModel}. This only works if the builder.model() was
+     * called either with an object of class T or an object of class {@literal EntityModel<T>}. In these cases, all
+     * JSON:API specific things will be lost in the resulting {@link EntityModel}, but will be fully serialized,
      * including JSON:API specifics like relationships and included.
      *
      * @param contentClass the class of T. This is used for compile and runtime checks.
      * @param <T> The class of the DTO object the JsonApiModel is based on
-     * @return the converted {@link EntityModel<T>}.
+     * @return the converted {@link EntityModel}.
      */
     public <T> EntityModel<T> buildEntityModel(Class<T> contentClass) {
         return new JsonApiEntityModel<T>(
