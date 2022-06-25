@@ -19,6 +19,7 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
@@ -71,5 +72,47 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
     @JsonUnwrapped
     public RepresentationModel<?> getContent() {
         return entity;
+    }
+
+    public <T> EntityModel<T> toEntityModel(Class<T> contentClass) {
+        return new JsonApiEntityModel<>(this, contentClass);
+    }
+}
+
+class JsonApiEntityModel<T> extends EntityModel<T> {
+    @Getter
+    private JsonApiModel jsonApiModel;
+
+    public JsonApiEntityModel(JsonApiModel jsonApiModel, Class<T> contentClass) {
+        super((T) getJsonApiModelContent(jsonApiModel, contentClass));
+        add(jsonApiModel.getLinks());
+        this.jsonApiModel = jsonApiModel;
+    }
+
+
+    private static <T> T getJsonApiModelContent(JsonApiModel jsonApiModel, Class<T> contentClass) {
+        if (jsonApiModel.getContent() == null) {
+            return null;
+        }
+
+        RepresentationModel<?> jsonApiModelContent = jsonApiModel.getContent();
+
+        if (!(jsonApiModelContent instanceof EntityModel)) {
+            throw new IllegalArgumentException("Internal model of JsonApiModel must be EntityModel<" + contentClass.getSimpleName() + ">");
+        }
+
+        EntityModel<T> entityModel = (EntityModel<T>) jsonApiModelContent;
+
+        if (entityModel.getContent() == null) {
+            return null;
+        }
+
+        if (!(contentClass.isInstance(entityModel.getContent()))) {
+            throw new IllegalArgumentException(
+                    "Cannot cast EntityModel<" + entityModel.getContent().getClass().getSimpleName() +
+                            "> to EntityModel<" + contentClass.getSimpleName() + ">");
+        }
+
+        return ((EntityModel<T>) jsonApiModelContent).getContent();
     }
 }
