@@ -1704,12 +1704,12 @@ public class PolymorphicRelationEntity {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @JsonApiRelationships("superEntities")
     @JsonIgnore
     @Getter
-    private List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
+    private final List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
 }
 </code></pre>
 </div>
@@ -1735,7 +1735,7 @@ public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEn
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @Override
     public T getT() {
@@ -1753,9 +1753,9 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
-    private String extraAttribute = "";
+    private final String extraAttribute = "";
 
     @Override
     public String getT() {
@@ -2244,7 +2244,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 1.5.1-SNAPSHOT<br>
-Last updated 2022-07-03 12:21:42 UTC
+Last updated 2022-07-03 16:04:44 UTC
 </div>
 </div>
 </div>
