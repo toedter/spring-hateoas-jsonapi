@@ -26,7 +26,7 @@ This is very useful for polymorphic use cases.
 * A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 
-NOTE: Since the JSON:API recommendation contains square brackets in the request parameter names,
+TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,
 make sure you provide the following configuration in your Spring `application.properties` when using Tomcat:
 `server.tomcat.relaxed-query-chars= [,]`
 
