@@ -98,13 +98,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                         Type typeArgument = type.getActualTypeArguments()[0];
 
                                         for (HashMap<String, Object> entry : jsonApiRelationships) {
-                                            String id = entry.get("id").toString();
-                                            String jsonApiType = entry.get("type").toString();
-                                            Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
-                                            if (attributes != null) {
-                                                entry.put("attributes", attributes);
-                                            }
-                                            Object newInstance = convertToResource(entry, false, doc, objectMapper.constructType(typeArgument), true);
+                                            Object newInstance = createRelationship(doc, typeArgument, entry);
                                             relationshipCollection.add(newInstance);
                                         }
 
@@ -114,13 +108,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     // we expect a concrete type otherwise, like "Director"
                                     HashMap<String, Object> data =
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
-                                    String id = data.get("id").toString();
-                                    String jsonApiType = data.get("type").toString();
-                                    Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
-                                    if (attributes != null) {
-                                        data.put("attributes", attributes);
-                                    }
-                                    Object newInstance = convertToResource(data, false, doc, objectMapper.constructType(genericType), true);
+                                    Object newInstance = createRelationship(doc, genericType, data);
                                     field.set(content, newInstance);
                                 }
                             }
@@ -178,6 +166,16 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
         }
         throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
 
+    }
+
+    private Object createRelationship(JsonApiDocument doc, Type typeArgument, HashMap<String, Object> entry) {
+        String id = entry.get("id").toString();
+        String jsonApiType = entry.get("type").toString();
+        Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
+        if (attributes != null) {
+            entry.put("attributes", attributes);
+        }
+        return convertToResource(entry, false, doc, objectMapper.constructType(typeArgument), true);
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
