@@ -29,7 +29,7 @@ public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @Override
     public T getT() {

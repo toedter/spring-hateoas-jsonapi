@@ -32,11 +32,11 @@ public class PolymorphicRelationEntity {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @JsonApiRelationships("superEntities")
     @JsonIgnore
     @Getter
-    private List<SuperEntity<?>> relation = null;
+    private final List<SuperEntity<?>> relation = null;
 }
 // end::PolymorphicRelationEntity[]

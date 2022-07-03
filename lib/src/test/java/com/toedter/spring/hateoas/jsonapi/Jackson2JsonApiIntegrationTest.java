@@ -996,8 +996,8 @@ class Jackson2JsonApiIntegrationTest {
         @Getter
         @JsonApiTypeForClass(value = "MyClassType")
         class Movie {
-            private Long id = 1L;
-            private String type = "MyObjectType";
+            private final Long id = 1L;
+            private final String type = "MyObjectType";
         }
 
         String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
@@ -1027,10 +1027,10 @@ class Jackson2JsonApiIntegrationTest {
     void should_serialize_jsonapimeta_field_annotation() throws Exception {
         @Getter
         class Movie {
-            private Long id = 1L;
-            private String title = "Star Wars";
+            private final Long id = 1L;
+            private final String title = "Star Wars";
             @JsonApiMeta
-            private String metaProperty = "metaValue";
+            private final String metaProperty = "metaValue";
         }
 
         String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
@@ -1041,8 +1041,8 @@ class Jackson2JsonApiIntegrationTest {
     void should_serialize_jsonapimeta_method_annotation() throws Exception {
         @Getter
         class Movie {
-            private Long id = 1L;
-            private String title = "Star Wars";
+            private final Long id = 1L;
+            private final String title = "Star Wars";
 
             @JsonApiMeta
             public String getMetaProperty() {

@@ -42,7 +42,7 @@ class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     @JsonIgnore
     @Getter
-    private Map<String, Object> metaData;
+    private final Map<String, Object> metaData;
 
     @JsonIgnore
     @Getter

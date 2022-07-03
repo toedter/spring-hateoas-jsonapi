@@ -27,9 +27,9 @@ public class SuperEChild2 implements SuperEntity<String> {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
-    private String extraAttribute = "";
+    private final String extraAttribute = "";
 
     @Override
     public String getT() {
