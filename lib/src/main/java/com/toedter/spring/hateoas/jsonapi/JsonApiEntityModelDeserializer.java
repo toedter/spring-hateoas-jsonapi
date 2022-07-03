@@ -168,6 +168,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
 
     }
 
+    @Nullable
     private Object createRelationship(JsonApiDocument doc, Type typeArgument, HashMap<String, Object> entry) {
         String id = entry.get("id").toString();
         String jsonApiType = entry.get("type").toString();
