@@ -84,7 +84,7 @@ class JsonApiData {
             CollectionModel<?> collectionModel,
             ObjectMapper objectMapper,
             JsonApiConfiguration jsonApiConfiguration,
-            @Nullable HashMap<String, Collection<String>> sparseFieldsets,
+            @Nullable Map<String, Collection<String>> sparseFieldsets,
             boolean eliminateDuplicates) {
 
         if (eliminateDuplicates) {
@@ -111,7 +111,7 @@ class JsonApiData {
             boolean isSingleEntity,
             ObjectMapper objectMapper,
             JsonApiConfiguration jsonApiConfiguration,
-            @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
+            @Nullable Map<String, Collection<String>> sparseFieldsets) {
 
         Links links = null;
         Map<String, JsonApiRelationship> relationships = null;

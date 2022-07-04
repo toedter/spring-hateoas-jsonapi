@@ -29,7 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")
-public class AbstractJsonApiModelDeserializerUnitTest {
+class AbstractJsonApiModelDeserializerUnitTest {
     class TestJsonApiDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
         public TestJsonApiDeserializer(JsonApiConfiguration jsonApiConfiguration) {
             super(jsonApiConfiguration);

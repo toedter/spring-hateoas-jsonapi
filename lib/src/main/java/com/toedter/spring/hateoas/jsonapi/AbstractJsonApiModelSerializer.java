@@ -118,10 +118,10 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             // in some cases we want to add the metadata to the top level JSON:API document
             Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
             if (embeddedMeta != metaData || data == null) {
-                if (doc.getMeta() == null) {
+                final Map<String, Object> meta = doc.getMeta();
+                if (meta == null) {
                     doc = doc.withMeta(metaData);
                 } else {
-                    final Map<String, Object> meta = doc.getMeta();
                     // add/override with metadata created with builder
                     // this will override the previous generated page metadata, if the key is the same
                     for (Map.Entry<?, ?> entry : metaData.entrySet()) {
@@ -132,7 +132,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
 
         // issue #13: if meta is set, we don't want to serialize to "data": null
-        if (doc.getMeta() != null && !doc.getMeta().isEmpty() && doc.getData() == null) {
+        final Map<String, Object> meta = doc.getMeta();
+        if (meta != null && !meta.isEmpty() && doc.getData() == null) {
             JsonApiDocumentWithoutSerializedData documentWithoutSerializedData =
                     new JsonApiDocumentWithoutSerializedData(doc);
             provider

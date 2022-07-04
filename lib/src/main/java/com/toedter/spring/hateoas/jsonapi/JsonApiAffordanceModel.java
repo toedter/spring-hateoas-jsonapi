@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode(callSuper=true)
 class JsonApiAffordanceModel extends AffordanceModel {
 
     @Value

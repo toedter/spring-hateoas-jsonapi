@@ -23,8 +23,6 @@ import org.springframework.http.MediaType;
 
 class JsonApiAffordanceModelFactory implements AffordanceModelFactory {
 
-	private final MediaType mediaType = MediaTypes.JSON_API;
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.hateoas.mediatype.AffordanceModelFactory#getAffordanceModel(org.springframework.hateoas.mediatype.ConfiguredAffordance)
@@ -35,6 +33,6 @@ class JsonApiAffordanceModelFactory implements AffordanceModelFactory {
 	}
 
 	public MediaType getMediaType() {
-		return this.mediaType;
+		return MediaTypes.JSON_API;
 	}
 }

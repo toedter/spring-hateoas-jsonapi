@@ -110,7 +110,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
         attributeMap.remove("template");
         attributeMap.remove("affordances");
 
-        if (link.getAffordances().size() > 0) {
+        if (!link.getAffordances().isEmpty()) {
 
             List<Object> affordanceList = new ArrayList<>();
             for (Affordance affordance : link.getAffordances()) {

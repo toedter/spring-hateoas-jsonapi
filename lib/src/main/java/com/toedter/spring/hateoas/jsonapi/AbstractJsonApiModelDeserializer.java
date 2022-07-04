@@ -26,6 +26,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.*;
@@ -66,9 +67,10 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             }
         }
         JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
-        if (doc.getData() != null && doc.getData() instanceof Collection<?>) {
+        if (doc.getData() instanceof Collection<?>) {
             final boolean isEntityModelCollectionFinal = isEntityModelCollection;
             List<HashMap<String, Object>> collection = (List<HashMap<String, Object>>) doc.getData();
+            Assert.notNull(collection, "JsonApiDocument data must not be null!");
             List<Object> resources = collection.stream()
                     .map(data -> this.convertToResource(data, isEntityModelCollectionFinal, doc, null, false))
                     .collect(Collectors.toList());
@@ -80,8 +82,25 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
     }
 
+    @Override
+    public JavaType getContentType() {
+        return this.contentType;
+    }
+
+    @Override
     @Nullable
-    Object convertToResource(@Nullable HashMap<String, Object> data, boolean wrapInEntityModel,
+    public JsonDeserializer<Object> getContentDeserializer() {
+        return null;
+    }
+
+    @Override
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, @Nullable BeanProperty property) {
+        JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
+        return createJsonDeserializer(type);
+    }
+
+    @Nullable
+    protected Object convertToResource(@Nullable HashMap<String, Object> data, boolean wrapInEntityModel,
                              @Nullable JsonApiDocument doc, @Nullable JavaType javaType, boolean useDataForCreation) {
         if (data == null) {
             return null;
@@ -151,23 +170,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
     }
 
     abstract protected T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
-
-    @Override
-    public JavaType getContentType() {
-        return this.contentType;
-    }
-
-    @Override
-    @Nullable
-    public JsonDeserializer<Object> getContentDeserializer() {
-        return null;
-    }
-
-    @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, @Nullable BeanProperty property) {
-        JavaType type = property == null ? ctxt.getContextualType() : property.getType().getContentType();
-        return createJsonDeserializer(type);
-    }
 
     abstract protected JsonDeserializer<?> createJsonDeserializer(JavaType type);
 }

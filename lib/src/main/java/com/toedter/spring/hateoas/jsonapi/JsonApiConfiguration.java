@@ -291,7 +291,7 @@ public class JsonApiConfiguration {
         this.emptyAttributesObjectSerialized = true;
         this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
-        this.objectMapperCustomizer = objectMapper -> {
+        this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
 }
