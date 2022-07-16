@@ -29,6 +29,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,14 +49,19 @@ import java.util.Optional;
 @JsonSerialize(using = JsonApiRelationshipSerializer.class)
 @Getter
 class JsonApiRelationship {
+    @With(AccessLevel.PACKAGE)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Nullable
     private final Object data;
 
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Nullable
     private final Links links;
 
     @With(AccessLevel.PACKAGE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Nullable
     private final Map<String, Object> meta;
 
     @JsonIgnore
@@ -103,7 +109,7 @@ class JsonApiRelationship {
             if (!(this.data instanceof Collection<?>)) {
                 dataList.add(this.data);
             } else {
-                Collection<Object> collectionData = (Collection<Object>) this.data;
+                Collection<?> collectionData = (Collection<?>) this.data;
                 dataList.addAll(collectionData);
             }
             dataList.add(object);
@@ -136,7 +142,9 @@ class JsonApiRelationship {
     }
 
     public static JsonApiRelationship of(EntityModel<?> entityModel) {
-        return JsonApiRelationship.of(entityModel.getContent());
+        Object content = entityModel.getContent();
+        Assert.notNull(content, "Cannot create JSON:API relationship of EntityModel with null content.");
+        return JsonApiRelationship.of(content);
     }
 
     public static JsonApiRelationship of(Object object) {
@@ -196,16 +204,16 @@ class JsonApiRelationship {
     }
 
     JsonApiResourceIdentifier toJsonApiResource(Object data, JsonApiConfiguration jsonApiConfiguration) {
-        Map<String, Object> meta = null;
+        Map<String, Object> localMeta = null;
         if(metaForResourceIdentifiers != null) {
-            meta = metaForResourceIdentifiers.get(data);
+            localMeta = metaForResourceIdentifiers.get(data);
         }
 
         // JsonApiResource.getId and getType will throw IllegalStateExceptions
         // if id or type cannot be retrieved.
         String id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
         String type = JsonApiResourceIdentifier.getType(data, jsonApiConfiguration).value;
-        return new JsonApiResourceIdentifier(id, type, meta);
+        return new JsonApiResourceIdentifier(id, type, localMeta);
     }
 
     List<JsonApiResourceIdentifier> toJsonApiResourceCollection(

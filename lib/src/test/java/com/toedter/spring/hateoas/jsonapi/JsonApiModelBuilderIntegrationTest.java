@@ -317,6 +317,24 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     }
 
     @Test
+    void should_build_single_movie_model_with_relationship_only_meta() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        Director director = new Director("1", "George Lucas");
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("meta-key", "meta-value");
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", meta)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithOnlyMeta.json");
+    }
+
+
+    @Test
     void should_build_paged_movie_with_parametrized_page_links() throws Exception {
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
         Link selfLink = Link.of("http://localhost/movies").withSelfRel();

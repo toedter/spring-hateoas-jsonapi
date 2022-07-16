@@ -22,24 +22,30 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
 class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
-    private final JsonApiConfiguration jsonApiConfiguration;
+    private final transient JsonApiConfiguration jsonApiConfiguration;
 
     @Getter
     private static class JsonApiRelationshipForSerialization {
+        @Nullable
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private final Object data;
 
+        @Nullable
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final Links links;
 
+        @Nullable
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final Map<String, Object> meta;
 
-        public JsonApiRelationshipForSerialization(Object data, Links links, Map<String, Object> meta) {
+        public JsonApiRelationshipForSerialization(
+                @Nullable Object data, @Nullable Links links, @Nullable Map<String, Object> meta) {
             this.data = data;
             this.links = links;
             this.meta = meta;
@@ -54,10 +60,12 @@ class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRel
     @Override
     public void serialize(JsonApiRelationship value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         Object data = value.getData();
-        if (data instanceof Collection) {
-            data = value.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
-        } else {
-            data = value.toJsonApiResource(data, jsonApiConfiguration);
+        if( data != null ) {
+            if (data instanceof Collection) {
+                data = value.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
+            } else {
+                data = value.toJsonApiResource(data, jsonApiConfiguration);
+            }
         }
         JsonApiRelationshipForSerialization jsonApiRelationship =
                 new JsonApiRelationshipForSerialization(data, value.getLinks(), value.getMeta());
