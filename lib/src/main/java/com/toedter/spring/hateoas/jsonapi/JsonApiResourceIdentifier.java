@@ -46,6 +46,7 @@ import static org.springframework.util.ReflectionUtils.getAllDeclaredMethods;
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@SuppressWarnings("squid:S3011")
 class JsonApiResourceIdentifier {
     public static final String CANNOT_COMPUTE_JSON_API_RESOURCE_ID =
             "Cannot compute JSON:API resource id.";
@@ -98,7 +99,7 @@ class JsonApiResourceIdentifier {
 
     enum JsonApiResourceField {ID, TYPE}
 
-    static private ResourceField getResourceField(
+    private static ResourceField getResourceField(
             JsonApiResourceField resourceField, Object object, JsonApiConfiguration jsonApiConfiguration) {
 
         try {

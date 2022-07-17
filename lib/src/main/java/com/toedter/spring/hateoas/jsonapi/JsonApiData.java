@@ -39,6 +39,7 @@ import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredF
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@SuppressWarnings("squid:S3011")
 class JsonApiData {
     String id;
     String type;

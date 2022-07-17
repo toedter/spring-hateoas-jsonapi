@@ -33,6 +33,7 @@ import java.util.*;
 
 import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
+@SuppressWarnings("squid:S3011")
 class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>>
         implements ContextualDeserializer {
 

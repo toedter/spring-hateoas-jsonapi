@@ -388,7 +388,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie.getTitle()).isEqualTo("New Movie");
 
         List<Director> directors = movie.getDirectors();
-        assertThat(directors.size()).isEqualTo(1);
+        assertThat(directors).hasSize(1);
         assertThat(directors.get(0).getId()).isEqualTo("1");
     }
 
@@ -404,7 +404,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie.getTitle()).isEqualTo("New Movie");
 
         List<DirectorWithType> directors = movie.getDirectors();
-        assertThat(directors.size()).isEqualTo(1);
+        assertThat(directors).hasSize(1);
         assertThat(directors.get(0).getId()).isEqualTo("1");
         assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type");
     }
@@ -421,7 +421,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie.getTitle()).isEqualTo("New Movie");
 
         Set<DirectorWithType> directors = movie.getDirectors();
-        assertThat(directors.size()).isEqualTo(1);
+        assertThat(directors).hasSize(1);
         DirectorWithType director = directors.iterator().next();
         assertThat(director.getId()).isEqualTo("1");
         assertThat(director.getDirectorType()).isEqualTo("director-type");
@@ -455,7 +455,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie.getTitle()).isEqualTo("New Movie");
 
         List<DirectorWithType> directors = movie.getDirectors();
-        assertThat(directors.size()).isEqualTo(2);
+        assertThat(directors).hasSize(2);
         assertThat(directors.get(0).getId()).isEqualTo("1");
         assertThat(directors.get(0).getDirectorType()).isEqualTo("director-type-1");
         assertThat(directors.get(1).getId()).isEqualTo("2");
@@ -474,7 +474,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(movie.getTitle()).isEqualTo("New Movie");
 
         List<Director> directors = movie.getDirectors();
-        assertThat(directors.size()).isEqualTo(2);
+        assertThat(directors).hasSize(2);
         assertThat(directors.get(0).getId()).isEqualTo("1");
         assertThat(directors.get(1).getId()).isEqualTo("2");
     }
@@ -908,7 +908,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUID.class);
         File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
         EntityModel<MovieWithUUID> entityModel = mapper.readValue(file, javaType);
-        assertThat(entityModel.getContent().getId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
+        assertThat(entityModel.getContent().getId()).hasToString("00000000-0001-e240-0000-00002f08ba38");
     }
 
     @Test
@@ -917,7 +917,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUIDAnnotation.class);
         File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
         EntityModel<MovieWithUUIDAnnotation> entityModel = mapper.readValue(file, javaType);
-        assertThat(entityModel.getContent().getMyId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
+        assertThat(entityModel.getContent().getMyId()).hasToString("00000000-0001-e240-0000-00002f08ba38");
     }
 
     @Test
@@ -926,7 +926,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithUUIDMethod.class);
         File file = new ClassPathResource("movieWithUUID.json", getClass()).getFile();
         EntityModel<MovieWithUUIDMethod> entityModel = mapper.readValue(file, javaType);
-        assertThat(entityModel.getContent().getMyId().toString()).isEqualTo("00000000-0001-e240-0000-00002f08ba38");
+        assertThat(entityModel.getContent().getMyId()).hasToString("00000000-0001-e240-0000-00002f08ba38");
     }
 
     @Test
@@ -1010,7 +1010,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(CollectionModel.class, Movie.class);
         File file = new ClassPathResource("moviesCollectionModelWithoutLinks.json", getClass()).getFile();
         CollectionModel<Movie> collectionModel = mapper.readValue(file, javaType);
-        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+        assertThat(Objects.requireNonNull(collectionModel.getContent())).hasSize(2);
     }
 
     @Test
@@ -1020,7 +1020,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
         File file = new ClassPathResource("moviesCollectionModelWithoutLinks.json", getClass()).getFile();
         CollectionModel<EntityModel<Movie>> collectionModel = mapper.readValue(file, javaType);
-        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+        assertThat(Objects.requireNonNull(collectionModel.getContent())).hasSize(2);
     }
 
     @Test
@@ -1114,7 +1114,7 @@ class Jackson2JsonApiIntegrationTest {
         File file = new ClassPathResource("moviesCollectionModelWithIncluded.json", getClass()).getFile();
         CollectionModel<EntityModel<MovieWithDirectors>> collectionModel = mapper.readValue(file, javaType);
 
-        assertThat(Objects.requireNonNull(collectionModel.getContent()).size()).isEqualTo(2);
+        assertThat(Objects.requireNonNull(collectionModel.getContent())).hasSize(2);
         Iterator<EntityModel<MovieWithDirectors>> iterator = collectionModel.getContent().iterator();
         EntityModel<MovieWithDirectors> entityModel = iterator.next();
         Director director = entityModel.getContent().getDirectors().get(0);

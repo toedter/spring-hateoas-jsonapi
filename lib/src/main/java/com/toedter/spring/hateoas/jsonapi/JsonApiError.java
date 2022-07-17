@@ -39,6 +39,8 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class JsonApiError {
     private static final JsonApiError EMPTY = new JsonApiError();
+    public static final String POINTER = "pointer";
+    public static final String PARAMETER = "parameter";
 
     /**
      * Gets a unique identifier for this particular occurrence of the problem.
@@ -146,12 +148,12 @@ public class JsonApiError {
      * @return will never be {@literal null}.
      */
     public JsonApiError withSourcePointer(final String sourcePointer) {
-        Map<String, String> source = new HashMap<>();
-        if (this.source != null && this.source.get("parameter") != null) {
-            source.put("parameter", this.source.get("parameter"));
+        Map<String, String> localSource = new HashMap<>();
+        if (this.source != null && this.source.get(PARAMETER) != null) {
+            localSource.put(PARAMETER, this.source.get(PARAMETER));
         }
-        source.put("pointer", sourcePointer);
-        return new JsonApiError(this.id, this.links, this.status, this.code, this.title, this.detail, source, this.meta);
+        localSource.put(POINTER, sourcePointer);
+        return new JsonApiError(this.id, this.links, this.status, this.code, this.title, this.detail, localSource, this.meta);
     }
 
     /**
@@ -161,12 +163,12 @@ public class JsonApiError {
      * @return will never be {@literal null}.
      */
     public JsonApiError withSourceParameter(final String sourceParameter) {
-        Map<String, String> source = new HashMap<>();
-        if (this.source != null && this.source.get("pointer") != null) {
-            source.put("pointer", this.source.get("pointer"));
+        Map<String, String> localSource = new HashMap<>();
+        if (this.source != null && this.source.get(POINTER) != null) {
+            localSource.put(POINTER, this.source.get(POINTER));
         }
-        source.put("parameter", sourceParameter);
-        return new JsonApiError(this.id, this.links, this.status, this.code, this.title, this.detail, source, this.meta);
+        localSource.put(PARAMETER, sourceParameter);
+        return new JsonApiError(this.id, this.links, this.status, this.code, this.title, this.detail, localSource, this.meta);
     }
 
     /**
@@ -176,9 +178,9 @@ public class JsonApiError {
      * @return will never be {@literal null}.
      */
     public JsonApiError withAboutLink(final String aboutLink) {
-        Map<String, String> links = new HashMap<>();
-        links.put("about", aboutLink);
-        return new JsonApiError(this.id, links, this.status, this.code, this.title, this.detail, this.source, this.meta);
+        Map<String, String> localLinks = new HashMap<>();
+        localLinks.put("about", aboutLink);
+        return new JsonApiError(this.id, localLinks, this.status, this.code, this.title, this.detail, this.source, this.meta);
     }
 
     /**

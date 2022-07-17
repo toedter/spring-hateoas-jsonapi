@@ -35,7 +35,7 @@ import java.util.Optional;
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
-    private final JsonApiConfiguration jsonApiConfiguration;
+    private final transient JsonApiConfiguration jsonApiConfiguration;
     private final ObjectMapper objectMapper;
 
     private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {

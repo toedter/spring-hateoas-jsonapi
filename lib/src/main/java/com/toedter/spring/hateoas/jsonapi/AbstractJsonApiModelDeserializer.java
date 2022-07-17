@@ -38,7 +38,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
 
     protected final ObjectMapper objectMapper;
     protected final JavaType contentType;
-    protected final JsonApiConfiguration jsonApiConfiguration;
+    protected final transient JsonApiConfiguration jsonApiConfiguration;
 
     private final ObjectMapper plainObjectMapper;
 
@@ -169,7 +169,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
         return objectFromProperties;
     }
 
-    abstract protected T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
+    protected abstract T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
 
-    abstract protected JsonDeserializer<?> createJsonDeserializer(JavaType type);
+    protected abstract JsonDeserializer<?> createJsonDeserializer(JavaType type);
 }
