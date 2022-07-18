@@ -45,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Integration Test")
+@SuppressWarnings({"squid:S2699", "squid:S5778"})
 class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     private ObjectMapper mapper;
 
@@ -317,9 +318,8 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     }
 
     @Test
-    void should_build_single_movie_model_with_relationship_only_meta() throws Exception {
+    void should_build_single_movie_model_with_relationship_with_only_meta() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        Director director = new Director("1", "George Lucas");
         Map<String, Object> meta = new HashMap<>();
         meta.put("meta-key", "meta-value");
 
@@ -331,6 +331,20 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithOnlyMeta.json");
+    }
+
+    @Test
+    void should_build_single_movie_model_with_relationship_with_only_link() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", "http://movies.com/1", null, null)
+                        .build();
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithOnlyLink.json");
     }
 
 
