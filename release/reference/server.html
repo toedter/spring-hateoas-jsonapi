@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.5.0</span>
+<span id="revnumber">version 1.5.1</span>
 </div>
 </div>
 <div id="content">
@@ -1501,12 +1501,12 @@ public class PolymorphicRelationEntity {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @JsonApiRelationships("superEntities")
     @JsonIgnore
     @Getter
-    private List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
+    private final List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
 }
 </code></pre>
 </div>
@@ -1532,7 +1532,7 @@ public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEn
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
     @Override
     public T getT() {
@@ -1550,9 +1550,9 @@ public class SuperEChild2 implements SuperEntity&lt;String&gt; {
     private String id;
 
     @JsonApiType
-    private String type = null;
+    private final String type = null;
 
-    private String extraAttribute = "";
+    private final String extraAttribute = "";
 
     @Override
     public String getT() {
@@ -1654,8 +1654,8 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.5.0<br>
-Last updated 2022-05-28 09:27:26 UTC
+Version 1.5.1<br>
+Last updated 2022-07-18 07:07:44 UTC
 </div>
 </div>
 </div>
