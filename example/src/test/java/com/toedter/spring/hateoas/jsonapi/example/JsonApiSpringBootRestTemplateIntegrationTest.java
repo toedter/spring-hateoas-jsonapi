@@ -20,12 +20,20 @@ import com.toedter.spring.hateoas.jsonapi.MediaTypes;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("Spring Boot Integration Test with RestTemplate")
-public class JsonApiSpringBootRestTemplateIntegrationTest {
+class JsonApiSpringBootRestTemplateIntegrationTest {
 
     @LocalServerPort
     private int randomPort;
@@ -74,12 +82,12 @@ public class JsonApiSpringBootRestTemplateIntegrationTest {
                         + "\",\"type\":\"movies\",\"attributes\":{\"title\":\"Test Movie\",\"year\":2020,\"rating\":9.3}"
                         + ",\"relationships\":{\"directors\":{\"data\":[],\"links\":{\"self\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/427/relationships/directors\",\"related\":\"http://localhost:"
+                        + "/api/movies/426/relationships/directors\",\"related\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/427/directors\"}}}}"
+                        + "/api/movies/426/directors\"}}}}"
                         + ",\"links\":{\"self\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/427\"}}";
+                        + "/api/movies/426\"}}";
 
         assertThat(response.getBody()).isEqualTo(expectedResult);
     }
@@ -108,6 +116,6 @@ public class JsonApiSpringBootRestTemplateIntegrationTest {
         ResponseEntity<String> response = restTemplate.postForEntity("/api/movies/", entity, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getHeaders().containsKey("Location")).isTrue();
+        assertThat(response.getHeaders()).containsKey("Location");
     }
 }
