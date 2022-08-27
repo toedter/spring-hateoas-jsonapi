@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 1.5.1,</span>
-<span id="revdate">2022-07-18</span>
+<span id="revnumber">version 1.6.0,</span>
+<span id="revdate">2022-08-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -214,10 +214,10 @@ Answers to a few questions, e.g. related to HAL, you can find
   },
   "meta": {
     "page": {
-      "number": 0,
       "size": 1,
+      "totalElements": 250,
       "totalPages": 250,
-      "totalElements": 250
+      "number": 0
     }
   }
 }</code></pre>
@@ -238,19 +238,19 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;1.5.1&lt;/version&gt;
+    &lt;version&gt;1.6.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock secondary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.5.1'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.6.0'
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>1.5.2-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>1.6.1-SNAPSHOT</code>.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as a repository to your Maven or Gradle configuration.</p>
 </div>
@@ -815,10 +815,10 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 10,
+      "totalElements": 100,
       "totalPages": 10,
-      "totalElements": 100
+      "number": 1
     }
   }
 }</code></pre>
@@ -1412,10 +1412,10 @@ useful if a service consumes results of other services that produce JSON:API res
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 2,
+      "totalElements": 2,
       "totalPages": 2,
-      "totalElements": 2
+      "number": 1
     }
   }
 }</code></pre>
@@ -1995,10 +1995,10 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 10,
+      "totalElements": 100,
       "totalPages": 10,
-      "totalElements": 100
+      "number": 1
     }
   }
 }</code></pre>
@@ -2243,8 +2243,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.5.1<br>
-Last updated 2022-07-18 07:07:44 UTC
+Version 1.6.0<br>
+Last updated 2022-08-27 09:21:04 UTC
 </div>
 </div>
 </div>
