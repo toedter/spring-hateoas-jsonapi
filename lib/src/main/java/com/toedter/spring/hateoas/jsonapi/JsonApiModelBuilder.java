@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class JsonApiModelBuilder {
     private final HashMap<String, JsonApiRelationship> relationships = new HashMap<>();
     private final HashMap<String, Collection<String>> sparseFieldsets = new HashMap<>();
     private final List<RepresentationModel<?>> included = new ArrayList<>();
-    private final Map<String, Object> meta = new HashMap<>();
+    private final Map<String, Object> meta = new LinkedHashMap<>();
 
     private RepresentationModel<?> model;
     private Links links = Links.NONE;
@@ -478,11 +479,11 @@ public class JsonApiModelBuilder {
         final long totalElements = metadata.getTotalElements();
         final long totalPages = metadata.getTotalPages();
 
-        Map<String, Object> metaObject = new HashMap<>();
-        metaObject.put(PAGE_NUMBER, pageNumber);
+        Map<String, Object> metaObject = new LinkedHashMap<>();
         metaObject.put(PAGE_SIZE, pageSize);
         metaObject.put(PAGE_TOTAL_ELEMENTS, totalElements);
         metaObject.put(PAGE_TOTAL_PAGES, totalPages);
+        metaObject.put(PAGE_NUMBER, pageNumber);
 
         meta.put(PAGE, metaObject);
 

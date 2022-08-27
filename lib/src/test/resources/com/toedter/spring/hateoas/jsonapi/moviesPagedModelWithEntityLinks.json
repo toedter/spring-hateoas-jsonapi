@@ -26,10 +26,10 @@
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 2,
+      "totalElements": 2,
       "totalPages": 2,
-      "totalElements": 2
+      "number": 1
     }
   }
 }

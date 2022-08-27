@@ -205,7 +205,7 @@ class JsonApiData {
                 try {
                     field.setAccessible(true);
                     if (metaData == null) {
-                        metaData = new HashMap<>();
+                        metaData = new LinkedHashMap<>();
                     }
                     metaData.put(field.getName(), field.get(content));
                 } catch (IllegalAccessException e) {

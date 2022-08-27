@@ -75,10 +75,10 @@
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 10,
+      "totalElements": 100,
       "totalPages": 10,
-      "totalElements": 100
+      "number": 1
     }
   }
 }
