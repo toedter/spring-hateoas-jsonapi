@@ -173,10 +173,10 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
   },
   "meta": {
     "page": {
-      "number": 1,
       "size": 10,
+      "totalElements": 100,
       "totalPages": 10,
-      "totalElements": 100
+      "number": 1
     }
   }
 }</code></pre>
@@ -314,7 +314,7 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 <div id="footer">
 <div id="footer-text">
 Version 1.5.2-SNAPSHOT<br>
-Last updated 2022-08-25 07:27:11 UTC
+Last updated 2022-08-27 09:06:06 UTC
 </div>
 </div>
 </div>
