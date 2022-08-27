@@ -18,8 +18,8 @@ you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-exam
 
 Here you find the documentation for the latest release and the current snapshot:
 |===
-| 1.5.1 | https://toedter.github.io/spring-hateoas-jsonapi/1.5.1/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.5.1/api/[API Documentation]
-| 1.5.2-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
+| 1.6.0 | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/api/[API Documentation]
+| 1.6.1-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
 |===
 
 == Integration with your Backends
@@ -31,14 +31,14 @@ Maven:
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
 </dependency>
 
 Gradle:
 [source]
-implementation 'com.toedter:spring-hateoas-jsonapi:1.5.1'
+implementation 'com.toedter:spring-hateoas-jsonapi:1.6.0'
 
-The latest published snapshot version is `1.5.2-SNAPSHOT`.
+The latest published snapshot version is `1.6.1-SNAPSHOT`.
 If you want to try it out,
 please make sure to add `https://oss.sonatype.org/content/repositories/snapshots/`
 as a repository to your Maven or Gradle configuration.
@@ -102,10 +102,10 @@ The (pretty-printed) rendered result is:
   },
   "meta": {
     "page": {
-      "number": 0,
       "size": 1,
+      "totalElements": 250,
       "totalPages": 250,
-      "totalElements": 250
+      "number": 0
     }
   }
 }
