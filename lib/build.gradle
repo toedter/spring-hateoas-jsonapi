@@ -9,18 +9,19 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.7.4' apply false
+    id 'org.springframework.boot' version '3.0.0-SNAPSHOT' apply false
     id 'org.sonarqube' version '3.3'
 }
 
 group = 'com.toedter'
 version = '1.6.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '1.17'
 
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/release' }
     maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 configurations {
@@ -49,7 +50,7 @@ dependencies {
     testImplementation 'ch.qos.logback:logback-classic'
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.hamcrest:hamcrest-library'
-    testImplementation 'javax.persistence:javax.persistence-api'
+    testImplementation 'jakarta.persistence:jakarta.persistence-api'
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.3'

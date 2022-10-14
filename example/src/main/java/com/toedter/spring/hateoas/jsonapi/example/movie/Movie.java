@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;

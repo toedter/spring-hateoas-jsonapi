@@ -117,10 +117,14 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
                 if (this.affordanceType == JsonApiConfiguration.AffordanceType.SPRING_HATEOAS) {
                     JsonApiAffordanceModel affordanceModel = affordance.getAffordanceModel(JSON_API);
                     if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
+                        String httpMethod = null;
+                        if(affordanceModel.getHttpMethod() != null) {
+                            httpMethod = affordanceModel.getHttpMethod().name();
+                        }
                         SpringHateoasAffordance springHateoasAffordance = new SpringHateoasAffordance(
                                 affordanceModel.getName(),
                                 affordanceModel.getLink(),
-                                affordanceModel.getHttpMethod(),
+                                httpMethod,
                                 affordanceModel.getQueryMethodParameters(),
                                 affordanceModel.getInputProperties(),
                                 affordanceModel.getQueryProperties()
@@ -157,7 +161,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     static class SpringHateoasAffordance {
         private final String name;
         private final Link link;
-        private final HttpMethod httpMethod;
+        private final String httpMethod;
         private final List<QueryParameter> queryMethodParameters;
         private final List<JsonApiAffordanceModel.PropertyData> inputProperties;
         private final List<JsonApiAffordanceModel.PropertyData> queryProperties;

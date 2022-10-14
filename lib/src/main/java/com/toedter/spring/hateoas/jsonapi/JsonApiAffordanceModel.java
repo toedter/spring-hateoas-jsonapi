@@ -17,7 +17,12 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Value;
+import lombok.With;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.hateoas.AffordanceModel;
 import org.springframework.hateoas.mediatype.ConfiguredAffordance;
@@ -25,7 +30,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,10 +62,11 @@ class JsonApiAffordanceModel extends AffordanceModel {
     }
 
     private static final Set<HttpMethod> ENTITY_ALTERING_METHODS =
-            EnumSet.of(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
+            Set.of(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
 
     private final List<PropertyData> inputProperties;
     private final List<PropertyData> queryProperties;
+
 
     JsonApiAffordanceModel(ConfiguredAffordance configured) {
 

@@ -1,0 +1,2 @@
+com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration
+com.toedter.spring.hateoas.jsonapi.JsonApiAffordanceModelFactory

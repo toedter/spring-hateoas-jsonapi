@@ -23,7 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 
 // tag::Movie[]
 // @fold:on

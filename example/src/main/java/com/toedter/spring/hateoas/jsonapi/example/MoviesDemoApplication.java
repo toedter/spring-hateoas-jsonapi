@@ -37,8 +37,8 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
                 .withObjectMapperCustomizer(objectMapper -> {
                     // put your additional object mapper config here
                     objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
-                });
+                })
                 // Experimental feature:
-                // .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
+                .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
     }
 }

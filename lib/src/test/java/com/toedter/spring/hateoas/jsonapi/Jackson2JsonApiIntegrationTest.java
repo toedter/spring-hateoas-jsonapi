@@ -33,7 +33,7 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.io.File;
 import java.time.Instant;
 import java.util.*;

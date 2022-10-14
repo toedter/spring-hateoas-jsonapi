@@ -56,8 +56,8 @@ following rules apply in order:
 
 * the annotation `@JsonApiId` is used on a field
 * the annotation `@JsonApiId` is used on a method
-* the annotation `@Id` (javax.persistence.Id) is used on a field
-* the annotation `@Id` (javax.persistence.Id) is used on a method
+* the annotation `@Id` (jakarta.persistence.Id) is used on a field
+* the annotation `@Id` (jakarta.persistence.Id) is used on a method
 * the entity (base for representation models) provides an attribute `id`
 
 For the mapping of the `type`, the

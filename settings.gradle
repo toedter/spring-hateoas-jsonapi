@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://repo.spring.io/milestone' }
+        maven { url 'https://repo.spring.io/snapshot' }
+        gradlePluginPortal()
+    }
+}
+
 include 'lib'
 include 'example'
 
@@ -8,3 +16,4 @@ rootProject.children.each { project ->
     project.projectDir = new File(settingsDir, projectDirName)
     assert project.projectDir.isDirectory()
 }
+

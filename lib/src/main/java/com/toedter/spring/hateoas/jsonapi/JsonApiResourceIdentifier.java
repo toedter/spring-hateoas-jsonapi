@@ -52,7 +52,7 @@ class JsonApiResourceIdentifier {
             "Cannot compute JSON:API resource id.";
     public static final String JSONAPI_ID_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiId";
     public static final String JSONAPI_TYPE_ANNOTATION = "com.toedter.spring.hateoas.jsonapi.JsonApiType";
-    public static final String JPA_ID_ANNOTATION = "javax.persistence.Id";
+    public static final String JPA_ID_ANNOTATION = "jakarta.persistence.Id";
     public static final String ID_LITERAL = "id";
     public static final String TYPE_LITERAL = "type";
 
