@@ -1,5 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.toedter.spring.hateoas.jsonapi.JsonApiMediaTypeConfiguration
-
-org.springframework.hateoas.mediatype.AffordanceModelFactory=\
-  com.toedter.spring.hateoas.jsonapi.JsonApiAffordanceModelFactory
