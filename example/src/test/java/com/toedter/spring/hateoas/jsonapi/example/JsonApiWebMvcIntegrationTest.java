@@ -76,7 +76,7 @@ public class JsonApiWebMvcIntegrationTest {
                 .perform(get("/api/movies/1").accept(JSON_API))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.jsonapi", is(not(empty()))))
-                .andExpect(jsonPath("$.jsonapi.version", is("1.0")))
+                .andExpect(jsonPath("$.jsonapi.version", is("1.1")))
                 .andExpect(jsonPath("$.data.id", is("1")))
                 .andExpect(jsonPath("$.data.type", is("movies")))
                 .andExpect(jsonPath("$.data.attributes.title", is("Test Movie")))

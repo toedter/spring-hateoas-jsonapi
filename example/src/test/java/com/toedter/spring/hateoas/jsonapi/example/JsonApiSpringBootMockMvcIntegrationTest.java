@@ -20,7 +20,6 @@ import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
-import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
@@ -42,7 +42,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Kai Toedter
@@ -74,7 +76,7 @@ public class JsonApiSpringBootMockMvcIntegrationTest {
                 .perform(get("/api/movies/1").accept(JSON_API))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.jsonapi", is(not(empty()))))
-                .andExpect(jsonPath("$.jsonapi.version", is("1.0")))
+                .andExpect(jsonPath("$.jsonapi.version", is("1.1")))
                 .andExpect(jsonPath("$.data.id", is("1")))
                 .andExpect(jsonPath("$.data.type", is("movies")))
                 .andExpect(jsonPath("$.data.attributes.title", is("Test Movie")))
@@ -98,7 +100,7 @@ public class JsonApiSpringBootMockMvcIntegrationTest {
                 .perform(get("/api/movies/1?include=directors").accept(JSON_API))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.jsonapi", is(not(empty()))))
-                .andExpect(jsonPath("$.jsonapi.version", is("1.0")))
+                .andExpect(jsonPath("$.jsonapi.version", is("1.1")))
                 .andExpect(jsonPath("$.data.id", is("1")))
                 .andExpect(jsonPath("$.data.type", is("movies")))
                 .andExpect(jsonPath("$.data.attributes.title", is("Test Movie")))
