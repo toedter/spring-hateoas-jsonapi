@@ -38,7 +38,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
     public Jackson2JsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
 
         super("json-api-module",
-                new Version(1, 0, 0, null,
+                new Version(2, 0, 0, null,
                         "com.toedter",
                         "spring-hateoas-jsonapi"));
 

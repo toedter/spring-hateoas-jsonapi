@@ -32,5 +32,5 @@ import org.springframework.lang.Nullable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JsonApiJsonApi {
     @Nullable
-    String version = "1.0";
+    String version = "1.1";
 }

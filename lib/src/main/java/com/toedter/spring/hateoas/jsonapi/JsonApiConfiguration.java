@@ -84,7 +84,7 @@ public class JsonApiConfiguration {
      * </p>
      * <pre>
      * "jsonapi": {
-     *    "version": "1.0"
+     *    "version": "1.1"
      * }
      * </pre>
      *
