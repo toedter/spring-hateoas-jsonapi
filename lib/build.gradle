@@ -9,7 +9,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '3.0.0-SNAPSHOT' apply false
+    id 'org.springframework.boot' version '3.0.0-M5' apply false
     id 'org.sonarqube' version '3.3'
 }
 
