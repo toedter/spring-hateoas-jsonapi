@@ -543,13 +543,9 @@ include::{test-resources-dir}/postMovieWithRating.json[]
 
 would be deserialized to an object of class `MovieWithRating`, even though the controller method accepts the superclass `Movie`.
 
-NOTE: @-members will be introduced in JSON:API version 1.1.
-The above example will produce JSON that is not compliant with JSON:API 1.0.
-For JSON:API 1.0 compliance you could configure Jackson like
-`@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")` instead.
+NOTE: @-Members were introduced in JSON:API version 1.1, see https://jsonapi.org/format/#document-member-names-at-members.
 From the JSON:API 1.1 spec:
-...because @-Members must be ignored when interpreting that definition,
-an @-Member that occurs in an attributes object is not an attribute.
+...an @-Member that occurs in an attributes object is not an attribute.
 
 Important: The above mechanism is also used for serialization, so you could set
 the JSON:API `type` attribute (within data) to a more generic type, but still serialize the
