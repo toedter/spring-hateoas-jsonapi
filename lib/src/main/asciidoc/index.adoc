@@ -20,8 +20,8 @@ Kai Tödter
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 :test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
 :example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
-:spring-hateoas-version: 1.5.1
-:spring-hateoas-url: https://docs.spring.io/spring-hateoas/docs/1.5.x/reference/html/
+:spring-hateoas-version: 2.0.0
+:spring-hateoas-url: https://docs.spring.io/spring-hateoas/docs/2.0.0-SNAPSHOT/reference/html/
 
 This project provides JSON:API media type support for Spring HATEOAS.
 
@@ -37,7 +37,7 @@ contains this Copyright Notice, whether distributed in print or electronically.
 * Version control: https://github.com/toedter/spring-hateoas-jsonapi
 * Bugtracker: https://github.com/toedter/spring-hateoas-jsonapi/issues
 * Release repository: https://mvnrepository.com/artifact/com.toedter/spring-hateoas-jsonapi[Maven Central]
-* Snapshot repository: https://oss.sonatype.org/#nexus-search;quick~spring-hateoas-jsonapi[Sonatype OSS Repository]
+* Snapshot repository: link:++https://oss.sonatype.org/#nexus-search;gav~com.toedter~spring-hateoas-jsonapi~~~~kw,versionexpand++[Sonatype OSS Repository]
 
 include::introduction.adoc[leveloffset=+1]
 include::setup.adoc[leveloffset=+1]
