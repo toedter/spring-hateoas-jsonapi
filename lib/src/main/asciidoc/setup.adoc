@@ -9,16 +9,19 @@ To enable the JSON:API media type you just need to add this module as a dependen
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>1.6.0</version>
+    <version>2.0.0</version>
 </dependency>
 ----
 
 [source,groovy,indent=0,role="secondary"]
 .Gradle
 ----
-implementation 'com.toedter:spring-hateoas-jsonapi:1.6.0'
+implementation 'com.toedter:spring-hateoas-jsonapi:2.0.0'
 ----
 
-The latest published snapshot version is `1.6.1-SNAPSHOT`.
+NOTE: Version 2.0.0 is not released yet. It is planned for December 2022.
+If you want to use this library in production, please use version 1.6.0.
+
+The latest published snapshot version is `2.0.0-SNAPSHOT`. The 2.x.x stream is based on Spring Boot 3.x.x.
 If you want to try it out, please make sure to add https://oss.sonatype.org/content/repositories/snapshots/
 as a repository to your Maven or Gradle configuration.

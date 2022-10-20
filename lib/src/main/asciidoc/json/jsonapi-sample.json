@@ -1,6 +1,6 @@
 {
   "jsonapi": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "data": [
     {
@@ -40,9 +40,9 @@
     }
   ],
   "links": {
-    "self": "http://localhost:8080/api/movies?page[number]=0&page[size]=1",
-    "next": "http://localhost:8080/api/movies?page[number]=1&page[size]=1",
-    "last": "http://localhost:8080/api/movies?page[number]=249&page[size]=1"
+    "self": "http://localhost:8080/api/movies?page%5Bnumber%5D=0&page%5Bsize%5D=1",
+    "next": "http://localhost:8080/api/movies?page%5Bnumber%5D=1&page%5Bsize%5D=1",
+    "last": "http://localhost:8080/api/movies?page%5Bnumber%5D=249&page%5Bsize%5D=1"
   },
   "meta": {
     "page": {

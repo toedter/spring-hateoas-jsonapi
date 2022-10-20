@@ -19,7 +19,16 @@ you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-exam
 Here you find the documentation for the latest release and the current snapshot:
 |===
 | 1.6.0 | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/api/[API Documentation]
-| 1.6.1-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
+| 2.0.0-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
+|===
+
+== Version Matrix
+If you want to add the library to your app, the first step is to determine the version of the library you should use.
+
+|===
+| JSON:API for Spring HATEOAS | Java | JSON:API | Spring HATEOAS | Spring Boot | Spring Framework
+| 1.x.x | 11 | 1.0 | 1.5.x | 2.7.x | 5.3.x
+| 2.x.x | 17 | 1.1 | 2.x.x | 3.x.x | 6.x.x
 |===
 
 == Integration with your Backends
@@ -56,7 +65,7 @@ The (pretty-printed) rendered result is:
 [source,json]
 {
   "jsonapi": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "data": [
     {
@@ -96,9 +105,9 @@ The (pretty-printed) rendered result is:
     }
   ],
   "links": {
-     "self": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=0&page[size]=1",
-     "next": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=1&page[size]=1",
-     "last": "http://localhost:8080/api/movies?fields[movies]=title,year,rating,directors&include=directors&page[number]=249&page[size]=1"
+     "self": "http://localhost:8080/api/movies?fields%5Bmovies%5D=title,year,rating,directors&include=directors&page%5Bnumber%5D=0&page%5Bsize%5D=1",
+     "next": "http://localhost:8080/api/movies?fields%5Bmovies%5D=title,year,rating,directors&include=directors&page%5Bnumber%5D=1&page%5Bsize%5D=1",
+     "last": "http://localhost:8080/api/movies?fields%5Bmovies%5D=title,year,rating,directors&include=directors&page%5Bnumber%5D=249&page%5Bsize%5D=1"
   },
   "meta": {
     "page": {

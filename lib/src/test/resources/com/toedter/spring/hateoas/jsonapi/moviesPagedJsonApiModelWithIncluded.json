@@ -68,10 +68,10 @@
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&page%5Bsize%5D=10"
   },
   "meta": {
     "page": {

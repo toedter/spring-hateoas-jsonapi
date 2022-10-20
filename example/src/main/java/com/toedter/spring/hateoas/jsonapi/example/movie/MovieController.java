@@ -74,7 +74,7 @@ public class MovieController {
         if (fieldsMovies != null) {
 
             String movieFieldParams = Arrays.toString(fieldsMovies);
-            uriParams = "?fields[movies]=" +
+            uriParams = "?fields%5Bmovies%5D=" +
                     movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
         }
 
@@ -92,8 +92,8 @@ public class MovieController {
                 afford(methodOn(MovieController.class).newMovie(null));
 
         Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-                + "page[number]=" + pagedResult.getNumber()
-                + "&page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+                + "&page%5Bnumber%5D=" + pagedResult.getNumber()
+                + "&page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
         // end::affordance[]
 
         PagedModel.PageMetadata pageMetadata =

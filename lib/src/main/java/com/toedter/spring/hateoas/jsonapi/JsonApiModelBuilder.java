@@ -504,7 +504,7 @@ public class JsonApiModelBuilder {
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder pageLinks(String linkBase) {
-        return this.pageLinks(linkBase, "page[number]", "page[size]");
+        return this.pageLinks(linkBase, "page%5Bnumber%5D", "page%5Bsize%5D");
     }
 
 
