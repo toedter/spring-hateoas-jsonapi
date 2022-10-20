@@ -1670,13 +1670,9 @@ public class MovieWithRating extends Movie {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-@-members will be introduced in JSON:API version 1.1.
-The above example will produce JSON that is not compliant with JSON:API 1.0.
-For JSON:API 1.0 compliance you could configure Jackson like
-<code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+@-Members were introduced in JSON:API version 1.1, see <a href="https://jsonapi.org/format/#document-member-names-at-members" class="bare">jsonapi.org/format/#document-member-names-at-members</a>.
 From the JSON:API 1.1 spec:
-&#8230;&#8203;because @-Members must be ignored when interpreting that definition,
-an @-Member that occurs in an attributes object is not an attribute.
+&#8230;&#8203;an @-Member that occurs in an attributes object is not an attribute.
 </td>
 </tr>
 </table>
@@ -2257,7 +2253,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-10-20 08:56:25 UTC
+Last updated 2022-10-20 09:11:00 UTC
 </div>
 </div>
 </div>
