@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 1.6.1-SNAPSHOT,</span>
-<span id="revdate">2022-09-27</span>
+<span id="revnumber">version 2.0.0-SNAPSHOT,</span>
+<span id="revdate">2022-10-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -168,7 +168,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">{
   "jsonapi": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "data": [
     {
@@ -208,9 +208,9 @@ Answers to a few questions, e.g. related to HAL, you can find
     }
   ],
   "links": {
-    "self": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1",
-    "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
-    "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
+    "self": "http://localhost:8080/api/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=1",
+    "next": "http://localhost:8080/api/movies?page%5Bnumber%5D=1&amp;page%5Bsize%5D=1",
+    "last": "http://localhost:8080/api/movies?page%5Bnumber%5D=249&amp;page%5Bsize%5D=1"
   },
   "meta": {
     "page": {
@@ -238,19 +238,32 @@ Answers to a few questions, e.g. related to HAL, you can find
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;1.6.0&lt;/version&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock secondary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.6.0'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.0.0'
 </code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Version 2.0.0 is not released yet. It is planned for December 2022.
+If you want to use this library in production, please use version 1.6.0.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>1.6.1-SNAPSHOT</code>.
+<p>The latest published snapshot version is <code>2.0.0-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.
 If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
 as a repository to your Maven or Gradle configuration.</p>
 </div>
@@ -380,10 +393,10 @@ following rules apply in order:</p>
 <p>the annotation <code>@JsonApiId</code> is used on a method</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a field</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a field</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a method</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a method</p>
 </li>
 <li>
 <p>the entity (base for representation models) provides an attribute <code>id</code></p>
@@ -808,10 +821,10 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -1066,8 +1079,8 @@ First you have to enable this experimental feature in the configuration, like</p
         afford(methodOn(MovieController.class).newMovie(null));
 
 Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "page[number]=" + pagedResult.getNumber()
-        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        + "&amp;page%5Bnumber%5D=" + pagedResult.getNumber()
+        + "&amp;page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -1988,10 +2001,10 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -2243,8 +2256,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.1-SNAPSHOT<br>
-Last updated 2022-09-27 12:30:33 UTC
+Version 2.0.0-SNAPSHOT<br>
+Last updated 2022-10-20 08:18:03 UTC
 </div>
 </div>
 </div>
