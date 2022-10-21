@@ -34,6 +34,7 @@ import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 
 import jakarta.persistence.Id;
+
 import java.io.File;
 import java.time.Instant;
 import java.util.*;
@@ -316,7 +317,7 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_movie_without_id() throws Exception {
         mapper = createObjectMapper(
-        // tag::noIdMarker[]
+                // tag::noIdMarker[]
                 new JsonApiConfiguration().withJsonApiIdNotSerializedForValue("doNotSerialize"));
         // end::noIdMarker[]
 
@@ -761,13 +762,17 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_serialize_movie_with_complex_link() throws Exception {
-        MovieWithLongId movie = new MovieWithLongId(1, "Star Wars", "long-movies");
-        EntityModel<MovieWithLongId> entityModel =
-                EntityModel.of(movie)
-                        .add(Links.of(Link.of("http://localhost/movies/1")
-                                .withRel("related")
-                                .withName("link name")
-                                .withTitle("link title")));
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+        Link complexLink = Link.of("https://complex-links.org")
+                .withHreflang("EN")
+                .withName("name")
+                .withTitle("title")
+                .withType("type")
+                .withMedia("media");
+
+        entityModel.add(complexLink);
+
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
     }

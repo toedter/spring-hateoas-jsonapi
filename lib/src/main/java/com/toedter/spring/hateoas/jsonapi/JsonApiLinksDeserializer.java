@@ -75,20 +75,20 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
                 if (meta instanceof LinkedHashMap) {
                     @SuppressWarnings({"unchecked", "rawtypes"})
                     LinkedHashMap<String, String> attributes = (LinkedHashMap) meta;
-                    if (attributes.containsKey("hreflang")) {
-                        link = link.withHreflang(attributes.get("hreflang"));
+                    if (linkedHashMap.containsKey("hreflang")) {
+                        link = link.withHreflang(linkedHashMap.get("hreflang").toString());
+                    }
+
+                    if (linkedHashMap.containsKey("title")) {
+                        link = link.withTitle(linkedHashMap.get("title").toString());
+                    }
+
+                    if (linkedHashMap.containsKey("type")) {
+                        link = link.withType(linkedHashMap.get("type").toString());
                     }
 
                     if (attributes.containsKey("media")) {
                         link = link.withMedia(attributes.get("media"));
-                    }
-
-                    if (attributes.containsKey("title")) {
-                        link = link.withTitle(attributes.get("title"));
-                    }
-
-                    if (attributes.containsKey("type")) {
-                        link = link.withType(attributes.get("type"));
                     }
 
                     if (attributes.containsKey("deprecation")) {

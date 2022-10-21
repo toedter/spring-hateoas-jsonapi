@@ -81,8 +81,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
             gen.writeStringField(link.getRel().value(), link.getHref());
         } else {
             gen.writeObjectFieldStart(link.getRel().value());
-            gen.writeStringField("href", link.getHref());
-            gen.writeObjectField("meta", getAttributes(link));
+            writeComplexLink(gen, link);
             gen.writeEndObject();
         }
     }
@@ -92,10 +91,28 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
             gen.writeString(link.getHref());
         } else {
             gen.writeStartObject();
-            gen.writeStringField("href", link.getHref());
-            gen.writeObjectField("meta", getAttributes(link));
+            writeComplexLink(gen, link);
             gen.writeEndObject();
         }
+    }
+
+    private void writeComplexLink(JsonGenerator gen, Link link) throws IOException {
+        gen.writeStringField("href", link.getHref());
+        Map<String, Object> attributes = getAttributes(link);
+        if (link.getTitle() != null) {
+            gen.writeStringField("title", link.getTitle());
+            attributes.remove("title");
+        }
+        if (link.getType() != null) {
+            gen.writeStringField("type", link.getType());
+            attributes.remove("type");
+        }
+        if (link.getHreflang() != null) {
+            gen.writeStringField("hreflang", link.getHreflang());
+            attributes.remove("hreflang");
+        }
+
+        gen.writeObjectField("meta", attributes);
     }
 
     private boolean isSimpleLink(Link link) {
@@ -118,7 +135,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
                     JsonApiAffordanceModel affordanceModel = affordance.getAffordanceModel(JSON_API);
                     if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
                         String httpMethod = null;
-                        if(affordanceModel.getHttpMethod() != null) {
+                        if (affordanceModel.getHttpMethod() != null) {
                             httpMethod = affordanceModel.getHttpMethod().name();
                         }
                         SpringHateoasAffordance springHateoasAffordance = new SpringHateoasAffordance(

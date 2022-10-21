@@ -1,17 +1,20 @@
 {
   "data": {
     "id": "1",
-    "type": "long-movies",
+    "type": "movies",
     "attributes": {
       "title": "Star Wars"
     }
   },
   "links": {
-    "related": {
-      "href": "http://localhost/movies/1",
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
       "meta": {
-        "title": "link title",
-        "name": "link name"
+        "media": "media",
+        "name": "name"
       }
     }
   }
