@@ -38,6 +38,7 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private JsonApiConfiguration.AffordanceType affordanceType;
+    private boolean removeHateoasLinkPropertiesFromMeta;
 
     public JsonApiLinksSerializer() {
         super(Links.class);
@@ -46,6 +47,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     public void setJsonApiConfiguration(JsonApiConfiguration jsonApiConfiguration) {
         this.affordanceType = jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
+        this.removeHateoasLinkPropertiesFromMeta = jsonApiConfiguration.isJsonapi11LinkPropertiesRemovedFromLinkMeta();
     }
 
     @Override
@@ -101,15 +103,21 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
         Map<String, Object> attributes = getAttributes(link);
         if (link.getTitle() != null) {
             gen.writeStringField("title", link.getTitle());
-            attributes.remove("title");
+            if (this.removeHateoasLinkPropertiesFromMeta) {
+                attributes.remove("title");
+            }
         }
         if (link.getType() != null) {
             gen.writeStringField("type", link.getType());
-            attributes.remove("type");
+            if (this.removeHateoasLinkPropertiesFromMeta) {
+                attributes.remove("type");
+            }
         }
         if (link.getHreflang() != null) {
             gen.writeStringField("hreflang", link.getHreflang());
-            attributes.remove("hreflang");
+            if (this.removeHateoasLinkPropertiesFromMeta) {
+                attributes.remove("hreflang");
+            }
         }
 
         gen.writeObjectField("meta", attributes);

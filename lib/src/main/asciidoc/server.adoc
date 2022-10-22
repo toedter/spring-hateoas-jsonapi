@@ -33,6 +33,47 @@ of the corresponding REST collection resource.
 
 NOTE: You can configure if you want to use non-pluralized class names, see <<configuration>>
 
+[[links]]
+== Links
+
+If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+Here is an example of a simple self link:
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithLinks.json[]
+----
+
+A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
+In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithComplexLinkAndJsonapi10Meta.json[]
+----
+
+JSON:API 1.1 now defines the optional link properties type, title and hreflang, see link:++https://jsonapi.org/format/#auto-id--link-objects++[JSON:API Link Objects].
+The default rendering of a complex link is now
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithComplexLinkAndOldMeta.json[]
+----
+
+As you see, the properties title, type, and hreflang appear both as top-level link properties
+as well as properties in the meta section. So the new format reflects the new JSON:API 1.1 link structure,
+but stays backward compatible to version 1.x.x of this library.
+
+If you start a new project without any existing clients, you could specify a special configuration (see <<links-configuration>>), that removes the attributes from the meta section.
+Be aware that this would be a breaking change that might break existing clients. The rendered result would
+the look like:
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithComplexLink.json[]
+----
+
+
 [[annotations]]
 == Annotations
 

@@ -30,3 +30,6 @@ Anytime a client supplies an `Accept` header with `application/vnd.api+json`, yo
 ----
 include::{resource-dir}/jsonapi-sample.json[]
 ----
+
+NOTE: The characters `[` and `]` in the Links section are unsafe and URL encoded when added automatically by the
+library. So the URL decoded next link would look like: ++http://localhost:8080/api/movies?page[number]=1&page[size]=1++.

@@ -110,6 +110,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
                     .withTypeForClassUsedForDeserialization(true)
                     .withEmptyAttributesObjectSerialized(false)
                     .withJsonApiIdNotSerializedForValue("-1")
+                    .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false)
                     .withObjectMapperCustomizer(
                             objectMapper -> objectMapper.configure(
                                     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));

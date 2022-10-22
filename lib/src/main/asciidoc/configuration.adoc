@@ -25,10 +25,21 @@ This is very useful for polymorphic use cases.
 ** If set to false, no "attributes" key is serialized if attributes are empty.
 * A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>.
 * A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
+* If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
+(to version 1.x.x of this library) way
+[[links-configuration]]
+** The Spring HATEOAS properties title, type and hreflang will then be serialized both as top level link
+properties, as well as in the meta section, see also <<links>>.
+** The default is `true`.
+** Be aware that setting this to false, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(related to version 1.x.x of this library that only supports JSON:API 1.0),
+since client might expect properties like title in the meta section.
 
 TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,
-make sure you provide the following configuration in your Spring `application.properties` when using Tomcat:
-`server.tomcat.relaxed-query-chars= [,]`
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw `[` and `]`
+characters in the URL, make sure you provide the following configuration in your Spring `application.properties`
+when using Tomcat: `server.tomcat.relaxed-query-chars= [,]`. If this library automatically creates pagination links,
+`[` and `]` characters are always URL-encoded.
 
 Here is an example of how you would implement a JSON:API configuration:
 

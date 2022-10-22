@@ -36,6 +36,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
         assertThat(new JsonApiConfiguration().isTypeForClassUsedForDeserialization()).isFalse();
+        assertThat(new JsonApiConfiguration().isJsonapi11LinkPropertiesRemovedFromLinkMeta()).isFalse();
         assertThat(new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta())
                 .isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
     }
@@ -89,5 +90,11 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration()
                 .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS)
                 .getAffordancesRenderedAsLinkMeta()).isEqualTo(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
+    }
+
+    @Test
+    void should_set_link_property_rendering() {
+        assertThat(new JsonApiConfiguration().withJsonapi11LinkPropertiesRemovedFromLinkMeta(false)
+                .isJsonapi11LinkPropertiesRemovedFromLinkMeta()).isFalse();
     }
 }

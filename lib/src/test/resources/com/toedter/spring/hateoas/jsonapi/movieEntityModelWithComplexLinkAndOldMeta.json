@@ -1,0 +1,24 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}

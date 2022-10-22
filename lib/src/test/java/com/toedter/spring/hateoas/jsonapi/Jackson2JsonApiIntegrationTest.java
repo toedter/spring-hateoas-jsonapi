@@ -761,6 +761,22 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_movie_with_complex_link_and_keep_link_meta() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+        Link complexLink = Link.of("https://complex-links.org")
+                .withHreflang("EN")
+                .withName("name")
+                .withTitle("title")
+                .withType("type")
+                .withMedia("media");
+
+        entityModel.add(complexLink);
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithComplexLinkAndOldMeta.json");
+    }
+    @Test
     void should_serialize_movie_with_complex_link() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel = EntityModel.of(movie);
@@ -772,6 +788,8 @@ class Jackson2JsonApiIntegrationTest {
                 .withMedia("media");
 
         entityModel.add(complexLink);
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(true));
 
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
@@ -793,6 +811,9 @@ class Jackson2JsonApiIntegrationTest {
                 .withProfile("profile")
                 .withName("Lana Wachowski");
         movieEntityModel.add(bigLink);
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(true));
 
         final String movieJson = mapper.writeValueAsString(movieEntityModel);
         compareWithFile(movieJson, "movieEntityModelWithTwoDirectorsLinks.json");

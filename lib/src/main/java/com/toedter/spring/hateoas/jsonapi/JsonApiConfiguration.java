@@ -196,8 +196,28 @@ public class JsonApiConfiguration {
     @With
     private final Consumer<ObjectMapper> objectMapperCustomizer;
 
+    /**
+     * JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
+     * see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
+     * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
+     * they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
+     * But to keep the format backward-compatible to previous version of this library, title, type, and hreflang
+     * will still be rendered also in the link's meta section.
+     *
+     * The removal from the meta section would be a breaking change that could harm existing clients.
+     * But if you start a new project, and you want to remove title, type, and hreflang
+     * from the meta section, set this configuration to true.
+     *
+     * @param jsonapi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta
+     * @return The default is {@literal false}.
+     */
+    @With
+    @Getter
+    private final boolean jsonapi11LinkPropertiesRemovedFromLinkMeta;
+
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
+
 
     private ObjectMapper objectMapper;
 
@@ -291,6 +311,7 @@ public class JsonApiConfiguration {
         this.emptyAttributesObjectSerialized = true;
         this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
+        this.jsonapi11LinkPropertiesRemovedFromLinkMeta = false;
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
