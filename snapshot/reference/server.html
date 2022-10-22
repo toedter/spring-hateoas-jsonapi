@@ -94,6 +94,127 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect1">
+<h2 id="links"><a class="anchor" href="#links"></a>Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+Here is an example of a simple self link:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
+In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSON:API 1.1 now defines the optional link properties type, title and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
+The default rendering of a complex link is now</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you see, the properties title, type, and hreflang appear both as top-level link properties
+as well as properties in the meta section. So the new format reflects the new JSON:API 1.1 link structure,
+but stays backward compatible to version 1.x.x of this library.</p>
+</div>
+<div class="paragraph">
+<p>If you start a new project without any existing clients, you could specify a special configuration (see <a href="#links-configuration">[links-configuration]</a>), that removes the attributes from the meta section.
+Be aware that this would be a breaking change that might break existing clients. The rendered result would
+the look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "media": "media",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="annotations"><a class="anchor" href="#annotations"></a>Annotations</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1651,7 +1772,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-10-21 17:55:53 UTC
+Last updated 2022-10-22 18:16:41 UTC
 </div>
 </div>
 </div>

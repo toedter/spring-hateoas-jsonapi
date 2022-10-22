@@ -158,41 +158,53 @@ loadScripts(document, 'script');</script>
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiVersionRendered()" class="member-name-link">isJsonApiVersionRendered</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonapi11LinkPropertiesRemovedFromLinkMeta()" class="member-name-link">isJsonapi11LinkPropertiesRemovedFromLinkMeta</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if the JSON:API version is rendered.</div>
+<div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
+ see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLowerCasedTypeRendered()" class="member-name-link">isLowerCasedTypeRendered</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiVersionRendered()" class="member-name-link">isJsonApiVersionRendered</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
+<div class="block">Indicates if the JSON:API version is rendered.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPageMetaAutomaticallyCreated()" class="member-name-link">isPageMetaAutomaticallyCreated</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLowerCasedTypeRendered()" class="member-name-link">isLowerCasedTypeRendered</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPageMetaAutomaticallyCreated()" class="member-name-link">isPageMetaAutomaticallyCreated</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPluralizedTypeRendered()" class="member-name-link">isPluralizedTypeRendered</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPluralizedTypeRendered()" class="member-name-link">isPluralizedTypeRendered</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTypeForClassUsedForDeserialization()" class="member-name-link">isTypeForClassUsedForDeserialization</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTypeForClassUsedForDeserialization()" class="member-name-link">isTypeForClassUsedForDeserialization</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
  is also used during deserialization.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)" class="member-name-link">withAffordancesRenderedAsLinkMeta</a><wbr>(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)" class="member-name-link">withAffordancesRenderedAsLinkMeta</a><wbr>(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withEmptyAttributesObjectSerialized(boolean)" class="member-name-link">withEmptyAttributesObjectSerialized</a><wbr>(boolean&nbsp;emptyAttributesObjectSerialized)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withEmptyAttributesObjectSerialized(boolean)" class="member-name-link">withEmptyAttributesObjectSerialized</a><wbr>(boolean&nbsp;emptyAttributesObjectSerialized)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)" class="member-name-link">withJsonapi11LinkPropertiesRemovedFromLinkMeta</a><wbr>(boolean&nbsp;jsonapi11LinkPropertiesRemovedFromLinkMeta)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
+ see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiIdNotSerializedForValue(java.lang.String)" class="member-name-link">withJsonApiIdNotSerializedForValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonApiIdNotSerializedForValue)</code></div>
@@ -634,6 +646,48 @@ loadScripts(document, 'script');</script>
 <dd><code>objectMapperCustomizer</code> - the ObjectMapper customizer</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)">
+<h3>withJsonapi11LinkPropertiesRemovedFromLinkMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonapi11LinkPropertiesRemovedFromLinkMeta</span><wbr><span class="parameters">(boolean&nbsp;jsonapi11LinkPropertiesRemovedFromLinkMeta)</span></div>
+<div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
+ see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
+ they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
+ But to keep the format backward-compatible to previous version of this JSON:API for Spring HATEOASrary, title, type, and hreflang
+ will still be rendered also in the link's meta section.
+
+ The removal from the meta section would be a breaking change that could harm existing clients.
+ But if you start a new project, and you want to remove title, type, and hreflang
+ from the meta section, set this configuration to true.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>jsonapi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta</dd>
+<dt>Returns:</dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isJsonapi11LinkPropertiesRemovedFromLinkMeta()">
+<h3>isJsonapi11LinkPropertiesRemovedFromLinkMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonapi11LinkPropertiesRemovedFromLinkMeta</span>()</div>
+<div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
+ see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
+ they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
+ But to keep the format backward-compatible to previous version of this JSON:API for Spring HATEOASrary, title, type, and hreflang
+ will still be rendered also in the link's meta section.
+
+ The removal from the meta section would be a breaking change that could harm existing clients.
+ But if you start a new project, and you want to remove title, type, and hreflang
+ from the meta section, set this configuration to true.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The default is false.</dd>
 </dl>
 </section>
 </li>

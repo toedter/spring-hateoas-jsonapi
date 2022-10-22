@@ -103,6 +103,26 @@ This is very useful for polymorphic use cases.</p>
 <li>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
 </li>
+<li>
+<p>If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
+(to version 1.x.x of this library) way</p>
+<div id="links-configuration" class="ulist">
+<ul>
+<li>
+<p>The Spring HATEOAS properties title, type and hreflang will then be serialized both as top level link
+properties, as well as in the meta section, see also <a href="#links">[links]</a>.</p>
+</li>
+<li>
+<p>The default is <code>true</code>.</p>
+</li>
+<li>
+<p>Be aware that setting this to false, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(related to version 1.x.x of this library that only supports JSON:API 1.0),
+since client might expect properties like title in the meta section.</p>
+</li>
+</ul>
+</div>
+</li>
 </ul>
 </div>
 <div class="admonitionblock tip">
@@ -113,8 +133,10 @@ This is very useful for polymorphic use cases.</p>
 </td>
 <td class="content">
 Since the JSON:API recommendation contains square brackets in the request parameter names,
-make sure you provide the following configuration in your Spring <code>application.properties</code> when using Tomcat:
-<code>server.tomcat.relaxed-query-chars= [,]</code>
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw <code>[</code> and <code>]</code>
+characters in the URL, make sure you provide the following configuration in your Spring <code>application.properties</code>
+when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this library automatically creates pagination links,
+<code>[</code> and <code>]</code> characters are always URL-encoded.
 </td>
 </tr>
 </table>
@@ -134,6 +156,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withTypeForClassUsedForDeserialization(true)
             .withEmptyAttributesObjectSerialized(false)
             .withJsonApiIdNotSerializedForValue("-1")
+            .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -145,7 +168,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-10-21 17:55:53 UTC
+Last updated 2022-10-22 18:16:41 UTC
 </div>
 </div>
 </div>
