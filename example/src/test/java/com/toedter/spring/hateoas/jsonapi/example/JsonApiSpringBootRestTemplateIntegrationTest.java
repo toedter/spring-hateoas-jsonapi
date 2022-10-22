@@ -82,12 +82,12 @@ class JsonApiSpringBootRestTemplateIntegrationTest {
                         + "\",\"type\":\"movies\",\"attributes\":{\"title\":\"Test Movie\",\"year\":2020,\"rating\":9.3}"
                         + ",\"relationships\":{\"directors\":{\"data\":[],\"links\":{\"self\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/426/relationships/directors\",\"related\":\"http://localhost:"
+                        + "/api/movies/" + savedMovie.getId() + "/relationships/directors\",\"related\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/426/directors\"}}}}"
+                        + "/api/movies/" + savedMovie.getId() + "/directors\"}}}}"
                         + ",\"links\":{\"self\":\"http://localhost:"
                         + this.randomPort
-                        + "/api/movies/426\"}}";
+                        + "/api/movies/" + savedMovie.getId() + "\"}}";
 
         assertThat(response.getBody()).isEqualTo(expectedResult);
     }
@@ -113,7 +113,7 @@ class JsonApiSpringBootRestTemplateIntegrationTest {
 
         final HttpEntity<String> entity = new HttpEntity<>(movieJson, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity("/api/movies/", entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("/api/movies", entity, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getHeaders()).containsKey("Location");
