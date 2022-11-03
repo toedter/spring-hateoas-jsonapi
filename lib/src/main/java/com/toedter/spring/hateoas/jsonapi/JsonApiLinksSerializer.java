@@ -22,11 +22,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.*;
+import org.springframework.hateoas.Affordance;
+import org.springframework.hateoas.AffordanceModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.QueryParameter;
 import org.springframework.hateoas.mediatype.hal.forms.HalFormsTemplateBuilderWrapper;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,9 +62,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     public void serialize(Links value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
         for (Link link : value) {
-            linksMap.computeIfAbsent(
-                            link.getRel(), key -> new ArrayList<>())
-                    .add(link);
+            linksMap.computeIfAbsent(link.getRel(), key -> new ArrayList<>()).add(link);
         }
 
         gen.writeStartObject();
@@ -80,7 +86,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     private void serializeLinkWithRelation(JsonGenerator gen, Link link) throws IOException {
         if (isSimpleLink(link)) {
-            gen.writeStringField(link.getRel().value(), link.getHref());
+            gen.writeStringField(link.getRel().value(), UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
         } else {
             gen.writeObjectFieldStart(link.getRel().value());
             writeComplexLink(gen, link);
@@ -90,7 +96,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     private void serializeLinkWithoutRelation(JsonGenerator gen, Link link) throws IOException {
         if (isSimpleLink(link)) {
-            gen.writeString(link.getHref());
+            gen.writeString(UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
         } else {
             gen.writeStartObject();
             writeComplexLink(gen, link);
@@ -99,7 +105,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     }
 
     private void writeComplexLink(JsonGenerator gen, Link link) throws IOException {
-        gen.writeStringField("href", link.getHref());
+        gen.writeStringField("href", UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
         Map<String, Object> attributes = getAttributes(link);
         if (link.getTitle() != null) {
             gen.writeStringField("title", link.getTitle());
@@ -163,7 +169,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
                     if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
                         Object halFormsTemplate = HalFormsTemplateBuilderWrapper.write(EntityModel.of(new Object()).add(link));
                         if (halFormsTemplate != null) {
-                            attributeMap.put("_templates", halFormsTemplate);
+                            attributeMap.put("hal-forms-templates", halFormsTemplate);
                         }
                     }
                 }

@@ -10,9 +10,9 @@
   ],
   "links": {
     "self": {
-      "href": "/",
+      "href": "https://mymovies.com",
       "meta": {
-        "_templates": {
+        "hal-forms-templates": {
           "default": {
             "method": "POST",
             "properties": [

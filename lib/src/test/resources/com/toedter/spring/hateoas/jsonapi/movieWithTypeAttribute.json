@@ -3,7 +3,7 @@
     "id": "1",
     "type": "MyClassType",
     "attributes": {
-      "type": "MyObjectType"
+      "myType": "MyObjectType"
     }
   }
 }

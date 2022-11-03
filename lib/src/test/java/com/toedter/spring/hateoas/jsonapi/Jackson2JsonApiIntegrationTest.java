@@ -18,26 +18,80 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.toedter.spring.hateoas.jsonapi.support.*;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
+import com.toedter.spring.hateoas.jsonapi.support.Director;
+import com.toedter.spring.hateoas.jsonapi.support.DirectorWithEmail;
+import com.toedter.spring.hateoas.jsonapi.support.DirectorWithType;
+import com.toedter.spring.hateoas.jsonapi.support.Movie;
+import com.toedter.spring.hateoas.jsonapi.support.MovieDerivedWithTypeForClass;
+import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithJsonApiType;
+import com.toedter.spring.hateoas.jsonapi.support.MovieThrowingException;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotationsDerived;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithCustomSerializer;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithGetters;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithIntId;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithIntegerObjectId;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongId;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithLongObjectId;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithMetaAnnotation;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithMethodMetaAnnotation;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithUUID;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithUUIDAnnotation;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithUUIDMethod;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithoutAttributes;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelationEntity;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
+import jakarta.persistence.Id;
 import lombok.Getter;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.hateoas.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 
-import jakarta.persistence.Id;
-
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,9 +100,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Jackson2JsonApiIntegrationTest {
 
     private ObjectMapper mapper;
+    private JsonSchema schema;
+
 
     @BeforeEach
-    void setUpModule() {
+    void setUpModule() throws IOException {
         mapper = createObjectMapper(new JsonApiConfiguration().withObjectMapperCustomizer(
                         mapper -> {
                             mapper.registerModule(new JavaTimeModule());
@@ -58,6 +114,12 @@ class Jackson2JsonApiIntegrationTest {
                 .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
                 .withTypeForClass(DirectorWithEmail.class, "directors-with-email")
                 .withTypeForClassUsedForDeserialization(true));
+
+        if (schema == null) {
+            InputStream schemaInputStream = new ClassPathResource("jsonapi-schema.json", getClass()).getInputStream();
+            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012);
+            schema = factory.getSchema(schemaInputStream);
+        }
     }
 
     @Test
@@ -326,7 +388,7 @@ class Jackson2JsonApiIntegrationTest {
         // end::noIdMovie[]
         EntityModel<Movie> entityModel = EntityModel.of(movie);
         String movieJson = mapper.writeValueAsString(entityModel);
-        compareWithFile(movieJson, "movieEntityModelWithoutId.json");
+        compareWithFile(movieJson, "movieEntityModelWithoutId.json", false);
     }
 
     @Test
@@ -343,7 +405,7 @@ class Jackson2JsonApiIntegrationTest {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel =
                 EntityModel.of(movie).add(
-                        Links.of(Link.of("http://localhost/directors?{page,size}").withRel("directors")));
+                        Links.of(Link.of("http://localhost/directors?{page,size}").withRel("related")));
         final String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithTemplatedLink.json");
     }
@@ -776,6 +838,7 @@ class Jackson2JsonApiIntegrationTest {
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLinkAndOldMeta.json");
     }
+
     @Test
     void should_serialize_movie_with_complex_link() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
@@ -796,13 +859,13 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_serialize_single_movie_model_with_many_director_links() throws Exception {
+    void should_serialize_single_movie_model_with_two_links() throws Exception {
         Movie movie = new Movie("4", "The Matrix");
 
         EntityModel<Movie> movieEntityModel = EntityModel.of(movie);
-        movieEntityModel.add(Link.of("http://mymovies.com/directors/1").withRel("directors"));
+        movieEntityModel.add(Link.of("http://mymovies.com/movies/4"));
         Link bigLink = Link.of("http://mymovies.com/directors/2")
-                .withRel("directors")
+                .withRel("related")
                 .withHreflang("hreflang")
                 .withMedia("media")
                 .withTitle("title")
@@ -816,13 +879,13 @@ class Jackson2JsonApiIntegrationTest {
                 .withJsonapi11LinkPropertiesRemovedFromLinkMeta(true));
 
         final String movieJson = mapper.writeValueAsString(movieEntityModel);
-        compareWithFile(movieJson, "movieEntityModelWithTwoDirectorsLinks.json");
+        compareWithFile(movieJson, "movieEntityModelWithTwoLinks.json");
     }
 
     @Test
     void should_deserialize_single_movie_model_with_many_director_links() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, Movie.class);
-        File file = new ClassPathResource("movieEntityModelWithTwoDirectorsLinks.json", getClass()).getFile();
+        File file = new ClassPathResource("movieEntityModelWithTwoLinks.json", getClass()).getFile();
         EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
         Movie movie = movieEntityModel.getContent();
@@ -834,10 +897,10 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(links.hasSize(2)).isTrue();
 
         Object[] linksArray = links.stream().toArray();
-        Link link1 = (Link) linksArray[0];
-        assertThat(link1.getHref()).isEqualTo("http://mymovies.com/directors/1");
+        Link link1 = (Link) linksArray[1];
+        assertThat(link1.getHref()).isEqualTo("http://mymovies.com/movies/4");
 
-        Link link2 = (Link) linksArray[1];
+        Link link2 = (Link) linksArray[0];
         assertThat(link2.getHreflang()).isEqualTo("hreflang");
         assertThat(link2.getMedia()).isEqualTo("media");
         assertThat(link2.getTitle()).isEqualTo("title");
@@ -1023,7 +1086,8 @@ class Jackson2JsonApiIntegrationTest {
         @JsonApiTypeForClass(value = "MyClassType")
         class Movie {
             private final Long id = 1L;
-            private final String type = "MyObjectType";
+            @JsonApiType
+            private final String myType = "MyObjectType";
         }
 
         String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
@@ -1102,7 +1166,7 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_serialize_affordance_with_proprietary_format() throws Exception {
-        Link link = Affordances.of(Link.of("/"))
+        Link link = Affordances.of(Link.of("https://mymovies.com"))
                 .afford(HttpMethod.POST)
                 .withInputAndOutput(Movie.class) //
                 .withName("create-movie") //
@@ -1118,7 +1182,7 @@ class Jackson2JsonApiIntegrationTest {
 
     @Test
     void should_serialize_affordance_with_hal_forms_format() throws Exception {
-        Link link = Affordances.of(Link.of("/"))
+        Link link = Affordances.of(Link.of("https://mymovies.com"))
                 .afford(HttpMethod.POST)
                 .withInputAndOutput(Movie.class) //
                 .withName("create-movie") //
@@ -1167,11 +1231,19 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
+        compareWithFile(json,fileName,true);
+    }
+    private void compareWithFile(String json, String fileName, boolean validateSchema) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
         assertThat(json).isEqualTo(jsonNode.toString());
+
+        if(validateSchema) {
+            Set<ValidationMessage> errors = schema.validate(jsonNode);
+            assertThat(errors.size()).isEqualTo(0);
+        }
     }
 
     private ObjectMapper createObjectMapper(JsonApiConfiguration jsonApiConfiguration) {

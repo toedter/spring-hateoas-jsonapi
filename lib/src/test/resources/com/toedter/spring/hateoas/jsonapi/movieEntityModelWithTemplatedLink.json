@@ -7,8 +7,8 @@
     }
   },
   "links": {
-    "directors": {
-      "href": "http://localhost/directors?{page,size}",
+    "related": {
+      "href": "http://localhost/directors?%7Bpage,size%7D",
       "meta": {
         "isTemplated": true
       }

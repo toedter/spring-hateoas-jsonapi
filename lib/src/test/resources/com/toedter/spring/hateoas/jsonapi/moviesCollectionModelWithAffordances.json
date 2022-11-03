@@ -10,14 +10,14 @@
   ],
   "links": {
     "self": {
-      "href": "/",
+      "href": "https://mymovies.com",
       "meta": {
         "affordances": [
           {
             "name": "create-movie",
             "link": {
               "rel": "self",
-              "href": "/"
+              "href": "https://mymovies.com"
             },
             "httpMethod": "POST",
             "inputProperties": [
