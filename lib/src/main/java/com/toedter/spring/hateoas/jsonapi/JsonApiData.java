@@ -161,6 +161,21 @@ class JsonApiData {
         if (isSingleEntity || links != null && links.isEmpty()) {
             links = null;
         }
+
+        // breaking change: JSON:API only allows a self link within resources (not top-level!),
+        // see https://jsonapi.org/format/#document-resource-object-links.
+        // All other resource links are now removed.
+        if (links != null) {
+            Links validJsonApiLinks = Links.NONE;
+            for(Link link: links) {
+                if(link.hasRel("self")) {
+                    validJsonApiLinks = validJsonApiLinks.and(link);
+                    break;
+                }
+            }
+            links = validJsonApiLinks;
+        }
+
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
         JavaType mapType = objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);

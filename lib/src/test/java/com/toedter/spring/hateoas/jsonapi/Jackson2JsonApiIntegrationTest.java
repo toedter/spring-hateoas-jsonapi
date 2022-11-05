@@ -320,6 +320,25 @@ class Jackson2JsonApiIntegrationTest {
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");
     }
+    @Test
+    void should_serialize_movie_collection_model_with_entity_models_and_invalid_links() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        EntityModel<Movie> movie1Model = EntityModel.of(movie1);
+        movie1Model.add(Link.of("http://localhost/movies/1").withSelfRel());
+        movie1Model.add(Link.of("http://localhost/movies/1").withRel("invalid"));
+        Movie movie2 = new Movie("2", "Avengers");
+        EntityModel<Movie> movie2Model = EntityModel.of(movie2);
+        movie2Model.add(Link.of("http://localhost/movies/2").withSelfRel());
+        movie2Model.add(Link.of("http://localhost/movies/2").withRel("invalid"));
+        List<EntityModel<Movie>> movies = new ArrayList<>();
+        movies.add(movie1Model);
+        movies.add(movie2Model);
+
+        CollectionModel<EntityModel<Movie>> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        String moviesJson = mapper.writeValueAsString(collectionModel);
+
+        compareWithFile(moviesJson, "moviesCollectionModel.json");
+    }
 
     @Test
     void should_serialize_movie_paged_model_with_automatically_created_page_meta() throws Exception {

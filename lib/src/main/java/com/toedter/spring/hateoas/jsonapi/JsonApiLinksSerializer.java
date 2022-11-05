@@ -73,13 +73,10 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
             if (list.size() == 1) {
                 Link link = list.get(0);
                 serializeLinkWithRelation(gen, link);
-            } else {
-                gen.writeArrayFieldStart(rel.value());
-                for (Link link : list) {
-                    serializeLinkWithoutRelation(gen, link);
-                }
-                gen.writeEndArray();
             }
+
+            // JSON:API does not support arrays of links with same name.
+            // So, every list with size != 1 is ignored
         }
         gen.writeEndObject();
     }
