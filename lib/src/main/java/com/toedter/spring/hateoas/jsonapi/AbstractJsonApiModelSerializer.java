@@ -20,7 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.extern.java.Log;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+@Log
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
@@ -152,6 +155,28 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         if (links.isEmpty()) {
             links = null;
         }
+
+        // breaking change: JSON:API only allows specific links at (document) top-level!,
+        // see https://jsonapi.org/format/#document-top-level.
+        // Those links are self, related, describedby, and
+        // the pagination links first, last, prev, and next.
+        // All other top-level links are not allowed and therefore removed.
+        if (links != null) {
+            Links validJsonApiLinks = Links.NONE;
+            for (Link link : links) {
+                if (!validJsonApiLinks.hasLink(link.getRel())
+                        || link.hasRel("self") || link.hasRel("related") || link.hasRel("describedby")
+                        || link.hasRel("first") || link.hasRel("last") || link.hasRel("prev") || link.hasRel("next")) {
+                    {
+                        validJsonApiLinks = validJsonApiLinks.and(link);
+                    }
+                } else {
+                    log.warning("remove invalid JSON:API top-level link: " + link.getRel());
+                }
+            }
+            links = validJsonApiLinks;
+        }
+
         return links;
     }
 

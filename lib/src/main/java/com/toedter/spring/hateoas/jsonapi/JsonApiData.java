@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
+import lombok.extern.java.Log;
 import org.springframework.hateoas.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
@@ -39,6 +40,7 @@ import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredF
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Log
 @SuppressWarnings("squid:S3011")
 class JsonApiData {
     String id;
@@ -170,7 +172,8 @@ class JsonApiData {
             for(Link link: links) {
                 if(link.hasRel("self")) {
                     validJsonApiLinks = validJsonApiLinks.and(link);
-                    break;
+                }else {
+                    log.warning("remove invalid JSON:API resource-level link: " + link.getRel());
                 }
             }
             links = validJsonApiLinks;
