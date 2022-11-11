@@ -173,7 +173,7 @@ class JsonApiData {
                 if(link.hasRel("self")) {
                     validJsonApiLinks = validJsonApiLinks.and(link);
                 }else {
-                    log.warning("remove invalid JSON:API resource-level link: " + link.getRel());
+                    log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
                 }
             }
             links = validJsonApiLinks;
