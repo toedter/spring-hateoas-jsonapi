@@ -34,7 +34,7 @@ dependencies {
     }
 
     // runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.hsqldb:hsqldb:2.6.1'
+    runtimeOnly 'org.hsqldb:hsqldb'
 }
 
 test {
