@@ -116,7 +116,8 @@ class Jackson2JsonApiIntegrationTest {
                 .withTypeForClassUsedForDeserialization(true));
 
         if (schema == null) {
-            InputStream schemaInputStream = new ClassPathResource("jsonapi-schema.json", getClass()).getInputStream();
+            InputStream schemaInputStream =
+                    new ClassPathResource("jsonapi-schema.json", getClass()).getInputStream();
             JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012);
             schema = factory.getSchema(schemaInputStream);
         }
@@ -245,14 +246,16 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_and_meta_fields() throws Exception {
         String movieJson = mapper.writeValueAsString(
-                EntityModel.of(new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")));
+                EntityModel.of(
+                        new MovieWithAnnotations("1", "my-movies", "metaValue", "Star Wars")));
         compareWithFile(movieJson, "movieEntityModelWithThreeAnnotations.json");
     }
 
     @Test
     void should_serialize_entity_model_with_annotated_jsonapi_id_and_type_methods() throws Exception {
         String movieJson = mapper.writeValueAsString(
-                EntityModel.of(new MovieWithGetters("1", "Star Wars", "my-movies", "metaValue")));
+                EntityModel.of(
+                        new MovieWithGetters("1", "Star Wars", "my-movies", "metaValue")));
         compareWithFile(movieJson, "movieEntityModelWithThreeAnnotations.json");
     }
 
@@ -274,7 +277,8 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_single_movie_entity_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        EntityModel<Movie> entityModel = EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
+        EntityModel<Movie> entityModel =
+                EntityModel.of(movie).add(Links.of(Link.of("http://localhost/movies/1").withSelfRel()));
         String movieJson = mapper.writeValueAsString(entityModel);
 
         compareWithFile(movieJson, "movieEntityModelWithLinks.json");
@@ -283,7 +287,8 @@ class Jackson2JsonApiIntegrationTest {
     @Test
     void should_serialize_single_movie_representation_model() throws Exception {
         Movie movie = new Movie("1", "Star Wars");
-        MovieRepresentationModelWithJsonApiType movieRepresentationModelWithJsonApiType = new MovieRepresentationModelWithJsonApiType(movie);
+        MovieRepresentationModelWithJsonApiType movieRepresentationModelWithJsonApiType =
+                new MovieRepresentationModelWithJsonApiType(movie);
         String movieJson = mapper.writeValueAsString(movieRepresentationModelWithJsonApiType);
 
         compareWithFile(movieJson, "movieRepresentationModel.json");
@@ -297,7 +302,8 @@ class Jackson2JsonApiIntegrationTest {
         movies.add(movie1);
         movies.add(movie2);
 
-        CollectionModel<Movie> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        CollectionModel<Movie> collectionModel =
+                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
         compareWithFile(moviesJson, "moviesCollectionModelFromResources.json");
@@ -315,14 +321,15 @@ class Jackson2JsonApiIntegrationTest {
         movies.add(movie1Model);
         movies.add(movie2Model);
 
-        CollectionModel<EntityModel<Movie>> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        CollectionModel<EntityModel<Movie>> collectionModel =
+                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");
     }
 
     @Test
-    void should_serialize_movie_collection_model_with_entity_models_and_invalid_links() throws Exception {
+    void should_serialize_movie_collection_model_with_entity_models_and_hide_non_compliant_links() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
         EntityModel<Movie> movie1Model = EntityModel.of(movie1);
         movie1Model.add(Link.of("http://localhost/movies/1").withSelfRel());
@@ -335,10 +342,36 @@ class Jackson2JsonApiIntegrationTest {
         movies.add(movie1Model);
         movies.add(movie2Model);
 
-        CollectionModel<EntityModel<Movie>> collectionModel = CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        CollectionModel<EntityModel<Movie>> collectionModel =
+                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");
+    }
+
+    @Test
+    void should_serialize_movie_collection_model_with_entity_models_and_serialize_non_compliant_links() throws Exception {
+        Movie movie1 = new Movie("1", "Star Wars");
+        EntityModel<Movie> movie1Model = EntityModel.of(movie1);
+        movie1Model.add(Link.of("http://localhost/movies/1").withSelfRel());
+        movie1Model.add(Link.of("http://localhost/movies/1").withRel("invalid"));
+        Movie movie2 = new Movie("2", "Avengers");
+        EntityModel<Movie> movie2Model = EntityModel.of(movie2);
+        movie2Model.add(Link.of("http://localhost/movies/2").withSelfRel());
+        movie2Model.add(Link.of("http://localhost/movies/2").withRel("invalid"));
+        List<EntityModel<Movie>> movies = new ArrayList<>();
+        movies.add(movie1Model);
+        movies.add(movie2Model);
+
+        CollectionModel<EntityModel<Movie>> collectionModel =
+                CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        collectionModel.add(Link.of("http://localhost/movies/non-compliant").withRel("invalid"));
+
+        mapper = createObjectMapper(new JsonApiConfiguration().withJsonapiCompliantLinks(false));
+        String moviesJson = mapper.writeValueAsString(collectionModel);
+
+        compareWithFile(moviesJson, "moviesCollectionModelWithNonCompliantLinks.json", false);
     }
 
     @Test

@@ -167,16 +167,18 @@ class JsonApiData {
         // breaking change: JSON:API only allows a self link within resources (not top-level!),
         // see https://jsonapi.org/format/#document-resource-object-links.
         // All other resource links are now removed.
-        if (links != null) {
-            Links validJsonApiLinks = Links.NONE;
-            for(Link link: links) {
-                if(link.hasRel("self")) {
-                    validJsonApiLinks = validJsonApiLinks.and(link);
-                }else {
-                    log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
+        if (jsonApiConfiguration.isJsonapiCompliantLinks()) {
+            if (links != null) {
+                Links validJsonApiLinks = Links.NONE;
+                for (Link link : links) {
+                    if (link.hasRel("self")) {
+                        validJsonApiLinks = validJsonApiLinks.and(link);
+                    } else {
+                        log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
+                    }
                 }
+                links = validJsonApiLinks;
             }
-            links = validJsonApiLinks;
         }
 
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);

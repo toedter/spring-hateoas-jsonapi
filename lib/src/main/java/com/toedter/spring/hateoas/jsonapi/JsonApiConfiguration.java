@@ -215,6 +215,22 @@ public class JsonApiConfiguration {
     @Getter
     private final boolean jsonapi11LinkPropertiesRemovedFromLinkMeta;
 
+    /**
+     * JSON:API is very strict about the allowed link relations, the allowed
+     * <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
+     * self, related, describedBy, next, pre, first and last. The only allowed
+     * <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
+     *
+     * If you set this configuration to {@literal false}, Spring HATEOAS links that are not compliant
+     * with JSON:API would also be serialized.
+     *
+     * @param jsonapiCompliantLinks The new value of this configuration's jsonapiCompliantLinks
+     * @return The default is {@literal true}.
+     */
+    @With
+    @Getter
+    private final boolean jsonapiCompliantLinks;
+
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
 
@@ -312,6 +328,7 @@ public class JsonApiConfiguration {
         this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
         this.jsonapi11LinkPropertiesRemovedFromLinkMeta = true;
+        this.jsonapiCompliantLinks = true;
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }

@@ -73,6 +73,13 @@ both as top-level link properties _and_ in the meta section, you can configure t
 include::{test-resources-dir}/movieEntityModelWithComplexLinkAndOldMeta.json[]
 ----
 
+JSON:API is very strict about the allowed link relations, the allowed
+https://jsonapi.org/format/#document-top-level[top-level links] are
+`self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`. The only allowed
+https://jsonapi.org/format/#document-resource-object-links[resource link] is `self`.
+
+By default, all other links will _not_ be serialized. If you want to serialize links that are non-compliant
+with JSON:API, you can use a specific configuration, (see <<links-configuration>>).
 
 [[annotations]]
 == Annotations
