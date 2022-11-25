@@ -166,10 +166,7 @@ The default rendering of a complex link is now</p>
       "type": "type",
       "hreflang": "EN",
       "meta": {
-        "hreflang": "EN",
         "media": "media",
-        "title": "title",
-        "type": "type",
         "name": "name"
       }
     }
@@ -178,14 +175,14 @@ The default rendering of a complex link is now</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you see, the properties title, type, and hreflang appear both as top-level link properties
-as well as properties in the meta section. So the new format reflects the new JSON:API 1.1 link structure,
-but stays backward compatible to version 1.x.x of this library.</p>
+<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
+So the new format reflects the new JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
 </div>
 <div class="paragraph">
-<p>If you start a new project without any existing clients, you could specify a special configuration (see <a href="#links-configuration">[links-configuration]</a>), that removes the attributes from the meta section.
-Be aware that this would be a breaking change that might break existing clients. The rendered result would
-the look like:</p>
+<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+(see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -204,7 +201,10 @@ the look like:</p>
       "type": "type",
       "hreflang": "EN",
       "meta": {
+        "hreflang": "EN",
         "media": "media",
+        "title": "title",
+        "type": "type",
         "name": "name"
       }
     }
@@ -1772,7 +1772,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-25 07:20:33 UTC
+Last updated 2022-11-25 07:35:44 UTC
 </div>
 </div>
 </div>

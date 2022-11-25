@@ -416,10 +416,7 @@ The default rendering of a complex link is now</p>
       "type": "type",
       "hreflang": "EN",
       "meta": {
-        "hreflang": "EN",
         "media": "media",
-        "title": "title",
-        "type": "type",
         "name": "name"
       }
     }
@@ -428,14 +425,14 @@ The default rendering of a complex link is now</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you see, the properties title, type, and hreflang appear both as top-level link properties
-as well as properties in the meta section. So the new format reflects the new JSON:API 1.1 link structure,
-but stays backward compatible to version 1.x.x of this library.</p>
+<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
+So the new format reflects the new JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
 </div>
 <div class="paragraph">
-<p>If you start a new project without any existing clients, you could specify a special configuration (see <a href="#links-configuration">[links-configuration]</a>), that removes the attributes from the meta section.
-Be aware that this would be a breaking change that might break existing clients. The rendered result would
-the look like:</p>
+<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+(see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -454,7 +451,10 @@ the look like:</p>
       "type": "type",
       "hreflang": "EN",
       "meta": {
+        "hreflang": "EN",
         "media": "media",
+        "title": "title",
+        "type": "type",
         "name": "name"
       }
     }
@@ -2348,14 +2348,16 @@ This is very useful for polymorphic use cases.</p>
 <div id="links-configuration" class="ulist">
 <ul>
 <li>
-<p>The Spring HATEOAS properties title, type and hreflang will then be serialized both as top level link
-properties, as well as in the meta section, see also <a href="#links">Links</a>.</p>
+<p>By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
+properties, those link properties were introduced in JSON:API 1.1,
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>.</p>
 </li>
 <li>
-<p>The default is <code>true</code>.</p>
+<p>To serialize the Spring HATEOAS properties title, type and hreflang both as top level link
+properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">Links</a>.</p>
 </li>
 <li>
-<p>Be aware that setting this to false, Spring HATEOAS complex links are rendered in a backward-incompatible way
+<p>Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
 since client might expect properties like title in the meta section.</p>
 </li>
@@ -2409,7 +2411,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-25 07:20:33 UTC
+Last updated 2022-11-25 07:35:44 UTC
 </div>
 </div>
 </div>
