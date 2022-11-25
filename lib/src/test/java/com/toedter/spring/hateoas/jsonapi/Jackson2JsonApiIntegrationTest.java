@@ -612,6 +612,25 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
     }
+    @Test
+    void should_deserialize_single_movie_entity_model_with_field_annotation_and_links_object() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithAnnotations.class);
+        File file = new ClassPathResource("movieEntityModelWithLinksObject.json", getClass()).getFile();
+        EntityModel<MovieWithAnnotations> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithAnnotations movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getMyId()).isEqualTo("1");
+        assertThat(movie.getType()).isEqualTo("movies");
+        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+
+        Links links = movieEntityModel.getLinks();
+        assertThat(links.hasSingleLink()).isTrue();
+        assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+        assertThat(links.getLink("self").get().getHreflang()).isEqualTo("en");
+        assertThat(links.getLink("self").get().getTitle()).isEqualTo("title");
+        assertThat(links.getLink("self").get().getType()).isEqualTo("type");
+    }
 
     @Test
     void should_deserialize_derived_class_with_field_annotation() throws Exception {

@@ -35,6 +35,14 @@ import java.util.Map;
 
 class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
 
+    private static final String HREFLANG = "hreflang";
+    private static final String TITLE = "title";
+    private static final String TYPE = "type";
+    private static final String MEDIA = "media";
+    private static final String DEPRECATION = "deprecation";
+    private static final String PROFILE = "profile";
+    private static final String NAME = "name";
+
     protected JsonApiLinksDeserializer() {
         super(TypeFactory.defaultInstance().constructCollectionLikeType(List.class, Link.class));
     }
@@ -75,36 +83,44 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
                 if (meta instanceof LinkedHashMap) {
                     @SuppressWarnings({"unchecked", "rawtypes"})
                     LinkedHashMap<String, String> attributes = (LinkedHashMap) meta;
-                    if (linkedHashMap.containsKey("hreflang")) {
-                        link = link.withHreflang(linkedHashMap.get("hreflang").toString());
+                    link = getLink(attributes, link);
+
+                    if (attributes.containsKey(MEDIA)) {
+                        link = link.withMedia(attributes.get(MEDIA));
                     }
 
-                    if (linkedHashMap.containsKey("title")) {
-                        link = link.withTitle(linkedHashMap.get("title").toString());
+                    if (attributes.containsKey(DEPRECATION)) {
+                        link = link.withDeprecation(attributes.get(DEPRECATION));
                     }
 
-                    if (linkedHashMap.containsKey("type")) {
-                        link = link.withType(linkedHashMap.get("type").toString());
+                    if (attributes.containsKey(PROFILE)) {
+                        link = link.withProfile(attributes.get(PROFILE));
                     }
 
-                    if (attributes.containsKey("media")) {
-                        link = link.withMedia(attributes.get("media"));
-                    }
-
-                    if (attributes.containsKey("deprecation")) {
-                        link = link.withDeprecation(attributes.get("deprecation"));
-                    }
-
-                    if (attributes.containsKey("profile")) {
-                        link = link.withProfile(attributes.get("profile"));
-                    }
-
-                    if (attributes.containsKey("name")) {
-                        link = link.withName(attributes.get("name"));
+                    if (attributes.containsKey(NAME)) {
+                        link = link.withName(attributes.get(NAME));
                     }
                 }
+
+                link = getLink(linkedHashMap, link);
+
                 links.add(link);
             }
         }
+    }
+
+    private static Link getLink(LinkedHashMap<?, ?> linkedHashMap, Link link) {
+        if (linkedHashMap.containsKey(HREFLANG)) {
+            link = link.withHreflang(linkedHashMap.get(HREFLANG).toString());
+        }
+
+        if (linkedHashMap.containsKey(TITLE)) {
+            link = link.withTitle(linkedHashMap.get(TITLE).toString());
+        }
+
+        if (linkedHashMap.containsKey(TYPE)) {
+            link = link.withType(linkedHashMap.get(TYPE).toString());
+        }
+        return link;
     }
 }

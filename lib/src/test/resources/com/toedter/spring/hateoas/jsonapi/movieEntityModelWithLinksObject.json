@@ -8,7 +8,20 @@
   },
   "links": {
     "self": {
-      "href": "http://localhost/movies/1"
+      "href": "http://localhost/movies/1",
+      "rel": "rel",
+      "describedby": "describedby",
+      "title": "title",
+      "type": "type",
+      "hreflang": "en",
+      "meta": {
+        "metaKey": "metaValue",
+        "rel": "metaRel",
+        "describedby": "metaDescribedby",
+        "title": "metaTitle",
+        "type": "metaType",
+        "hreflang": "metaEn"
+      }
     }
   }
 }
