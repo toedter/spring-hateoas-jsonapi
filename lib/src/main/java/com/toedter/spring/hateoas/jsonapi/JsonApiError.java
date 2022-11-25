@@ -39,8 +39,8 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class JsonApiError {
     private static final JsonApiError EMPTY = new JsonApiError();
-    public static final String POINTER = "pointer";
-    public static final String PARAMETER = "parameter";
+    private static final String POINTER = "pointer";
+    private static final String PARAMETER = "parameter";
 
     /**
      * Gets a unique identifier for this particular occurrence of the problem.
@@ -64,7 +64,7 @@ public class JsonApiError {
     private Map<String, String> links;
 
     /**
-     * Gets the the HTTP status code applicable to this problem, expressed as a string value.
+     * Gets the HTTP status code applicable to this problem, expressed as a string value.
      *
      * @return will never be {@literal null}.
      * -- WITHER --

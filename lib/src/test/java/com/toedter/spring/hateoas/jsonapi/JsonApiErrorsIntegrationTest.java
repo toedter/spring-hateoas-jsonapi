@@ -43,7 +43,6 @@ class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
 
     @Test
     void should_build_empty_errors() throws Exception {
-        JsonApiError jsonApiError = new JsonApiError();
         JsonApiErrors jsonApiErrors = new JsonApiErrors();
         String errorsJson = mapper.writeValueAsString(jsonApiErrors);
         assertThat(errorsJson).isEqualTo("{\"errors\":[]}");
