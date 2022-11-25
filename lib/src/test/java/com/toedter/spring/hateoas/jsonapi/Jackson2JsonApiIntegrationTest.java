@@ -344,6 +344,7 @@ class Jackson2JsonApiIntegrationTest {
 
         CollectionModel<EntityModel<Movie>> collectionModel =
                 CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
+        collectionModel.add(Link.of("http://localhost/movies/non-compliant").withRel("invalid"));
 
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
