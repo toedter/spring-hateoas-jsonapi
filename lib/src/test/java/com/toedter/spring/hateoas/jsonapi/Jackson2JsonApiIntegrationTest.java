@@ -320,6 +320,7 @@ class Jackson2JsonApiIntegrationTest {
 
         compareWithFile(moviesJson, "moviesCollectionModel.json");
     }
+
     @Test
     void should_serialize_movie_collection_model_with_entity_models_and_invalid_links() throws Exception {
         Movie movie1 = new Movie("1", "Star Wars");
@@ -811,23 +812,23 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_not_deserialize_movie_with_non_polymorphic_type() {
+    void should_not_deserialize_movie_with_non_polymorphic_type() throws Exception {
+        JavaType movieType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, Director.class);
+        File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            JavaType movieType =
-                    mapper.getTypeFactory().constructParametricType(EntityModel.class, Director.class);
-            File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
-            EntityModel<Director> movieEntityModel = mapper.readValue(file, movieType);
+            mapper.readValue(file, movieType);
         });
     }
 
     @Test
-    void should_not_deserialize_movie_with_illegal_polymorphic_relationships() {
+    void should_not_deserialize_movie_with_illegal_polymorphic_relationships() throws Exception {
+        JavaType movieType =
+                mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("postMovieWithTwoRelationshipsWithIllegalPolymorphicTypes.json",
+                getClass()).getFile();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            JavaType movieType =
-                    mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
-            File file = new ClassPathResource("postMovieWithTwoRelationshipsWithIllegalPolymorphicTypes.json",
-                    getClass()).getFile();
-            EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieType);
+            mapper.readValue(file, movieType);
         });
     }
 
@@ -854,6 +855,9 @@ class Jackson2JsonApiIntegrationTest {
 
         entityModel.add(complexLink);
 
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false));
+
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLinkAndOldMeta.json");
     }
@@ -870,8 +874,6 @@ class Jackson2JsonApiIntegrationTest {
                 .withMedia("media");
 
         entityModel.add(complexLink);
-        mapper = createObjectMapper(new JsonApiConfiguration()
-                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(true));
 
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLink.json");
@@ -991,12 +993,12 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
-    void should_not_deserialize_movie_with_wrong_annotation() {
+    void should_not_deserialize_movie_with_wrong_annotation() throws Exception {
         JavaType javaType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieThrowingException.class);
+        File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
 
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
             mapper.readValue(file, javaType);
         });
     }
@@ -1250,8 +1252,9 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     private void compareWithFile(String json, String fileName) throws Exception {
-        compareWithFile(json,fileName,true);
+        compareWithFile(json, fileName, true);
     }
+
     private void compareWithFile(String json, String fileName, boolean validateSchema) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -1259,9 +1262,9 @@ class Jackson2JsonApiIntegrationTest {
         JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
         assertThat(json).isEqualTo(jsonNode.toString());
 
-        if(validateSchema) {
+        if (validateSchema) {
             Set<ValidationMessage> errors = schema.validate(jsonNode);
-            assertThat(errors.size()).isEqualTo(0);
+            assertThat(errors).isEmpty();
         }
     }
 

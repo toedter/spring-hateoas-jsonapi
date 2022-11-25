@@ -36,7 +36,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
         assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
         assertThat(new JsonApiConfiguration().isTypeForClassUsedForDeserialization()).isFalse();
-        assertThat(new JsonApiConfiguration().isJsonapi11LinkPropertiesRemovedFromLinkMeta()).isFalse();
+        assertThat(new JsonApiConfiguration().isJsonapi11LinkPropertiesRemovedFromLinkMeta()).isTrue();
         assertThat(new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta())
                 .isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
     }

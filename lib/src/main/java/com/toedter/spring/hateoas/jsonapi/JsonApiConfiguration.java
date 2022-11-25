@@ -199,17 +199,17 @@ public class JsonApiConfiguration {
     /**
      * JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
      * see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
-     * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
-     * they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
-     * But to keep the format backward-compatible to previous version of this library, title, type, and hreflang
-     * will still be rendered also in the link's meta section.
+     * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
+     * are now serialized as direct link properties. For the previous version JSON:API v1.0
+     * they were serialized in the meta section.
      *
-     * The removal from the meta section would be a breaking change that could harm existing clients.
-     * But if you start a new project, and you want to remove title, type, and hreflang
-     * from the meta section, set this configuration to true.
+     * The removal from the meta section is a breaking change that could harm existing clients.
+     * But to keep the format backward-compatible to previous versions of this library, title, type, and hreflang
+     * can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
+     * to {@literal false}.
      *
      * @param jsonapi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta
-     * @return The default is {@literal false}.
+     * @return The default is {@literal true}.
      */
     @With
     @Getter
@@ -311,7 +311,7 @@ public class JsonApiConfiguration {
         this.emptyAttributesObjectSerialized = true;
         this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
-        this.jsonapi11LinkPropertiesRemovedFromLinkMeta = false;
+        this.jsonapi11LinkPropertiesRemovedFromLinkMeta = true;
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
