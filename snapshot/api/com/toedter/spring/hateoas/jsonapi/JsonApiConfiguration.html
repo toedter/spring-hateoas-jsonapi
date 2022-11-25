@@ -655,14 +655,14 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonapi11LinkPropertiesRemovedFromLinkMeta</span><wbr><span class="parameters">(boolean&nbsp;jsonapi11LinkPropertiesRemovedFromLinkMeta)</span></div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
- Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
- they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
- But to keep the format backward-compatible to previous version of this JSON:API for Spring HATEOASrary, title, type, and hreflang
- will still be rendered also in the link's meta section.
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
+ are now serialized as direct link properties. For the previous version JSON:API v1.0
+ they were serialized in the meta section.
 
- The removal from the meta section would be a breaking change that could harm existing clients.
- But if you start a new project, and you want to remove title, type, and hreflang
- from the meta section, set this configuration to true.</div>
+ The removal from the meta section is a breaking change that could harm existing clients.
+ But to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and hreflang
+ can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
+ to false.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>jsonapi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta</dd>
@@ -677,17 +677,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonapi11LinkPropertiesRemovedFromLinkMeta</span>()</div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
- Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API v1.0
- they were serialized in the meta section. For JSON:API 1.1 they are now serialized as direct link properties.
- But to keep the format backward-compatible to previous version of this JSON:API for Spring HATEOASrary, title, type, and hreflang
- will still be rendered also in the link's meta section.
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
+ are now serialized as direct link properties. For the previous version JSON:API v1.0
+ they were serialized in the meta section.
 
- The removal from the meta section would be a breaking change that could harm existing clients.
- But if you start a new project, and you want to remove title, type, and hreflang
- from the meta section, set this configuration to true.</div>
+ The removal from the meta section is a breaking change that could harm existing clients.
+ But to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and hreflang
+ can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
+ to false.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The default is false.</dd>
+<dd>The default is true.</dd>
 </dl>
 </section>
 </li>
