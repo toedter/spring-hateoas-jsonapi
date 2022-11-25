@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "links": {
+        "self": "http://localhost/movies/1",
+        "invalid": "http://localhost/movies/1"
+      }
+    },
+    {
+      "id": "2",
+      "type": "movies",
+      "attributes": {
+        "title": "Avengers"
+      },
+      "links": {
+        "self": "http://localhost/movies/2",
+        "invalid": "http://localhost/movies/2"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost/movies",
+    "invalid": "http://localhost/movies/non-compliant"
+  }
+}
