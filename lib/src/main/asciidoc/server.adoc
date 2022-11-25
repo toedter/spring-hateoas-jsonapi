@@ -57,20 +57,20 @@ The default rendering of a complex link is now
 
 [source, json]
 ----
-include::{test-resources-dir}/movieEntityModelWithComplexLinkAndOldMeta.json[]
+include::{test-resources-dir}/movieEntityModelWithComplexLink.json[]
 ----
 
-As you see, the properties title, type, and hreflang appear both as top-level link properties
-as well as properties in the meta section. So the new format reflects the new JSON:API 1.1 link structure,
-but stays backward compatible to version 1.x.x of this library.
+As you see, the properties title, type, and hreflang appear now only as top-level link properties.
+So the new format reflects the new JSON:API 1.1 link structure,
+but is _not_ backward compatible to version 1.x.x of this library.
 
-If you start a new project without any existing clients, you could specify a special configuration (see <<links-configuration>>), that removes the attributes from the meta section.
-Be aware that this would be a breaking change that might break existing clients. The rendered result would
-the look like:
+If you want to stay backward-compatible and render the link properties type, title and hreflang
+both as top-level link properties _and_ in the meta section, you can configure this behaviour,
+(see <<links-configuration>>). The rendered result would then look like:
 
 [source, json]
 ----
-include::{test-resources-dir}/movieEntityModelWithComplexLink.json[]
+include::{test-resources-dir}/movieEntityModelWithComplexLinkAndOldMeta.json[]
 ----
 
 

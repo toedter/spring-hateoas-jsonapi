@@ -28,10 +28,12 @@ This is very useful for polymorphic use cases.
 * If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
 (to version 1.x.x of this library) way
 [[links-configuration]]
-** The Spring HATEOAS properties title, type and hreflang will then be serialized both as top level link
-properties, as well as in the meta section, see also <<links>>.
-** The default is `true`.
-** Be aware that setting this to false, Spring HATEOAS complex links are rendered in a backward-incompatible way
+** By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
+properties, those link properties were introduced in JSON:API 1.1,
+see https://jsonapi.org/format/#auto-id--link-objects.
+** To serialize the Spring HATEOAS properties title, type and hreflang both as top level link
+properties, as well as in the meta section, set this property to `false`, see also <<links>>.
+** Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
 since client might expect properties like title in the meta section.
 
