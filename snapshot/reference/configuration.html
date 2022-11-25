@@ -56,11 +56,11 @@ Currently, you can configure</p>
 </div>
 </li>
 <li>
-<p>if JSON:API types should be rendered as lowercase or original class names.</p>
+<p>if JSON:API types should be rendered as lower case or original class names.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The default is lowercase.</p>
+<p>The default is lower case.</p>
 </li>
 </ul>
 </div>
@@ -104,9 +104,36 @@ This is very useful for polymorphic use cases.</p>
 <p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
 </li>
 <li>
+<p>If only JSON:API compliant links are rendered.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The default is true</p>
+</li>
+<li>
+<p>The following links are JSON:API compliant:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>.</p>
+</li>
+<li>
+<p><code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>To allow any link, set this configuration to <code>false</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
 (to version 1.x.x of this library) way</p>
-<div id="links-configuration" class="ulist">
+<div class="ulist">
 <ul>
 <li>
 <p>By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
@@ -159,6 +186,7 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withEmptyAttributesObjectSerialized(false)
             .withJsonApiIdNotSerializedForValue("-1")
             .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false)
+            .withJsonapiCompliantLinks(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -170,7 +198,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-25 07:35:44 UTC
+Last updated 2022-11-25 15:58:30 UTC
 </div>
 </div>
 </div>

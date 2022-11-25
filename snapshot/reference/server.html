@@ -212,6 +212,16 @@ both as top-level link properties <em>and</em> in the meta section, you can conf
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>JSON:API is very strict about the allowed link relations, the allowed
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
+<code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>. The only allowed
+<a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is <code>self</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default, all other links will <em>not</em> be serialized. If you want to serialize links that are non-compliant
+with JSON:API, you can use a specific configuration, (see <a href="#links-configuration">[links-configuration]</a>).</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1772,7 +1782,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-25 07:35:44 UTC
+Last updated 2022-11-25 15:58:30 UTC
 </div>
 </div>
 </div>
