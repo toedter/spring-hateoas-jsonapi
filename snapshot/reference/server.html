@@ -755,8 +755,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals("directors")) {
-    HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
+<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals(DIRECTORS)) {
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
     }
@@ -1782,7 +1781,7 @@ Right now there is the restriction, that the type attribute of both
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-27 17:36:11 UTC
+Last updated 2022-11-27 18:42:58 UTC
 </div>
 </div>
 </div>
