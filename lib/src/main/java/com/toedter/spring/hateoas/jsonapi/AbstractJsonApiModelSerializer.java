@@ -107,7 +107,17 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                 .withIncluded(getIncluded(value));
 
         if (jsonApiConfiguration.isJsonApiVersionRendered()) {
-            doc = doc.withJsonapi(new JsonApiJsonApi());
+            doc = doc.withJsonapi(new JsonApiObject(true, null, null, null));
+        }
+
+        JsonApiObject jsonApiObject = jsonApiConfiguration.getJsonApiObject();
+        if (jsonApiObject != null) {
+            if (jsonApiObject.getVersion() != null
+                    || jsonApiObject.getExt() != null
+                    || jsonApiObject.getProfile() != null
+                    || jsonApiObject.getMeta() != null
+            )
+                doc = doc.withJsonapi(jsonApiObject);
         }
 
         if (jsonApiConfiguration.isPageMetaAutomaticallyCreated() && collectionModel instanceof PagedModel) {
@@ -161,7 +171,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         // Those links are self, related, describedby, and
         // the pagination links first, last, prev, and next.
         // All other top-level links are not allowed and therefore removed.
-        if (jsonApiConfiguration.isJsonapiCompliantLinks()) {
+        if (jsonApiConfiguration.isJsonApiCompliantLinks()) {
             if (links != null) {
                 Links validJsonApiLinks = Links.NONE;
                 for (Link link : links) {

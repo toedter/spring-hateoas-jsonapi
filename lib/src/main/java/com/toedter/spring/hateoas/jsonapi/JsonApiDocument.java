@@ -37,7 +37,7 @@ class JsonApiDocument {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @With(AccessLevel.PACKAGE)
     @Nullable
-    private final JsonApiJsonApi jsonapi;
+    private final JsonApiObject jsonapi;
 
     @Getter
     @With(AccessLevel.PACKAGE)
@@ -71,7 +71,7 @@ class JsonApiDocument {
     private final List<JsonApiData> included;
 
     @JsonCreator
-    JsonApiDocument(@JsonProperty("jsonapi") @Nullable JsonApiJsonApi jsonapi,
+    JsonApiDocument(@JsonProperty("jsonapi") @Nullable JsonApiObject jsonapi,
                     @JsonProperty("data") @Nullable Object data,
                     @JsonProperty("meta") @Nullable Map<String, Object> meta,
                     @JsonProperty("errors") @Nullable JsonApiErrors errors,

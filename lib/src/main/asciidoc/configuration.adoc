@@ -8,41 +8,32 @@ There are several options for how to change the output of the JSON:API rendering
 For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
 Currently, you can configure
 
-* if the JSON:API version should be rendered automatically, the default is `false`.
-* if JSON:API types should be rendered as pluralized or non pluralized class names.
-** The default is pluralized.
-* if JSON:API types should be rendered as lower case or original class names.
-** The default is lower case.
-* if page information of a PagedModel should be rendered automatically as JSON:API meta.
-** The default is `true`.
-* if a specific Java class should be rendered with a specific JSON:API type. This is useful when
-representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass. See the example below.
-* if the above "Java class to JSON:API type" mapping should also be used for deserialization.
-This is very useful for polymorphic use cases.
-* if empty attributes should be serialized as an empty JSON object, like `"attributes": {}`.
-** The default is `true`.
-** If set to false, no "attributes" key is serialized if attributes are empty.
-* A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>.
-* A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization.
 [[links-configuration]]
-* If only JSON:API compliant links are rendered.
-** The default is true
-** The following links are JSON:API compliant:
-*** `self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`, for
-https://jsonapi.org/format/#document-top-level[top-level links].
-*** `self` for https://jsonapi.org/format/#document-resource-object-links[resource links].
-** To allow any link, set this configuration to `false`.
-* If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
-(to version 1.x.x of this library) way
-** By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
+[%autowidth]
+|===
+| *Configuration* | *Descriptions* | *Default*
+| JsonApiVersionRendered | the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead | false
+| JsonApiObject | Here you can set a JSON:API object do set all https://jsonapi.org/format/#document-jsonapi-object[allowed properties], like version, ext, profile and meta. | not set
+| PluralizedTypeRendered | JSON:API types should be rendered as pluralized or non pluralized class names. | pluralized
+| LowerCasedTypeRendered | JSON:API types should be rendered as lower case or original class names. | lower case
+| PageMetaAutomaticallyCreated | page information of a PagedModel should be rendered automatically as JSON:API meta. | true
+| TypeForClass | If a specific Java class should be rendered with a specific JSON:API type. This is useful when
+representation model classes should get the JSON:API type of the domain model or when derived classes
+should get the JSON:API type of the superclass. | not set
+| TypeForClassUsedForDeserialization | if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases. | true
+| EmptyAttributesObjectSerialized | Empty attributes should be serialized as an empty JSON object, like `"attributes": {}`. If set to false, no "attributes" key is serialized if attributes are empty. | true
+| JsonApiIdNotSerializedForValue | A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>. | not set
+| ObjectMapperCustomizer | A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization. | not set
+| JsonApiCompliantLinks | The following links are JSON:API compliant: `self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`, for
+https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` for https://jsonapi.org/format/#document-resource-object-links[resource links].
+To allow any link, set this configuration to false. | true
+| JsonApi11LinkPropertiesRemovedFromLinkMeta | If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
 properties, those link properties were introduced in JSON:API 1.1,
-see https://jsonapi.org/format/#auto-id--link-objects.
-** To serialize the Spring HATEOAS properties title, type and hreflang both as top level link
-properties, as well as in the meta section, set this property to `false`, see also <<links>>.
-** Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
+see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to `false`, see also <<links>>.
+Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
-since client might expect properties like title in the meta section.
+since client might expect properties like title in the meta section. | true
+|===
 
 TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,
 those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw `[` and `]`

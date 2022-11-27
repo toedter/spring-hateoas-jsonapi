@@ -55,7 +55,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     public void setJsonApiConfiguration(JsonApiConfiguration jsonApiConfiguration) {
         this.affordanceType = jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
-        this.removeHateoasLinkPropertiesFromMeta = jsonApiConfiguration.isJsonapi11LinkPropertiesRemovedFromLinkMeta();
+        this.removeHateoasLinkPropertiesFromMeta = jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
     }
 
     @Override

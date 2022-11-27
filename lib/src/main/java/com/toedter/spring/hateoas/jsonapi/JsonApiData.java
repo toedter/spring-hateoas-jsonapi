@@ -167,7 +167,7 @@ class JsonApiData {
         // breaking change: JSON:API only allows a self link within resources (not top-level!),
         // see https://jsonapi.org/format/#document-resource-object-links.
         // All other resource links are now removed.
-        if (jsonApiConfiguration.isJsonapiCompliantLinks()) {
+        if (jsonApiConfiguration.isJsonApiCompliantLinks()) {
             if (links != null) {
                 Links validJsonApiLinks = Links.NONE;
                 for (Link link : links) {

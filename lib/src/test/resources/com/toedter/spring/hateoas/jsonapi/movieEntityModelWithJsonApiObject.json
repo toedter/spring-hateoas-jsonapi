@@ -1,0 +1,22 @@
+{
+  "jsonapi": {
+    "version": "1.1",
+    "ext": [
+      "https://jsonapi.org/ext/atomic"
+    ],
+    "profile": [
+      "https://example.com/profiles/flexible-pagination",
+      "https://example.com/profiles/resource-versioning"
+    ],
+    "meta": {
+      "meta-key": "meta-value"
+    }
+  },
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}

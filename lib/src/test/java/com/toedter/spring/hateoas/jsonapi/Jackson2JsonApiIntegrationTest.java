@@ -83,12 +83,16 @@ import org.springframework.http.HttpMethod;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -369,7 +373,7 @@ class Jackson2JsonApiIntegrationTest {
                 CollectionModel.of(movies).add(Links.of(Link.of("http://localhost/movies").withSelfRel()));
         collectionModel.add(Link.of("http://localhost/movies/non-compliant").withRel("invalid"));
 
-        mapper = createObjectMapper(new JsonApiConfiguration().withJsonapiCompliantLinks(false));
+        mapper = createObjectMapper(new JsonApiConfiguration().withJsonApiCompliantLinks(false));
         String moviesJson = mapper.writeValueAsString(collectionModel);
 
         compareWithFile(moviesJson, "moviesCollectionModelWithNonCompliantLinks.json", false);
@@ -612,6 +616,7 @@ class Jackson2JsonApiIntegrationTest {
         assertThat(links.hasSingleLink()).isTrue();
         assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
     }
+
     @Test
     void should_deserialize_single_movie_entity_model_with_field_annotation_and_links_object() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithAnnotations.class);
@@ -909,7 +914,7 @@ class Jackson2JsonApiIntegrationTest {
         entityModel.add(complexLink);
 
         mapper = createObjectMapper(new JsonApiConfiguration()
-                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false));
+                .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false));
 
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithComplexLinkAndOldMeta.json");
@@ -950,7 +955,7 @@ class Jackson2JsonApiIntegrationTest {
         movieEntityModel.add(bigLink);
 
         mapper = createObjectMapper(new JsonApiConfiguration()
-                .withJsonapi11LinkPropertiesRemovedFromLinkMeta(true));
+                .withJsonApi11LinkPropertiesRemovedFromLinkMeta(true));
 
         final String movieJson = mapper.writeValueAsString(movieEntityModel);
         compareWithFile(movieJson, "movieEntityModelWithTwoLinks.json");
@@ -996,6 +1001,37 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_render_jsonapi_object() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("meta-key", "meta-value");
+
+        JsonApiObject jsonApiObject = new JsonApiObject(true,
+                Collections.singletonList(new URI("https://jsonapi.org/ext/atomic")),
+                Arrays.asList(new URI("https://example.com/profiles/flexible-pagination"),
+                        new URI("https://example.com/profiles/resource-versioning")),
+                meta);
+
+        mapper = createObjectMapper(new JsonApiConfiguration().withJsonApiObject(jsonApiObject));
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModelWithJsonApiObject.json");
+    }
+    @Test
+    void should_not_render_empty_jsonapi_object() throws Exception {
+        Movie movie = new Movie("1", "Star Wars");
+        EntityModel<Movie> entityModel = EntityModel.of(movie);
+
+        JsonApiObject jsonApiObject = new JsonApiObject(false, null, null, null);
+        mapper = createObjectMapper(new JsonApiConfiguration().withJsonApiObject(jsonApiObject));
+
+        String movieJson = mapper.writeValueAsString(entityModel);
+        compareWithFile(movieJson, "movieEntityModel.json");
+    }
+
+    @Test
     void should_serialize_custom_instant() throws Exception {
         @Getter
         class InstantExample {
@@ -1020,6 +1056,10 @@ class Jackson2JsonApiIntegrationTest {
             private final String test = null;
         }
         EntityModel<NonNullExample> entityModel = EntityModel.of(new NonNullExample());
+
+        mapper = createObjectMapper(new JsonApiConfiguration()
+                .withEmptyAttributesObjectSerialized(true));
+
         String json = mapper.writeValueAsString(entityModel);
         compareWithFile(json, "nonNullAnnotationExample.json");
     }

@@ -96,6 +96,35 @@ public class JsonApiConfiguration {
     private final boolean jsonApiVersionRendered;
 
     /**
+     * Indicates if the JSON:API object is rendered.
+     * <p>
+     * If set, each rendered JSON:API document will start with a JSON:API object like
+     * </p>
+     * <pre>
+     * {
+     *   "jsonapi": {
+     *     "version": "1.1",
+     *     "ext": [
+     *       "https://jsonapi.org/ext/atomic"
+     *     ],
+     *     "profile": [
+     *       "http://example.com/profiles/flexible-pagination",
+     *       "http://example.com/profiles/resource-versioning"
+     *     ]
+     *   }
+     * }
+     * </pre>
+     * See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.
+     *
+     * @param jsonApiObject The new value of this configuration's jsonApiObject
+     * @return The default is {@literal false}.
+     */
+    @With
+    @Getter
+    private final JsonApiObject jsonApiObject;
+
+
+    /**
      * Indicates if page metadata (rendered as top level JSON:API meta)
      * for a paged model is created automatically.
      *
@@ -208,12 +237,12 @@ public class JsonApiConfiguration {
      * can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
      * to {@literal false}.
      *
-     * @param jsonapi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta
+     * @param jsonApi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's jsonApi11LinkPropertiesRemovedFromLinkMeta
      * @return The default is {@literal true}.
      */
     @With
     @Getter
-    private final boolean jsonapi11LinkPropertiesRemovedFromLinkMeta;
+    private final boolean jsonApi11LinkPropertiesRemovedFromLinkMeta;
 
     /**
      * JSON:API is very strict about the allowed link relations, the allowed
@@ -224,12 +253,12 @@ public class JsonApiConfiguration {
      * If you set this configuration to {@literal false}, Spring HATEOAS links that are not compliant
      * with JSON:API would also be serialized.
      *
-     * @param jsonapiCompliantLinks The new value of this configuration's jsonapiCompliantLinks
+     * @param jsonApiCompliantLinks The new value of this configuration's jsonApiCompliantLinks
      * @return The default is {@literal true}.
      */
     @With
     @Getter
-    private final boolean jsonapiCompliantLinks;
+    private final boolean jsonApiCompliantLinks;
 
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
@@ -321,14 +350,15 @@ public class JsonApiConfiguration {
         this.pluralizedTypeRendered = true;
         this.lowerCasedTypeRendered = true;
         this.jsonApiVersionRendered = false;
+        this.jsonApiObject = null;
         this.pageMetaAutomaticallyCreated = true;
         this.typeForClass = new LinkedHashMap<>();
         this.typeForClassUsedForDeserialization = false;
-        this.emptyAttributesObjectSerialized = true;
+        this.emptyAttributesObjectSerialized = false;
         this.jsonApiIdNotSerializedForValue = null;
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
-        this.jsonapi11LinkPropertiesRemovedFromLinkMeta = true;
-        this.jsonapiCompliantLinks = true;
+        this.jsonApi11LinkPropertiesRemovedFromLinkMeta = true;
+        this.jsonApiCompliantLinks = true;
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
