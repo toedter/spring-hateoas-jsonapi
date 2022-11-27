@@ -146,84 +146,94 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypeForClass(java.lang.Class)" class="member-name-link">getTypeForClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getJsonApiObject()" class="member-name-link">getJsonApiObject</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates if the JSON:API object is rendered.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypeForClass(java.lang.Class)" class="member-name-link">getTypeForClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the JSON:API resource object type
  for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmptyAttributesObjectSerialized()" class="member-name-link">isEmptyAttributesObjectSerialized</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmptyAttributesObjectSerialized()" class="member-name-link">isEmptyAttributesObjectSerialized</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonapi11LinkPropertiesRemovedFromLinkMeta()" class="member-name-link">isJsonapi11LinkPropertiesRemovedFromLinkMeta</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApi11LinkPropertiesRemovedFromLinkMeta()" class="member-name-link">isJsonApi11LinkPropertiesRemovedFromLinkMeta</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonapiCompliantLinks()" class="member-name-link">isJsonapiCompliantLinks</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiCompliantLinks()" class="member-name-link">isJsonApiCompliantLinks</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
  self, related, describedBy, next, pre, first and last.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiVersionRendered()" class="member-name-link">isJsonApiVersionRendered</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiVersionRendered()" class="member-name-link">isJsonApiVersionRendered</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the JSON:API version is rendered.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLowerCasedTypeRendered()" class="member-name-link">isLowerCasedTypeRendered</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLowerCasedTypeRendered()" class="member-name-link">isLowerCasedTypeRendered</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is lower-cased.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPageMetaAutomaticallyCreated()" class="member-name-link">isPageMetaAutomaticallyCreated</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPageMetaAutomaticallyCreated()" class="member-name-link">isPageMetaAutomaticallyCreated</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
  for a paged model is created automatically.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPluralizedTypeRendered()" class="member-name-link">isPluralizedTypeRendered</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPluralizedTypeRendered()" class="member-name-link">isPluralizedTypeRendered</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the JSON:API type attribute of resource objects is pluralized.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTypeForClassUsedForDeserialization()" class="member-name-link">isTypeForClassUsedForDeserialization</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTypeForClassUsedForDeserialization()" class="member-name-link">isTypeForClassUsedForDeserialization</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
  is also used during deserialization.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)" class="member-name-link">withAffordancesRenderedAsLinkMeta</a><wbr>(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)" class="member-name-link">withAffordancesRenderedAsLinkMeta</a><wbr>(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withEmptyAttributesObjectSerialized(boolean)" class="member-name-link">withEmptyAttributesObjectSerialized</a><wbr>(boolean&nbsp;emptyAttributesObjectSerialized)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withEmptyAttributesObjectSerialized(boolean)" class="member-name-link">withEmptyAttributesObjectSerialized</a><wbr>(boolean&nbsp;emptyAttributesObjectSerialized)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)" class="member-name-link">withJsonapi11LinkPropertiesRemovedFromLinkMeta</a><wbr>(boolean&nbsp;jsonapi11LinkPropertiesRemovedFromLinkMeta)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApi11LinkPropertiesRemovedFromLinkMeta(boolean)" class="member-name-link">withJsonApi11LinkPropertiesRemovedFromLinkMeta</a><wbr>(boolean&nbsp;jsonApi11LinkPropertiesRemovedFromLinkMeta)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonapiCompliantLinks(boolean)" class="member-name-link">withJsonapiCompliantLinks</a><wbr>(boolean&nbsp;jsonapiCompliantLinks)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiCompliantLinks(boolean)" class="member-name-link">withJsonApiCompliantLinks</a><wbr>(boolean&nbsp;jsonApiCompliantLinks)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
  self, related, describedBy, next, pre, first and last.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiIdNotSerializedForValue(java.lang.String)" class="member-name-link">withJsonApiIdNotSerializedForValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonApiIdNotSerializedForValue)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiIdNotSerializedForValue(java.lang.String)" class="member-name-link">withJsonApiIdNotSerializedForValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonApiIdNotSerializedForValue)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiObject(com.toedter.spring.hateoas.jsonapi.JsonApiObject)" class="member-name-link">withJsonApiObject</a><wbr>(<a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a>&nbsp;jsonApiObject)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates if the JSON:API object is rendered.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiVersionRendered(boolean)" class="member-name-link">withJsonApiVersionRendered</a><wbr>(boolean&nbsp;jsonApiVersionRendered)</code></div>
@@ -439,6 +449,66 @@ loadScripts(document, 'script');</script>
     "version": "1.1"
  }
  </pre></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The default is false.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withJsonApiObject(com.toedter.spring.hateoas.jsonapi.JsonApiObject)">
+<h3>withJsonApiObject</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApiObject</span><wbr><span class="parameters">(<a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a>&nbsp;jsonApiObject)</span></div>
+<div class="block">Indicates if the JSON:API object is rendered.
+ <p>
+ If set, each rendered JSON:API document will start with a JSON:API object like
+ </p>
+ <pre>
+ {
+   "jsonapi": {
+     "version": "1.1",
+     "ext": [
+       "https://jsonapi.org/ext/atomic"
+     ],
+     "profile": [
+       "http://example.com/profiles/flexible-pagination",
+       "http://example.com/profiles/resource-versioning"
+     ]
+   }
+ }
+ </pre>
+ See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>jsonApiObject</code> - The new value of this configuration's jsonApiObject</dd>
+<dt>Returns:</dt>
+<dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getJsonApiObject()">
+<h3>getJsonApiObject</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></span>&nbsp;<span class="element-name">getJsonApiObject</span>()</div>
+<div class="block">Indicates if the JSON:API object is rendered.
+ <p>
+ If set, each rendered JSON:API document will start with a JSON:API object like
+ </p>
+ <pre>
+ {
+   "jsonapi": {
+     "version": "1.1",
+     "ext": [
+       "https://jsonapi.org/ext/atomic"
+     ],
+     "profile": [
+       "http://example.com/profiles/flexible-pagination",
+       "http://example.com/profiles/resource-versioning"
+     ]
+   }
+ }
+ </pre>
+ See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is false.</dd>
@@ -664,9 +734,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)">
-<h3>withJsonapi11LinkPropertiesRemovedFromLinkMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonapi11LinkPropertiesRemovedFromLinkMeta</span><wbr><span class="parameters">(boolean&nbsp;jsonapi11LinkPropertiesRemovedFromLinkMeta)</span></div>
+<section class="detail" id="withJsonApi11LinkPropertiesRemovedFromLinkMeta(boolean)">
+<h3>withJsonApi11LinkPropertiesRemovedFromLinkMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApi11LinkPropertiesRemovedFromLinkMeta</span><wbr><span class="parameters">(boolean&nbsp;jsonApi11LinkPropertiesRemovedFromLinkMeta)</span></div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
  Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
@@ -679,16 +749,16 @@ loadScripts(document, 'script');</script>
  to false.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonapi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's jsonapi11LinkPropertiesRemovedFromLinkMeta</dd>
+<dd><code>jsonApi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's jsonApi11LinkPropertiesRemovedFromLinkMeta</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="isJsonapi11LinkPropertiesRemovedFromLinkMeta()">
-<h3>isJsonapi11LinkPropertiesRemovedFromLinkMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonapi11LinkPropertiesRemovedFromLinkMeta</span>()</div>
+<section class="detail" id="isJsonApi11LinkPropertiesRemovedFromLinkMeta()">
+<h3>isJsonApi11LinkPropertiesRemovedFromLinkMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonApi11LinkPropertiesRemovedFromLinkMeta</span>()</div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
  Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
@@ -706,9 +776,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="withJsonapiCompliantLinks(boolean)">
-<h3>withJsonapiCompliantLinks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonapiCompliantLinks</span><wbr><span class="parameters">(boolean&nbsp;jsonapiCompliantLinks)</span></div>
+<section class="detail" id="withJsonApiCompliantLinks(boolean)">
+<h3>withJsonApiCompliantLinks</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApiCompliantLinks</span><wbr><span class="parameters">(boolean&nbsp;jsonApiCompliantLinks)</span></div>
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
  self, related, describedBy, next, pre, first and last. The only allowed
@@ -718,16 +788,16 @@ loadScripts(document, 'script');</script>
  with JSON:API would also be serialized.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonapiCompliantLinks</code> - The new value of this configuration's jsonapiCompliantLinks</dd>
+<dd><code>jsonApiCompliantLinks</code> - The new value of this configuration's jsonApiCompliantLinks</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="isJsonapiCompliantLinks()">
-<h3>isJsonapiCompliantLinks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonapiCompliantLinks</span>()</div>
+<section class="detail" id="isJsonApiCompliantLinks()">
+<h3>isJsonApiCompliantLinks</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonApiCompliantLinks</span>()</div>
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
  self, related, describedBy, next, pre, first and last. The only allowed

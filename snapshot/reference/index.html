@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 2.0.0-SNAPSHOT,</span>
-<span id="revdate">2022-11-25</span>
+<span id="revdate">2022-11-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2289,120 +2289,89 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 <p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
 Currently, you can configure</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>if the JSON:API version should be rendered automatically, the default is <code>false</code>.</p>
-</li>
-<li>
-<p>if JSON:API types should be rendered as pluralized or non pluralized class names.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is pluralized.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if JSON:API types should be rendered as lower case or original class names.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is lower case.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is <code>true</code>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if a specific Java class should be rendered with a specific JSON:API type. This is useful when
+<table id="links-configuration" class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiVersionRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Here you can set a JSON:API object do set all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, like version, ext, profile and meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PluralizedTypeRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as pluralized or non pluralized class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pluralized</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LowerCasedTypeRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as lower case or original class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lower case</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PageMetaAutomaticallyCreated</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If a specific Java class should be rendered with a specific JSON:API type. This is useful when
 representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass. See the example below.</p>
-</li>
-<li>
-<p>if the above "Java class to JSON:API type" mapping should also be used for deserialization.
-This is very useful for polymorphic use cases.</p>
-</li>
-<li>
-<p>if empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is <code>true</code>.</p>
-</li>
-<li>
-<p>If set to false, no "attributes" key is serialized if attributes are empty.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p>
-</li>
-<li>
-<p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
-</li>
-<li>
-<p>If only JSON:API compliant links are rendered.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is true</p>
-</li>
-<li>
-<p>The following links are JSON:API compliant:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
-<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>.</p>
-</li>
-<li>
-<p><code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>To allow any link, set this configuration to <code>false</code>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible
-(to version 1.x.x of this library) way</p>
-<div class="ulist">
-<ul>
-<li>
-<p>By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
+should get the JSON:API type of the superclass.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClassUsedForDeserialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EmptyAttributesObjectSerialized</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized if attributes are empty.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiIdNotSerializedForValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ObjectMapperCustomizer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiCompliantLinks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
+To allow any link, set this configuration to false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApi11LinkPropertiesRemovedFromLinkMeta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
 properties, those link properties were introduced in JSON:API 1.1,
-see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>.</p>
-</li>
-<li>
-<p>To serialize the Spring HATEOAS properties title, type and hreflang both as top level link
-properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">Links</a>.</p>
-</li>
-<li>
-<p>Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">Links</a>.
+Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
-since client might expect properties like title in the meta section.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+since client might expect properties like title in the meta section.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -2434,8 +2403,8 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withTypeForClassUsedForDeserialization(true)
             .withEmptyAttributesObjectSerialized(false)
             .withJsonApiIdNotSerializedForValue("-1")
-            .withJsonapi11LinkPropertiesRemovedFromLinkMeta(false)
-            .withJsonapiCompliantLinks(false)
+            .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+            .withJsonApiCompliantLinks(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -2449,7 +2418,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2022-11-25 18:49:31 UTC
+Last updated 2022-11-27 12:39:35 UTC
 </div>
 </div>
 </div>

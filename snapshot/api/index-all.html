@@ -121,6 +121,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets list of <a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects.</div>
 </dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html#getExt()" class="member-name-link">getExt()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getId()" class="member-name-link">getId()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
@@ -130,6 +132,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getJsonApiIdNotSerializedForValue()" class="member-name-link">getJsonApiIdNotSerializedForValue()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+</dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#getJsonApiObject()" class="member-name-link">getJsonApiObject()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">Indicates if the JSON:API object is rendered.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getLinks()" class="member-name-link">getLinks()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
@@ -142,6 +148,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 </dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html#getMeta()" class="member-name-link">getMeta()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html#getProfile()" class="member-name-link">getProfile()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html#getSource()" class="member-name-link">getSource()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></dt>
 <dd>
 <div class="block">Gets an object containing references to the source of the error, optionally including
@@ -163,6 +173,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the JSON:API resource object type
  for a given class, when it was added with <a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withTypeForClass(java.lang.Class,java.lang.String)"><code>JsonApiConfiguration.withTypeForClass(Class, String)</code></a>.</div>
 </dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html#getVersion()" class="member-name-link">getVersion()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
@@ -194,12 +206,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Indicates if empty attributes are serialized as empty object.</div>
 </dd>
-<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonapi11LinkPropertiesRemovedFromLinkMeta()" class="member-name-link">isJsonapi11LinkPropertiesRemovedFromLinkMeta()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonApi11LinkPropertiesRemovedFromLinkMeta()" class="member-name-link">isJsonApi11LinkPropertiesRemovedFromLinkMeta()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </dd>
-<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonapiCompliantLinks()" class="member-name-link">isJsonapiCompliantLinks()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#isJsonApiCompliantLinks()" class="member-name-link">isJsonApiCompliantLinks()</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
@@ -310,6 +322,16 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiModelBuilder.html" class="type-name-link" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a> - Class in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
 <div class="block">Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API.</div>
+</dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" class="type-name-link" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a> - Class in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
+<dd>
+<div class="block">This class represents a JSON:API object compliant to the
+ see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 specification</a>.</div>
+</dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html#%3Cinit%3E(boolean,java.util.List,java.util.List,java.util.Map)" class="member-name-link">JsonApiObject(boolean, List&lt;URI&gt;, List&lt;URI&gt;, Map&lt;String, Object&gt;)</a> - Constructor for class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></dt>
+<dd>
+<div class="block">Creates a JSON:API object compliant to the
+ see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiRelationships.html" class="type-name-link" title="annotation interface in com.toedter.spring.hateoas.jsonapi">JsonApiRelationships</a> - Annotation Interface in <a href="com/toedter/spring/hateoas/jsonapi/package-summary.html">com.toedter.spring.hateoas.jsonapi</a></dt>
 <dd>
@@ -493,12 +515,12 @@ the order they are declared.</div>
 <dd>
 <div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
 </dd>
-<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)" class="member-name-link">withJsonapi11LinkPropertiesRemovedFromLinkMeta(boolean)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApi11LinkPropertiesRemovedFromLinkMeta(boolean)" class="member-name-link">withJsonApi11LinkPropertiesRemovedFromLinkMeta(boolean)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.</div>
 </dd>
-<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonapiCompliantLinks(boolean)" class="member-name-link">withJsonapiCompliantLinks(boolean)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiCompliantLinks(boolean)" class="member-name-link">withJsonApiCompliantLinks(boolean)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">JSON:API is very strict about the allowed link relations, the allowed
  <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
@@ -507,6 +529,10 @@ the order they are declared.</div>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiIdNotSerializedForValue(java.lang.String)" class="member-name-link">withJsonApiIdNotSerializedForValue(String)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
 <div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+</dd>
+<dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiObject(com.toedter.spring.hateoas.jsonapi.JsonApiObject)" class="member-name-link">withJsonApiObject(JsonApiObject)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
+<dd>
+<div class="block">Indicates if the JSON:API object is rendered.</div>
 </dd>
 <dt><a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html#withJsonApiVersionRendered(boolean)" class="member-name-link">withJsonApiVersionRendered(boolean)</a> - Method in class com.toedter.spring.hateoas.jsonapi.<a href="com/toedter/spring/hateoas/jsonapi/JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></dt>
 <dd>
