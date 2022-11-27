@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi.example;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
+import com.toedter.spring.hateoas.jsonapi.JsonApiObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class MoviesDemoApplication implements WebMvcConfigurer {
+    public static final String MOVIES = "movies";
+    public static final String DIRECTORS = "directors";
+
     public static void main(String... args) {
         SpringApplication.run(MoviesDemoApplication.class, args);
     }
@@ -32,12 +36,12 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
     @Bean
     public JsonApiConfiguration jsonApiConfiguration() {
         return new JsonApiConfiguration()
-                .withJsonApiVersionRendered(true)
+                .withJsonApiObject(new JsonApiObject(true))
                 .withEmptyAttributesObjectSerialized(false)
-                .withObjectMapperCustomizer(objectMapper -> {
+                .withObjectMapperCustomizer(objectMapper ->
                     // put your additional object mapper config here
-                    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
-                });
+                    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
+                );
                 // Experimental feature:
                 // .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
     }

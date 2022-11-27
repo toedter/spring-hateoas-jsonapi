@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,13 +34,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Slf4j
 class DirectorModelAssembler {
 
-    private static final String MOVIES = "movies";
-
     public RepresentationModel<?> toJsonApiModel(Director director, String[] fieldsDirectors) {
         Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null, null)).withSelfRel();
 
-        Link directorsLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
-        Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel("directors");
+        Link directorsLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
+        Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(director)
@@ -46,10 +46,10 @@ class DirectorModelAssembler {
                 .link(templatedDirectorsLink);
 
         if (fieldsDirectors != null) {
-            builder = builder.fields("directors", fieldsDirectors);
+            builder = builder.fields(DIRECTORS, fieldsDirectors);
         }
 
-        if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains("movies")) {
+        if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains(MOVIES)) {
             builder = builder.relationship(MOVIES, director.getMovies());
         }
 

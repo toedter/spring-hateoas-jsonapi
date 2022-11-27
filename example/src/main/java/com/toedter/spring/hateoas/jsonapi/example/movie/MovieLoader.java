@@ -32,6 +32,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
+
 @Component
 @Slf4j
 class MovieLoader {
@@ -48,7 +50,7 @@ class MovieLoader {
             moviesJson = readFile(file.getPath());
             JsonNode rootNode = mapper.readValue(moviesJson, JsonNode.class);
 
-            JsonNode movies = rootNode.get("movies");
+            JsonNode movies = rootNode.get(MOVIES);
             int rating = 1;
             for (JsonNode movieNode : movies) {
                 Movie movie = createMovie(rating++, movieNode);

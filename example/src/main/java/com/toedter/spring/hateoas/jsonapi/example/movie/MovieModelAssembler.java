@@ -24,14 +24,14 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 
 @Component
 @Slf4j
 class MovieModelAssembler {
-
-    private static final String DIRECTORS = "directors";
 
     public RepresentationModel<?> toJsonApiModel(Movie movie, String[] fieldsMovies) {
         Link selfLink = linkTo(methodOn(MovieController.class).findOne(movie.getId(), null, null)).withSelfRel();
@@ -55,10 +55,10 @@ class MovieModelAssembler {
                 .link(selfLink.andAffordance(updatePartiallyAffordance).andAffordance(deleteAffordance));
 
         if (fieldsMovies != null) {
-            builder = builder.fields("movies", fieldsMovies);
+            builder = builder.fields(MOVIES, fieldsMovies);
         }
 
-        if (fieldsMovies == null || Arrays.asList(fieldsMovies).contains("directors")) {
+        if (fieldsMovies == null || Arrays.asList(fieldsMovies).contains(DIRECTORS)) {
             builder = builder
                     .relationship(DIRECTORS, movie.getDirectors())
                     .relationship(DIRECTORS, relationshipSelfLink, relationshipRelatedLink, null);
@@ -72,7 +72,7 @@ class MovieModelAssembler {
 
         JsonApiModelBuilder builder = jsonApiModel()
                 .model(CollectionModel.of(movie.getDirectors()))
-                .relationshipWithDataArray("movies")
+                .relationshipWithDataArray(MOVIES)
                 .link(selfLink);
 
         return builder.build();

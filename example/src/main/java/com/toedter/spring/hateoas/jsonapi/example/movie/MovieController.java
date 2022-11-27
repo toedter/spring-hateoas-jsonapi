@@ -20,24 +20,43 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.*;
+import org.springframework.hateoas.Affordance;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = RootController.API_BASE_PATH, produces = JSON_API_VALUE)
@@ -59,7 +78,7 @@ public class MovieController {
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size,
             @RequestParam(value = "include", required = false) String[] include,
-            @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies) {
+            @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] fieldsMovies) {
 
         final PageRequest pageRequest = PageRequest.of(page, size);
 
@@ -68,7 +87,7 @@ public class MovieController {
         List<? extends RepresentationModel<?>> movieResources =
                 StreamSupport.stream(pagedResult.spliterator(), false)
                         .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
-                        .collect(Collectors.toList());
+                        .toList();
 
         String uriParams = "?";
         if (fieldsMovies != null) {
@@ -80,7 +99,7 @@ public class MovieController {
 
         if (include != null) {
             String includeParams = Arrays.toString(include);
-            if(!uriParams.equals("?")) {
+            if (!uriParams.equals("?")) {
                 uriParams += "&";
             }
             uriParams += "include=" +
@@ -106,19 +125,18 @@ public class MovieController {
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
                 PagedModel.of(movieResources, pageMetadata);
 
-        if(uriParams.equals("?")) {
+        if (uriParams.equals("?")) {
             uriParams = "";
         }
 
         String pageLinksBase =
-                linkTo(MovieController.class).slash("movies").withSelfRel().getHref() + uriParams;
+                linkTo(MovieController.class).slash(MOVIES).withSelfRel().getHref() + uriParams;
 
         final JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
         // tag::relationship-inclusion[]
-        if (include != null && include.length == 1 && include[0].equals("directors")) {
-            HashMap<Long, Director> directors = new HashMap<>();
+        if (include != null && include.length == 1 && include[0].equals(DIRECTORS)) {
             for (Movie movie : pagedResult.getContent()) {
                 jsonApiModelBuilder.included(movie.getDirectors());
             }
@@ -172,7 +190,7 @@ public class MovieController {
     public ResponseEntity<? extends RepresentationModel<?>> findOne(
             @PathVariable Long id,
             @RequestParam(value = "include", required = false) String[] include,
-            @RequestParam(value = "fields[movies]", required = false) String[] filterMovies) {
+            @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] filterMovies) {
 
         return movieRepository.findById(id)
                 .map(movie -> setInclude(movie, include, filterMovies))
@@ -183,7 +201,7 @@ public class MovieController {
     private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
         RepresentationModel<?> model = movieModelAssembler.toJsonApiModel(movie, filterMovies);
         JsonApiModelBuilder builder = jsonApiModel().model(model);
-        if (include != null && include.length == 1 && include[0].equals("directors")) {
+        if (include != null && include.length == 1 && include[0].equals(DIRECTORS)) {
             movie.getDirectors().forEach(entry -> builder.included(EntityModel.of(entry)));
         }
         return builder.build();

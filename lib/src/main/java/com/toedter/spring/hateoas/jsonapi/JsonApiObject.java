@@ -44,7 +44,7 @@ public class JsonApiObject {
      * @return list of JSON:API extensions or null
      */
     @Nullable
-    private final List<URI> ext ;
+    private final List<URI> ext;
     /**
      * @return list of JSON:API profiles or null
      */
@@ -62,9 +62,9 @@ public class JsonApiObject {
      * see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
      *
      * @param showVersion true, if JSON:API version should be rendered
-     * @param ext list of JSON:API extensions
-     * @param profile list of JSON:API profiles
-     * @param meta the JSON:API object meta
+     * @param ext         list of JSON:API extensions
+     * @param profile     list of JSON:API profiles
+     * @param meta        the JSON:API object meta
      */
     public JsonApiObject(boolean showVersion,
                          @Nullable List<URI> ext,
@@ -80,5 +80,15 @@ public class JsonApiObject {
         this.ext = ext;
         this.profile = profile;
         this.meta = meta;
+    }
+
+    /**
+     * Creates a JSON:API object compliant to the
+     * see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
+     *
+     * @param showVersion true, if JSON:API version should be rendered
+     */
+    public JsonApiObject(boolean showVersion) {
+        this(true, null, null, null);
     }
 }

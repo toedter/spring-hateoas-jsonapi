@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -42,13 +44,13 @@ public class RootController {
 
 		resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
 
-		Link selfLink = linkTo(MovieController.class).slash("movies").withRel("movies");
-		Link templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel("movies");
+		Link selfLink = linkTo(MovieController.class).slash(MOVIES).withRel(MOVIES);
+		Link templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(MOVIES);
 
 		resourceSupport.add(templatedLink);
 
-		selfLink = linkTo(DirectorController.class).slash("directors").withRel("directors");
-		templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel("directors");
+		selfLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
+		templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
 
 		resourceSupport.add(templatedLink);
 

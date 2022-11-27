@@ -35,11 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
@@ -59,8 +60,8 @@ public class DirectorController {
             @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "include", required = false) String[] include,
-            @RequestParam(value = "fields[movies]", required = false) String[] fieldsMovies,
-            @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
+            @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] fieldsMovies,
+            @RequestParam(value = "fields[" + DIRECTORS + "]", required = false) String[] fieldsDirectors) {
 
         final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
@@ -68,7 +69,7 @@ public class DirectorController {
 
         List<? extends RepresentationModel<?>> movieResources = StreamSupport.stream(pagedResult.spliterator(), false)
                 .map(director -> directorModelAssembler.toJsonApiModel(director, fieldsDirectors))
-                .collect(Collectors.toList());
+                .toList();
 
         Link selfLink = linkTo(DirectorController.class).slash(
                 "directors?page[number]=" + pagedResult.getNumber()
@@ -79,16 +80,16 @@ public class DirectorController {
         final PagedModel<? extends RepresentationModel<?>> pagedModel =
                 PagedModel.of(movieResources, pageMetadata, selfLink);
 
-        String pageLinksBase = linkTo(MovieController.class).slash("directors").withSelfRel().getHref();
+        String pageLinksBase = linkTo(MovieController.class).slash(DIRECTORS).withSelfRel().getHref();
         JsonApiModelBuilder jsonApiModelBuilder =
                 jsonApiModel().model(pagedModel).pageLinks(pageLinksBase);
 
         if (fieldsMovies != null) {
-            jsonApiModelBuilder = jsonApiModelBuilder.fields("movies", fieldsMovies);
+            jsonApiModelBuilder = jsonApiModelBuilder.fields(MOVIES, fieldsMovies);
         }
 
         final JsonApiModelBuilder finalJsonApiModelBuilder = jsonApiModelBuilder;
-        if (include != null && include.length == 1 && include[0].equals("movies")) {
+        if (include != null && include.length == 1 && include[0].equals(MOVIES)) {
             HashMap<Long, Movie> movies = new HashMap<>();
             for (Director director : pagedResult.getContent()) {
                 for (Movie movie : director.getMovies()) {
@@ -107,7 +108,7 @@ public class DirectorController {
     public ResponseEntity<? extends RepresentationModel<?>> findOne(
             @PathVariable Long id,
             @RequestParam(value = "include", required = false) String[] include,
-            @RequestParam(value = "fields[directors]", required = false) String[] fieldsDirectors) {
+            @RequestParam(value = "fields[" + DIRECTORS + "]", required = false) String[] fieldsDirectors) {
         return repository.findById(id)
                 .map(director -> setInclude(director, include, fieldsDirectors))
                 .map(ResponseEntity::ok)
@@ -117,7 +118,7 @@ public class DirectorController {
     private RepresentationModel<?> setInclude(Director director, String[] include, String[] fieldsDirectors) {
         RepresentationModel<?> model = directorModelAssembler.toJsonApiModel(director, fieldsDirectors);
         JsonApiModelBuilder builder = jsonApiModel().model(model);
-        if (include != null && include.length == 1 && include[0].equals("movies")) {
+        if (include != null && include.length == 1 && include[0].equals(MOVIES)) {
             director.getMovies().forEach(entry -> builder.included(EntityModel.of(entry)));
         }
         return builder.build();
