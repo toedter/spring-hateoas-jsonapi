@@ -88,11 +88,13 @@ public class JsonApiConfiguration {
      * }
      * </pre>
      *
+     * @deprecated since 2.0.0, prefer {@link #jsonApiObject}
      * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
      * @return The default is {@literal false}.
      */
     @With
     @Getter
+    @Deprecated(since = "2.0.0")
     private final boolean jsonApiVersionRendered;
 
     /**
