@@ -91,16 +91,6 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
         }
     }
 
-    private void serializeLinkWithoutRelation(JsonGenerator gen, Link link) throws IOException {
-        if (isSimpleLink(link)) {
-            gen.writeString(UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
-        } else {
-            gen.writeStartObject();
-            writeComplexLink(gen, link);
-            gen.writeEndObject();
-        }
-    }
-
     private void writeComplexLink(JsonGenerator gen, Link link) throws IOException {
         gen.writeStringField("href", UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
         Map<String, Object> attributes = getAttributes(link);

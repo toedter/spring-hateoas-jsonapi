@@ -35,6 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Log
+@SuppressWarnings("deprecation")
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
@@ -67,13 +68,13 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
         CollectionModel<?> collectionModel = null;
-        if (value instanceof JsonApiModel) {
-            Object content = ((JsonApiModel) value).getContent();
-            if (content instanceof CollectionModel) {
-                collectionModel = (CollectionModel<?>) content;
+        if (value instanceof JsonApiModel jsonApiModel) {
+            Object content = jsonApiModel.getContent();
+            if (content instanceof CollectionModel<?> collectionModelContent) {
+                collectionModel = collectionModelContent;
             }
-        } else if (value instanceof CollectionModel<?>) {
-            collectionModel = (CollectionModel<?>) value;
+        } else if (value instanceof CollectionModel<?> collectionModelContent) {
+            collectionModel = collectionModelContent;
         }
 
         Object data;
@@ -83,17 +84,17 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             data = JsonApiData.extractCollectionContent(
                     collectionModel, objectMapper, jsonApiConfiguration, null, false);
         } else {
-            if (value instanceof JsonApiModel
-                    && ((JsonApiModel) value).getContent() != null
-                    && ((JsonApiModel) value).getContent() instanceof JsonApiModel) {
+            if (value instanceof JsonApiModel jsonApiModel
+                    && jsonApiModel.getContent() != null
+                    && jsonApiModel.getContent() instanceof JsonApiModel) {
                 JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
                 embeddedMeta = Objects.requireNonNull(content).getMetaData();
                 final Optional<JsonApiData> jsonApiData =
                         JsonApiData.extractContent(content, true, objectMapper, jsonApiConfiguration, null);
                 data = jsonApiData.orElse(null);
             } else {
-                if (value instanceof JsonApiModel) {
-                    embeddedMeta = ((JsonApiModel) value).getMetaData();
+                if (value instanceof JsonApiModel jsonApiModel) {
+                    embeddedMeta = jsonApiModel.getMetaData();
                 }
                 final Optional<JsonApiData> jsonApiData =
                         JsonApiData.extractContent(value, true, objectMapper, jsonApiConfiguration, null);
@@ -111,13 +112,11 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         }
 
         JsonApiObject jsonApiObject = jsonApiConfiguration.getJsonApiObject();
-        if (jsonApiObject != null) {
-            if (jsonApiObject.getVersion() != null
-                    || jsonApiObject.getExt() != null
-                    || jsonApiObject.getProfile() != null
-                    || jsonApiObject.getMeta() != null
-            )
-                doc = doc.withJsonapi(jsonApiObject);
+        if (jsonApiObject != null && (jsonApiObject.getVersion() != null
+                || jsonApiObject.getExt() != null
+                || jsonApiObject.getProfile() != null
+                || jsonApiObject.getMeta() != null)) {
+            doc = doc.withJsonapi(jsonApiObject);
         }
 
         if (jsonApiConfiguration.isPageMetaAutomaticallyCreated() && collectionModel instanceof PagedModel) {
@@ -127,9 +126,9 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             doc = doc.withMeta(metaData);
         }
 
-        if (value instanceof JsonApiModel) {
+        if (value instanceof JsonApiModel jsonApiModel) {
             // in some cases we want to add the metadata to the top level JSON:API document
-            Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
+            Map<String, Object> metaData = jsonApiModel.getMetaData();
             if (embeddedMeta != metaData || data == null) {
                 final Map<String, Object> meta = doc.getMeta();
                 if (meta == null) {
@@ -195,13 +194,13 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
     private @Nullable
     List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
-        if (representationModel instanceof JsonApiModel) {
+        if (representationModel instanceof JsonApiModel jsonApiModel) {
             final List<RepresentationModel<?>> includedEntities =
-                    ((JsonApiModel) representationModel).getIncludedEntities();
+                    jsonApiModel.getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
             return JsonApiData.extractCollectionContent(
                     collectionModel, objectMapper, jsonApiConfiguration,
-                    ((JsonApiModel) representationModel).getSparseFieldsets(), true);
+                    jsonApiModel.getSparseFieldsets(), true);
         }
         return null;
     }

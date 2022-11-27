@@ -17,7 +17,11 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -29,8 +33,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializerBase<T>
@@ -73,7 +80,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends ContainerDeserializer
             Assert.notNull(collection, "JsonApiDocument data must not be null!");
             List<Object> resources = collection.stream()
                     .map(data -> this.convertToResource(data, isEntityModelCollectionFinal, doc, null, false))
-                    .collect(Collectors.toList());
+                    .toList();
             return convertToRepresentationModel(resources, doc);
         }
         HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();

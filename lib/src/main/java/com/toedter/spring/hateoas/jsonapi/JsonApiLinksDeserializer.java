@@ -73,16 +73,13 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
     private void deserializeLink(List<Link> links, String rel, Object linkObject) {
         if (linkObject instanceof String) {
             links.add(Link.of(linkObject.toString(), rel));
-        } else if (linkObject instanceof LinkedHashMap) {
-            @SuppressWarnings("rawtypes")
-            LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap) linkObject;
+        } else if (linkObject instanceof LinkedHashMap linkedHashMap) {
             Object href = linkedHashMap.get("href");
             Object meta = linkedHashMap.get("meta");
             if (href instanceof String) {
                 Link link = Link.of(href.toString(), rel);
-                if (meta instanceof LinkedHashMap) {
-                    @SuppressWarnings({"unchecked", "rawtypes"})
-                    LinkedHashMap<String, String> attributes = (LinkedHashMap) meta;
+                if (meta instanceof LinkedHashMap linkedHashMapMeta) {
+                    LinkedHashMap<String, String> attributes = linkedHashMapMeta;
                     link = getLink(attributes, link);
 
                     if (attributes.containsKey(MEDIA)) {

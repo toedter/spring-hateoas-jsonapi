@@ -199,8 +199,9 @@ public class JsonApiModelBuilder {
      */
     public JsonApiModelBuilder relationship(String name, EntityModel<?> entityModel) {
         Assert.notNull(entityModel, "EntityModel must not be null!");
-        Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
-        return this.relationship(name, entityModel.getContent());
+        Object content = entityModel.getContent();
+        Assert.notNull(content, "Content of EntityModel must not be null!");
+        return this.relationship(name, content);
     }
 
     /**
@@ -229,9 +230,10 @@ public class JsonApiModelBuilder {
 
         JsonApiRelationship jsonApiRelationship = null;
         if (entityModel != null) {
-            Assert.notNull(entityModel.getContent(), "Content of EntityModel must not be null!");
+            Object content = entityModel.getContent();
+            Assert.notNull(content, "Content of EntityModel must not be null!");
             jsonApiRelationship =
-                    addDataObject(relationships.get(name), entityModel.getContent(), null);
+                    addDataObject(relationships.get(name), content, null);
         }
 
         if (selfLink != null || relatedLink != null) {
@@ -347,30 +349,30 @@ public class JsonApiModelBuilder {
             @Nullable String relatedLink,
             @Nullable Links otherLinks) {
 
-        Links links = Links.NONE;
+        Links relationshipLinks = Links.NONE;
 
         if (otherLinks != null) {
-            links = otherLinks;
+            relationshipLinks = otherLinks;
         }
 
         if (selfLink != null && selfLink.trim().length() != 0) {
-            links = links.and(Link.of(selfLink));
+            relationshipLinks = relationshipLinks.and(Link.of(selfLink));
         }
 
         if (relatedLink != null && relatedLink.trim().length() != 0) {
-            links = links.and(Link.of(relatedLink).withRel(RELATED));
+            relationshipLinks = relationshipLinks.and(Link.of(relatedLink).withRel(RELATED));
         }
 
-        if (links.isEmpty() || !(links.hasLink("self") || links.hasLink(RELATED))) {
+        if (relationshipLinks.isEmpty() || !(relationshipLinks.hasLink("self") || relationshipLinks.hasLink(RELATED))) {
             throw new IllegalArgumentException(
                     "JSON:API relationship links must contain a \"self\" link or a \"related\" link!");
         }
 
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {
-            newRelationship = JsonApiRelationship.of(links);
+            newRelationship = JsonApiRelationship.of(relationshipLinks);
         } else {
-            newRelationship = jsonApiRelationship.withLinks(links);
+            newRelationship = jsonApiRelationship.withLinks(relationshipLinks);
         }
         return newRelationship;
     }

@@ -18,6 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@EqualsAndHashCode(callSuper = true)
 class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
     private final RepresentationModel<?> entity;
