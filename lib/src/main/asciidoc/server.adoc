@@ -236,7 +236,7 @@ There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like
 
 [source, java]
-@RequestParam(value = "include", required = false) String[] include)
+@RequestParam(value = "include", required = false) String[] include
 
 Then, within the controller implementation, this parameter could be interpreted,
 and the builder could be used for the inclusion, like
@@ -312,7 +312,7 @@ if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies"))
 == Spring HATEOAS Affordances
 
 Spring HATEOAS provides a generic, media type independent API for
-https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances[affordances].
+{spring-hateoas-version}/reference/html/#server.affordances[affordances].
 Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
 information. This library provide a new *experimental* configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,

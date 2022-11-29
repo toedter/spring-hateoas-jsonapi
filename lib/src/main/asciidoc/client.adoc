@@ -58,7 +58,8 @@ include::{test-dir}/RestTemplateIntegrationTest.java[tags=restTemplateConfig]
 === Creating POST requests without serialized JSON:API id
 
 If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate that DTOs with this id value should not contain the JSON:API id in the resulting JSON.
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
+that DTOs with this id value should not contain the JSON:API id in the resulting JSON.
 
 For example, if you specify a configuration like
 [source,java, indent=0]

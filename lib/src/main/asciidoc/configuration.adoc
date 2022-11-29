@@ -8,7 +8,6 @@ There are several options for how to change the output of the JSON:API rendering
 For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
 Currently, you can configure
 
-[[links-configuration]]
 [%autowidth]
 |===
 | *Configuration* | *Descriptions* | *Default*
@@ -24,6 +23,7 @@ should get the JSON:API type of the superclass. | not set
 | EmptyAttributesObjectSerialized | Empty attributes should be serialized as an empty JSON object, like `"attributes": {}`. If set to false, no "attributes" key is serialized if attributes are empty. | true
 | JsonApiIdNotSerializedForValue | A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>. | not set
 | ObjectMapperCustomizer | A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization. | not set
+[[links-configuration]]
 | JsonApiCompliantLinks | The following links are JSON:API compliant: `self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`, for
 https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` for https://jsonapi.org/format/#document-resource-object-links[resource links].
 To allow any link, set this configuration to false. | true
