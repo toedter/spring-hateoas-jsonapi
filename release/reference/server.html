@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.6.0</span>
+<span id="revnumber">version 2.0.0</span>
 </div>
 </div>
 <div id="content">
@@ -90,6 +90,137 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="links"><a class="anchor" href="#links"></a>Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+Here is an example of a simple self link:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
+In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSON:API 1.1 now defines the optional link properties type, title and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
+The default rendering of a complex link is now</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "media": "media",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
+So the new format reflects the new JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
+</div>
+<div class="paragraph">
+<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+(see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSON:API is very strict about the allowed link relations, the allowed
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
+<code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>. The only allowed
+<a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is <code>self</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default, all other links will <em>not</em> be serialized. If you want to serialize links that are non-compliant
+with JSON:API, you can use a specific configuration, (see <a href="#links-configuration">[links-configuration]</a>).</p>
 </div>
 </div>
 </div>
@@ -157,10 +288,10 @@ following rules apply in order:</p>
 <p>the annotation <code>@JsonApiId</code> is used on a method</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a field</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a field</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a method</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a method</p>
 </li>
 <li>
 <p>the entity (base for representation models) provides an attribute <code>id</code></p>
@@ -587,10 +718,10 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -614,7 +745,7 @@ but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "include", required = false) String[] include)
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "include", required = false) String[] include
 </code></pre>
 </div>
 </div>
@@ -624,8 +755,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals("directors")) {
-    HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
+<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals(DIRECTORS)) {
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
     }
@@ -828,7 +958,7 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 <div class="sectionbody">
 <div class="paragraph">
 <p>Spring HATEOAS provides a generic, media type independent API for
-<a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances">affordances</a>.
+{spring-hateoas-version}/reference/html/#server.affordances[affordances].
 Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
 information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
@@ -853,8 +983,8 @@ First you have to enable this experimental feature in the configuration, like</p
         afford(methodOn(MovieController.class).newMovie(null));
 
 Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "page[number]=" + pagedResult.getNumber()
-        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        + "&amp;page%5Bnumber%5D=" + pagedResult.getNumber()
+        + "&amp;page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -1454,13 +1584,9 @@ public class MovieWithRating extends Movie {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-@-members will be introduced in JSON:API version 1.1.
-The above example will produce JSON that is not compliant with JSON:API 1.0.
-For JSON:API 1.0 compliance you could configure Jackson like
-<code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+@-Members were introduced in JSON:API version 1.1, see <a href="https://jsonapi.org/format/#document-member-names-at-members" class="bare">https://jsonapi.org/format/#document-member-names-at-members</a>.
 From the JSON:API 1.1 spec:
-&#8230;&#8203;because @-Members must be ignored when interpreting that definition,
-an @-Member that occurs in an attributes object is not an attribute.
+&#8230;&#8203;an @-Member that occurs in an attributes object is not an attribute.
 </td>
 </tr>
 </table>
@@ -1654,8 +1780,8 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.0<br>
-Last updated 2022-08-27 09:44:00 UTC
+Version 2.0.0<br>
+Last updated 2022-11-29 07:32:46 UTC
 </div>
 </div>
 </div>

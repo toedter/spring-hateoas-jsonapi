@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 1.6.0,</span>
-<span id="revdate">2022-08-27</span>
+<span id="revnumber">version 2.0.0,</span>
+<span id="revdate">2022-11-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -48,22 +48,23 @@
 <li><a href="#server-side-support">3. Server Side support</a>
 <ul class="sectlevel2">
 <li><a href="#representation-models">3.1. Representation Models</a></li>
-<li><a href="#annotations">3.2. Annotations</a></li>
-<li><a href="#jsonapi-builder">3.3. JSON:API Builder</a></li>
-<li><a href="#inclusion">3.4. Inclusion of related Resources</a></li>
-<li><a href="#Nesting">3.5. Nesting of JsonApiModels</a></li>
-<li><a href="#sparse-fielsets">3.6. Sparse Fieldsets</a></li>
-<li><a href="#affordances">3.7. Spring HATEOAS Affordances</a></li>
-<li><a href="#Creating">3.8. Creating Resources with HTTP POST</a></li>
-<li><a href="#server-deserialization">3.9. Deserialization of JSON:API types</a></li>
-<li><a href="#collection-model-deserialization">3.10. Deserialization of PagedModels</a></li>
-<li><a href="#uuid">3.11. UUID Deserialization</a></li>
-<li><a href="#polymorphy">3.12. Polymorphic Deserialization</a>
+<li><a href="#links">3.2. Links</a></li>
+<li><a href="#annotations">3.3. Annotations</a></li>
+<li><a href="#jsonapi-builder">3.4. JSON:API Builder</a></li>
+<li><a href="#inclusion">3.5. Inclusion of related Resources</a></li>
+<li><a href="#Nesting">3.6. Nesting of JsonApiModels</a></li>
+<li><a href="#sparse-fielsets">3.7. Sparse Fieldsets</a></li>
+<li><a href="#affordances">3.8. Spring HATEOAS Affordances</a></li>
+<li><a href="#Creating">3.9. Creating Resources with HTTP POST</a></li>
+<li><a href="#server-deserialization">3.10. Deserialization of JSON:API types</a></li>
+<li><a href="#collection-model-deserialization">3.11. Deserialization of PagedModels</a></li>
+<li><a href="#uuid">3.12. UUID Deserialization</a></li>
+<li><a href="#polymorphy">3.13. Polymorphic Deserialization</a>
 <ul class="sectlevel3">
-<li><a href="#jackson-annotations">3.12.1. Jackson Annotations</a></li>
+<li><a href="#jackson-annotations">3.13.1. Jackson Annotations</a></li>
 </ul>
 </li>
-<li><a href="#error-handling">3.13. Error Handling</a></li>
+<li><a href="#error-handling">3.14. Error Handling</a></li>
 </ul>
 </li>
 <li><a href="#client-side-support">4. Client Side support</a>
@@ -122,7 +123,7 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <p>Release repository: <a href="https://mvnrepository.com/artifact/com.toedter/spring-hateoas-jsonapi">Maven Central</a></p>
 </li>
 <li>
-<p>Snapshot repository: <a href="https://oss.sonatype.org/#nexus-search;quick~spring-hateoas-jsonapi">Sonatype OSS Repository</a></p>
+<p>Snapshot repository: <a href="https://oss.sonatype.org/#nexus-search;gav~com.toedter~spring-hateoas-jsonapi~~~~kw,versionexpand">Sonatype OSS Repository</a></p>
 </li>
 </ul>
 </div>
@@ -134,13 +135,13 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <div class="sect2">
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
-<p>JSON:API for Spring HATEOAS is based on version 1.5.1 of Spring HATEOAS.
+<p>JSON:API for Spring HATEOAS is based on version 2.0.0 of Spring HATEOAS.
 For further understanding of this document, please be aware of both</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/1.5.x/reference/html/">Spring HATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/2.0.0/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -168,7 +169,7 @@ Answers to a few questions, e.g. related to HAL, you can find
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">{
   "jsonapi": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "data": [
     {
@@ -208,9 +209,9 @@ Answers to a few questions, e.g. related to HAL, you can find
     }
   ],
   "links": {
-    "self": "http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1",
-    "next": "http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1",
-    "last": "http://localhost:8080/api/movies?page[number]=249&amp;page[size]=1"
+    "self": "http://localhost:8080/api/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=1",
+    "next": "http://localhost:8080/api/movies?page%5Bnumber%5D=1&amp;page%5Bsize%5D=1",
+    "last": "http://localhost:8080/api/movies?page%5Bnumber%5D=249&amp;page%5Bsize%5D=1"
   },
   "meta": {
     "page": {
@@ -223,6 +224,19 @@ Answers to a few questions, e.g. related to HAL, you can find
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The characters <code>[</code> and <code>]</code> in the Links section are unsafe and URL encoded when added automatically by the
+library. So the URL decoded next link would look like: http://localhost:8080/api/movies?page[number]=1&amp;page[size]=1.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -233,26 +247,24 @@ Answers to a few questions, e.g. related to HAL, you can find
 <p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
 <div class="listingblock primary">
+<div class="title">Gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.0.0'
+</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
 <div class="title">Maven</div>
 <div class="content">
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;1.6.0&lt;/version&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
-<div class="listingblock secondary">
-<div class="title">Gradle</div>
-<div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:1.6.0'
-</code></pre>
-</div>
-</div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>1.6.1-SNAPSHOT</code>.
-If you want to try it out, please make sure to add <a href="https://oss.sonatype.org/content/repositories/snapshots/" class="bare">oss.sonatype.org/content/repositories/snapshots/</a>
-as a repository to your Maven or Gradle configuration.</p>
+<p>The latest published snapshot version is <code>2.0.1-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
 </div>
 </div>
 </div>
@@ -318,7 +330,136 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.2. Annotations</h3>
+<h3 id="links"><a class="anchor" href="#links"></a>3.2. Links</h3>
+<div class="paragraph">
+<p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+Here is an example of a simple self link:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
+In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSON:API 1.1 now defines the optional link properties type, title and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
+The default rendering of a complex link is now</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "media": "media",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
+So the new format reflects the new JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
+</div>
+<div class="paragraph">
+<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+(see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://complex-links.org",
+      "title": "title",
+      "type": "type",
+      "hreflang": "EN",
+      "meta": {
+        "hreflang": "EN",
+        "media": "media",
+        "title": "title",
+        "type": "type",
+        "name": "name"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSON:API is very strict about the allowed link relations, the allowed
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
+<code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>. The only allowed
+<a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is <code>self</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default, all other links will <em>not</em> be serialized. If you want to serialize links that are non-compliant
+with JSON:API, you can use a specific configuration, (see <a href="#links-configuration">[links-configuration]</a>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.3. Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.</p>
@@ -380,10 +521,10 @@ following rules apply in order:</p>
 <p>the annotation <code>@JsonApiId</code> is used on a method</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a field</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a field</p>
 </li>
 <li>
-<p>the annotation <code>@Id</code> (javax.persistence.Id) is used on a method</p>
+<p>the annotation <code>@Id</code> (jakarta.persistence.Id) is used on a method</p>
 </li>
 <li>
 <p>the entity (base for representation models) provides an attribute <code>id</code></p>
@@ -467,7 +608,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.3. JSON:API Builder</h3>
+<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.4. JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
@@ -808,10 +949,10 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -826,14 +967,14 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.4. Inclusion of related Resources</h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.5. Inclusion of related Resources</h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "include", required = false) String[] include)
+<pre class="highlight"><code class="language-java" data-lang="java">@RequestParam(value = "include", required = false) String[] include
 </code></pre>
 </div>
 </div>
@@ -843,8 +984,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals("directors")) {
-    HashMap&lt;Long, Director&gt; directors = new HashMap&lt;&gt;();
+<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals(DIRECTORS)) {
     for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
     }
@@ -857,7 +997,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.5. Nesting of JsonApiModels</h3>
+<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.6. Nesting of JsonApiModels</h3>
 <div class="paragraph">
 <p>When using the model builder, <code>JsonApiModel</code> instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
@@ -945,7 +1085,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel =
 </div>
 </div>
 <div class="sect2">
-<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.6. Sparse Fieldsets</h3>
+<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.7. Sparse Fieldsets</h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
 by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
@@ -1038,10 +1178,10 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 </div>
 <div class="sect2">
-<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.7. Spring HATEOAS Affordances</h3>
+<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.8. Spring HATEOAS Affordances</h3>
 <div class="paragraph">
 <p>Spring HATEOAS provides a generic, media type independent API for
-<a href="https://docs.spring.io/spring-hateoas/docs/current-SNAPSHOT/reference/html/#server.affordances">affordances</a>.
+2.0.0/reference/html/#server.affordances[affordances].
 Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
 information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
@@ -1066,8 +1206,8 @@ First you have to enable this experimental feature in the configuration, like</p
         afford(methodOn(MovieController.class).newMovie(null));
 
 Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "page[number]=" + pagedResult.getNumber()
-        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        + "&amp;page%5Bnumber%5D=" + pagedResult.getNumber()
+        + "&amp;page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -1144,7 +1284,7 @@ If you want to get property information like required, you have to include a dep
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.8. Creating Resources with HTTP POST</h3>
+<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.9. Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
@@ -1276,7 +1416,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.9. Deserialization of JSON:API types</h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.10. Deserialization of JSON:API types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1373,7 +1513,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.10. Deserialization of PagedModels</h3>
+<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.11. Deserialization of PagedModels</h3>
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
 it is sometimes handy to be able to deserialize collection models and paged models. This is
@@ -1427,7 +1567,7 @@ The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;M
 </div>
 </div>
 <div class="sect2">
-<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.11. UUID Deserialization</h3>
+<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.12. UUID Deserialization</h3>
 <div class="paragraph">
 <p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
 So a JSON like</p>
@@ -1465,7 +1605,7 @@ So a JSON like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.12. Polymorphic Deserialization</h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.13. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
 assigning a JSON:API type to a Java class and then also switching on, that the mappings should
@@ -1587,7 +1727,7 @@ But the first director would be an instance of class <code>Director</code>,
 while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
 </div>
 <div class="sect3">
-<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.12.1. Jackson Annotations</h4>
+<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.13.1. Jackson Annotations</h4>
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
@@ -1657,13 +1797,9 @@ public class MovieWithRating extends Movie {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-@-members will be introduced in JSON:API version 1.1.
-The above example will produce JSON that is not compliant with JSON:API 1.0.
-For JSON:API 1.0 compliance you could configure Jackson like
-<code>@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeName")</code> instead.
+@-Members were introduced in JSON:API version 1.1, see <a href="https://jsonapi.org/format/#document-member-names-at-members" class="bare">jsonapi.org/format/#document-member-names-at-members</a>.
 From the JSON:API 1.1 spec:
-&#8230;&#8203;because @-Members must be ignored when interpreting that definition,
-an @-Member that occurs in an attributes object is not an attribute.
+&#8230;&#8203;an @-Member that occurs in an attributes object is not an attribute.
 </td>
 </tr>
 </table>
@@ -1812,7 +1948,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.13. Error Handling</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.14. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -1988,10 +2124,10 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -2056,7 +2192,8 @@ static class Config {
 <h4 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>4.2.1. Creating POST requests without serialized JSON:API id</h4>
 <div class="paragraph">
 <p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
+that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you specify a configuration like</p>
@@ -2097,7 +2234,7 @@ and is not part of the JSON body. The easiest way for doing this is to configure
 <h3 id="traverson"><a class="anchor" href="#traverson"></a>4.3. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/1.5.x/reference/html/">Spring HATEOAS</a>.</p>
+implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/2.0.0/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2105,7 +2242,7 @@ implementation provided through <a href="https://docs.spring.io/spring-hateoas/d
 <div class="paragraph">
 <p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
-<a href="https://docs.spring.io/spring-hateoas/docs/1.5.x/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+<a href="https://docs.spring.io/spring-hateoas/docs/2.0.0/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
 When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
 is exposed as a Spring bean.</p>
@@ -2137,71 +2274,90 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 <p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
 Currently, you can configure</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>if the JSON:API version should be rendered automatically, the default is <code>false</code>.</p>
-</li>
-<li>
-<p>if JSON:API types should be rendered as pluralized or non pluralized class names.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is pluralized.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if JSON:API types should be rendered as lowercase or original class names.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is lowercase.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if page information of a PagedModel should be rendered automatically as JSON:API meta.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is <code>true</code>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>if a specific Java class should be rendered with a specific JSON:API type. This is useful when
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiVersionRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Here you can set a JSON:API object do set all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, like version, ext, profile and meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PluralizedTypeRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as pluralized or non pluralized class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pluralized</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LowerCasedTypeRendered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as lower case or original class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lower case</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PageMetaAutomaticallyCreated</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If a specific Java class should be rendered with a specific JSON:API type. This is useful when
 representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass. See the example below.</p>
-</li>
-<li>
-<p>if the above "Java class to JSON:API type" mapping should also be used for deserialization.
-This is very useful for polymorphic use cases.</p>
-</li>
-<li>
-<p>if empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The default is <code>true</code>.</p>
-</li>
-<li>
-<p>If set to false, no "attributes" key is serialized if attributes are empty.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p>
-</li>
-<li>
-<p>A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p>
-</li>
-</ul>
-</div>
+should get the JSON:API type of the superclass.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClassUsedForDeserialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EmptyAttributesObjectSerialized</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized if attributes are empty.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiIdNotSerializedForValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ObjectMapperCustomizer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">not set
+<a id="links-configuration"></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiCompliantLinks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
+To allow any link, set this configuration to false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApi11LinkPropertiesRemovedFromLinkMeta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
+properties, those link properties were introduced in JSON:API 1.1,
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">Links</a>.
+Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(related to version 1.x.x of this library that only supports JSON:API 1.0),
+since client might expect properties like title in the meta section.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -2210,8 +2366,10 @@ This is very useful for polymorphic use cases.</p>
 </td>
 <td class="content">
 Since the JSON:API recommendation contains square brackets in the request parameter names,
-make sure you provide the following configuration in your Spring <code>application.properties</code> when using Tomcat:
-<code>server.tomcat.relaxed-query-chars= [,]</code>
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw <code>[</code> and <code>]</code>
+characters in the URL, make sure you provide the following configuration in your Spring <code>application.properties</code>
+when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this library automatically creates pagination links,
+<code>[</code> and <code>]</code> characters are always URL-encoded.
 </td>
 </tr>
 </table>
@@ -2231,6 +2389,8 @@ JsonApiConfiguration jsonApiConfiguration() {
             .withTypeForClassUsedForDeserialization(true)
             .withEmptyAttributesObjectSerialized(false)
             .withJsonApiIdNotSerializedForValue("-1")
+            .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+            .withJsonApiCompliantLinks(false)
             .withObjectMapperCustomizer(
                     objectMapper -&gt; objectMapper.configure(
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true));
@@ -2243,8 +2403,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.0<br>
-Last updated 2022-08-27 09:44:00 UTC
+Version 2.0.0<br>
+Last updated 2022-11-29 07:32:46 UTC
 </div>
 </div>
 </div>

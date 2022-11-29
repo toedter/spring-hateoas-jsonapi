@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Client Side support</h1>
 <div class="details">
-<span id="revnumber">version 1.6.0</span>
+<span id="revnumber">version 2.0.0</span>
 </div>
 </div>
 <div id="content">
@@ -166,10 +166,10 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
   ],
   "links": {
     "self": "http://localhost/movies",
-    "first": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "prev": "http://localhost/movies?page[number]=0&amp;page[size]=10",
-    "next": "http://localhost/movies?page[number]=2&amp;page[size]=10",
-    "last": "http://localhost/movies?page[number]=9&amp;page[size]=10"
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
   },
   "meta": {
     "page": {
@@ -236,7 +236,8 @@ static class Config {
 <h3 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>Creating POST requests without serialized JSON:API id</h3>
 <div class="paragraph">
 <p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
+that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you specify a configuration like</p>
@@ -313,8 +314,8 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.0<br>
-Last updated 2022-08-27 09:44:00 UTC
+Version 2.0.0<br>
+Last updated 2022-11-29 07:32:46 UTC
 </div>
 </div>
 </div>
