@@ -19,8 +19,8 @@ you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-exam
 Here you find the documentation for the releases and the current snapshot:
 |===
 | 2.0.0 | https://toedter.github.io/spring-hateoas-jsonapi/2.0.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/2.0.0/api/[API Documentation]
-| 1.6.0 | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/api/[API Documentation]
 | 2.0.1-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
+| 1.6.0 | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/api/[API Documentation]
 |===
 
 == Version Matrix
@@ -36,6 +36,10 @@ If you want to add the library to your app, the first step is to determine the v
 
 To enable the JSON:API media type you just need to add this module as a dependency to your project.
 
+Gradle:
+[source]
+implementation 'com.toedter:spring-hateoas-jsonapi:2.0.0'
+
 Maven:
 [source,xml]
 <dependency>
@@ -43,10 +47,6 @@ Maven:
     <artifactId>spring-hateoas-jsonapi</artifactId>
     <version>2.0.0</version>
 </dependency>
-
-Gradle:
-[source]
-implementation 'com.toedter:spring-hateoas-jsonapi:2.0.0'
 
 The latest published snapshot version is `2.0.1-SNAPSHOT`.
 If you want to try it out,
