@@ -45,6 +45,7 @@ public class JsonApiObject {
      */
     @Nullable
     private final List<URI> ext;
+
     /**
      * @return list of JSON:API profiles or null
      */
@@ -89,6 +90,6 @@ public class JsonApiObject {
      * @param showVersion true, if JSON:API version should be rendered
      */
     public JsonApiObject(boolean showVersion) {
-        this(true, null, null, null);
+        this(showVersion, null, null, null);
     }
 }
