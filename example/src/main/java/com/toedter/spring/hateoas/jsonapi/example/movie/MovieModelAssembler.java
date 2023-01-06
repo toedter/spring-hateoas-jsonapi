@@ -38,7 +38,7 @@ class MovieModelAssembler {
         String href = selfLink.getHref();
         selfLink = selfLink.withHref(href.substring(0,href.indexOf("{")));
 
-        // TODO: Spring HATEOAS does not recognize templated links with square brackets
+        // Spring HATEOAS does not recognize templated links with square brackets
         // Link templatedMoviesLink = Link.of(moviesLink.getHref() + "{?page[number],page[size]}").withRel("movies");
 
         String relationshipSelfLink = selfLink.getHref() + "/relationships/" + DIRECTORS;

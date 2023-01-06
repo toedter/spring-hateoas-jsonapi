@@ -170,23 +170,21 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         // Those links are self, related, describedby, and
         // the pagination links first, last, prev, and next.
         // All other top-level links are not allowed and therefore removed.
-        if (jsonApiConfiguration.isJsonApiCompliantLinks()) {
-            if (links != null) {
-                Links validJsonApiLinks = Links.NONE;
-                for (Link link : links) {
-                    if (!validJsonApiLinks.hasLink(link.getRel()) &&
-                            (link.hasRel("self") || link.hasRel("related") || link.hasRel("describedby")
-                                    || link.hasRel("first") || link.hasRel("last") || link.hasRel("prev")
-                                    || link.hasRel("next"))) {
-                        {
-                            validJsonApiLinks = validJsonApiLinks.and(link);
-                        }
-                    } else {
-                        log.warning("remove invalid JSON:API top-level link: " + link.getRel());
+        if (jsonApiConfiguration.isJsonApiCompliantLinks() && links != null) {
+            Links validJsonApiLinks = Links.NONE;
+            for (Link link : links) {
+                if (!validJsonApiLinks.hasLink(link.getRel()) &&
+                        (link.hasRel("self") || link.hasRel("related") || link.hasRel("describedby")
+                                || link.hasRel("first") || link.hasRel("last") || link.hasRel("prev")
+                                || link.hasRel("next"))) {
+                    {
+                        validJsonApiLinks = validJsonApiLinks.and(link);
                     }
+                } else {
+                    log.warning("remove invalid JSON:API top-level link: " + link.getRel());
                 }
-                links = validJsonApiLinks;
             }
+            links = validJsonApiLinks;
         }
 
         return links;

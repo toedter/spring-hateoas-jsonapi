@@ -68,7 +68,6 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
         gen.writeStartObject();
 
         for (Map.Entry<LinkRelation, List<Link>> entry : linksMap.entrySet()) {
-            LinkRelation rel = entry.getKey();
             List<Link> list = entry.getValue();
             if (list.size() == 1) {
                 Link link = list.get(0);

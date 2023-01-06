@@ -16,7 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
@@ -41,7 +40,9 @@ import static org.hamcrest.Matchers.empty;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Kai Toedter
@@ -50,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ComponentScan("com.toedter.spring.hateoas.jsonapi")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("WebMvc Integration Test")
-public class JsonApiWebMvcIntegrationTest {
+class JsonApiWebMvcIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -59,9 +60,6 @@ public class JsonApiWebMvcIntegrationTest {
 
     @MockBean
     private DirectorRepository directorRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     void should_get_single_movie() throws Exception {

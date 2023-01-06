@@ -53,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("Spring Boot MockMvc Integration Test")
-public class JsonApiSpringBootMockMvcIntegrationTest {
+class JsonApiSpringBootMockMvcIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
