@@ -54,7 +54,7 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     testImplementation 'com.networknt:json-schema-validator:1.0.73'
 
-    docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.3'
+    docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.4'
 }
 
 test {
