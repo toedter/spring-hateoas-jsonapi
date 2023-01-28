@@ -229,6 +229,22 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
+The JSON:API specification allows empty to-one relationships and empty to-many relationships
+(see link:https://jsonapi.org/format/#document-resource-object-linkage[JSON:API specification]).
+An empty to-one relationship can be added like
+
+[source, java, indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=empty-to-one-relationship]
+----
+
+An empty to-many relationship can be added like
+
+[source, java, indent=0]
+----
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=empty-to-many-relationship]
+----
+
 [[inclusion]]
 == Inclusion of related Resources
 

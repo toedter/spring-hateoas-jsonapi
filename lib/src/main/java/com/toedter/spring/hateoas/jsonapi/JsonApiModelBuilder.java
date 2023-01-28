@@ -143,18 +143,19 @@ public class JsonApiModelBuilder {
     /**
      * Adds or updates a {@literal relationship} based on the {@link Object}.
      * It must be possible to extract the JSON:API id of this object,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
+     * see <a href="https://toedter.github.io/spring-hateoas-jsonapi/release/reference/#annotations">reference doc</a>.
      * If there is already a relationship for the given name defined,
      * the new data object will be added to the existing relationship.
+     * If the dataObject is {@literal null}, an empty to-one relationship
+     * is created, see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API doc</a>.
      *
      * @param name       must not be {@literal null}.
      * @param dataObject must not be {@literal null}.
      * @return will never be {@literal null}.
      */
     public JsonApiModelBuilder relationship(String name,
-                                            Object dataObject) {
+                                            @Nullable Object dataObject) {
         Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
-        Assert.notNull(dataObject, "Relationship data object must not be null!");
 
         final JsonApiRelationship jsonApiRelationship =
                 addDataObject(relationships.get(name), dataObject, null);
@@ -167,7 +168,7 @@ public class JsonApiModelBuilder {
      * Adds or updates a {@literal relationship} based on the {@link Collection}.
      * It must be possible to extract the JSON:API id of all elements
      * of this collection,
-     * see https://toedter.github.io/spring-hateoas-jsonapi/#_annotations.
+     * see <a href="https://toedter.github.io/spring-hateoas-jsonapi/release/reference/#annotations">reference doc</a>.
      * If there is already a relationship for the given name defined,
      * the elements of the collection will be added to the existing relationship.
      *
@@ -379,7 +380,7 @@ public class JsonApiModelBuilder {
 
     private JsonApiRelationship addDataObject(
             @Nullable JsonApiRelationship jsonApiRelationship,
-            Object dataObject,
+            @Nullable Object dataObject,
             @Nullable Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship newRelationship;
         if (jsonApiRelationship == null) {

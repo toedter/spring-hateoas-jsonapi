@@ -89,14 +89,14 @@ class JsonApiRelationship {
         this(data, links, meta, null);
     }
 
-    public JsonApiRelationship addDataObject(final Object object) {
+    public JsonApiRelationship addDataObject(@Nullable final Object object) {
         return this.addDataObject(object, null);
     }
 
-    public JsonApiRelationship addDataObject(final Object object,
+    public JsonApiRelationship addDataObject(@Nullable final Object object,
                                              @Nullable Map<String, Object> metaForResourceIdentifier) {
-        if(metaForResourceIdentifier != null && !metaForResourceIdentifier.isEmpty()) {
-            if(metaForResourceIdentifiers == null) {
+        if (metaForResourceIdentifier != null && !metaForResourceIdentifier.isEmpty()) {
+            if (metaForResourceIdentifiers == null) {
                 metaForResourceIdentifiers = new HashMap<>();
             }
             metaForResourceIdentifiers.put(object, metaForResourceIdentifier);
@@ -150,7 +150,7 @@ class JsonApiRelationship {
         return new JsonApiRelationship(object, null, null);
     }
 
-    public static JsonApiRelationship of(Object object,
+    public static JsonApiRelationship of(@Nullable Object object,
                                          @Nullable Map<String, Object> resourceIdentifierMeta) {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
         jsonApiRelationship = jsonApiRelationship.addDataObject(object, resourceIdentifierMeta);
@@ -173,7 +173,7 @@ class JsonApiRelationship {
     public boolean isValid() {
 
         if (data == null && links == null && meta == null) {
-            return false;
+            return true;
         }
 
         if (data != null) {
@@ -204,7 +204,7 @@ class JsonApiRelationship {
 
     JsonApiResourceIdentifier toJsonApiResource(Object data, JsonApiConfiguration jsonApiConfiguration) {
         Map<String, Object> localMeta = null;
-        if(metaForResourceIdentifiers != null) {
+        if (metaForResourceIdentifiers != null) {
             localMeta = metaForResourceIdentifiers.get(data);
         }
 
@@ -223,7 +223,7 @@ class JsonApiRelationship {
         HashMap<String, JsonApiResourceIdentifier> values = new HashMap<>();
         for (Object object : collection) {
             JsonApiResourceIdentifier resourceIdentifier = toJsonApiResource(object, jsonApiConfiguration);
-            if(values.get(resourceIdentifier.getId() + "." + resourceIdentifier.getType()) == null) {
+            if (values.get(resourceIdentifier.getId() + "." + resourceIdentifier.getType()) == null) {
                 dataList.add(resourceIdentifier);
                 values.put(resourceIdentifier.getId() + "." + resourceIdentifier.getType(), resourceIdentifier);
             }

@@ -52,6 +52,12 @@ class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRel
         }
     }
 
+    @Getter
+    private static class JsonApiNullDataRelationshipForSerialization {
+
+        private final Object data = null;
+    }
+
     public JsonApiRelationshipSerializer(JsonApiConfiguration jsonApiConfiguration) {
         super(JsonApiRelationship.class, false);
         this.jsonApiConfiguration = jsonApiConfiguration;
@@ -67,11 +73,18 @@ class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRel
                 data = value.toJsonApiResource(data, jsonApiConfiguration);
             }
         }
-        JsonApiRelationshipForSerialization jsonApiRelationship =
-                new JsonApiRelationshipForSerialization(data, value.getLinks(), value.getMeta());
 
-        provider
-                .findValueSerializer(JsonApiRelationshipForSerialization.class)
-                .serialize(jsonApiRelationship, gen, provider);
+        if(data == null && value.getLinks() == null && value.getMeta() == null) {
+            provider
+                    .findValueSerializer(JsonApiNullDataRelationshipForSerialization.class)
+                    .serialize(new JsonApiNullDataRelationshipForSerialization(), gen, provider);
+        } else {
+            JsonApiRelationshipForSerialization jsonApiRelationship =
+                    new JsonApiRelationshipForSerialization(data, value.getLinks(), value.getMeta());
+
+            provider
+                    .findValueSerializer(JsonApiRelationshipForSerialization.class)
+                    .serialize(jsonApiRelationship, gen, provider);
+        }
     }
 }

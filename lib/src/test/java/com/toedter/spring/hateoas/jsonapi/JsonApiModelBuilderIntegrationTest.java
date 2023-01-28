@@ -517,7 +517,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
         PagedModel.PageMetadata pageMetadata =
                 new PagedModel.PageMetadata(2, 1, 100, 50);
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
-                .model(PagedModel.of(Collections.EMPTY_LIST, pageMetadata))
+                .model(PagedModel.of(Collections.emptyList(), pageMetadata))
                 .pageMeta()
                 .pageLinks("httpx://test::8080")
                 .build());
@@ -550,13 +550,6 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     void should_not_add_invalid_relationship_links() {
         assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
                 .relationship("directors", (String) null, null, null)
-                .build());
-    }
-
-    @Test
-    void should_not_add_invalid_relationship_meta() {
-        assertThrows(IllegalArgumentException.class, () -> jsonApiModel()
-                .relationship("directors", (HashMap<?, ?>) null)
                 .build());
     }
 
@@ -725,6 +718,38 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
+    }
+
+    @Test
+    void should_build_empty_to_one_relationship() throws Exception {
+        Movie movie = new Movie("1", "The Matrix");
+
+        // tag::empty-to-one-relationship[]
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("director", (Object)null)
+                        .build();
+        // end::empty-to-one-relationship[]
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithEmptyToOneRelationship.json");
+    }
+
+    @Test
+    void should_build_empty_to_many_relationship() throws Exception {
+        Movie movie = new Movie("1", "The Matrix");
+
+        // tag::empty-to-many-relationship[]
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel()
+                        .model(movie)
+                        .relationship("directors", Collections.emptyList())
+                        .build();
+        // end::empty-to-many-relationship[]
+
+        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "movieJsonApiModelWithEmptyToManyRelationship.json");
     }
 
 }

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "The Matrix"
+    },
+    "relationships": {
+      "director": {
+        "data": null
+      }
+    }
+  }
+}

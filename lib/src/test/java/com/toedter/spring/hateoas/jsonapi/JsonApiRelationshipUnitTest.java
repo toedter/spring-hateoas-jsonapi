@@ -100,7 +100,7 @@ class JsonApiRelationshipUnitTest {
         //noinspection unchecked
         List<JsonApiResourceIdentifier> data = (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
-        assertThat(data.size()).isEqualTo(0);
+        assertThat(data).isEmpty();
     }
 
     @Test
@@ -161,7 +161,7 @@ class JsonApiRelationshipUnitTest {
 
         List<JsonApiResourceIdentifier> data = (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
-        assertThat(data.isEmpty()).isTrue();
+        assertThat(data).isEmpty();
     }
 
     @Test
@@ -171,7 +171,7 @@ class JsonApiRelationshipUnitTest {
 
         List<JsonApiResourceIdentifier> data = (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
-        assertThat(data.isEmpty()).isTrue();
+        assertThat(data).isEmpty();
     }
 
     @Test
@@ -182,7 +182,7 @@ class JsonApiRelationshipUnitTest {
 
         List<JsonApiResourceIdentifier> data = (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
-        assertThat(data.size()).isEqualTo(1);
+        assertThat(data).hasSize(1);
     }
     @Test
     void should_add_data_collection_to_existing_data_colection() {
@@ -198,7 +198,7 @@ class JsonApiRelationshipUnitTest {
 
         List<JsonApiResourceIdentifier> data = (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
-        assertThat(data.size()).isEqualTo(4);
+        assertThat(data).hasSize(4);
     }
 
     @Test
@@ -231,7 +231,7 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_validate_invalid_null_relationship() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        assertThat(jsonApiRelationship.isValid()).isFalse();
+        assertThat(jsonApiRelationship.isValid()).isTrue();
     }
 
     @Test
