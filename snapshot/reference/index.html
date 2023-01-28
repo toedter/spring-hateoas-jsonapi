@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 2.0.2-SNAPSHOT,</span>
-<span id="revdate">2023-01-22</span>
+<span id="revdate">2023-01-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -963,6 +963,34 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel =
     }
   }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
+(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).
+An empty to-one relationship can be added like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movie)
+                .relationship("director", (Object)null)
+                .build();
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An empty to-many relationship can be added like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
+        jsonApiModel()
+                .model(movie)
+                .relationship("directors", Collections.emptyList())
+                .build();
+</code></pre>
 </div>
 </div>
 </div>
@@ -2404,7 +2432,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.2-SNAPSHOT<br>
-Last updated 2023-01-22 15:18:45 UTC
+Last updated 2023-01-28 13:19:02 UTC
 </div>
 </div>
 </div>
