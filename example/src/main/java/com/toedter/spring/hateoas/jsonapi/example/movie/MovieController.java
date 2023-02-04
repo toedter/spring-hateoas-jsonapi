@@ -20,7 +20,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Affordance;

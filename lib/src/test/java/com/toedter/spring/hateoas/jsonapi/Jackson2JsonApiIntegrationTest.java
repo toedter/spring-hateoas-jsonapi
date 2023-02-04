@@ -61,7 +61,6 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.PolymorphicRelati
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +79,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 
+import javax.persistence.Id;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

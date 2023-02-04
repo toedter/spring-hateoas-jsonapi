@@ -68,12 +68,15 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
         CollectionModel<?> collectionModel = null;
-        if (value instanceof JsonApiModel jsonApiModel) {
+        if (value instanceof JsonApiModel) {
+            JsonApiModel jsonApiModel = (JsonApiModel)value;
             Object content = jsonApiModel.getContent();
-            if (content instanceof CollectionModel<?> collectionModelContent) {
+            if (content instanceof CollectionModel<?>) {
+                CollectionModel<?> collectionModelContent = (CollectionModel<?>) content;
                 collectionModel = collectionModelContent;
             }
-        } else if (value instanceof CollectionModel<?> collectionModelContent) {
+        } else if (value instanceof CollectionModel<?>) {
+            CollectionModel<?> collectionModelContent = (CollectionModel<?>) value;
             collectionModel = collectionModelContent;
         }
 
@@ -84,17 +87,17 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             data = JsonApiData.extractCollectionContent(
                     collectionModel, objectMapper, jsonApiConfiguration, null, false);
         } else {
-            if (value instanceof JsonApiModel jsonApiModel
-                    && jsonApiModel.getContent() != null
-                    && jsonApiModel.getContent() instanceof JsonApiModel) {
+            if (value instanceof JsonApiModel
+                    && ((JsonApiModel) value).getContent() != null
+                    && ((JsonApiModel) value).getContent() instanceof JsonApiModel) {
                 JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
                 embeddedMeta = Objects.requireNonNull(content).getMetaData();
                 final Optional<JsonApiData> jsonApiData =
                         JsonApiData.extractContent(content, true, objectMapper, jsonApiConfiguration, null);
                 data = jsonApiData.orElse(null);
             } else {
-                if (value instanceof JsonApiModel jsonApiModel) {
-                    embeddedMeta = jsonApiModel.getMetaData();
+                if (value instanceof JsonApiModel) {
+                    embeddedMeta = ((JsonApiModel) value).getMetaData();
                 }
                 final Optional<JsonApiData> jsonApiData =
                         JsonApiData.extractContent(value, true, objectMapper, jsonApiConfiguration, null);
@@ -126,9 +129,9 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
             doc = doc.withMeta(metaData);
         }
 
-        if (value instanceof JsonApiModel jsonApiModel) {
+        if (value instanceof JsonApiModel) {
             // in some cases we want to add the metadata to the top level JSON:API document
-            Map<String, Object> metaData = jsonApiModel.getMetaData();
+            Map<String, Object> metaData = ((JsonApiModel) value).getMetaData();
             if (embeddedMeta != metaData || data == null) {
                 final Map<String, Object> meta = doc.getMeta();
                 if (meta == null) {
@@ -192,13 +195,13 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
     private @Nullable
     List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
-        if (representationModel instanceof JsonApiModel jsonApiModel) {
+        if (representationModel instanceof JsonApiModel) {
             final List<RepresentationModel<?>> includedEntities =
-                    jsonApiModel.getIncludedEntities();
+                    ((JsonApiModel) representationModel).getIncludedEntities();
             final CollectionModel<RepresentationModel<?>> collectionModel = CollectionModel.of(includedEntities);
             return JsonApiData.extractCollectionContent(
                     collectionModel, objectMapper, jsonApiConfiguration,
-                    jsonApiModel.getSparseFieldsets(), true);
+                    ((JsonApiModel) representationModel).getSparseFieldsets(), true);
         }
         return null;
     }

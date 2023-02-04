@@ -106,9 +106,10 @@ class JsonApiRelationship {
             return new JsonApiRelationship(object, this.links, this.meta, this.metaForResourceIdentifiers);
         } else {
             List<Object> dataList = new ArrayList<>();
-            if (!(this.data instanceof Collection<?> collection)) {
+            if (!(this.data instanceof Collection<?>)) {
                 dataList.add(this.data);
             } else {
+                Collection<?> collection = (Collection<?>) this.data;
                 dataList.addAll(collection);
             }
             dataList.add(object);

@@ -124,7 +124,8 @@ class JsonApiData {
             links = ((RepresentationModel<?>) content).getLinks();
         }
 
-        if (content instanceof JsonApiModel jsonApiModel) {
+        if (content instanceof JsonApiModel) {
+            JsonApiModel jsonApiModel = (JsonApiModel)content;
             JsonApiModel jsonApiRepresentationModel = jsonApiModel;
             relationships = jsonApiRepresentationModel.getRelationships();
             sparseFieldsets = jsonApiRepresentationModel.getSparseFieldsets();

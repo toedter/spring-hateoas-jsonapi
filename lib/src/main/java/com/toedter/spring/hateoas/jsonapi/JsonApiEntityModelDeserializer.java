@@ -77,7 +77,8 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                             if (relationship != null) {
                                 final Type genericType = field.getGenericType();
                                 // expect collections to always be generic, like "List<Director>"
-                                if (genericType instanceof ParameterizedType parameterizedType) {
+                                if (genericType instanceof ParameterizedType) {
+                                    ParameterizedType parameterizedType = (ParameterizedType) genericType;
                                     ParameterizedType type = parameterizedType;
                                     if (Collection.class.isAssignableFrom(field.getType())) {
                                         Collection<Object> relationshipCollection;
