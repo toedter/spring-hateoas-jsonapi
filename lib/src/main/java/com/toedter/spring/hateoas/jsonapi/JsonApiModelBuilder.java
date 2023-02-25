@@ -321,7 +321,7 @@ public class JsonApiModelBuilder {
 
     /**
      * If called (anywhere in the builder sequence),
-     * the data portion of this relationship will be always rendered
+     * the data portion of this relationship will always be rendered
      * as an array, even if the data is not set or is one single element,
      * e.g. {@literal "data": []} or {@literal "data" : [{"id":"1", "type":"movies"}]}.
      * This is convenient if the consumer always expects a (one to many)
