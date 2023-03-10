@@ -1,0 +1,13 @@
+{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "New Movie"
+    },
+    "relationships": {
+      "directors": {
+        "data": null
+      }
+    }
+  }
+}

@@ -87,20 +87,23 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             relationshipCollection = new ArrayList<>();
                                         }
                                         Object data = ((HashMap<?, ?>) relationship).get("data");
-                                        List<HashMap<String, Object>> jsonApiRelationships;
+                                        List<HashMap<String, Object>> jsonApiRelationships = null;
                                         if (data instanceof List) {
                                             jsonApiRelationships = (List<HashMap<String, Object>>) data;
                                         } else if (data instanceof HashMap) {
                                             HashMap<String, Object> castedData = (HashMap<String, Object>) data;
                                             jsonApiRelationships = Collections.singletonList(castedData);
-                                        } else {
+                                        } else if (data != null) {
                                             throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
                                         }
-                                        Type typeArgument = type.getActualTypeArguments()[0];
 
-                                        for (HashMap<String, Object> entry : jsonApiRelationships) {
-                                            Object newInstance = createRelationship(doc, typeArgument, entry);
-                                            relationshipCollection.add(newInstance);
+                                        if (data != null) {
+                                            Type typeArgument = type.getActualTypeArguments()[0];
+
+                                            for (HashMap<String, Object> entry : jsonApiRelationships) {
+                                                Object newInstance = createRelationship(doc, typeArgument, entry);
+                                                relationshipCollection.add(newInstance);
+                                            }
                                         }
 
                                         field.set(content, relationshipCollection);

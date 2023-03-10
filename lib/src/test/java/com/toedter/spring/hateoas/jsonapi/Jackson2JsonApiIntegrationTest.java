@@ -514,6 +514,21 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_deserialize_single_movie_entity_model_with_null_relationship() throws Exception {
+        JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
+        File file = new ClassPathResource("postMovieWithNullRelationship.json", getClass()).getFile();
+        EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+        MovieWithDirectors movie = movieEntityModel.getContent();
+        assert movie != null;
+        assertThat(movie.getId()).isNull();
+        assertThat(movie.getTitle()).isEqualTo("New Movie");
+
+        List<Director> directors = movie.getDirectors();
+        assertThat(directors).isEmpty();
+    }
+
+    @Test
     void should_deserialize_single_movie_entity_model_with_one_list_relationship_and_relationship_type() throws Exception {
         JavaType movieEntityModelType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithTypedDirectors.class);
         File file = new ClassPathResource("postMovieWithOneRelationshipWithType.json", getClass()).getFile();
