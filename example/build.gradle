@@ -2,11 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.4'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'io.freefair.lombok' version '6.6.1'
+    id 'io.freefair.lombok' version '6.6.3'
 }
 
 group = 'com.toedter'
-version = '2.0.3-SNAPSHOT'
+version = '2.0.3'
 sourceCompatibility = '1.17'
 
 repositories {
@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 
     // if you want to use the released version, use
-    // implementation 'com.toedter:spring-hateoas-jsonapi:2.0.2'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:2.0.3'
     implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
