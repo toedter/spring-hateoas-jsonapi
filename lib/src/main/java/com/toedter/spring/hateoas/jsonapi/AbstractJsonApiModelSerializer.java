@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Log
-@SuppressWarnings("deprecation")
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         extends AbstractJsonApiSerializer<T> {
 
@@ -65,6 +64,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
         CollectionModel<?> collectionModel = null;
@@ -181,7 +181,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                         validJsonApiLinks = validJsonApiLinks.and(link);
                     }
                 } else {
-                    log.warning("remove invalid JSON:API top-level link: " + link.getRel());
+                    log.warning("removed invalid JSON:API top-level link: " + link.getRel());
                 }
             }
             links = validJsonApiLinks;

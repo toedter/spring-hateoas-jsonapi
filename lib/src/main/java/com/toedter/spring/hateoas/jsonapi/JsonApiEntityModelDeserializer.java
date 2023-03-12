@@ -101,7 +101,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                             Type typeArgument = type.getActualTypeArguments()[0];
 
                                             for (HashMap<String, Object> entry : jsonApiRelationships) {
-                                                Object newInstance = createRelationship(doc, typeArgument, entry);
+                                                Object newInstance = createRelationship(doc, typeArgument, entry).getContent();
                                                 relationshipCollection.add(newInstance);
                                             }
                                         }
@@ -112,7 +112,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                                     // we expect a concrete type otherwise, like "Director"
                                     HashMap<String, Object> data =
                                             (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
-                                    Object newInstance = createRelationship(doc, genericType, data);
+                                    Object newInstance = createRelationship(doc, genericType, data).getContent();
                                     field.set(content, newInstance);
                                 }
                             }
@@ -169,18 +169,23 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             return entityModel;
         }
         throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL);
-
     }
 
     @Nullable
-    private Object createRelationship(JsonApiDocument doc, Type typeArgument, HashMap<String, Object> entry) {
+    private EntityModel<?> createRelationship(JsonApiDocument doc, Type typeArgument, HashMap<String, Object> entry) {
         String id = entry.get("id").toString();
         String jsonApiType = entry.get("type").toString();
-        Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
-        if (attributes != null) {
-            entry.put("attributes", attributes);
+        if (doc != null && doc.getIncluded() != null) {
+            Map<String, Object> attributes = findIncludedAttributesForRelationshipObject(id, jsonApiType, doc);
+            if (attributes != null) {
+                entry.put("attributes", attributes);
+            }
+            Map<String, Object> relationships = findIncludedRelationshipsForRelationshipObject(id, jsonApiType, doc);
+            if (relationships != null) {
+                entry.put("relationships", relationships);
+            }
         }
-        return convertToResource(entry, false, doc, objectMapper.constructType(typeArgument), true);
+        return (EntityModel<?>) convertToResource(entry, true, doc, objectMapper.constructType(typeArgument), true);
     }
 
     protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
@@ -188,15 +193,21 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
     }
 
     protected @Nullable Map<String, Object> findIncludedAttributesForRelationshipObject(
-            String id, String type, @Nullable JsonApiDocument doc) {
-
-        if (doc == null || doc.getIncluded() == null) {
-            return null;
-        }
-
+            String id, String type, JsonApiDocument doc) {
         for (JsonApiData jsonApiData : doc.getIncluded()) {
             if (id.equals(jsonApiData.getId()) && type.equals(jsonApiData.getType())) {
                 return jsonApiData.getAttributes();
+            }
+        }
+        return null;
+    }
+
+    protected @Nullable Map<String, Object> findIncludedRelationshipsForRelationshipObject(
+            String id, String type, JsonApiDocument doc) {
+
+        for (JsonApiData jsonApiData : doc.getIncluded()) {
+            if (id.equals(jsonApiData.getId()) && type.equals(jsonApiData.getType())) {
+                return (Map<String, Object>) jsonApiData.getRelationships();
             }
         }
         return null;

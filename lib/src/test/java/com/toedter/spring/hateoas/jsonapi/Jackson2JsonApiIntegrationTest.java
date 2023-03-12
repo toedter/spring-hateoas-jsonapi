@@ -30,7 +30,9 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
+import com.toedter.spring.hateoas.jsonapi.support.Address;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
+import com.toedter.spring.hateoas.jsonapi.support.DirectorWithAddress;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithEmail;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithType;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
@@ -41,6 +43,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotationsDerived;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithCustomSerializer;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectorsWithAdresses;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithGetters;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithIntId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithIntegerObjectId;
@@ -889,9 +892,7 @@ class Jackson2JsonApiIntegrationTest {
         JavaType movieType =
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, Director.class);
         File file = new ClassPathResource("postMovieWithCustomType.json", getClass()).getFile();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            mapper.readValue(file, movieType);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> mapper.readValue(file, movieType));
     }
 
     @Test
@@ -900,9 +901,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectors.class);
         File file = new ClassPathResource("postMovieWithTwoRelationshipsWithIllegalPolymorphicTypes.json",
                 getClass()).getFile();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            mapper.readValue(file, movieType);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> mapper.readValue(file, movieType));
     }
 
     @Test
@@ -1106,9 +1105,7 @@ class Jackson2JsonApiIntegrationTest {
                 mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieThrowingException.class);
         File file = new ClassPathResource("movieEntityModel.json", getClass()).getFile();
 
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            mapper.readValue(file, javaType);
-        });
+        Assertions.assertThrows(IllegalStateException.class, () -> mapper.readValue(file, javaType));
     }
 
     @Test
@@ -1346,6 +1343,27 @@ class Jackson2JsonApiIntegrationTest {
         Director director3 = entityModel.getContent().getDirectors().get(0);
         assertThat(director3.getId()).isEqualTo("3");
         assertThat(director3.getName()).isEqualTo("George Lucas");
+    }
+
+    @Test
+    void should_deserialize_collection_model_of_entity_models_with_relationships_and_included_relationships() throws Exception {
+        JavaType innerType = mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithDirectorsWithAdresses.class);
+        JavaType javaType =
+                mapper.getTypeFactory().constructParametricType(CollectionModel.class, innerType);
+        File file = new ClassPathResource("moviesCollectionModelWithIncludedIndirect.json", getClass()).getFile();
+        CollectionModel<EntityModel<MovieWithDirectorsWithAdresses>> collectionModel = mapper.readValue(file, javaType);
+
+        assertThat(Objects.requireNonNull(collectionModel.getContent())).hasSize(1);
+        Iterator<EntityModel<MovieWithDirectorsWithAdresses>> iterator = collectionModel.getContent().iterator();
+        EntityModel<MovieWithDirectorsWithAdresses> entityModel = iterator.next();
+
+        DirectorWithAddress director = entityModel.getContent().getDirectors().get(0);
+        assertThat(director.getId()).isEqualTo("1");
+        assertThat(director.getName()).isEqualTo("Lana Wachowski");
+
+        Address address = director.getAddresses().get(0);
+        assertThat(address.getId()).isEqualTo("5");
+        assertThat(address.getCity()).isEqualTo("New York");
     }
 
     @Test

@@ -1,0 +1,45 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Matrix"
+      },
+      "relationships": {
+        "directors": {
+          "data": [
+            {
+              "id": "1",
+              "type": "directors"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      },
+      "relationships": {
+        "addresses": {
+          "data": {
+            "id": "5",
+            "type": "addresses"
+          }
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "addresses",
+      "attributes": {
+        "city": "New York"
+      }
+    }
+  ]
+}
