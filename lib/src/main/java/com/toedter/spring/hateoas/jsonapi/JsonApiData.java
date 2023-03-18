@@ -219,7 +219,7 @@ class JsonApiData {
         }
 
         // extract annotated meta data
-        for (Field field : content.getClass().getDeclaredFields()) {
+        for (Field field : ReflectionUtils.getAllDeclaredFields(content.getClass())) {
             if (field.getAnnotation(JsonApiMeta.class) != null) {
                 attributeMap.remove(field.getName());
                 try {
@@ -235,7 +235,7 @@ class JsonApiData {
             }
         }
 
-        for (Method method : content.getClass().getDeclaredMethods()) {
+        for (Method method : content.getClass().getMethods()) {
             if (method.getAnnotation(JsonApiMeta.class) != null) {
                 try {
                     method.setAccessible(true);

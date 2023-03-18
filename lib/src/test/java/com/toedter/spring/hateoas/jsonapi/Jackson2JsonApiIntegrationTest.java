@@ -1254,6 +1254,25 @@ class Jackson2JsonApiIntegrationTest {
     }
 
     @Test
+    void should_serialize_inherited_jsonapimeta_field_annotation() throws Exception {
+        @Getter
+        class Movie {
+            private final Long id = 1L;
+            private final String title = "Star Wars";
+            @JsonApiMeta
+            private final String metaProperty = "metaValue";
+        }
+
+        class InheritedMovie extends Movie {
+            @JsonApiType
+            private final String type = "movies";
+        }
+
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new InheritedMovie()));
+        compareWithFile(movieJson, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
     void should_serialize_jsonapimeta_method_annotation() throws Exception {
         @Getter
         class Movie {
@@ -1267,6 +1286,28 @@ class Jackson2JsonApiIntegrationTest {
         }
 
         String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
+    void should_serialize_inherited_jsonapimeta_method_annotation() throws Exception {
+        @Getter
+        class Movie {
+            private final Long id = 1L;
+            private final String title = "Star Wars";
+
+            @JsonApiMeta
+            public String getMetaProperty() {
+                return "metaValue";
+            }
+        }
+
+        class InheritedMovie extends Movie {
+            @JsonApiType
+            private final String type = "movies";
+        }
+
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new InheritedMovie()));
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
     }
 
