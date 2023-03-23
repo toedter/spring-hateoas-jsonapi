@@ -9,7 +9,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '3.0.4' apply false
+    id 'org.springframework.boot' version '3.0.5' apply false
     id 'org.sonarqube' version '4.0.0.2929'
 }
 
@@ -54,7 +54,7 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     testImplementation 'com.networknt:json-schema-validator:1.0.73'
 
-    docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.4'
+    docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.5'
 }
 
 test {
