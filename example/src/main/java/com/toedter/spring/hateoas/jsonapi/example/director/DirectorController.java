@@ -99,7 +99,6 @@ public class DirectorController {
             movies.values().forEach(entry -> finalJsonApiModelBuilder.included(EntityModel.of(entry)));
         }
 
-
         final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
         return ResponseEntity.ok(pagedJsonApiModel);
     }

@@ -36,6 +36,8 @@ class DirectorModelAssembler {
 
     public RepresentationModel<?> toJsonApiModel(Director director, String[] fieldsDirectors) {
         Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null, null)).withSelfRel();
+        String href = selfLink.getHref();
+        selfLink = selfLink.withHref(href.substring(0,href.indexOf("{")));
 
         Link directorsLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
         Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
