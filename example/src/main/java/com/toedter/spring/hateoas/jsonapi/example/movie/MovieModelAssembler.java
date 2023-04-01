@@ -77,4 +77,17 @@ class MovieModelAssembler {
 
         return builder.build();
     }
+
+    public RepresentationModel<?> directorsRelationshipToJsonApiModel(Movie movie) {
+        Link selfLink = linkTo(methodOn(MovieController.class).findDirectorsRelationship(movie.getId())).withSelfRel();
+        Link relatedLink = linkTo(methodOn(MovieController.class).findDirectors(movie.getId())).withRel("related");
+
+        JsonApiModelBuilder builder = jsonApiModel()
+                .model(CollectionModel.of(movie.getDirectors()))
+                .relationshipWithDataArray(MOVIES)
+                .link(selfLink)
+                .link(relatedLink);
+
+        return builder.build();
+    }
 }
