@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
-import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.hateoas.AffordanceModel;
 import org.springframework.hateoas.mediatype.ConfiguredAffordance;
 import org.springframework.http.HttpMethod;
