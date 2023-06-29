@@ -1008,7 +1008,7 @@ class Jackson2JsonApiIntegrationTest {
         Movie movie = new Movie("1", "Star Wars");
         EntityModel<Movie> entityModel = EntityModel.of(movie);
 
-        mapper = createObjectMapper(new JsonApiConfiguration().withJsonApiVersionRendered(true));
+        mapper = createObjectMapper(new JsonApiConfiguration().withJsonApiObject(new JsonApiObject(true)));
 
         String movieJson = mapper.writeValueAsString(entityModel);
         compareWithFile(movieJson, "movieEntityModelWithJsonApiVersion.json");

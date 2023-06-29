@@ -53,11 +53,11 @@ class JsonApiConfigurationUnitTest {
 
     @Test
     void should_set_render_version() {
-        assertThat(new JsonApiConfiguration().withJsonApiVersionRendered(true).isJsonApiVersionRendered()).isTrue();
+        assertThat(new JsonApiConfiguration().withJsonApiObject(new JsonApiObject(true)).getJsonApiObject().getVersion()).isEqualTo("1.1");
     }
 
     @Test
-    void should_set_page_meta_auotomatically_created() {
+    void should_set_page_meta_automatically_created() {
         assertThat(new JsonApiConfiguration().withPageMetaAutomaticallyCreated(false)
                 .isPageMetaAutomaticallyCreated()).isFalse();
     }

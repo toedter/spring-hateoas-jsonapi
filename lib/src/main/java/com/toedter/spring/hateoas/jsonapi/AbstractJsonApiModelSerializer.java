@@ -108,7 +108,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
                 .withIncluded(getIncluded(value));
 
         if (jsonApiConfiguration.isJsonApiVersionRendered()) {
-            doc = doc.withJsonapi(new JsonApiObject(true, null, null, null));
+            doc = doc.withJsonapi(new JsonApiObject(true));
         }
 
         JsonApiObject jsonApiObject = jsonApiConfiguration.getJsonApiObject();

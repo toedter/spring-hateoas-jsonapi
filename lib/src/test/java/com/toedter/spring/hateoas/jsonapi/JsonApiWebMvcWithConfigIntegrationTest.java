@@ -103,7 +103,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
         @Bean
         JsonApiConfiguration jsonApiConfiguration() {
             return new JsonApiConfiguration()
-                    .withJsonApiVersionRendered(true)
+                    .withJsonApiObject(new JsonApiObject(true))
                     .withPluralizedTypeRendered(false)
                     .withLowerCasedTypeRendered(false)
                     .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
