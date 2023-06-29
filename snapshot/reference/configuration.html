@@ -148,7 +148,7 @@ when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this 
 <pre class="highlight"><code class="language-java" data-lang="java">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
-            .withJsonApiVersionRendered(true)
+            .withJsonApiObject(new JsonApiObject(true))
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
@@ -168,7 +168,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.6-SNAPSHOT<br>
-Last updated 2023-06-29 06:19:45 UTC
+Last updated 2023-06-29 06:42:30 UTC
 </div>
 </div>
 </div>
