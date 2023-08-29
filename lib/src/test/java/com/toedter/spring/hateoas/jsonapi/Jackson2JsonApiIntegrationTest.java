@@ -1424,8 +1424,8 @@ class Jackson2JsonApiIntegrationTest {
 
     private void compareWithFile(String json, String fileName, boolean validateSchema) throws Exception {
         File file = new ClassPathResource(fileName, getClass()).getFile();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        ObjectMapper objectMapper =
+                JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();
         JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
         assertThat(json).isEqualTo(jsonNode.toString());
 
