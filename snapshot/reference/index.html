@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 2.0.6-SNAPSHOT,</span>
-<span id="revdate">2023-08-29</span>
+<span id="revdate">2023-09-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1234,8 +1234,8 @@ First you have to enable this experimental feature in the configuration, like</p
         afford(methodOn(MovieController.class).newMovie(null));
 
 Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "&amp;page%5Bnumber%5D=" + pagedResult.getNumber()
-        + "&amp;page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        + "&amp;page[number]=" + pagedResult.getNumber()
+        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -2432,7 +2432,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.6-SNAPSHOT<br>
-Last updated 2023-08-29 13:10:16 UTC
+Last updated 2023-09-21 13:52:47 UTC
 </div>
 </div>
 </div>
