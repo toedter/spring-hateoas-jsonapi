@@ -111,8 +111,8 @@ public class MovieController {
                 afford(methodOn(MovieController.class).newMovie(null));
 
         Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-                + "&page%5Bnumber%5D=" + pagedResult.getNumber()
-                + "&page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+                + "&page[number]=" + pagedResult.getNumber()
+                + "&page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
         // end::affordance[]
 
         PagedModel.PageMetadata pageMetadata =
