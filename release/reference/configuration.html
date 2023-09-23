@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Configuration</h1>
 <div class="details">
-<span id="revnumber">version 2.0.5</span>
+<span id="revnumber">version 2.0.6</span>
 </div>
 </div>
 <div id="content">
@@ -148,7 +148,7 @@ when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this 
 <pre class="highlight"><code class="language-java" data-lang="java">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
-            .withJsonApiVersionRendered(true)
+            .withJsonApiObject(new JsonApiObject(true))
             .withPluralizedTypeRendered(false)
             .withLowerCasedTypeRendered(false)
             .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
@@ -167,8 +167,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.5<br>
-Last updated 2023-05-29 09:05:51 UTC
+Version 2.0.6<br>
+Last updated 2023-09-23 08:11:48 UTC
 </div>
 </div>
 </div>

@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 2.0.5</span>
+<span id="revnumber">version 2.0.6</span>
 </div>
 </div>
 <div id="content">
@@ -1011,8 +1011,8 @@ First you have to enable this experimental feature in the configuration, like</p
         afford(methodOn(MovieController.class).newMovie(null));
 
 Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "&amp;page%5Bnumber%5D=" + pagedResult.getNumber()
-        + "&amp;page%5Bsize%5D=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+        + "&amp;page[number]=" + pagedResult.getNumber()
+        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -1808,8 +1808,8 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.5<br>
-Last updated 2023-05-29 09:05:51 UTC
+Version 2.0.6<br>
+Last updated 2023-09-23 08:11:48 UTC
 </div>
 </div>
 </div>
