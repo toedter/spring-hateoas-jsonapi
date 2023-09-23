@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '2.0.6-SNAPSHOT'
+version = '2.0.6'
 sourceCompatibility = '1.17'
 
 repositories {
@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 
     // if you want to use the released version, use
-    // implementation 'com.toedter:spring-hateoas-jsonapi:2.0.5'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:2.0.6'
     implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
