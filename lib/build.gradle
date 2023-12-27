@@ -11,7 +11,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '3.1.5' apply false
+    id 'org.springframework.boot' version '3.2.1' apply false
     id 'org.sonarqube' version '4.0.0.2929'
 }
 
@@ -193,4 +193,8 @@ sonarqube {
         property 'sonar.organization', 'toedter'
         property 'sonar.host.url', 'https://sonarcloud.io'
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
 }
