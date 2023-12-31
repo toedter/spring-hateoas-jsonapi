@@ -125,11 +125,10 @@ class JsonApiData {
         }
 
         if (content instanceof JsonApiModel jsonApiModel) {
-            JsonApiModel jsonApiRepresentationModel = jsonApiModel;
-            relationships = jsonApiRepresentationModel.getRelationships();
-            sparseFieldsets = jsonApiRepresentationModel.getSparseFieldsets();
-            metaData = jsonApiRepresentationModel.getMetaData();
-            content = jsonApiRepresentationModel.getContent();
+            relationships = jsonApiModel.getRelationships();
+            sparseFieldsets = jsonApiModel.getSparseFieldsets();
+            metaData = jsonApiModel.getMetaData();
+            content = jsonApiModel.getContent();
         }
 
         if (content instanceof EntityModel) {
@@ -220,7 +219,7 @@ class JsonApiData {
 
         // extract annotated meta data
         for (Field field : ReflectionUtils.getAllDeclaredFields(content.getClass())) {
-            if (field.getAnnotation(JsonApiMeta.class) != null) {
+            if (field.getAnnotation(JsonApiMeta.class) != null && attributeMap.containsKey(field.getName())) {
                 attributeMap.remove(field.getName());
                 try {
                     field.setAccessible(true);
@@ -238,17 +237,19 @@ class JsonApiData {
         for (Method method : content.getClass().getMethods()) {
             if (method.getAnnotation(JsonApiMeta.class) != null) {
                 try {
-                    method.setAccessible(true);
-                    if (metaData == null) {
-                        metaData = new HashMap<>();
-                    }
                     String methodName = method.getName();
                     if (methodName.startsWith("get")) {
                         methodName = StringUtils.uncapitalize(methodName.substring(3));
                     }
-                    if (method.getReturnType() != void.class) {
-                        attributeMap.remove(methodName);
-                        metaData.put(methodName, method.invoke(content));
+                    if(attributeMap.containsKey(methodName)) {
+                        method.setAccessible(true);
+                        if (metaData == null) {
+                            metaData = new LinkedHashMap<>();
+                        }
+                        if (method.getReturnType() != void.class) {
+                            attributeMap.remove(methodName);
+                            metaData.put(methodName, method.invoke(content));
+                        }
                     }
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Cannot get JSON:API meta data from annotated method: "
@@ -262,7 +263,7 @@ class JsonApiData {
         JsonApiData jsonApiData = new JsonApiData(
                 finalId, finalType, attributeMap, finalRelationships, finalLinks, finalMetaData);
 
-        if (attributeMap.size() > 0 || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
+        if (!attributeMap.isEmpty() || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
             return Optional.of(content)
                     .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
                     .map(it -> jsonApiData);

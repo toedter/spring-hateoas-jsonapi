@@ -82,6 +82,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -1251,6 +1252,41 @@ class Jackson2JsonApiIntegrationTest {
 
         String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
         compareWithFile(movieJson, "movieEntityModelWithMeta.json");
+    }
+
+    @Test
+    void should_not_serialize_jsonapimeta_field_annotation_with_null_value() throws Exception {
+        @Getter
+        class Movie {
+            private final Long id = 1L;
+            private final String title = "Star Wars";
+            @JsonApiMeta
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final String metaProperty = null;
+        }
+
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
+    }
+
+    @Test
+    void should_not_serialize_jsonapimeta_method_annotation_with_null_value() throws Exception {
+
+        class Movie {
+            @Getter
+            private final Long id = 1L;
+            @Getter
+            private final String title = "Star Wars";
+            @JsonApiMeta
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            @Nullable
+            public String getMetaProperty() {
+                return null;
+            }
+        }
+
+        String movieJson = mapper.writeValueAsString(EntityModel.of(new Movie()));
+        compareWithFile(movieJson, "movieEntityModel.json");
     }
 
     @Test
