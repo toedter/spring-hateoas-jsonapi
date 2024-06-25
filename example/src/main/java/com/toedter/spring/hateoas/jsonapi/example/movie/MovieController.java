@@ -20,6 +20,8 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
+import com.toedter.spring.hateoas.jsonapi.example.exception.CommonErrors;
+import com.toedter.spring.hateoas.jsonapi.example.exception.JsonApiErrorsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -195,7 +197,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movie -> setInclude(movie, include, filterMovies))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
+                        id.toString())));
     }
 
     private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
@@ -213,7 +216,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movieModelAssembler::directorsToJsonApiModel)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
+                        id.toString())));
     }
 
     @GetMapping("/movies/{id}/relationships/directors")
@@ -222,7 +226,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movieModelAssembler::directorsRelationshipToJsonApiModel)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
+                        id.toString())));
     }
 
     @PatchMapping("/movies/{id}")
@@ -244,8 +249,9 @@ public class MovieController {
                         throw new RuntimeException(e);
                     }
                 }) //
-                .map(uri -> ResponseEntity.noContent().location(uri).build()) //
-                .orElse(ResponseEntity.badRequest().body("Unable to update " + existingMovie + " partially"));
+                .map(uri -> ResponseEntity.noContent().location(uri).build())
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newBadRequestError("Unable to update " + existingMovie + " partially")));
     }
 
     @DeleteMapping("/movies/{id}")
