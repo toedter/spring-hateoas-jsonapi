@@ -59,9 +59,7 @@ as a repository to your Maven or Gradle configuration.
 * Clone this Git repository and cd into `spring-hateoas-jsonapi`
 * Invoke `./gradlew bootrun` (just `gradlew` on Windows)
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++]
- in your Web browser
-
-The (pretty-printed) rendered result is:
+ in your Web browser. The (pretty-printed) response is:
 
 [source,json]
 {
@@ -118,6 +116,22 @@ The (pretty-printed) rendered result is:
       "number": 0
     }
   }
+}
+
+* Open link:++http://localhost:8080/api/movies/1000[http://localhost:8080/api/movies/1000]
+ in your Web browser to get a JSON:API compliant error response:
+
+[source,json]
+{
+    "errors": [
+        {
+            "id": "9d29c51d-ca50-40b6-addc-9c130b0e44a6",
+            "status": "404",
+            "code": "xrn:err:platform:resourceNotFound",
+            "title": "Resource Not Found",
+            "detail": "Resource of type 'movies' with id '1000' not found."
+        }
+    ]
 }
 
 == License
