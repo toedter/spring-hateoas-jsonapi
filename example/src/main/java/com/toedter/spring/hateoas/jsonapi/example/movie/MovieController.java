@@ -31,7 +31,6 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -185,7 +183,8 @@ public class MovieController {
                     }
                 })
                 .map(uri -> ResponseEntity.created(uri).body(movieRepresentationModel))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create " + movie));
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newBadRequestError("Unable to create " + movie)));
     }
 
     @GetMapping("/movies/{id}")
@@ -197,8 +196,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movie -> setInclude(movie, include, filterMovies))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
-                        id.toString())));
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newResourceNotFound("movies", id.toString())));
     }
 
     private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
@@ -216,8 +215,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movieModelAssembler::directorsToJsonApiModel)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
-                        id.toString())));
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newResourceNotFound("movies", id.toString())));
     }
 
     @GetMapping("/movies/{id}/relationships/directors")
@@ -226,8 +225,8 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movieModelAssembler::directorsRelationshipToJsonApiModel)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new JsonApiErrorsException(CommonErrors.newResourceNotFound("movies",
-                        id.toString())));
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newResourceNotFound("movies", id.toString())));
     }
 
     @PatchMapping("/movies/{id}")

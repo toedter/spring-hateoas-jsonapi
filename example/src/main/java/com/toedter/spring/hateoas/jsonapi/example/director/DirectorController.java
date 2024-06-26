@@ -18,6 +18,8 @@ package com.toedter.spring.hateoas.jsonapi.example.director;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 import com.toedter.spring.hateoas.jsonapi.example.RootController;
+import com.toedter.spring.hateoas.jsonapi.example.exception.CommonErrors;
+import com.toedter.spring.hateoas.jsonapi.example.exception.JsonApiErrorsException;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
 import org.springframework.data.domain.Page;
@@ -111,7 +113,8 @@ public class DirectorController {
         return repository.findById(id)
                 .map(director -> setInclude(director, include, fieldsDirectors))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new JsonApiErrorsException(
+                        CommonErrors.newResourceNotFound("directors", id.toString())));
     }
 
     private RepresentationModel<?> setInclude(Director director, String[] include, String[] fieldsDirectors) {
