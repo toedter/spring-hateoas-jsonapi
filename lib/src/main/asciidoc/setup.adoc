@@ -6,7 +6,7 @@ To enable the JSON:API media type you just need to add this module as a dependen
 [source,groovy,indent=0,role="primary"]
 .Gradle
 ----
-implementation 'com.toedter:spring-hateoas-jsonapi:2.0.7'
+implementation 'com.toedter:spring-hateoas-jsonapi:2.0.8'
 ----
 
 [source,xml,indent=0,role="secondary"]
@@ -15,9 +15,9 @@ implementation 'com.toedter:spring-hateoas-jsonapi:2.0.7'
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
 </dependency>
 ----
 
-The latest published snapshot version is `2.0.8-SNAPSHOT`. The 2.x.x stream is based on Spring Boot 3.x.x.
+The latest published snapshot version is `2.0.9-SNAPSHOT`. The 2.x.x stream is based on Spring Boot 3.x.x.
 
