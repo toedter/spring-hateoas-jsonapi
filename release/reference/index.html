@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 2.0.7,</span>
-<span id="revdate">2023-12-31</span>
+<span id="revnumber">version 2.0.8,</span>
+<span id="revdate">2024-06-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -64,7 +64,11 @@
 <li><a href="#jackson-annotations">3.13.1. Jackson Annotations</a></li>
 </ul>
 </li>
-<li><a href="#error-handling">3.14. Error Handling</a></li>
+<li><a href="#error-handling">3.14. Error Handling</a>
+<ul class="sectlevel3">
+<li><a href="#more-generic-error-handling">3.14.1. More Generic Error Handling</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#client-side-support">4. Client Side support</a>
@@ -249,7 +253,7 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <div class="listingblock primary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.0.7'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.0.8'
 </code></pre>
 </div>
 </div>
@@ -259,12 +263,12 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;2.0.7&lt;/version&gt;
+    &lt;version&gt;2.0.8&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>2.0.8-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
+<p>The latest published snapshot version is <code>2.0.9-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
 </div>
 </div>
 </div>
@@ -2014,6 +2018,145 @@ Right now there is the restriction, that the type attribute of both
 }</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>3.14.1. More Generic Error Handling</h4>
+<div class="paragraph">
+<p>If you want to implement a more generic error handling that converts exceptions
+to JSON:API error responses, you could implement a <code>@ControllerAdvice</code> like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@ControllerAdvice(annotations = RestController.class)
+@Slf4j
+public class ExceptionControllerAdvice {
+    /**
+     * Handles all manually thrown exceptions of type JsonApiErrorsException.
+     */
+    @ExceptionHandler
+    public ResponseEntity&lt;JsonApiErrors&gt; handle(JsonApiErrorsException ex) {
+        log.error("JSON:API error: Http status:{}, message:{}", ex.getStatus(), ex.getMessage());
+        return ResponseEntity.status(ex.getStatus()).body(ex.getErrors());
+    }
+
+    /**
+     * Handles all exceptions which are not of type JsonAPIErrorsException and treats
+     * them as internal errors or maps specific exceptions to specific HTTP status codes.
+     */
+    @ExceptionHandler
+    public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
+        log.error("Internal error: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                body(JsonApiErrors.create().withError(
+                        CommonErrors.newInternalServerError().withDetail(ex.getMessage())));
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This would then convert exceptions to JSON:API error responses like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+    "errors": [
+        {
+            "id": "58bab604-a149-452a-ab30-f61fafab80e7",
+            "status": "500",
+            "code": "xrn:err:platform:internalServerError",
+            "title": "Internal server error",
+            "detail": "JSON parse error: Illegal unquoted character ((CTRL-CHAR, code 13)): has to be escaped using backslash to be included in string value"
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Furthermore, you could implement a <code>JsonApiErrorsException</code> like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Getter
+public class JsonApiErrorsException extends RuntimeException {
+    private final transient JsonApiErrors errors;
+    private final HttpStatus status;
+
+    public JsonApiErrorsException(JsonApiErrors errors, HttpStatus status) {
+        super();
+        this.errors = errors;
+        this.status = status;
+    }
+
+    public JsonApiErrorsException(JsonApiError error) {
+        super();
+        this.errors = JsonApiErrors.create().withError(error);
+        this.status = HttpStatus.valueOf(Integer.parseInt(error.getStatus()));
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and provide <code>CommonErrors</code> like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class CommonErrors {
+    private CommonErrors() {
+    }
+
+    private static final JsonApiError resourceNotFound = JsonApiError.create()
+        .withCode("xrn:err:platform:resourceNotFound")
+        .withTitle("Resource Not Found")
+        .withStatus("404");
+
+    private static final JsonApiError badRequest = JsonApiError.create()
+            .withCode("xrn:err:platform:badRequest")
+            .withTitle("Bad Request")
+            .withStatus("400");
+
+    private static final JsonApiError internalServerError = JsonApiError.create()
+        .withCode("xrn:err:platform:internalServerError")
+        .withTitle("Internal server error")
+        .withStatus("500");
+
+    public static JsonApiError newResourceNotFound(String resourceType, String resourceId) {
+        return resourceNotFound
+                .withDetail("Resource of type '" + resourceType + "' with id '" + resourceId + "' not found.")
+                .withId(java.util.UUID.randomUUID().toString());
+    }
+
+    public static JsonApiError newBadRequestError(String message) {
+        return badRequest
+                .withId(java.util.UUID.randomUUID().toString())
+                .withDetail(message);
+    }
+
+    public static JsonApiError newInternalServerError() {
+        return internalServerError
+            .withId(java.util.UUID.randomUUID().toString());
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you could throw a <code>JsonApiErrorsException</code> like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">.orElseThrow(() -&gt; new JsonApiErrorsException(
+        CommonErrors.newResourceNotFound("movies", id.toString())));
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which would then be converted to a JSON:API error response.</p>
+</div>
+<div class="paragraph">
+<p>You find implementations of the <code>ExceptionControllerAdvice</code>, <code>JsonApiErrorsException</code> and <code>CommonErrors</code> in the example code.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2431,8 +2574,8 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.7<br>
-Last updated 2023-12-31 12:38:47 UTC
+Version 2.0.8<br>
+Last updated 2024-06-28 07:21:36 UTC
 </div>
 </div>
 </div>
