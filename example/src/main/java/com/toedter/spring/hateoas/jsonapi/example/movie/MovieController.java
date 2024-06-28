@@ -196,8 +196,10 @@ public class MovieController {
         return movieRepository.findById(id)
                 .map(movie -> setInclude(movie, include, filterMovies))
                 .map(ResponseEntity::ok)
+                // tag::throw-common-error-exception[]
                 .orElseThrow(() -> new JsonApiErrorsException(
                         CommonErrors.newResourceNotFound("movies", id.toString())));
+                // end::throw-common-error-exception[]
     }
 
     private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
@@ -249,7 +251,7 @@ public class MovieController {
                     }
                 }) //
                 .map(uri -> ResponseEntity.noContent().location(uri).build())
-                .orElseThrow(() -> new JsonApiErrorsException(
+                .orElse(ResponseEntity.badRequest().body(
                         CommonErrors.newBadRequestError("Unable to update " + existingMovie + " partially")));
     }
 

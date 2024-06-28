@@ -675,3 +675,57 @@ The result would be rendered as:
 ----
 include::{test-resources-dir}/errorsMvcExample.json[]
 ----
+
+=== More Generic Error Handling
+
+If you want to implement a more generic error handling that converts exceptions
+to JSON:API error responses, you could implement a `@ControllerAdvice` like:
+
+[source, java, indent=0]
+----
+include::{example-code-dir}/exception/ExceptionControllerAdvice.java[tags=exception-controller-advice]
+----
+
+This would then convert exceptions to JSON:API error responses like:
+
+[source, json]
+----
+{
+    "errors": [
+        {
+            "id": "58bab604-a149-452a-ab30-f61fafab80e7",
+            "status": "500",
+            "code": "xrn:err:platform:internalServerError",
+            "title": "Internal server error",
+            "detail": "JSON parse error: Illegal unquoted character ((CTRL-CHAR, code 13)): has to be escaped using backslash to be included in string value"
+        }
+    ]
+}
+----
+
+Furthermore, you could implement a `JsonApiErrorsException` like:
+
+[source, java, indent=0]
+----
+include::{example-code-dir}/exception/JsonApiErrorsException.java[tags=jsonapi-errors-exception]
+----
+
+and provide `CommonErrors` like:
+
+[source, java, indent=0]
+----
+include::{example-code-dir}/exception/CommonErrors.java[tags=common-errors]
+----
+
+Now you could throw a `JsonApiErrorsException` like:
+
+[source, java, indent=0]
+----
+include::{example-code-dir}/movie/MovieController.java[tags=throw-common-error-exception]
+----
+
+which would then be converted to a JSON:API error response.
+
+You find implementations of the `ExceptionControllerAdvice`, `JsonApiErrorsException` and `CommonErrors` in the example code.
+
+[[configuration]]

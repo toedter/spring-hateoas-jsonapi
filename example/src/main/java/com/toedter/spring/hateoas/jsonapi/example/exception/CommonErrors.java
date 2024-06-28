@@ -2,6 +2,7 @@ package com.toedter.spring.hateoas.jsonapi.example.exception;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 
+// tag::common-errors[]
 public class CommonErrors {
     private CommonErrors() {
     }
@@ -38,3 +39,4 @@ public class CommonErrors {
             .withId(java.util.UUID.randomUUID().toString());
     }
 }
+// end::common-errors[]

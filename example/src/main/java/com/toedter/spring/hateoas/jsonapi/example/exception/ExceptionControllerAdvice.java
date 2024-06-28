@@ -4,14 +4,11 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.InvalidParameterException;
-
-
+// tag::exception-controller-advice[]
 @ControllerAdvice(annotations = RestController.class)
 @Slf4j
 public class ExceptionControllerAdvice {
@@ -31,6 +28,9 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<JsonApiErrors> handle(Exception ex) {
         log.error("Internal error: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(JsonApiErrors.create().withError(CommonErrors.newInternalServerError().withDetail(ex.getMessage())));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                body(JsonApiErrors.create().withError(
+                        CommonErrors.newInternalServerError().withDetail(ex.getMessage())));
     }
 }
+// end::exception-controller-advice[]

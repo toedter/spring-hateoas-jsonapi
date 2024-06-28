@@ -5,6 +5,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+// tag::jsonapi-errors-exception[]
 @Getter
 public class JsonApiErrorsException extends RuntimeException {
     private final transient JsonApiErrors errors;
@@ -21,5 +22,5 @@ public class JsonApiErrorsException extends RuntimeException {
         this.errors = JsonApiErrors.create().withError(error);
         this.status = HttpStatus.valueOf(Integer.parseInt(error.getStatus()));
     }
-
 }
+// end::jsonapi-errors-exception[]
