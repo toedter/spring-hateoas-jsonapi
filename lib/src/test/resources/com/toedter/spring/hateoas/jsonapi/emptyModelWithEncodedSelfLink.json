@@ -1,0 +1,6 @@
+{
+  "data": null,
+  "links": {
+    "self": "http://localhost/items?filter=item.id%3Dcontains%3D%27%26%27"
+  }
+}

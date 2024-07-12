@@ -36,9 +36,11 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
@@ -47,6 +49,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private JsonApiConfiguration.AffordanceType affordanceType;
     private boolean removeHateoasLinkPropertiesFromMeta;
+    private Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
 
     public JsonApiLinksSerializer() {
         super(Links.class);
@@ -56,6 +59,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     public void setJsonApiConfiguration(JsonApiConfiguration jsonApiConfiguration) {
         this.affordanceType = jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
         this.removeHateoasLinkPropertiesFromMeta = jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
+        this.linksNotUrlEncoded = jsonApiConfiguration.getLinksNotUrlEncoded();
     }
 
     @Override
@@ -82,7 +86,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     private void serializeLinkWithRelation(JsonGenerator gen, Link link) throws IOException {
         if (isSimpleLink(link)) {
-            gen.writeStringField(link.getRel().value(), UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
+            gen.writeStringField(link.getRel().value(), uriEncodeLinkHref(link));
         } else {
             gen.writeObjectFieldStart(link.getRel().value());
             writeComplexLink(gen, link);
@@ -91,7 +95,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     }
 
     private void writeComplexLink(JsonGenerator gen, Link link) throws IOException {
-        gen.writeStringField("href", UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8));
+        gen.writeStringField("href", uriEncodeLinkHref(link));
         Map<String, Object> attributes = getAttributes(link);
         if (link.getTitle() != null) {
             gen.writeStringField("title", link.getTitle());
@@ -117,6 +121,10 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
     private boolean isSimpleLink(Link link) {
         return getAttributes(link).size() == 0;
+    }
+
+    private String uriEncodeLinkHref(Link link) {
+        return linksNotUrlEncoded.contains(link.getRel()) ? link.getHref() : UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8);
     }
 
 

@@ -21,11 +21,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 
@@ -262,6 +265,19 @@ public class JsonApiConfiguration {
     @Getter
     private final boolean jsonApiCompliantLinks;
 
+    /**
+     * By default, JSON:API links are serialized as URL encoded.
+     *
+     * If you set this configuration, Spring HATEOAS links with set relations won't be URI encoded.
+     * This can be useful for instance to avoid double uri encoding when you pass the links to the model already
+     * URL encoded.
+     * @param linksNotUrlEncoded The new value of this configuration's linksNotUrlEncoded
+     * @return The default is empty set.
+     */
+    @With
+    @Getter
+    private final Set<LinkRelation> linksNotUrlEncoded;
+
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
 
@@ -361,8 +377,8 @@ public class JsonApiConfiguration {
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
         this.jsonApi11LinkPropertiesRemovedFromLinkMeta = true;
         this.jsonApiCompliantLinks = true;
+        this.linksNotUrlEncoded = new HashSet<>();
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
 }
-

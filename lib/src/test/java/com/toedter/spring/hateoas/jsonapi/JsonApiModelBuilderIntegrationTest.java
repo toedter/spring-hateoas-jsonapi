@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
@@ -38,6 +39,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,6 +92,20 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
         final String movieJson = mapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "emptyModelWithSelfLink.json");
+    }
+
+    @Test
+    void should_build_empty_model_with_link_already_url_encoded() throws Exception {
+        final RepresentationModel<?> jsonApiModel =
+                jsonApiModel().model(new Object())
+                        .link("http://localhost/items?filter=item.id%3Dcontains%3D%27%26%27", IanaLinkRelations.SELF)
+                        .build();
+
+        var configuration = new JsonApiMediaTypeConfiguration(null, null);
+        var configuredMapper = new ObjectMapper();
+        configuration.configureObjectMapper(configuredMapper, new JsonApiConfiguration().withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF)));
+        final String movieJson = configuredMapper.writeValueAsString(jsonApiModel);
+        compareWithFile(movieJson, "emptyModelWithEncodedSelfLink.json");
     }
 
     @Test
