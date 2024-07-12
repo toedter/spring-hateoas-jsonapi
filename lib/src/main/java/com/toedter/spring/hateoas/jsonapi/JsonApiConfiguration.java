@@ -262,6 +262,19 @@ public class JsonApiConfiguration {
     @Getter
     private final boolean jsonApiCompliantLinks;
 
+    /**
+     * By default, JSON:API links are serialized as URI encoded.
+     *
+     * If you set this configuration ro {@literal false}, Spring HATEOAS links won't be URI encoded.
+     * This can be useful for instance to avoid double uri encoding when you pass the links to the model already
+     * URI encoded.
+     * @param linksUriEncoded The new value of this configuration's linksUriEncoded
+     * @return The default is {@literal true}.
+     */
+    @With
+    @Getter
+    private final boolean linksUriEncoded;
+
     @With(AccessLevel.PRIVATE)
     private final Map<Class<?>, String> typeForClass;
 
@@ -361,8 +374,8 @@ public class JsonApiConfiguration {
         this.affordancesRenderedAsLinkMeta = AffordanceType.NONE;
         this.jsonApi11LinkPropertiesRemovedFromLinkMeta = true;
         this.jsonApiCompliantLinks = true;
+        this.linksUriEncoded = true;
         this.objectMapperCustomizer = customObjectMapper -> {
         }; // Default to no action.
     }
 }
-
