@@ -41,7 +41,7 @@ jobs:
       - name: Build and static code analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build doc sonarqube
+        run: ./gradlew build doc sonar
       - name: Publish to Maven
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
