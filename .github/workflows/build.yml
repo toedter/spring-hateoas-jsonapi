@@ -38,10 +38,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build and static code analysis
+      - name: Gradle Build
+        run: ./gradlew build doc
+      - name: Static code analysis (Sonar)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build doc sonar
+        run: ./gradlew sonar
       - name: Publish to Maven
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
