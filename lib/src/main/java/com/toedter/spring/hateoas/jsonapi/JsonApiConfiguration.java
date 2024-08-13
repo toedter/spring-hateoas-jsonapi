@@ -58,7 +58,8 @@ public class JsonApiConfiguration {
          * Affordances will be rendered as link meta (HAL-FORMS format).
          * See <a href="https://rwcbook.github.io/hal-forms/#templates-element">https://rwcbook.github.io/hal-forms/#templates-element</a>.
          */
-        HAL_FORMS}
+        HAL_FORMS
+    }
 
     /**
      * Indicates if the JSON:API type attribute of resource objects is pluralized.
@@ -91,9 +92,9 @@ public class JsonApiConfiguration {
      * }
      * </pre>
      *
-     * @deprecated since 2.0.0, prefer {@link #jsonApiObject}
      * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
      * @return The default is {@literal false}.
+     * @deprecated since 2.0.0, prefer {@link #jsonApiObject}
      */
     @With
     @Getter
@@ -236,7 +237,7 @@ public class JsonApiConfiguration {
      * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
      * are now serialized as direct link properties. For the previous version JSON:API v1.0
      * they were serialized in the meta section.
-     *
+     * <p>
      * The removal from the meta section is a breaking change that could harm existing clients.
      * But to keep the format backward-compatible to previous versions of this library, title, type, and hreflang
      * can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
@@ -254,7 +255,7 @@ public class JsonApiConfiguration {
      * <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
      * self, related, describedBy, next, pre, first and last. The only allowed
      * <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
-     *
+     * <p>
      * If you set this configuration to {@literal false}, Spring HATEOAS links that are not compliant
      * with JSON:API would also be serialized.
      *
@@ -267,10 +268,11 @@ public class JsonApiConfiguration {
 
     /**
      * By default, JSON:API links are serialized as URL encoded.
-     *
-     * If you set this configuration, Spring HATEOAS links with set relations won't be URI encoded.
+     * <p>
+     * If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
      * This can be useful for instance to avoid double uri encoding when you pass the links to the model already
      * URL encoded.
+     *
      * @param linksNotUrlEncoded The new value of this configuration's linksNotUrlEncoded
      * @return The default is empty set.
      */

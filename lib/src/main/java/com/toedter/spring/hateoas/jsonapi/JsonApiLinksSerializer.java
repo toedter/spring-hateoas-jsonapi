@@ -49,7 +49,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private JsonApiConfiguration.AffordanceType affordanceType;
     private boolean removeHateoasLinkPropertiesFromMeta;
-    private Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
+    private transient Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
 
     public JsonApiLinksSerializer() {
         super(Links.class);
