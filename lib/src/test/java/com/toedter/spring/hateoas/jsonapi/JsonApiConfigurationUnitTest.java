@@ -23,6 +23,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.IanaLinkRelations;
+
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,6 +42,7 @@ class JsonApiConfigurationUnitTest {
         assertThat(new JsonApiConfiguration().isJsonApi11LinkPropertiesRemovedFromLinkMeta()).isTrue();
         assertThat(new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta())
                 .isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
+        assertThat(new JsonApiConfiguration().getLinksNotUrlEncoded()).isEmpty();
     }
 
     @Test
@@ -96,5 +100,11 @@ class JsonApiConfigurationUnitTest {
     void should_set_link_property_rendering() {
         assertThat(new JsonApiConfiguration().withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
                 .isJsonApi11LinkPropertiesRemovedFromLinkMeta()).isFalse();
+    }
+
+    @Test
+    void should_set_links_not_url_encoded() {
+        assertThat(new JsonApiConfiguration().withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF, IanaLinkRelations.RELATED))
+                .getLinksNotUrlEncoded()).containsExactlyInAnyOrder(IanaLinkRelations.SELF, IanaLinkRelations.RELATED);
     }
 }
