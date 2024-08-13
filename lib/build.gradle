@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '2.1.0'
+version = '2.1.1-SNAPSHOT'
 sourceCompatibility = '1.17'
 
 repositories {
