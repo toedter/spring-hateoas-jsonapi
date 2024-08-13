@@ -89,8 +89,8 @@ class JsonApiLinkDiscovererUnitTest extends JsonApiTestBase {
         void should_find_links_as_string() throws IOException {
             String source = readFile("movieEntityModelWithLinks.json");
             // tag::link-discoverer[]
-            LinkDiscoverer discoverer = new JsonApiLinkDiscoverer();
-            Links links = discoverer.findLinksWithRel(SELF, source);
+            LinkDiscoverer linkDiscoverer = new JsonApiLinkDiscoverer();
+            Links links = linkDiscoverer.findLinksWithRel(SELF, source);
 
             assertThat(links.hasLink("self")).isTrue();
             assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");

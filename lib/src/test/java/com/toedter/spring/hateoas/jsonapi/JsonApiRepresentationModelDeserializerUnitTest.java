@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiRepresentationModelDeserializer Unit Test")
-public class JsonApiRepresentationModelDeserializerUnitTest {
+class JsonApiRepresentationModelDeserializerUnitTest {
     private JsonApiRepresentationModelDeserializer deserializer;
 
     @BeforeEach
@@ -38,14 +38,14 @@ public class JsonApiRepresentationModelDeserializerUnitTest {
     }
 
     @Test
-    public void should_throw_exception_with_null_arguments() {
+    void should_throw_exception_with_null_arguments() {
         List<Object> list = new ArrayList<>();
         assertThrows(IllegalArgumentException.class,
                 () -> deserializer.convertToRepresentationModel(list, null));
     }
 
     @Test
-    public void should_throw_exception_with_wrong_list_size() {
+    void should_throw_exception_with_wrong_list_size() {
         List<Object> list = new ArrayList<>();
         JsonApiDocument jsonApiDocument = new JsonApiDocument();
         assertThrows(IllegalArgumentException.class,
@@ -53,7 +53,7 @@ public class JsonApiRepresentationModelDeserializerUnitTest {
     }
 
     @Test
-    public void should_throw_exception_with_wrong_list_content() {
+    void should_throw_exception_with_wrong_list_content() {
         List<Object> list = new ArrayList<>();
         list.add(new Object());
         JsonApiDocument jsonApiDocument = new JsonApiDocument();

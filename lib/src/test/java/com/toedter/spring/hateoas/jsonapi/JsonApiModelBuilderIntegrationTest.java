@@ -606,8 +606,8 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     @Test
     void should_build_single_movie_model_with_relationship_included_type_config() throws Exception {
         JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
-        ObjectMapper mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper,
+        ObjectMapper objectMapper = new ObjectMapper();
+        configuration.configureObjectMapper(objectMapper,
                 new JsonApiConfiguration()
                         .withPluralizedTypeRendered(false)
                         .withLowerCasedTypeRendered(false));
@@ -621,7 +621,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
                         .included(director)
                         .build();
 
-        final String movieJson = mapper.writeValueAsString(jsonApiModel);
+        final String movieJson = objectMapper.writeValueAsString(jsonApiModel);
         compareWithFile(movieJson, "movieWidthDirectorRelationshipAndTypeConfiguration.json");
     }
 

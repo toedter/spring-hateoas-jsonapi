@@ -48,14 +48,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class WebFluxMovieController {
 
-    private static Map<Integer, Movie> MOVIES;
+    private static Map<Integer, Movie> movies;
 
     public static void reset() {
 
-        MOVIES = new TreeMap<>();
+        movies = new TreeMap<>();
 
-        MOVIES.put(1, new Movie("1", "Star Wars"));
-        MOVIES.put(2, new Movie("2", "Avengers"));
+        movies.put(1, new Movie("1", "Star Wars"));
+        movies.put(2, new Movie("2", "Avengers"));
     }
 
     @GetMapping("/movies")
@@ -63,7 +63,7 @@ public class WebFluxMovieController {
 
         WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
 
-        return Flux.fromIterable(MOVIES.keySet())
+        return Flux.fromIterable(movies.keySet())
                 .flatMap(this::findOne)
                 .collectList()
                 .flatMap(resources -> WebFluxLinkBuilder.linkTo(controller.all()).withSelfRel()
@@ -80,14 +80,13 @@ public class WebFluxMovieController {
                 .withSelfRel()
                 .toMono();
 
-        Movie movie = MOVIES.get(id);
+        Movie movie = movies.get(id);
         return selfLink.map(links -> EntityModel.of(movie, links));
     }
 
     @GetMapping("/moviesWithDirectors/{id}")
     public Mono<RepresentationModel<?>> findOneWidthDirectors(@PathVariable Integer id) {
-        WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
-        Movie movie = MOVIES.get(id);
+        Movie movie = movies.get(id);
         List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
         JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
         for (Director director : directors) {
@@ -109,10 +108,10 @@ public class WebFluxMovieController {
         return movie
                 .flatMap(resource -> {
 
-                    int newMovieId = MOVIES.size() + 1;
+                    int newMovieId = movies.size() + 1;
                     assert resource.getContent() != null;
                     resource.getContent().setId("" + newMovieId);
-                    MOVIES.put(newMovieId, resource.getContent());
+                    movies.put(newMovieId, resource.getContent());
                     return findOne(newMovieId);
                 })
                 .map(findOne -> ResponseEntity.created(findOne
@@ -126,10 +125,10 @@ public class WebFluxMovieController {
 
         return movie
                 .flatMap(resource -> {
-                    int newMovieId = MOVIES.size() + 1;
+                    int newMovieId = movies.size() + 1;
                     assert resource.getContent() != null;
                     resource.getContent().setId("" + newMovieId);
-                    MOVIES.put(newMovieId, resource.getContent());
+                    movies.put(newMovieId, resource.getContent());
                     return findOne(newMovieId);
                 })
                 .map(findOne -> ResponseEntity.created(findOne
@@ -145,13 +144,13 @@ public class WebFluxMovieController {
         return movie
                 .flatMap(resource -> {
 
-                    Movie newMovie = MOVIES.get(id);
+                    Movie newMovie = movies.get(id);
                     assert resource.getContent() != null;
                     if (resource.getContent().getTitle() != null) {
                         newMovie = newMovie.withTitle(resource.getContent().getTitle());
                     }
 
-                    MOVIES.put(id, newMovie);
+                    movies.put(id, newMovie);
 
                     return findOne(id);
 
