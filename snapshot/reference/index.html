@@ -2424,8 +2424,8 @@ is exposed as a Spring bean.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">LinkDiscoverer discoverer = new JsonApiLinkDiscoverer();
-Links links = discoverer.findLinksWithRel(SELF, source);
+<pre class="highlight"><code class="language-java" data-lang="java">LinkDiscoverer linkDiscoverer = new JsonApiLinkDiscoverer();
+Links links = linkDiscoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
 assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
@@ -2580,7 +2580,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.0.9-SNAPSHOT<br>
-Last updated 2024-08-13 06:58:26 UTC
+Last updated 2024-08-13 09:20:38 UTC
 </div>
 </div>
 </div>
