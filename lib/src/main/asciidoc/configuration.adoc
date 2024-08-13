@@ -33,7 +33,7 @@ see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring H
 Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
 since client might expect properties like title in the meta section. | true
-| LinksNotUrlEncoded | Set of links' rels which are not URL encoded when serializing. Empty by default. | empty set
+| LinksNotUrlEncoded | Set of link relations which are not URL encoded when serializing. Empty by default. | empty set
 |===
 
 TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,

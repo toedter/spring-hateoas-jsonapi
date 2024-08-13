@@ -274,7 +274,7 @@ public class JsonApiConfiguration {
      * URL encoded.
      *
      * @param linksNotUrlEncoded The new value of this configuration's linksNotUrlEncoded
-     * @return The default is empty set.
+     * @return The default is an empty set.
      */
     @With
     @Getter
