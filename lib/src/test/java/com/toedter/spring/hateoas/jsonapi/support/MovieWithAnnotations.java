@@ -18,12 +18,11 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiMeta;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import jakarta.persistence.Id;
 
 // tag::Movie[]
 // @fold:on
