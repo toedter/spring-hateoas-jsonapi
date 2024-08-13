@@ -42,25 +42,25 @@ class JsonApiMediaTypeConfigurationUnitTest {
     }
 
     @Test
-    public void should_return_json_api_media_type() {
+    void should_return_json_api_media_type() {
         List<MediaType> mediaTypes = configuration.getMediaTypes();
-        assertThat(mediaTypes.size()).isEqualTo(1);
-        assertThat(mediaTypes.get(0).toString()).isEqualTo("application/vnd.api+json");
+        assertThat(mediaTypes).hasSize(1);
+        assertThat(mediaTypes.get(0)).hasToString("application/vnd.api+json");
     }
 
     @Test
-    public void should_return_json_api_jackson_module() {
+    void should_return_json_api_jackson_module() {
         Module jacksonModule = configuration.getJacksonModule();
         assertThat(jacksonModule).isInstanceOf(Jackson2JsonApiModule.class);
     }
 
     @Test
-    public void should_return_configured_object_mapper() {
+    void should_return_configured_object_mapper() {
         ObjectMapper objectMapper = configuration.configureObjectMapper(new ObjectMapper(), new JsonApiConfiguration());
         assertThat(objectMapper.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)).isFalse();
         assertThat(objectMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)).isFalse();
         assertThat(objectMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)).isFalse();
-        assertThat(objectMapper.getRegisteredModuleIds().contains("json-api-module")).isTrue();
+        assertThat(objectMapper.getRegisteredModuleIds()).contains("json-api-module");
     }
 
 }

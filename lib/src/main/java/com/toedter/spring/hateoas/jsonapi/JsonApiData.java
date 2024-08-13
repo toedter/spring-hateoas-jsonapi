@@ -180,19 +180,18 @@ class JsonApiData {
         // breaking change: JSON:API only allows a self link within resources (not top-level!),
         // see https://jsonapi.org/format/#document-resource-object-links.
         // All other resource links are now removed.
-        if (jsonApiConfiguration.isJsonApiCompliantLinks()) {
-            if (links != null) {
-                Links validJsonApiLinks = Links.NONE;
-                for (Link link : links) {
-                    if (link.hasRel("self")) {
-                        validJsonApiLinks = validJsonApiLinks.and(link);
-                    } else {
-                        log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
-                    }
+        if (links != null && jsonApiConfiguration.isJsonApiCompliantLinks()) {
+            Links validJsonApiLinks = Links.NONE;
+            for (Link link : links) {
+                if (link.hasRel("self")) {
+                    validJsonApiLinks = validJsonApiLinks.and(link);
+                } else {
+                    log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
                 }
-                links = validJsonApiLinks;
             }
+            links = validJsonApiLinks;
         }
+
 
         JsonApiResourceIdentifier.ResourceField typeField = JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
@@ -255,7 +254,7 @@ class JsonApiData {
                     if (methodName.startsWith("get")) {
                         methodName = StringUtils.uncapitalize(methodName.substring(3));
                     }
-                    if(attributeMap.containsKey(methodName)) {
+                    if (attributeMap.containsKey(methodName)) {
                         method.setAccessible(true);
                         if (metaData == null) {
                             metaData = new LinkedHashMap<>();

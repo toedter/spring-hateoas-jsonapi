@@ -114,9 +114,9 @@ class Jackson2JsonApiIntegrationTest {
     @BeforeEach
     void setUpModule() throws IOException {
         mapper = createObjectMapper(new JsonApiConfiguration().withObjectMapperCustomizer(
-                        mapper -> {
-                            mapper.registerModule(new JavaTimeModule());
-                            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                        objectMapper -> {
+                            objectMapper.registerModule(new JavaTimeModule());
+                            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
                         }
                 )
                 .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")

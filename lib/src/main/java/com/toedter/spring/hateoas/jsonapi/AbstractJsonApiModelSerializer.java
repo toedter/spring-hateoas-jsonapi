@@ -173,13 +173,11 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         if (jsonApiConfiguration.isJsonApiCompliantLinks() && links != null) {
             Links validJsonApiLinks = Links.NONE;
             for (Link link : links) {
-                if (!validJsonApiLinks.hasLink(link.getRel()) &&
-                        (link.hasRel("self") || link.hasRel("related") || link.hasRel("describedby")
-                                || link.hasRel("first") || link.hasRel("last") || link.hasRel("prev")
-                                || link.hasRel("next"))) {
-                    {
-                        validJsonApiLinks = validJsonApiLinks.and(link);
-                    }
+                if (!validJsonApiLinks.hasLink(link.getRel())
+                        && (link.hasRel("self") || link.hasRel("related") || link.hasRel("describedby")
+                        || link.hasRel("first") || link.hasRel("last") || link.hasRel("prev")
+                        || link.hasRel("next"))) {
+                    validJsonApiLinks = validJsonApiLinks.and(link);
                 } else {
                     log.warning("removed invalid JSON:API top-level link: " + link.getRel());
                 }
