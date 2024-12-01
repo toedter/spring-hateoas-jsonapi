@@ -12,7 +12,7 @@ plugins {
     id 'signing'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.springframework.boot' version '3.3.5' apply false
-    id 'org.sonarqube' version '5.1.0.4882'
+    id 'org.sonarqube' version '6.0.1.5171'
 }
 
 group = 'com.toedter'
