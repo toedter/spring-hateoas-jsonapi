@@ -16,8 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MovieRepository extends PagingAndSortingRepository<Movie, Long>, CrudRepository<Movie, Long> {
+public interface MovieRepository extends JpaRepository<Movie, Long> {
 }

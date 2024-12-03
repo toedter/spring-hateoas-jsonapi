@@ -211,7 +211,7 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_validate_relationship_with_wither() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type"));
+        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type", null));
         jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
         jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
         assertThat(jsonApiRelationship.isValid()).isTrue();
@@ -220,9 +220,9 @@ class JsonApiRelationshipUnitTest {
     @Test
     void should_validate_relationship_with_wither_and_multiple_data() {
         JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
-        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type"));
-        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("2", "type"));
-        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("3", "type"));
+        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type", null));
+        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("2", "type", null));
+        jsonApiRelationship = jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("3", "type", null));
         jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
         jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
         assertThat(jsonApiRelationship.isValid()).isTrue();

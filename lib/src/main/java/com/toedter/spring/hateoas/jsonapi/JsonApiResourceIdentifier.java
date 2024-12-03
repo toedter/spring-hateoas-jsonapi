@@ -71,14 +71,6 @@ class JsonApiResourceIdentifier {
         this.meta = meta;
     }
 
-    @JsonCreator
-    public JsonApiResourceIdentifier(
-            @JsonProperty String id,
-            @JsonProperty String type
-    ) {
-        this(id, type, null);
-    }
-
     static class ResourceField {
         final String name;
         final String value;
