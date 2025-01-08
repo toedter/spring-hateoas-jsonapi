@@ -24,7 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @JsonApiTypeForClass("movies")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class DerivedMovieWithRating extends MovieWithJsonTypeInfo {
-    private double rating;
+
+  private double rating;
 }

@@ -22,7 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonApiTypeForClass("my-movies")
 public class MovieDerivedWithTypeForClass extends Movie {
-    public MovieDerivedWithTypeForClass(String id, String title) {
-        super(id, title);
-    }
+
+  public MovieDerivedWithTypeForClass(String id, String title) {
+    super(id, title);
+  }
 }

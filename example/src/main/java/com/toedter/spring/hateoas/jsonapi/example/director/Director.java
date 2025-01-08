@@ -18,10 +18,6 @@ package com.toedter.spring.hateoas.jsonapi.example.director;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,30 +25,35 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Director {
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Movie> movies = new ArrayList<>();
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    public Director(String name) {
-        this.name = name;
-    }
+  private String name;
 
-    public void addMovie(Movie movie) {
-        this.movies.add(movie);
-    }
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JsonIgnore
+  private List<Movie> movies = new ArrayList<>();
 
-    public void deleteMovie(Movie movie) {
-        this.movies.remove(movie);
-    }
+  public Director(String name) {
+    this.name = name;
+  }
+
+  public void addMovie(Movie movie) {
+    this.movies.add(movie);
+  }
+
+  public void deleteMovie(Movie movie) {
+    this.movies.remove(movie);
+  }
 }

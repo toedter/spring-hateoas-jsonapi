@@ -18,22 +18,22 @@ package com.toedter.spring.hateoas.jsonapi.support.polymorphism;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
-import lombok.NoArgsConstructor;
-
 import java.util.Collection;
+import lombok.NoArgsConstructor;
 
 // tag::SuperEChild[]
 @NoArgsConstructor
 public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    @Override
-    public T getT() {
-        return null;
-    }
+  @JsonApiType
+  private final String type = null;
+
+  @Override
+  public T getT() {
+    return null;
+  }
 }
 // end::SuperEChild[]

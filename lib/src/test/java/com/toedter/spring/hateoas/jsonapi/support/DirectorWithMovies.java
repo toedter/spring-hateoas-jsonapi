@@ -18,29 +18,29 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
 @JsonApiTypeForClass("directors")
-public class DirectorWithMovies  {
-    private String id;
-    private String name;
-    private int born;
+public class DirectorWithMovies {
 
-    @JsonIgnore
-    private List<MovieWithRating> movies;
+  private String id;
+  private String name;
+  private int born;
 
-    public DirectorWithMovies(String id, String name, int born) {
-        this.id = id;
-        this.name = name;
-        this.born = born;
-    }
+  @JsonIgnore
+  private List<MovieWithRating> movies;
+
+  public DirectorWithMovies(String id, String name, int born) {
+    this.id = id;
+    this.name = name;
+    this.born = born;
+  }
 }

@@ -19,72 +19,94 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import lombok.Getter;
-import org.springframework.hateoas.Links;
-
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import javax.annotation.Nullable;
+import lombok.Getter;
+import org.springframework.hateoas.Links;
 
-class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
-    private final transient JsonApiConfiguration jsonApiConfiguration;
+class JsonApiRelationshipSerializer
+  extends AbstractJsonApiSerializer<JsonApiRelationship> {
 
-    @Getter
-    private static class JsonApiRelationshipForSerialization {
-        @Nullable
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        private final Object data;
+  private final transient JsonApiConfiguration jsonApiConfiguration;
 
-        @Nullable
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private final Links links;
+  @Getter
+  private static class JsonApiRelationshipForSerialization {
 
-        @Nullable
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private final Map<String, Object> meta;
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private final Object data;
 
-        public JsonApiRelationshipForSerialization(
-                @Nullable Object data, @Nullable Links links, @Nullable Map<String, Object> meta) {
-            this.data = data;
-            this.links = links;
-            this.meta = meta;
-        }
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private final Links links;
+
+    @Nullable
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private final Map<String, Object> meta;
+
+    public JsonApiRelationshipForSerialization(
+      @Nullable Object data,
+      @Nullable Links links,
+      @Nullable Map<String, Object> meta
+    ) {
+      this.data = data;
+      this.links = links;
+      this.meta = meta;
+    }
+  }
+
+  @Getter
+  private static class JsonApiNullDataRelationshipForSerialization {
+
+    private final Object data = null;
+  }
+
+  public JsonApiRelationshipSerializer(
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    super(JsonApiRelationship.class, false);
+    this.jsonApiConfiguration = jsonApiConfiguration;
+  }
+
+  @Override
+  public void serialize(
+    JsonApiRelationship value,
+    JsonGenerator gen,
+    SerializerProvider provider
+  ) throws IOException {
+    Object data = value.getData();
+    if (data != null) {
+      if (data instanceof Collection) {
+        data = value.toJsonApiResourceCollection(
+          (Collection<?>) data,
+          jsonApiConfiguration
+        );
+      } else {
+        data = value.toJsonApiResource(data, jsonApiConfiguration);
+      }
     }
 
-    @Getter
-    private static class JsonApiNullDataRelationshipForSerialization {
+    if (data == null && value.getLinks() == null && value.getMeta() == null) {
+      provider
+        .findValueSerializer(JsonApiNullDataRelationshipForSerialization.class)
+        .serialize(
+          new JsonApiNullDataRelationshipForSerialization(),
+          gen,
+          provider
+        );
+    } else {
+      JsonApiRelationshipForSerialization jsonApiRelationship =
+        new JsonApiRelationshipForSerialization(
+          data,
+          value.getLinks(),
+          value.getMeta()
+        );
 
-        private final Object data = null;
+      provider
+        .findValueSerializer(JsonApiRelationshipForSerialization.class)
+        .serialize(jsonApiRelationship, gen, provider);
     }
-
-    public JsonApiRelationshipSerializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(JsonApiRelationship.class, false);
-        this.jsonApiConfiguration = jsonApiConfiguration;
-    }
-
-    @Override
-    public void serialize(JsonApiRelationship value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        Object data = value.getData();
-        if( data != null ) {
-            if (data instanceof Collection) {
-                data = value.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
-            } else {
-                data = value.toJsonApiResource(data, jsonApiConfiguration);
-            }
-        }
-
-        if(data == null && value.getLinks() == null && value.getMeta() == null) {
-            provider
-                    .findValueSerializer(JsonApiNullDataRelationshipForSerialization.class)
-                    .serialize(new JsonApiNullDataRelationshipForSerialization(), gen, provider);
-        } else {
-            JsonApiRelationshipForSerialization jsonApiRelationship =
-                    new JsonApiRelationshipForSerialization(data, value.getLinks(), value.getMeta());
-
-            provider
-                    .findValueSerializer(JsonApiRelationshipForSerialization.class)
-                    .serialize(jsonApiRelationship, gen, provider);
-        }
-    }
+  }
 }

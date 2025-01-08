@@ -19,32 +19,40 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 
-import java.util.List;
+class JsonApiCollectionModelDeserializer
+  extends AbstractJsonApiModelDeserializer<CollectionModel<?>>
+  implements ContextualDeserializer {
 
-class JsonApiCollectionModelDeserializer extends AbstractJsonApiModelDeserializer<CollectionModel<?>>
-        implements ContextualDeserializer {
+  JsonApiCollectionModelDeserializer(
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    super(jsonApiConfiguration);
+  }
 
-    JsonApiCollectionModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(jsonApiConfiguration);
+  protected JsonApiCollectionModelDeserializer(
+    JavaType contentType,
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    super(contentType, jsonApiConfiguration);
+  }
+
+  @Override
+  protected CollectionModel<?> convertToRepresentationModel(
+    List<Object> resources,
+    JsonApiDocument doc
+  ) {
+    Links links = doc.getLinks();
+    if (links == null) {
+      return CollectionModel.of(resources);
     }
+    return CollectionModel.of(resources, links);
+  }
 
-    protected JsonApiCollectionModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
-        super(contentType, jsonApiConfiguration);
-    }
-
-    @Override
-    protected CollectionModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
-        Links links = doc.getLinks();
-        if(links == null) {
-            return CollectionModel.of(resources);
-        }
-        return CollectionModel.of(resources, links);
-    }
-
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiCollectionModelDeserializer(type, jsonApiConfiguration);
-    }
+  protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+    return new JsonApiCollectionModelDeserializer(type, jsonApiConfiguration);
+  }
 }

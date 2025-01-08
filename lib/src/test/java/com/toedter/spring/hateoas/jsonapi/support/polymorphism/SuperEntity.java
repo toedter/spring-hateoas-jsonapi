@@ -21,11 +21,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 // tag::SuperEntity[]
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
-        @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
-})
+@JsonSubTypes(
+  {
+    @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
+    @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2"),
+  }
+)
 public interface SuperEntity<T> {
-    T getT();
+  T getT();
 }
 // end::SuperEntity[]

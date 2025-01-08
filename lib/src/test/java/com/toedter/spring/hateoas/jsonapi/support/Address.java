@@ -26,6 +26,7 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class Address {
-    private String id;
-    private String city;
+
+  private String id;
+  private String city;
 }

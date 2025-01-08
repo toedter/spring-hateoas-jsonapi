@@ -19,6 +19,8 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -27,9 +29,6 @@ import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Spring configuration for JSON:API support.
  *
@@ -37,52 +36,57 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration
-public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
+public class JsonApiMediaTypeConfiguration
+  implements HypermediaMappingInformation {
 
-    private final ObjectProvider<JsonApiConfiguration> configuration;
-    private final AutowireCapableBeanFactory beanFactory;
+  private final ObjectProvider<JsonApiConfiguration> configuration;
+  private final AutowireCapableBeanFactory beanFactory;
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.hateoas.config.HypermediaMappingInformation#getMediaTypes()
-     */
-    @Override
-    @NonNull
-    public List<MediaType> getMediaTypes() {
-        return Collections.singletonList(MediaTypes.JSON_API);
-    }
+  /*
+   * (non-Javadoc)
+   * @see org.springframework.hateoas.config.HypermediaMappingInformation#getMediaTypes()
+   */
+  @Override
+  @NonNull
+  public List<MediaType> getMediaTypes() {
+    return Collections.singletonList(MediaTypes.JSON_API);
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.hateoas.config.HypermediaMappingInformation#getJacksonModule()
-     */
-    @Override
-    public Module getJacksonModule() {
-        return new Jackson2JsonApiModule();
-    }
+  /*
+   * (non-Javadoc)
+   * @see org.springframework.hateoas.config.HypermediaMappingInformation#getJacksonModule()
+   */
+  @Override
+  public Module getJacksonModule() {
+    return new Jackson2JsonApiModule();
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.hateoas.config.HypermediaMappingInformation#configureObjectMapper(com.fasterxml.jackson.databind.
-     * ObjectMapper)
-     */
-    @Override
-    @NonNull
-    public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
-        return this.configureObjectMapper(
-                mapper, configuration.getIfAvailable(JsonApiConfiguration::new));
-    }
+  /*
+   * (non-Javadoc)
+   * @see org.springframework.hateoas.config.HypermediaMappingInformation#configureObjectMapper(com.fasterxml.jackson.databind.
+   * ObjectMapper)
+   */
+  @Override
+  @NonNull
+  public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
+    return this.configureObjectMapper(
+        mapper,
+        configuration.getIfAvailable(JsonApiConfiguration::new)
+      );
+  }
 
-    @NonNull
-    ObjectMapper configureObjectMapper(
-            @NonNull ObjectMapper mapper,
-            JsonApiConfiguration configuration) {
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.registerModule(new Jackson2JsonApiModule(configuration));
-        mapper.setHandlerInstantiator(new JsonApiHandlerInstantiator(
-                configuration, beanFactory));
-        configuration.customize(mapper);
-        configuration.setObjectMapper(mapper);
-        return mapper;
-    }
+  @NonNull
+  ObjectMapper configureObjectMapper(
+    @NonNull ObjectMapper mapper,
+    JsonApiConfiguration configuration
+  ) {
+    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    mapper.registerModule(new Jackson2JsonApiModule(configuration));
+    mapper.setHandlerInstantiator(
+      new JsonApiHandlerInstantiator(configuration, beanFactory)
+    );
+    configuration.customize(mapper);
+    configuration.setObjectMapper(mapper);
+    return mapper;
+  }
 }

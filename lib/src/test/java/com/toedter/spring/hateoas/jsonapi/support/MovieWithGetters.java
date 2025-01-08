@@ -23,49 +23,49 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class MovieWithGetters {
-    private String myId;
-    private String title;
-    private String myType;
-    private String myMeta;
 
-    public MovieWithGetters() {
-    }
+  private String myId;
+  private String title;
+  private String myType;
+  private String myMeta;
 
-    @JsonApiId
-    public String getMyId() {
-        return myId;
-    }
+  public MovieWithGetters() {}
 
-    @JsonApiId
-    public void setMyId(String myId) {
-        this.myId = myId;
-    }
+  @JsonApiId
+  public String getMyId() {
+    return myId;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  @JsonApiId
+  public void setMyId(String myId) {
+    this.myId = myId;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    @JsonApiType
-    public String getMyType() {
-        return myType;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    @JsonApiType
-    public void setMyType(String myType) {
-        this.myType = myType;
-    }
+  @JsonApiType
+  public String getMyType() {
+    return myType;
+  }
 
-    @JsonApiMeta
-    public String getMyMeta() {
-        return myMeta;
-    }
+  @JsonApiType
+  public void setMyType(String myType) {
+    this.myType = myType;
+  }
 
-    @JsonApiMeta
-    public void setMyMeta(String myMeta) {
-        this.myMeta = myMeta;
-    }
+  @JsonApiMeta
+  public String getMyMeta() {
+    return myMeta;
+  }
+
+  @JsonApiMeta
+  public void setMyMeta(String myMeta) {
+    this.myMeta = myMeta;
+  }
 }

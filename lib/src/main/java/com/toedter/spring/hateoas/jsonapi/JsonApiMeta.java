@@ -16,12 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Specifies if this field/method should be
@@ -29,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author Kai Toedter
  */
-@Target({METHOD, FIELD})
+@Target({ METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface JsonApiMeta {}
-
+public @interface JsonApiMeta {
+}

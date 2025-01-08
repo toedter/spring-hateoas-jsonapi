@@ -16,20 +16,20 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiObject Unit Test")
 class JsonApiObjectUnitTest {
 
-    @Test
-    void should_create_null_version_with_single_argument_constructor() {
-        JsonApiObject jsonApiObject = new JsonApiObject(false);
-        assertThat(jsonApiObject.getVersion()).isNull();
-    }
+  @Test
+  void should_create_null_version_with_single_argument_constructor() {
+    JsonApiObject jsonApiObject = new JsonApiObject(false);
+    assertThat(jsonApiObject.getVersion()).isNull();
+  }
 }

@@ -20,73 +20,73 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 
-import java.util.List;
-import java.util.Map;
-
 @With
-@JsonPropertyOrder({"jsonapi", "data", "included", "links", "meta"})
+@JsonPropertyOrder({ "jsonapi", "data", "included", "links", "meta" })
 class JsonApiDocument {
 
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
-    @Nullable
-    private final JsonApiObject jsonapi;
+  @Getter
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @With(AccessLevel.PACKAGE)
+  @Nullable
+  private final JsonApiObject jsonapi;
 
-    @Getter
-    @With(AccessLevel.PACKAGE)
-    @JsonProperty("data")
-    @Nullable
-    // data can either be a single JsonApiData object or a list of JsonApiData objects
-    private final Object data;
+  @Getter
+  @With(AccessLevel.PACKAGE)
+  @JsonProperty("data")
+  @Nullable
+  // data can either be a single JsonApiData object or a list of JsonApiData objects
+  private final Object data;
 
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
-    @Nullable
-    private final Map<String, Object> meta;
+  @Getter
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @With(AccessLevel.PACKAGE)
+  @Nullable
+  private final Map<String, Object> meta;
 
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
-    @Nullable
-    private final JsonApiErrors errors;
+  @Getter
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @With(AccessLevel.PACKAGE)
+  @Nullable
+  private final JsonApiErrors errors;
 
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
-    @Nullable
-    private final Links links;
+  @Getter
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @With(AccessLevel.PACKAGE)
+  @Nullable
+  private final Links links;
 
-    @Getter
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @With(AccessLevel.PACKAGE)
-    @Nullable
-    private final List<JsonApiData> included;
+  @Getter
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @With(AccessLevel.PACKAGE)
+  @Nullable
+  private final List<JsonApiData> included;
 
-    @JsonCreator
-    JsonApiDocument(@JsonProperty("jsonapi") @Nullable JsonApiObject jsonapi,
-                    @JsonProperty("data") @Nullable Object data,
-                    @JsonProperty("meta") @Nullable Map<String, Object> meta,
-                    @JsonProperty("errors") @Nullable JsonApiErrors errors,
-                    @JsonProperty("links") @Nullable Links links,
-                    @JsonProperty("included") @Nullable List<JsonApiData> included
-    ) {
-        this.jsonapi = jsonapi;
-        this.data = data;
-        this.meta = meta;
-        this.errors = errors;
-        this.links = links;
-        this.included = included;
-    }
+  @JsonCreator
+  JsonApiDocument(
+    @JsonProperty("jsonapi") @Nullable JsonApiObject jsonapi,
+    @JsonProperty("data") @Nullable Object data,
+    @JsonProperty("meta") @Nullable Map<String, Object> meta,
+    @JsonProperty("errors") @Nullable JsonApiErrors errors,
+    @JsonProperty("links") @Nullable Links links,
+    @JsonProperty("included") @Nullable List<JsonApiData> included
+  ) {
+    this.jsonapi = jsonapi;
+    this.data = data;
+    this.meta = meta;
+    this.errors = errors;
+    this.links = links;
+    this.included = included;
+  }
 
-    public JsonApiDocument() {
-        this(null, null, null, null, null, null);
-    }
+  public JsonApiDocument() {
+    this(null, null, null, null, null, null);
+  }
 }

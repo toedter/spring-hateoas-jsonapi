@@ -31,12 +31,18 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.MockRestServiceServer.createServer;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
+import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -60,13 +66,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.client.MockRestServiceServer.createServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-
 /**
  * Integration tests for {@link TypeReferences}.
  *
@@ -78,88 +77,112 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @DisplayName("JsonApi RestTemplate Integration Test")
 class RestTemplateIntegrationTest {
 
-    @Autowired
-    RestTemplate template;
-    MockRestServiceServer server;
+  @Autowired
+  RestTemplate template;
 
-    // tag::restTemplateConfig[]
-    @Configuration
-    @EnableHypermediaSupport(type = {})
-    static class Config {
-        public @Bean
-        RestTemplate template() {
-            return new RestTemplate();
-        }
+  MockRestServiceServer server;
 
-        @Bean
-        public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-                ObjectProvider<JsonApiConfiguration> configuration,
-                AutowireCapableBeanFactory beanFactory) {
-            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
-        }
-    }
-    // end::restTemplateConfig[]
+  // tag::restTemplateConfig[]
+  @Configuration
+  @EnableHypermediaSupport(type = {})
+  static class Config {
 
-    @BeforeEach
-    void setUp() {
-        this.server = createServer(template);
+    public @Bean RestTemplate template() {
+      return new RestTemplate();
     }
 
-    @Test
-    void should_deserialize_entity_model_with_link() throws Exception {
-        String jsonResult = createJsonStringFromFile("movieEntityModelWithLinks.json");
-        server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
-
-        ResponseEntity<EntityModel<Movie>> response =
-                template.exchange("/movie", HttpMethod.GET, null,
-                        new EntityModelType<Movie>() {
-                        });
-
-        EntityModel<Movie> entityModel = response.getBody();
-        assertThat(entityModel.getLink("self")).isPresent();
-
-        Movie movie = entityModel.getContent();
-        assertThat(movie.getId()).isEqualTo("1");
-        assertThat(movie.getTitle()).isEqualTo("Star Wars");
+    @Bean
+    public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
+      ObjectProvider<JsonApiConfiguration> configuration,
+      AutowireCapableBeanFactory beanFactory
+    ) {
+      return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
     }
+  }
 
-    @Test
-    void should_deserialize_entity_model_with_relationship() throws Exception {
-        String jsonResult = createJsonStringFromFile("movieCreatedWithSingleDirector.json");
-        server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+  // end::restTemplateConfig[]
 
-        ResponseEntity<EntityModel<MovieWithDirectors>> response =
-                template.exchange("/movie", HttpMethod.GET, null,
-                        new EntityModelType<MovieWithDirectors>() {
-                        });
+  @BeforeEach
+  void setUp() {
+    this.server = createServer(template);
+  }
 
-        EntityModel<MovieWithDirectors> entityModel = response.getBody();
-        MovieWithDirectors movie = entityModel.getContent();
-        assertThat(movie.getDirectors().get(0).getId()).isEqualTo("1");
-    }
+  @Test
+  void should_deserialize_entity_model_with_link() throws Exception {
+    String jsonResult = createJsonStringFromFile(
+      "movieEntityModelWithLinks.json"
+    );
+    server
+      .expect(requestTo("/movie"))
+      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
-    @Test
-    void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
-        String jsonResult = createJsonStringFromFile("movieWithIncludedRelationships.json");
-        server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+    ResponseEntity<EntityModel<Movie>> response = template.exchange(
+      "/movie",
+      HttpMethod.GET,
+      null,
+      new EntityModelType<Movie>() {}
+    );
 
-        ResponseEntity<EntityModel<MovieWithDirectors>> response =
-                template.exchange("/movie", HttpMethod.GET, null,
-                        new EntityModelType<MovieWithDirectors>() {
-                        });
+    EntityModel<Movie> entityModel = response.getBody();
+    assertThat(entityModel.getLink("self")).isPresent();
 
-        EntityModel<MovieWithDirectors> entityModel = response.getBody();
-        MovieWithDirectors movie = entityModel.getContent();
-        assertThat(movie.getDirectors().get(0).getId()).isEqualTo("3");
-        assertThat(movie.getDirectors().get(0).getName()).isEqualTo("George Lucas");
-    }
+    Movie movie = entityModel.getContent();
+    assertThat(movie.getId()).isEqualTo("1");
+    assertThat(movie.getTitle()).isEqualTo("Star Wars");
+  }
 
+  @Test
+  void should_deserialize_entity_model_with_relationship() throws Exception {
+    String jsonResult = createJsonStringFromFile(
+      "movieCreatedWithSingleDirector.json"
+    );
+    server
+      .expect(requestTo("/movie"))
+      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
-    private String createJsonStringFromFile(String fileName) throws Exception {
-        File file = new ClassPathResource(fileName, getClass()).getFile();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
-        return jsonNode.toString();
-    }
+    ResponseEntity<EntityModel<MovieWithDirectors>> response =
+      template.exchange(
+        "/movie",
+        HttpMethod.GET,
+        null,
+        new EntityModelType<MovieWithDirectors>() {}
+      );
+
+    EntityModel<MovieWithDirectors> entityModel = response.getBody();
+    MovieWithDirectors movie = entityModel.getContent();
+    assertThat(movie.getDirectors().get(0).getId()).isEqualTo("1");
+  }
+
+  @Test
+  void should_deserialize_entity_model_with_relationships_and_included()
+    throws Exception {
+    String jsonResult = createJsonStringFromFile(
+      "movieWithIncludedRelationships.json"
+    );
+    server
+      .expect(requestTo("/movie"))
+      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+
+    ResponseEntity<EntityModel<MovieWithDirectors>> response =
+      template.exchange(
+        "/movie",
+        HttpMethod.GET,
+        null,
+        new EntityModelType<MovieWithDirectors>() {}
+      );
+
+    EntityModel<MovieWithDirectors> entityModel = response.getBody();
+    MovieWithDirectors movie = entityModel.getContent();
+    assertThat(movie.getDirectors().get(0).getId()).isEqualTo("3");
+    assertThat(movie.getDirectors().get(0).getName()).isEqualTo("George Lucas");
+  }
+
+  private String createJsonStringFromFile(String fileName) throws Exception {
+    File file = new ClassPathResource(fileName, getClass()).getFile();
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonMapper.builder()
+      .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+    JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
+    return jsonNode.toString();
+  }
 }

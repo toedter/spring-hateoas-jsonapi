@@ -16,19 +16,19 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.springframework.util.ReflectionUtils.doWithFields;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.util.ReflectionUtils.doWithFields;
-
 class ReflectionUtils {
 
-    private ReflectionUtils() {}
+  private ReflectionUtils() {}
 
-    static Field[] getAllDeclaredFields(Class<?> leafClass) {
-        final List<Field> fields = new ArrayList<>(32);
-        doWithFields(leafClass, fields::add);
-        return fields.toArray(new Field[0]);
-    }
+  static Field[] getAllDeclaredFields(Class<?> leafClass) {
+    final List<Field> fields = new ArrayList<>(32);
+    doWithFields(leafClass, fields::add);
+    return fields.toArray(new Field[0]);
+  }
 }

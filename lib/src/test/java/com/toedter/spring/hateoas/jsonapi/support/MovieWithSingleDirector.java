@@ -31,10 +31,11 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class MovieWithSingleDirector extends Movie {
-    @JsonApiType
-    String myType = "movies";
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    Director director;
+  @JsonApiType
+  String myType = "movies";
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  Director director;
 }

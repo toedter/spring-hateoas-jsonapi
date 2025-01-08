@@ -19,5 +19,4 @@ package com.toedter.spring.hateoas.jsonapi.support;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class MovieWithAnnotationsDerived extends MovieWithAnnotations {
-}
+public class MovieWithAnnotationsDerived extends MovieWithAnnotations {}

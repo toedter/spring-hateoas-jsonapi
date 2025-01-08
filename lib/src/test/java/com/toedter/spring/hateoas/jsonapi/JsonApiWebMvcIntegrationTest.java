@@ -15,6 +15,13 @@
  */
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,14 +49,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
 /**
  * @author Kai Toedter
  */
@@ -59,241 +58,261 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApi Web MVC Integration Test")
 class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
-    @Autowired
-    WebApplicationContext context;
 
-    MockMvc mockMvc;
+  @Autowired
+  WebApplicationContext context;
 
-    @BeforeEach
-    void setUp() {
-        this.mockMvc = webAppContextSetup(this.context).build();
-        WebMvcMovieController.reset();
+  MockMvc mockMvc;
+
+  @BeforeEach
+  void setUp() {
+    this.mockMvc = webAppContextSetup(this.context).build();
+    WebMvcMovieController.reset();
+  }
+
+  @Test
+  void should_get_single_movie() throws Exception {
+    String movieJson =
+      this.mockMvc.perform(get("/movies/1").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "movieEntityModelWithLinks.json");
+  }
+
+  @Test
+  void should_get_collection_of_movies() throws Exception {
+    String moviesJson =
+      this.mockMvc.perform(get("/movies").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(moviesJson, "moviesCollectionModel.json");
+  }
+
+  @Test
+  void should_get_last_seen_movie() throws Exception {
+    String movieJson =
+      this.mockMvc.perform(get("/movieWithLastSeen").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "movieWithLastSeen.json");
+  }
+
+  @Test
+  void should_create_new_movie() throws Exception {
+    String input = readFile("postMovie.json");
+
+    this.mockMvc.perform(post("/movies").content(input).contentType(JSON_API))
+      .andExpect(status().isCreated())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/movies/3").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "movieCreated.json");
+  }
+
+  @Test
+  void should_create_new_movie_with_rating() throws Exception {
+    String input = readFile("postMovieWithRating.json");
+
+    this.mockMvc.perform(
+        post("/moviesWithPolymorphism").content(input).contentType(JSON_API)
+      )
+      .andExpect(status().isCreated())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "polymorphicMovie.json");
+  }
+
+  @Test
+  void should_create_new_polymorphic_movie_with_custom_type() throws Exception {
+    String input = readFile("postMovieWithCustomType.json");
+
+    this.mockMvc.perform(
+        post("/moviesWithJsonApiTypePolymorphism")
+          .content(input)
+          .contentType(JSON_API)
+      )
+      .andExpect(status().isCreated())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/movies/3").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "polymorphicMovieWithCustomType.json");
+  }
+
+  @Test
+  void should_not_create_new_polymorphic_movie_with_custom_type()
+    throws Exception {
+    String input = readFile("postMovieWithCustomType2.json");
+
+    Assertions.assertThrows(Exception.class, () ->
+      this.mockMvc.perform(
+          post("/moviesWithJsonApiTypePolymorphism")
+            .content(input)
+            .contentType(JSON_API)
+        )
+    );
+  }
+
+  @Test
+  void should_create_new_movie_with_relationships() throws Exception {
+    String input = readFile("postMovieWithTwoRelationships.json");
+
+    this.mockMvc.perform(
+        post("/moviesWithDirectors").content(input).contentType(JSON_API)
+      )
+      .andExpect(status().isCreated())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "movieCreatedWithDirectors.json");
+  }
+
+  @Test
+  void should_create_new_movie_with_single_relationship() throws Exception {
+    String input = readFile("postMovieWithOneRelationship.json");
+
+    this.mockMvc.perform(
+        post("/moviesWithSingleDirector").content(input).contentType(JSON_API)
+      )
+      .andExpect(status().isCreated())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "movieCreatedWithSingleDirector.json");
+  }
+
+  @Test
+  void should_create_instant() throws Exception {
+    String input = readFile("movieWithLastSeen.json");
+
+    this.mockMvc.perform(
+        post("/movieWithLastSeen").content(input).contentType(JSON_API)
+      )
+      .andExpect(status().isCreated())
+      .andExpect(
+        header()
+          .stringValues(
+            HttpHeaders.LOCATION,
+            "http://localhost/movieWithLastSeen"
+          )
+      );
+  }
+
+  @Test
+  void should_patch_movie() throws Exception {
+    String input = readFile("patchMovie.json");
+
+    this.mockMvc.perform(
+        patch("/movies/1").content(input).contentType(JSON_API)
+      )
+      .andExpect(status().isNoContent())
+      .andExpect(
+        header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/1")
+      );
+
+    String movieJson =
+      this.mockMvc.perform(get("/movies/1").accept(JSON_API))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(movieJson, "patchedMovie.json");
+  }
+
+  @Test
+  void should_return_error() throws Exception {
+    String errorJson =
+      this.mockMvc.perform(get("/error").accept(JSON_API))
+        .andExpect(status().isBadRequest())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    compareWithFile(errorJson, "errorsMvcExample.json");
+  }
+
+  @Configuration
+  @WebAppConfiguration
+  @EnableWebMvc
+  @EnableHypermediaSupport(type = {})
+  static class TestConfig {
+
+    @Bean
+    WebMvcMovieController movieController() {
+      return new WebMvcMovieController();
     }
 
-    @Test
-    void should_get_single_movie() throws Exception {
-        String movieJson = this.mockMvc
-                .perform(get("/movies/1").accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieEntityModelWithLinks.json");
+    @Bean
+    JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
+      ObjectProvider<JsonApiConfiguration> configuration,
+      AutowireCapableBeanFactory beanFactory
+    ) {
+      return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
     }
 
-    @Test
-    void should_get_collection_of_movies() throws Exception {
-
-        String moviesJson = this.mockMvc
-                .perform(get("/movies").accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(moviesJson, "moviesCollectionModel.json");
+    @Bean
+    JsonApiConfiguration jsonApiConfiguration() {
+      return new JsonApiConfiguration()
+        .withObjectMapperCustomizer(objectMapper -> {
+          objectMapper.registerModule(new JavaTimeModule());
+          objectMapper.configure(
+            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+            false
+          );
+        })
+        .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
+        .withTypeForClass(MovieWithAnnotations.class, "my-movies-2")
+        .withTypeForClassUsedForDeserialization(true);
     }
-
-    @Test
-    void should_get_last_seen_movie() throws Exception {
-        String movieJson = this.mockMvc
-                .perform(get("/movieWithLastSeen").accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieWithLastSeen.json");
-    }
-
-    @Test
-    void should_create_new_movie() throws Exception {
-
-        String input = readFile("postMovie.json");
-
-        this.mockMvc.perform(post("/movies")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/movies/3")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieCreated.json");
-    }
-
-    @Test
-    void should_create_new_movie_with_rating() throws Exception {
-
-        String input = readFile("postMovieWithRating.json");
-
-        this.mockMvc.perform(post("/moviesWithPolymorphism")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "polymorphicMovie.json");
-    }
-
-    @Test
-    void should_create_new_polymorphic_movie_with_custom_type() throws Exception {
-
-        String input = readFile("postMovieWithCustomType.json");
-
-        this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/movies/3")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "polymorphicMovieWithCustomType.json");
-    }
-
-    @Test
-    void should_not_create_new_polymorphic_movie_with_custom_type() throws Exception {
-
-        String input = readFile("postMovieWithCustomType2.json");
-
-        Assertions.assertThrows(Exception.class, () ->
-                this.mockMvc.perform(post("/moviesWithJsonApiTypePolymorphism")
-                        .content(input)
-                        .contentType(JSON_API)));
-    }
-
-    @Test
-    void should_create_new_movie_with_relationships() throws Exception {
-
-        String input = readFile("postMovieWithTwoRelationships.json");
-
-        this.mockMvc.perform(post("/moviesWithDirectors")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieCreatedWithDirectors.json");
-    }
-
-    @Test
-    void should_create_new_movie_with_single_relationship() throws Exception {
-
-        String input = readFile("postMovieWithOneRelationship.json");
-
-        this.mockMvc.perform(post("/moviesWithSingleDirector")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3"));
-
-        String movieJson = this.mockMvc.perform(get("/moviesWithDirectors/3")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "movieCreatedWithSingleDirector.json");
-    }
-
-    @Test
-    void should_create_instant() throws Exception {
-        String input = readFile("movieWithLastSeen.json");
-
-        this.mockMvc.perform(post("/movieWithLastSeen")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movieWithLastSeen"));
-    }
-
-    @Test
-    void should_patch_movie() throws Exception {
-
-        String input = readFile("patchMovie.json");
-
-        this.mockMvc.perform(patch("/movies/1")
-                        .content(input)
-                        .contentType(JSON_API))
-                .andExpect(status().isNoContent())
-                .andExpect(header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/1"));
-
-        String movieJson = this.mockMvc.perform(get("/movies/1")
-                        .accept(JSON_API))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(movieJson, "patchedMovie.json");
-    }
-
-    @Test
-    void should_return_error() throws Exception {
-
-        String errorJson = this.mockMvc
-                .perform(get("/error").accept(JSON_API))
-                .andExpect(status().isBadRequest())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        compareWithFile(errorJson, "errorsMvcExample.json");
-    }
-
-    @Configuration
-    @WebAppConfiguration
-    @EnableWebMvc
-    @EnableHypermediaSupport(type = {})
-    static class TestConfig {
-        @Bean
-        WebMvcMovieController movieController() {
-            return new WebMvcMovieController();
-        }
-
-        @Bean
-        JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(ObjectProvider<JsonApiConfiguration> configuration,
-                                                                    AutowireCapableBeanFactory beanFactory) {
-            return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
-        }
-
-        @Bean
-        JsonApiConfiguration jsonApiConfiguration() {
-            return new JsonApiConfiguration()
-                    .withObjectMapperCustomizer(objectMapper -> {
-                        objectMapper.registerModule(new JavaTimeModule());
-                        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-                    })
-                    .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
-                    .withTypeForClass(MovieWithAnnotations.class, "my-movies-2")
-                    .withTypeForClassUsedForDeserialization(true);
-        }
-    }
+  }
 }

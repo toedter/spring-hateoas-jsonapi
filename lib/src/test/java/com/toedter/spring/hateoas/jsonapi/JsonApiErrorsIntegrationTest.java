@@ -16,91 +16,98 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiErrors Test")
 class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
-    private ObjectMapper mapper;
 
-    @BeforeEach
-    void setUpModule() {
-        JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
-        mapper = new ObjectMapper();
-        configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
-        mapper.disable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
-    }
+  private ObjectMapper mapper;
 
-    @Test
-    void should_build_empty_errors() throws Exception {
-        JsonApiErrors jsonApiErrors = new JsonApiErrors();
-        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
-        assertThat(errorsJson).isEqualTo("{\"errors\":[]}");
-    }
+  @BeforeEach
+  void setUpModule() {
+    JsonApiMediaTypeConfiguration configuration =
+      new JsonApiMediaTypeConfiguration(null, null);
+    mapper = new ObjectMapper();
+    configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
+    mapper.disable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+  }
 
-    @Test
-    void should_build_single_error() throws Exception {
-        JsonApiError jsonApiError = new JsonApiError().withId("123").withCode("404");
-        JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
-        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
-        compareWithFile(errorsJson, "errorsSingle.json");
-    }
+  @Test
+  void should_build_empty_errors() throws Exception {
+    JsonApiErrors jsonApiErrors = new JsonApiErrors();
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    assertThat(errorsJson).isEqualTo("{\"errors\":[]}");
+  }
 
-    @Test
-    void should_build_two_errors() throws Exception {
-        JsonApiError jsonApiError = new JsonApiError().withId("123").withCode("456");
-        JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
-        jsonApiErrors.withError(new JsonApiError().withId("345").withDetail("error details"));
-        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
-        compareWithFile(errorsJson, "errorsMany.json");
-    }
+  @Test
+  void should_build_single_error() throws Exception {
+    JsonApiError jsonApiError = new JsonApiError()
+      .withId("123")
+      .withCode("404");
+    JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    compareWithFile(errorsJson, "errorsSingle.json");
+  }
 
-    @Test
-    void should_build_complete_error() throws Exception {
-        HashMap<String, Object> metaMap = new HashMap<>();
-        metaMap.put("foo", "bar");
-        JsonApiError jsonApiError = new JsonApiError()
-                .withId("1")
-                .withAboutLink("http://example-error/about")
-                .withStatus("500")
-                .withCode("404")
-                .withTitle("error title")
-                .withDetail("error detail")
-                .withSourcePointer("to infinity and beyond")
-                .withSourceParameter("...but always with towel.")
-                .withMeta(metaMap);
-        JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
-        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
-        compareWithFile(errorsJson, "errorsAllAttributes.json");
-    }
+  @Test
+  void should_build_two_errors() throws Exception {
+    JsonApiError jsonApiError = new JsonApiError()
+      .withId("123")
+      .withCode("456");
+    JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
+    jsonApiErrors.withError(
+      new JsonApiError().withId("345").withDetail("error details")
+    );
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    compareWithFile(errorsJson, "errorsMany.json");
+  }
 
-    @Test
-    void should_build_complete_error_with_other_invocation_order() throws Exception {
-        HashMap<String, Object> metaMap = new HashMap<>();
-        metaMap.put("foo", "bar");
-        JsonApiError jsonApiError = new JsonApiError()
-                .withId("1")
-                .withAboutLink("http://example-error/about")
-                .withStatus("500")
-                .withCode("404")
-                .withTitle("error title")
-                .withDetail("error detail")
-                .withSourceParameter("...but always with towel.")
-                .withSourcePointer("to infinity and beyond")
-                .withMeta(metaMap);
-        JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
-        String errorsJson = mapper.writeValueAsString(jsonApiErrors);
-        compareWithFile(errorsJson, "errorsAllAttributes.json");
-    }
+  @Test
+  void should_build_complete_error() throws Exception {
+    HashMap<String, Object> metaMap = new HashMap<>();
+    metaMap.put("foo", "bar");
+    JsonApiError jsonApiError = new JsonApiError()
+      .withId("1")
+      .withAboutLink("http://example-error/about")
+      .withStatus("500")
+      .withCode("404")
+      .withTitle("error title")
+      .withDetail("error detail")
+      .withSourcePointer("to infinity and beyond")
+      .withSourceParameter("...but always with towel.")
+      .withMeta(metaMap);
+    JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    compareWithFile(errorsJson, "errorsAllAttributes.json");
+  }
 
+  @Test
+  void should_build_complete_error_with_other_invocation_order()
+    throws Exception {
+    HashMap<String, Object> metaMap = new HashMap<>();
+    metaMap.put("foo", "bar");
+    JsonApiError jsonApiError = new JsonApiError()
+      .withId("1")
+      .withAboutLink("http://example-error/about")
+      .withStatus("500")
+      .withCode("404")
+      .withTitle("error title")
+      .withDetail("error detail")
+      .withSourceParameter("...but always with towel.")
+      .withSourcePointer("to infinity and beyond")
+      .withMeta(metaMap);
+    JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    compareWithFile(errorsJson, "errorsAllAttributes.json");
+  }
 }

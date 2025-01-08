@@ -16,12 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Specifies the JSON:API relationships of a resource object.
@@ -32,13 +32,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author Kai Toedter
  */
-@Target({METHOD, FIELD})
+@Target({ METHOD, FIELD })
 @Retention(RUNTIME)
 public @interface JsonApiRelationships {
-
-    /**
-     * The name of the relationship.
-     */
-    String value();
+  /**
+   * The name of the relationship.
+   */
+  String value();
 }
-

@@ -19,25 +19,25 @@ package com.toedter.spring.hateoas.jsonapi.support;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
 public class MovieWithTypedDirectorSet {
-    private String id;
-    private String title;
 
-    @JsonApiType
-    String myType;
+  private String id;
+  private String title;
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    Set<DirectorWithType> directors;
+  @JsonApiType
+  String myType;
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  Set<DirectorWithType> directors;
 }

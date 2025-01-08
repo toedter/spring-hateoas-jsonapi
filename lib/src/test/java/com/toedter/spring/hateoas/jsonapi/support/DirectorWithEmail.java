@@ -33,6 +33,7 @@ import lombok.With;
 // @fold:off
 @JsonApiTypeForClass("directors-with-email")
 public class DirectorWithEmail extends Director {
-    private String email;
+
+  private String email;
 }
 // end::director-with-type-for-class[]

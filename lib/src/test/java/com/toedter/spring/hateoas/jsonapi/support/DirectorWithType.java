@@ -30,10 +30,11 @@ import lombok.With;
 @With
 // @fold:off
 public class DirectorWithType {
-    private String id;
-    private String name;
 
-    @JsonApiType
-    private  String directorType;
+  private String id;
+  private String name;
+
+  @JsonApiType
+  private String directorType;
 }
 // end::director-with-type[]

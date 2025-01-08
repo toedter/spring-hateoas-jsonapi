@@ -26,6 +26,7 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class MovieWithIntegerObjectId {
-    private Integer id;
-    private String title;
+
+  private Integer id;
+  private String title;
 }

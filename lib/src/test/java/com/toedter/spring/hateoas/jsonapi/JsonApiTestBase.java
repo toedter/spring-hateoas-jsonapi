@@ -16,35 +16,36 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.springframework.core.io.ClassPathResource;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author Kai Toedter
  */
 public abstract class JsonApiTestBase {
-    void compareWithFile(String json, String fileName) throws Exception {
-        String fileContent = readFile(fileName);
-        assertThat(json).isEqualTo(fileContent);
-    }
 
-    String readFile(String fileName) throws IOException {
-        File file = new ClassPathResource(fileName, getClass()).getFile();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        return objectMapper.readValue(file, JsonNode.class).toString();
-    }
+  void compareWithFile(String json, String fileName) throws Exception {
+    String fileContent = readFile(fileName);
+    assertThat(json).isEqualTo(fileContent);
+  }
 
-    InputStream getStream(String fileName) throws IOException {
-        return new ClassPathResource(fileName, getClass()).getInputStream();
-    }
+  String readFile(String fileName) throws IOException {
+    File file = new ClassPathResource(fileName, getClass()).getFile();
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonMapper.builder()
+      .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+    return objectMapper.readValue(file, JsonNode.class).toString();
+  }
+
+  InputStream getStream(String fileName) throws IOException {
+    return new ClassPathResource(fileName, getClass()).getInputStream();
+  }
 }

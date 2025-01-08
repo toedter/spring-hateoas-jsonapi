@@ -29,8 +29,10 @@ import lombok.With;
 @With
 @JsonApiTypeForClass("movies")
 public class MovieWithMetaAnnotation {
-    private Long id = 1L;
-    private String title = "Star Wars";
-    @JsonApiMeta
-    private String metaProperty = "xxx";
+
+  private Long id = 1L;
+  private String title = "Star Wars";
+
+  @JsonApiMeta
+  private String metaProperty = "xxx";
 }

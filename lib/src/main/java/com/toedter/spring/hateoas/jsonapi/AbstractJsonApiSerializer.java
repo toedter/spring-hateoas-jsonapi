@@ -24,34 +24,36 @@ import org.springframework.lang.Nullable;
 
 abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
 
-    protected AbstractJsonApiSerializer(Class<T> t) {
-        super(t);
-    }
+  protected AbstractJsonApiSerializer(Class<T> t) {
+    super(t);
+  }
 
-    protected AbstractJsonApiSerializer(Class<?> t, boolean dummy) {
-        super(t, dummy);
-    }
+  protected AbstractJsonApiSerializer(Class<?> t, boolean dummy) {
+    super(t, dummy);
+  }
 
-    @Override
-    @Nullable
-    public JavaType getContentType() {
-        return null;
-    }
+  @Override
+  @Nullable
+  public JavaType getContentType() {
+    return null;
+  }
 
-    @Override
-    @Nullable
-    public JsonSerializer<?> getContentSerializer() {
-        return null;
-    }
+  @Override
+  @Nullable
+  public JsonSerializer<?> getContentSerializer() {
+    return null;
+  }
 
-    @Override
-    public boolean hasSingleElement(T value) {
-        return false;
-    }
+  @Override
+  public boolean hasSingleElement(T value) {
+    return false;
+  }
 
-    @Override
-    @Nullable
-    protected ContainerSerializer<?> _withValueTypeSerializer(TypeSerializer vts) {
-        return null;
-    }
+  @Override
+  @Nullable
+  protected ContainerSerializer<?> _withValueTypeSerializer(
+    TypeSerializer vts
+  ) {
+    return null;
+  }
 }

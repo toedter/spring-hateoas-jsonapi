@@ -27,8 +27,10 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class MovieWithLongId {
-    private long id;
-    private String title;
-    @JsonApiType
-    private String type;
+
+  private long id;
+  private String title;
+
+  @JsonApiType
+  private String type;
 }

@@ -32,14 +32,16 @@ import lombok.Setter;
 @AllArgsConstructor
 // @fold:off
 public class MovieWithAnnotations {
-    @Id
-    private String myId;
-    @JsonApiType
-    private String type;
 
-    @JsonApiMeta
-    private String myMeta;
+  @Id
+  private String myId;
 
-    private String title;
+  @JsonApiType
+  private String type;
+
+  @JsonApiMeta
+  private String myMeta;
+
+  private String title;
 }
 // end::Movie[]

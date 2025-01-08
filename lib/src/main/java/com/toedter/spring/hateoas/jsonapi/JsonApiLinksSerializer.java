@@ -16,10 +16,21 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Affordance;
@@ -33,162 +44,183 @@ import org.springframework.hateoas.mediatype.hal.forms.HalFormsTemplateBuilderWr
 import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    private JsonApiConfiguration.AffordanceType affordanceType;
-    private boolean removeHateoasLinkPropertiesFromMeta;
-    private transient Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
 
-    public JsonApiLinksSerializer() {
-        super(Links.class);
-        this.affordanceType = JsonApiConfiguration.AffordanceType.NONE;
+  private static final ObjectMapper objectMapper = new ObjectMapper();
+  private JsonApiConfiguration.AffordanceType affordanceType;
+  private boolean removeHateoasLinkPropertiesFromMeta;
+  private transient Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
+
+  public JsonApiLinksSerializer() {
+    super(Links.class);
+    this.affordanceType = JsonApiConfiguration.AffordanceType.NONE;
+  }
+
+  public void setJsonApiConfiguration(
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    this.affordanceType =
+      jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
+    this.removeHateoasLinkPropertiesFromMeta =
+      jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
+    this.linksNotUrlEncoded = jsonApiConfiguration.getLinksNotUrlEncoded();
+  }
+
+  @Override
+  public void serialize(
+    Links value,
+    JsonGenerator gen,
+    SerializerProvider provider
+  ) throws IOException {
+    Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
+    for (Link link : value) {
+      linksMap
+        .computeIfAbsent(link.getRel(), key -> new ArrayList<>())
+        .add(link);
     }
 
-    public void setJsonApiConfiguration(JsonApiConfiguration jsonApiConfiguration) {
-        this.affordanceType = jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
-        this.removeHateoasLinkPropertiesFromMeta = jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
-        this.linksNotUrlEncoded = jsonApiConfiguration.getLinksNotUrlEncoded();
+    gen.writeStartObject();
+
+    for (Map.Entry<LinkRelation, List<Link>> entry : linksMap.entrySet()) {
+      List<Link> list = entry.getValue();
+      if (list.size() == 1) {
+        Link link = list.get(0);
+        serializeLinkWithRelation(gen, link);
+      }
+      // JSON:API does not support arrays of links with same name.
+      // So, every list with size != 1 is ignored
+    }
+    gen.writeEndObject();
+  }
+
+  private void serializeLinkWithRelation(JsonGenerator gen, Link link)
+    throws IOException {
+    if (isSimpleLink(link)) {
+      gen.writeStringField(link.getRel().value(), uriEncodeLinkHref(link));
+    } else {
+      gen.writeObjectFieldStart(link.getRel().value());
+      writeComplexLink(gen, link);
+      gen.writeEndObject();
+    }
+  }
+
+  private void writeComplexLink(JsonGenerator gen, Link link)
+    throws IOException {
+    gen.writeStringField("href", uriEncodeLinkHref(link));
+    Map<String, Object> attributes = getAttributes(link);
+    if (link.getTitle() != null) {
+      gen.writeStringField("title", link.getTitle());
+      if (this.removeHateoasLinkPropertiesFromMeta) {
+        attributes.remove("title");
+      }
+    }
+    if (link.getType() != null) {
+      gen.writeStringField("type", link.getType());
+      if (this.removeHateoasLinkPropertiesFromMeta) {
+        attributes.remove("type");
+      }
+    }
+    if (link.getHreflang() != null) {
+      gen.writeStringField("hreflang", link.getHreflang());
+      if (this.removeHateoasLinkPropertiesFromMeta) {
+        attributes.remove("hreflang");
+      }
     }
 
-    @Override
-    public void serialize(Links value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
-        for (Link link : value) {
-            linksMap.computeIfAbsent(link.getRel(), key -> new ArrayList<>()).add(link);
-        }
+    gen.writeObjectField("meta", attributes);
+  }
 
-        gen.writeStartObject();
+  private boolean isSimpleLink(Link link) {
+    return getAttributes(link).size() == 0;
+  }
 
-        for (Map.Entry<LinkRelation, List<Link>> entry : linksMap.entrySet()) {
-            List<Link> list = entry.getValue();
-            if (list.size() == 1) {
-                Link link = list.get(0);
-                serializeLinkWithRelation(gen, link);
+  private String uriEncodeLinkHref(Link link) {
+    return linksNotUrlEncoded.contains(link.getRel())
+      ? link.getHref()
+      : UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8);
+  }
+
+  private Map<String, Object> getAttributes(Link link) {
+    final Map<String, Object> attributeMap = objectMapper.convertValue(
+      link,
+      Map.class
+    );
+    attributeMap.remove("rel");
+    attributeMap.remove("href");
+    attributeMap.remove("template");
+    attributeMap.remove("affordances");
+
+    if (!link.getAffordances().isEmpty()) {
+      List<Object> affordanceList = new ArrayList<>();
+      for (Affordance affordance : link.getAffordances()) {
+        if (
+          this.affordanceType ==
+          JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
+        ) {
+          JsonApiAffordanceModel affordanceModel =
+            affordance.getAffordanceModel(JSON_API);
+          if (
+            affordanceModel != null &&
+            affordanceModel.getHttpMethod() != HttpMethod.GET
+          ) {
+            String httpMethod = null;
+            if (affordanceModel.getHttpMethod() != null) {
+              httpMethod = affordanceModel.getHttpMethod().name();
             }
-
-            // JSON:API does not support arrays of links with same name.
-            // So, every list with size != 1 is ignored
+            SpringHateoasAffordance springHateoasAffordance =
+              new SpringHateoasAffordance(
+                affordanceModel.getName(),
+                affordanceModel.getLink(),
+                httpMethod,
+                affordanceModel.getQueryMethodParameters(),
+                affordanceModel.getInputProperties(),
+                affordanceModel.getQueryProperties()
+              );
+            affordanceList.add(springHateoasAffordance);
+          }
         }
-        gen.writeEndObject();
-    }
 
-    private void serializeLinkWithRelation(JsonGenerator gen, Link link) throws IOException {
-        if (isSimpleLink(link)) {
-            gen.writeStringField(link.getRel().value(), uriEncodeLinkHref(link));
-        } else {
-            gen.writeObjectFieldStart(link.getRel().value());
-            writeComplexLink(gen, link);
-            gen.writeEndObject();
-        }
-    }
-
-    private void writeComplexLink(JsonGenerator gen, Link link) throws IOException {
-        gen.writeStringField("href", uriEncodeLinkHref(link));
-        Map<String, Object> attributes = getAttributes(link);
-        if (link.getTitle() != null) {
-            gen.writeStringField("title", link.getTitle());
-            if (this.removeHateoasLinkPropertiesFromMeta) {
-                attributes.remove("title");
+        if (
+          this.affordanceType == JsonApiConfiguration.AffordanceType.HAL_FORMS
+        ) {
+          AffordanceModel affordanceModel = affordance.getAffordanceModel(
+            org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON
+          );
+          if (
+            affordanceModel != null &&
+            affordanceModel.getHttpMethod() != HttpMethod.GET
+          ) {
+            Object halFormsTemplate = HalFormsTemplateBuilderWrapper.write(
+              EntityModel.of(new Object()).add(link)
+            );
+            if (halFormsTemplate != null) {
+              attributeMap.put("hal-forms-templates", halFormsTemplate);
             }
-        }
-        if (link.getType() != null) {
-            gen.writeStringField("type", link.getType());
-            if (this.removeHateoasLinkPropertiesFromMeta) {
-                attributes.remove("type");
-            }
-        }
-        if (link.getHreflang() != null) {
-            gen.writeStringField("hreflang", link.getHreflang());
-            if (this.removeHateoasLinkPropertiesFromMeta) {
-                attributes.remove("hreflang");
-            }
+          }
         }
 
-        gen.writeObjectField("meta", attributes);
-    }
-
-    private boolean isSimpleLink(Link link) {
-        return getAttributes(link).size() == 0;
-    }
-
-    private String uriEncodeLinkHref(Link link) {
-        return linksNotUrlEncoded.contains(link.getRel()) ? link.getHref() : UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8);
-    }
-
-
-    private Map<String, Object> getAttributes(Link link) {
-        final Map<String, Object> attributeMap = objectMapper.convertValue(link, Map.class);
-        attributeMap.remove("rel");
-        attributeMap.remove("href");
-        attributeMap.remove("template");
-        attributeMap.remove("affordances");
-
-        if (!link.getAffordances().isEmpty()) {
-
-            List<Object> affordanceList = new ArrayList<>();
-            for (Affordance affordance : link.getAffordances()) {
-                if (this.affordanceType == JsonApiConfiguration.AffordanceType.SPRING_HATEOAS) {
-                    JsonApiAffordanceModel affordanceModel = affordance.getAffordanceModel(JSON_API);
-                    if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
-                        String httpMethod = null;
-                        if (affordanceModel.getHttpMethod() != null) {
-                            httpMethod = affordanceModel.getHttpMethod().name();
-                        }
-                        SpringHateoasAffordance springHateoasAffordance = new SpringHateoasAffordance(
-                                affordanceModel.getName(),
-                                affordanceModel.getLink(),
-                                httpMethod,
-                                affordanceModel.getQueryMethodParameters(),
-                                affordanceModel.getInputProperties(),
-                                affordanceModel.getQueryProperties()
-                        );
-                        affordanceList.add(springHateoasAffordance);
-                    }
-                }
-
-                if (this.affordanceType == JsonApiConfiguration.AffordanceType.HAL_FORMS) {
-                    AffordanceModel affordanceModel = affordance.getAffordanceModel(org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON);
-                    if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
-                        Object halFormsTemplate = HalFormsTemplateBuilderWrapper.write(EntityModel.of(new Object()).add(link));
-                        if (halFormsTemplate != null) {
-                            attributeMap.put("hal-forms-templates", halFormsTemplate);
-                        }
-                    }
-                }
-
-                if (!affordanceList.isEmpty()) {
-                    attributeMap.put("affordances", affordanceList);
-                }
-            }
+        if (!affordanceList.isEmpty()) {
+          attributeMap.put("affordances", affordanceList);
         }
-
-        if (link.isTemplated()) {
-            attributeMap.put("isTemplated", true);
-        }
-        return attributeMap;
+      }
     }
 
-    @RequiredArgsConstructor
-    @Getter
-    @JsonInclude(NON_EMPTY)
-    static class SpringHateoasAffordance {
-        private final String name;
-        private final Link link;
-        private final String httpMethod;
-        private final List<QueryParameter> queryMethodParameters;
-        private final List<JsonApiAffordanceModel.PropertyData> inputProperties;
-        private final List<JsonApiAffordanceModel.PropertyData> queryProperties;
+    if (link.isTemplated()) {
+      attributeMap.put("isTemplated", true);
     }
+    return attributeMap;
+  }
+
+  @RequiredArgsConstructor
+  @Getter
+  @JsonInclude(NON_EMPTY)
+  static class SpringHateoasAffordance {
+
+    private final String name;
+    private final Link link;
+    private final String httpMethod;
+    private final List<QueryParameter> queryMethodParameters;
+    private final List<JsonApiAffordanceModel.PropertyData> inputProperties;
+    private final List<JsonApiAffordanceModel.PropertyData> queryProperties;
+  }
 }

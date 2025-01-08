@@ -19,12 +19,11 @@ package com.toedter.spring.hateoas.jsonapi.support;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-
-import java.util.List;
 
 // tag::movie-with-typed-director[]
 // @fold:on
@@ -34,14 +33,15 @@ import java.util.List;
 @With
 // @fold:off
 public class MovieWithTypedDirectors {
-    private String id;
-    private String title;
 
-    @JsonApiType
-    String myType;
+  private String id;
+  private String title;
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    List<DirectorWithType> directors;
+  @JsonApiType
+  String myType;
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  List<DirectorWithType> directors;
 }
 // end::movie-with-typed-director[]

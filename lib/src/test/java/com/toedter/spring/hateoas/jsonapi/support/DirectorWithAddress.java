@@ -18,23 +18,24 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @With
 public class DirectorWithAddress {
-    private String id;
-    private String name;
-    @JsonApiType
-    String myType = "directors";
 
-    @JsonApiRelationships("addresses")
-    private List<Address> addresses;
+  private String id;
+  private String name;
+
+  @JsonApiType
+  String myType = "directors";
+
+  @JsonApiRelationships("addresses")
+  private List<Address> addresses;
 }

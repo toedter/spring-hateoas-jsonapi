@@ -29,13 +29,14 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class MovieWithSingleTypedDirector {
-    private String id;
-    private String title;
 
-    @JsonApiType
-    String myType;
+  private String id;
+  private String title;
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    DirectorWithType director;
+  @JsonApiType
+  String myType;
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  DirectorWithType director;
 }

@@ -16,19 +16,21 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiLinksDeserializer Unit Test")
 class JsonApiLinksDeserializerUnitTest extends JsonApiTestBase {
 
-    @Test
-    void should_return_null_content_deserializer() {
-        assertThat(new JsonApiLinksDeserializer().getContentDeserializer()).isNull();
-    }
+  @Test
+  void should_return_null_content_deserializer() {
+    assertThat(
+      new JsonApiLinksDeserializer().getContentDeserializer()
+    ).isNull();
+  }
 }

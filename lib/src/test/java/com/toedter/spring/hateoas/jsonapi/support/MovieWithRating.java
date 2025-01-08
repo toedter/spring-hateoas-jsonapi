@@ -24,13 +24,14 @@ import lombok.NoArgsConstructor;
 @Data
 @JsonApiTypeForClass("movies")
 public class MovieWithRating {
-    private String id;
-    private String title;
-    private double rating;
 
-    public MovieWithRating(String id, String title, double rating) {
-        this.id = id;
-        this.title = title;
-        this.rating = rating;
-    }
+  private String id;
+  private String title;
+  private double rating;
+
+  public MovieWithRating(String id, String title, double rating) {
+    this.id = id;
+    this.title = title;
+    this.rating = rating;
+  }
 }

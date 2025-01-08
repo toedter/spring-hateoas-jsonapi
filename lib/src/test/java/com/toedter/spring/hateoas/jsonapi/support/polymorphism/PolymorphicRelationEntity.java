@@ -20,23 +20,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.JsonApiType;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 // tag::PolymorphicRelationEntity[]
 @NoArgsConstructor
 public class PolymorphicRelationEntity {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    @JsonApiRelationships("superEntities")
-    @JsonIgnore
-    @Getter
-    private final List<SuperEntity<?>> relation = null;
+  @JsonApiType
+  private final String type = null;
+
+  @JsonApiRelationships("superEntities")
+  @JsonIgnore
+  @Getter
+  private final List<SuperEntity<?>> relation = null;
 }
 // end::PolymorphicRelationEntity[]

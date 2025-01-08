@@ -16,9 +16,14 @@
 
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -36,139 +41,140 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 /**
  * @author Kai Toedter
  */
 @RestController
 public class WebFluxMovieController {
 
-    private static Map<Integer, Movie> movies;
+  private static Map<Integer, Movie> movies;
 
-    public static void reset() {
+  public static void reset() {
+    movies = new TreeMap<>();
 
-        movies = new TreeMap<>();
+    movies.put(1, new Movie("1", "Star Wars"));
+    movies.put(2, new Movie("2", "Avengers"));
+  }
 
-        movies.put(1, new Movie("1", "Star Wars"));
-        movies.put(2, new Movie("2", "Avengers"));
+  @GetMapping("/movies")
+  public Mono<CollectionModel<EntityModel<Movie>>> all() {
+    WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
+
+    return Flux.fromIterable(movies.keySet())
+      .flatMap(this::findOne)
+      .collectList()
+      .flatMap(resources ->
+        WebFluxLinkBuilder.linkTo(controller.all())
+          .withSelfRel()
+          .toMono()
+          .map(selfLink -> CollectionModel.of(resources, selfLink))
+      );
+  }
+
+  @GetMapping("/movies/{id}")
+  public Mono<EntityModel<Movie>> findOne(@PathVariable Integer id) {
+    WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
+
+    Mono<Link> selfLink = WebFluxLinkBuilder.linkTo(controller.findOne(id))
+      .withSelfRel()
+      .toMono();
+
+    Movie movie = movies.get(id);
+    return selfLink.map(links -> EntityModel.of(movie, links));
+  }
+
+  @GetMapping("/moviesWithDirectors/{id}")
+  public Mono<RepresentationModel<?>> findOneWidthDirectors(
+    @PathVariable Integer id
+  ) {
+    Movie movie = movies.get(id);
+    List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
+    JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
+    for (Director director : directors) {
+      model = model.relationship("directors", director);
     }
+    RepresentationModel<?> jsonApiModel = model.build();
+    return Mono.just(jsonApiModel);
+  }
 
-    @GetMapping("/movies")
-    public Mono<CollectionModel<EntityModel<Movie>>> all() {
+  @GetMapping("/movieWithClassType")
+  public Mono<RepresentationModel<?>> movieWithClassType() {
+    Movie movie = new Movie("1", "Star Wars");
+    return Mono.just(new MovieRepresentationModelWithoutJsonApiType(movie));
+  }
 
-        WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
+  @PostMapping("/movies")
+  public Mono<ResponseEntity<?>> newMovie(
+    @RequestBody Mono<EntityModel<Movie>> movie
+  ) {
+    return movie
+      .flatMap(resource -> {
+        int newMovieId = movies.size() + 1;
+        assert resource.getContent() != null;
+        resource.getContent().setId("" + newMovieId);
+        movies.put(newMovieId, resource.getContent());
+        return findOne(newMovieId);
+      })
+      .map(findOne ->
+        ResponseEntity.created(
+          findOne.getRequiredLink(IanaLinkRelations.SELF).toUri()
+        ).build()
+      );
+  }
 
-        return Flux.fromIterable(movies.keySet())
-                .flatMap(this::findOne)
-                .collectList()
-                .flatMap(resources -> WebFluxLinkBuilder.linkTo(controller.all()).withSelfRel()
-                        .toMono()
-                        .map(selfLink -> CollectionModel.of(resources, selfLink)));
-    }
+  @PostMapping("/moviesWithDirectors")
+  public Mono<ResponseEntity<?>> newMovieWithDirectors(
+    @RequestBody Mono<EntityModel<MovieWithDirectors>> movie
+  ) {
+    return movie
+      .flatMap(resource -> {
+        int newMovieId = movies.size() + 1;
+        assert resource.getContent() != null;
+        resource.getContent().setId("" + newMovieId);
+        movies.put(newMovieId, resource.getContent());
+        return findOne(newMovieId);
+      })
+      .map(findOne ->
+        ResponseEntity.created(
+          findOne.getRequiredLink(IanaLinkRelations.SELF).toUri()
+        ).build()
+      );
+  }
 
-    @GetMapping("/movies/{id}")
-    public Mono<EntityModel<Movie>> findOne(@PathVariable Integer id) {
-        WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
-
-        Mono<Link> selfLink = WebFluxLinkBuilder
-                .linkTo(controller.findOne(id))
-                .withSelfRel()
-                .toMono();
-
-        Movie movie = movies.get(id);
-        return selfLink.map(links -> EntityModel.of(movie, links));
-    }
-
-    @GetMapping("/moviesWithDirectors/{id}")
-    public Mono<RepresentationModel<?>> findOneWidthDirectors(@PathVariable Integer id) {
-        Movie movie = movies.get(id);
-        List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
-        JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
-        for (Director director : directors) {
-            model = model.relationship("directors", director);
+  @PatchMapping("/movies/{id}")
+  public Mono<ResponseEntity<?>> partiallyUpdateMovie(
+    @RequestBody Mono<EntityModel<Movie>> movie,
+    @PathVariable Integer id
+  ) {
+    return movie
+      .flatMap(resource -> {
+        Movie newMovie = movies.get(id);
+        assert resource.getContent() != null;
+        if (resource.getContent().getTitle() != null) {
+          newMovie = newMovie.withTitle(resource.getContent().getTitle());
         }
-        RepresentationModel<?> jsonApiModel = model.build();
-        return Mono.just(jsonApiModel);
-    }
 
-    @GetMapping("/movieWithClassType")
-    public Mono<RepresentationModel<?>> movieWithClassType() {
-        Movie movie = new Movie("1", "Star Wars");
-        return Mono.just(new MovieRepresentationModelWithoutJsonApiType(movie));
-    }
+        movies.put(id, newMovie);
 
-    @PostMapping("/movies")
-    public Mono<ResponseEntity<?>> newMovie(@RequestBody Mono<EntityModel<Movie>> movie) {
+        return findOne(id);
+      })
+      .map(findOne ->
+        ResponseEntity.noContent()
+          .location(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
+          .build()
+      );
+  }
 
-        return movie
-                .flatMap(resource -> {
-
-                    int newMovieId = movies.size() + 1;
-                    assert resource.getContent() != null;
-                    resource.getContent().setId("" + newMovieId);
-                    movies.put(newMovieId, resource.getContent());
-                    return findOne(newMovieId);
-                })
-                .map(findOne -> ResponseEntity.created(findOne
-                        .getRequiredLink(IanaLinkRelations.SELF)
-                        .toUri())
-                        .build());
-    }
-
-    @PostMapping("/moviesWithDirectors")
-    public Mono<ResponseEntity<?>> newMovieWithDirectors(@RequestBody Mono<EntityModel<MovieWithDirectors>> movie) {
-
-        return movie
-                .flatMap(resource -> {
-                    int newMovieId = movies.size() + 1;
-                    assert resource.getContent() != null;
-                    resource.getContent().setId("" + newMovieId);
-                    movies.put(newMovieId, resource.getContent());
-                    return findOne(newMovieId);
-                })
-                .map(findOne -> ResponseEntity.created(findOne
-                        .getRequiredLink(IanaLinkRelations.SELF)
-                        .toUri())
-                        .build());
-    }
-
-    @PatchMapping("/movies/{id}")
-    public Mono<ResponseEntity<?>> partiallyUpdateMovie(
-            @RequestBody Mono<EntityModel<Movie>> movie, @PathVariable Integer id) {
-
-        return movie
-                .flatMap(resource -> {
-
-                    Movie newMovie = movies.get(id);
-                    assert resource.getContent() != null;
-                    if (resource.getContent().getTitle() != null) {
-                        newMovie = newMovie.withTitle(resource.getContent().getTitle());
-                    }
-
-                    movies.put(id, newMovie);
-
-                    return findOne(id);
-
-                }).map(findOne -> ResponseEntity.noContent()
-                        .location(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                        .build()
-                );
-    }
-
-    @GetMapping("/error")
-    public ResponseEntity<?> error() {
-        JsonApiErrors body = JsonApiErrors.create().withError(
-                JsonApiError.create()
-                        .withAboutLink("http://movie-db.com/problem")
-                        .withTitle("Movie-based problem")
-                        .withStatus(HttpStatus.BAD_REQUEST.toString())
-                        .withDetail("This is a test case"));
-        return ResponseEntity.badRequest().body(
-                body);
-    }
+  @GetMapping("/error")
+  public ResponseEntity<?> error() {
+    JsonApiErrors body = JsonApiErrors.create()
+      .withError(
+        JsonApiError.create()
+          .withAboutLink("http://movie-db.com/problem")
+          .withTitle("Movie-based problem")
+          .withStatus(HttpStatus.BAD_REQUEST.toString())
+          .withDetail("This is a test case")
+      );
+    return ResponseEntity.badRequest().body(body);
+  }
 }

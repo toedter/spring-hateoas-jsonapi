@@ -16,9 +16,13 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import java.util.HashMap;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,66 +31,76 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
 
-import java.util.HashMap;
-import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")
 class AbstractJsonApiModelDeserializerUnitTest {
-    class TestJsonApiDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
-        public TestJsonApiDeserializer(JsonApiConfiguration jsonApiConfiguration) {
-            super(jsonApiConfiguration);
-        }
 
-        public TestJsonApiDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
-            super(contentType, jsonApiConfiguration);
-        }
+  class TestJsonApiDeserializer
+    extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
 
-        @Override
-        protected EntityModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
-            return null;
-        }
-
-        @Override
-        protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-            return null;
-        }
+    public TestJsonApiDeserializer(JsonApiConfiguration jsonApiConfiguration) {
+      super(jsonApiConfiguration);
     }
 
-    TestJsonApiDeserializer testJsonApiDeserializer;
-
-    @BeforeEach
-    void beforeEach() {
-        testJsonApiDeserializer = new TestJsonApiDeserializer(new JsonApiConfiguration());
+    public TestJsonApiDeserializer(
+      JavaType contentType,
+      JsonApiConfiguration jsonApiConfiguration
+    ) {
+      super(contentType, jsonApiConfiguration);
     }
 
-    @Test
-    void should_get_content_type() {
-        JavaType contentType = testJsonApiDeserializer.getContentType();
-        assertThat(contentType.getRawClass()).isEqualTo(JsonApiDocument.class);
+    @Override
+    protected EntityModel<?> convertToRepresentationModel(
+      List<Object> resources,
+      JsonApiDocument doc
+    ) {
+      return null;
     }
 
-    @Test
-    void should_get_null_content_deserializer() {
-        JsonDeserializer<Object> contentDeserializer = testJsonApiDeserializer.getContentDeserializer();
-        assertThat(contentDeserializer).isNull();
+    @Override
+    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+      return null;
     }
+  }
 
-    @Test
-    void should_not_convert_to_resource() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("test-key", "test-value");
+  TestJsonApiDeserializer testJsonApiDeserializer;
 
-        class TestWitNoConstructor {
-        }
+  @BeforeEach
+  void beforeEach() {
+    testJsonApiDeserializer = new TestJsonApiDeserializer(
+      new JsonApiConfiguration()
+    );
+  }
 
-        JavaType javaType = TypeFactory.defaultInstance().constructSimpleType(TestWitNoConstructor.class, new JavaType[0]);
-        testJsonApiDeserializer = new TestJsonApiDeserializer(javaType, new JsonApiConfiguration());
+  @Test
+  void should_get_content_type() {
+    JavaType contentType = testJsonApiDeserializer.getContentType();
+    assertThat(contentType.getRawClass()).isEqualTo(JsonApiDocument.class);
+  }
 
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> testJsonApiDeserializer.convertToResource(data, false, null, null, false));
-    }
+  @Test
+  void should_get_null_content_deserializer() {
+    JsonDeserializer<Object> contentDeserializer =
+      testJsonApiDeserializer.getContentDeserializer();
+    assertThat(contentDeserializer).isNull();
+  }
 
+  @Test
+  void should_not_convert_to_resource() {
+    HashMap<String, Object> data = new HashMap<>();
+    data.put("test-key", "test-value");
+
+    class TestWitNoConstructor {}
+
+    JavaType javaType = TypeFactory.defaultInstance()
+      .constructSimpleType(TestWitNoConstructor.class, new JavaType[0]);
+    testJsonApiDeserializer = new TestJsonApiDeserializer(
+      javaType,
+      new JsonApiConfiguration()
+    );
+
+    Assertions.assertThrows(IllegalStateException.class, () ->
+      testJsonApiDeserializer.convertToResource(data, false, null, null, false)
+    );
+  }
 }

@@ -18,60 +18,59 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @EqualsAndHashCode(callSuper = true)
 class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
-    private final RepresentationModel<?> entity;
+  private final RepresentationModel<?> entity;
 
-    @JsonIgnore
-    @Getter
-    private final Map<String, JsonApiRelationship> relationships;
+  @JsonIgnore
+  @Getter
+  private final Map<String, JsonApiRelationship> relationships;
 
-    @JsonIgnore
-    @Getter
-    private final List<RepresentationModel<?>> includedEntities;
+  @JsonIgnore
+  @Getter
+  private final List<RepresentationModel<?>> includedEntities;
 
-    @JsonIgnore
-    @Getter
-    private final Map<String, Object> metaData;
+  @JsonIgnore
+  @Getter
+  private final Map<String, Object> metaData;
 
-    @JsonIgnore
-    @Getter
-    private final HashMap<String, Collection<String>> sparseFieldsets;
+  @JsonIgnore
+  @Getter
+  private final HashMap<String, Collection<String>> sparseFieldsets;
 
-    JsonApiModel(
-            @Nullable RepresentationModel<?> entity,
-            @Nullable Map<String, JsonApiRelationship> relationships,
-            @Nullable List<RepresentationModel<?>> includedEntities,
-            @Nullable Map<String, Object> metadata,
-            @Nullable Links links,
-            @Nullable HashMap<String, Collection<String>> sparseFieldsets) {
+  JsonApiModel(
+    @Nullable RepresentationModel<?> entity,
+    @Nullable Map<String, JsonApiRelationship> relationships,
+    @Nullable List<RepresentationModel<?>> includedEntities,
+    @Nullable Map<String, Object> metadata,
+    @Nullable Links links,
+    @Nullable HashMap<String, Collection<String>> sparseFieldsets
+  ) {
+    this.entity = entity;
+    this.relationships = relationships;
+    this.includedEntities = includedEntities;
+    this.metaData = metadata;
+    this.sparseFieldsets = sparseFieldsets;
 
-        this.entity = entity;
-        this.relationships = relationships;
-        this.includedEntities = includedEntities;
-        this.metaData = metadata;
-        this.sparseFieldsets = sparseFieldsets;
-
-        if (links != null) {
-            add(links);
-        }
+    if (links != null) {
+      add(links);
     }
+  }
 
-    @Nullable
-    @JsonUnwrapped
-    public RepresentationModel<?> getContent() {
-        return entity;
-    }
+  @Nullable
+  @JsonUnwrapped
+  public RepresentationModel<?> getContent() {
+    return entity;
+  }
 }

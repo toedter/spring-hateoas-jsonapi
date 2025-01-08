@@ -16,23 +16,22 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Specifies the JSON:API type for resource objects of this class.
  *
  * @author Kai Toedter
  */
-@Target({TYPE})
+@Target({ TYPE })
 @Retention(RUNTIME)
 public @interface JsonApiTypeForClass {
-
-    /**
-     * The JSON:API type for resource objects of this class.
-     */
-    String value();
+  /**
+   * The JSON:API type for resource objects of this class.
+   */
+  String value();
 }

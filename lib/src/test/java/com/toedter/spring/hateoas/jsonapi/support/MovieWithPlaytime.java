@@ -10,7 +10,8 @@ import lombok.With;
 @AllArgsConstructor
 @With
 public class MovieWithPlaytime {
-    private String id;
-    private String title;
-    private Double playtime;
+
+  private String id;
+  private String title;
+  private Double playtime;
 }

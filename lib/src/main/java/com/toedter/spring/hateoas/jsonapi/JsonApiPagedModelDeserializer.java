@@ -19,48 +19,56 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import java.util.List;
+import java.util.Map;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 
-import java.util.List;
-import java.util.Map;
+class JsonApiPagedModelDeserializer
+  extends AbstractJsonApiModelDeserializer<PagedModel<?>>
+  implements ContextualDeserializer {
 
-class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>>
-        implements ContextualDeserializer {
+  public JsonApiPagedModelDeserializer(
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    super(jsonApiConfiguration);
+  }
 
-    public JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
-        super(jsonApiConfiguration);
+  protected JsonApiPagedModelDeserializer(
+    JavaType contentType,
+    JsonApiConfiguration jsonApiConfiguration
+  ) {
+    super(contentType, jsonApiConfiguration);
+  }
+
+  @Override
+  protected PagedModel<?> convertToRepresentationModel(
+    List<Object> resources,
+    JsonApiDocument doc
+  ) {
+    Links links = doc.getLinks();
+
+    PagedModel.PageMetadata pageMetadata = null;
+    Map<String, Object> meta = doc.getMeta();
+    if (meta != null) {
+      Map<String, Long> pageMeta = (Map<String, Long>) meta.get("page");
+      if (pageMeta != null) {
+        pageMetadata = new PagedModel.PageMetadata(
+          ((Number) pageMeta.get("size")).longValue(),
+          ((Number) pageMeta.get("number")).longValue(),
+          ((Number) pageMeta.get("totalElements")).longValue(),
+          ((Number) pageMeta.get("totalPages")).longValue()
+        );
+      }
     }
 
-    protected JsonApiPagedModelDeserializer(JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
-        super(contentType, jsonApiConfiguration);
+    if (links == null) {
+      links = Links.NONE;
     }
+    return PagedModel.of(resources, pageMetadata, links);
+  }
 
-    @Override
-    protected PagedModel<?> convertToRepresentationModel(List<Object> resources, JsonApiDocument doc) {
-        Links links = doc.getLinks();
-
-        PagedModel.PageMetadata pageMetadata = null;
-        Map<String, Object> meta = doc.getMeta();
-        if (meta != null) {
-            Map<String, Long> pageMeta = (Map<String, Long>) meta.get("page");
-            if (pageMeta != null) {
-                pageMetadata = new PagedModel.PageMetadata(
-                        ((Number) pageMeta.get("size")).longValue(),
-                        ((Number) pageMeta.get("number")).longValue(),
-                        ((Number) pageMeta.get("totalElements")).longValue(),
-                        ((Number) pageMeta.get("totalPages")).longValue()
-                );
-            }
-        }
-
-        if (links == null) {
-            links = Links.NONE;
-        }
-        return PagedModel.of(resources, pageMetadata, links);
-    }
-
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
-        return new JsonApiPagedModelDeserializer(type, jsonApiConfiguration);
-    }
+  protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+    return new JsonApiPagedModelDeserializer(type, jsonApiConfiguration);
+  }
 }

@@ -29,7 +29,8 @@ import lombok.With;
 @With
 // @fold:off
 public class Director {
-    private String id;
-    private String name;
+
+  private String id;
+  private String name;
 }
 // end::Director[]

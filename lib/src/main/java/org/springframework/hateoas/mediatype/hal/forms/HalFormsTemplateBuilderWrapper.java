@@ -21,29 +21,33 @@ import org.springframework.hateoas.mediatype.MessageResolver;
 import org.springframework.lang.Nullable;
 
 enum DefaultOnlyMessageResolver implements MessageResolver {
+  INSTANCE;
 
-	INSTANCE;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.hateoas.mediatype.MessageResolver#resolve(org.springframework.context.MessageSourceResolvable)
-	 */
-	@Nullable
-	@Override
-	public String resolve(MessageSourceResolvable resolvable) {
-		return resolvable.getDefaultMessage();
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.springframework.hateoas.mediatype.MessageResolver#resolve(org.springframework.context.MessageSourceResolvable)
+   */
+  @Nullable
+  @Override
+  public String resolve(MessageSourceResolvable resolvable) {
+    return resolvable.getDefaultMessage();
+  }
 }
 
 public class HalFormsTemplateBuilderWrapper {
-	@Nullable
-	public static Object write(Object bean) {
-		HalFormsTemplateBuilder builder = new HalFormsTemplateBuilder(new HalFormsConfiguration(), DefaultOnlyMessageResolver.INSTANCE);
-		HalFormsTemplatePropertyWriter halFormsTemplatePropertyWriter = new HalFormsTemplatePropertyWriter(builder);
-		try {
-			return halFormsTemplatePropertyWriter.value(bean, null, null);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Cannot write HAL-FORMS template.", e);
-		}
-	}
+
+  @Nullable
+  public static Object write(Object bean) {
+    HalFormsTemplateBuilder builder = new HalFormsTemplateBuilder(
+      new HalFormsConfiguration(),
+      DefaultOnlyMessageResolver.INSTANCE
+    );
+    HalFormsTemplatePropertyWriter halFormsTemplatePropertyWriter =
+      new HalFormsTemplatePropertyWriter(builder);
+    try {
+      return halFormsTemplatePropertyWriter.value(bean, null, null);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Cannot write HAL-FORMS template.", e);
+    }
+  }
 }

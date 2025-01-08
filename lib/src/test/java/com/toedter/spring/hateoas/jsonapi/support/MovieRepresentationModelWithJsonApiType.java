@@ -25,20 +25,22 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
-public class MovieRepresentationModelWithJsonApiType extends RepresentationModel<MovieRepresentationModelWithJsonApiType> {
+public class MovieRepresentationModelWithJsonApiType
+  extends RepresentationModel<MovieRepresentationModelWithJsonApiType> {
 
-    private String id;
-    @JsonApiType
-    private String type;
-    private String name;
+  private String id;
 
-    public MovieRepresentationModelWithJsonApiType() {
-    }
+  @JsonApiType
+  private String type;
 
-    public MovieRepresentationModelWithJsonApiType(Movie movie) {
-        this.id = movie.getId();
-        this.name = movie.getTitle();
-        this.type = "movie-type";
-        add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
-    }
+  private String name;
+
+  public MovieRepresentationModelWithJsonApiType() {}
+
+  public MovieRepresentationModelWithJsonApiType(Movie movie) {
+    this.id = movie.getId();
+    this.name = movie.getTitle();
+    this.type = "movie-type";
+    add(Links.of(Link.of("http://localhost/movies/7").withSelfRel()));
+  }
 }

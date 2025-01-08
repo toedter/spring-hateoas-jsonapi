@@ -23,16 +23,16 @@ import org.springframework.http.MediaType;
 
 class JsonApiAffordanceModelFactory implements AffordanceModelFactory {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.hateoas.mediatype.AffordanceModelFactory#getAffordanceModel(org.springframework.hateoas.mediatype.ConfiguredAffordance)
-	 */
-	@Override
-	public AffordanceModel getAffordanceModel(ConfiguredAffordance configured) {
-		return new JsonApiAffordanceModel(configured);
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.springframework.hateoas.mediatype.AffordanceModelFactory#getAffordanceModel(org.springframework.hateoas.mediatype.ConfiguredAffordance)
+   */
+  @Override
+  public AffordanceModel getAffordanceModel(ConfiguredAffordance configured) {
+    return new JsonApiAffordanceModel(configured);
+  }
 
-	public MediaType getMediaType() {
-		return MediaTypes.JSON_API;
-	}
+  public MediaType getMediaType() {
+    return MediaTypes.JSON_API;
+  }
 }

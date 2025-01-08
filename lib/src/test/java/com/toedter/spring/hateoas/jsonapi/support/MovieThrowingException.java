@@ -23,15 +23,16 @@ import lombok.Getter;
 @Getter
 @JsonApiTypeForClass("movies")
 public class MovieThrowingException {
-    @JsonApiId
-    public void setId(String id) {
-        throw new RuntimeException();
-    }
 
-    @JsonApiId
-    public String getId() {
-        return "1";
-    }
+  @JsonApiId
+  public void setId(String id) {
+    throw new RuntimeException();
+  }
 
-    private final String title = "Star Wars";
+  @JsonApiId
+  public String getId() {
+    return "1";
+  }
+
+  private final String title = "Star Wars";
 }

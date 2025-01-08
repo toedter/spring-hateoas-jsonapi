@@ -23,17 +23,18 @@ import lombok.NoArgsConstructor;
 // tag::SuperEChild2[]
 @NoArgsConstructor
 public class SuperEChild2 implements SuperEntity<String> {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    private final String extraAttribute = "";
+  @JsonApiType
+  private final String type = null;
 
-    @Override
-    public String getT() {
-        return null;
-    }
+  private final String extraAttribute = "";
+
+  @Override
+  public String getT() {
+    return null;
+  }
 }
 // end::SuperEChild2[]

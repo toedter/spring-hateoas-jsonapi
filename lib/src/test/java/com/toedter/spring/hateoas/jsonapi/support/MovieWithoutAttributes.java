@@ -24,5 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieWithoutAttributes {
-    private String id;
+
+  private String id;
 }

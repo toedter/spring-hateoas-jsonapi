@@ -16,19 +16,19 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Specifies the JSON:API id of a resource object.
  *
  * @author Kai Toedter
  */
-@Target({METHOD, FIELD})
+@Target({ METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface JsonApiId {}
-
+public @interface JsonApiId {
+}

@@ -16,45 +16,55 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.director;
 
-import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
 import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.DIRECTORS;
 import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.stereotype.Component;
+
 @Component
 @Slf4j
 class DirectorModelAssembler {
 
-    public RepresentationModel<?> toJsonApiModel(Director director, String[] fieldsDirectors) {
-        Link selfLink = linkTo(methodOn(DirectorController.class).findOne(director.getId(), null, null)).withSelfRel();
-        String href = selfLink.getHref();
-        selfLink = selfLink.withHref(href.substring(0,href.indexOf("{")));
+  public RepresentationModel<?> toJsonApiModel(
+    Director director,
+    String[] fieldsDirectors
+  ) {
+    Link selfLink = linkTo(
+      methodOn(DirectorController.class).findOne(director.getId(), null, null)
+    ).withSelfRel();
+    String href = selfLink.getHref();
+    selfLink = selfLink.withHref(href.substring(0, href.indexOf("{")));
 
-        Link directorsLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
-        Link templatedDirectorsLink = Link.of(directorsLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
+    Link directorsLink = linkTo(DirectorController.class)
+      .slash(DIRECTORS)
+      .withRel(DIRECTORS);
+    Link templatedDirectorsLink = Link.of(
+      directorsLink.getHref() + "{?page[number],page[size]}"
+    ).withRel(DIRECTORS);
 
-        JsonApiModelBuilder builder = jsonApiModel()
-                .model(director)
-                .link(selfLink)
-                .link(templatedDirectorsLink);
+    JsonApiModelBuilder builder = jsonApiModel()
+      .model(director)
+      .link(selfLink)
+      .link(templatedDirectorsLink);
 
-        if (fieldsDirectors != null) {
-            builder = builder.fields(DIRECTORS, fieldsDirectors);
-        }
-
-        if (fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains(MOVIES)) {
-            builder = builder.relationship(MOVIES, director.getMovies());
-        }
-
-        return builder.build();
+    if (fieldsDirectors != null) {
+      builder = builder.fields(DIRECTORS, fieldsDirectors);
     }
+
+    if (
+      fieldsDirectors == null || Arrays.asList(fieldsDirectors).contains(MOVIES)
+    ) {
+      builder = builder.relationship(MOVIES, director.getMovies());
+    }
+
+    return builder.build();
+  }
 }

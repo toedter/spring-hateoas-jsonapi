@@ -18,12 +18,11 @@ package com.toedter.spring.hateoas.jsonapi.support;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -31,16 +30,17 @@ import java.util.UUID;
 @With
 @JsonApiTypeForClass("movies")
 public class MovieWithUUIDMethod {
-    private UUID myId;
-    private String title;
 
-    @JsonApiId
-    public UUID getMyId() {
-        return this.myId;
-    }
+  private UUID myId;
+  private String title;
 
-    @JsonApiId
-    public void setMyId(UUID id) {
-        this.myId = id;
-    }
+  @JsonApiId
+  public UUID getMyId() {
+    return this.myId;
+  }
+
+  @JsonApiId
+  public void setMyId(UUID id) {
+    this.myId = id;
+  }
 }

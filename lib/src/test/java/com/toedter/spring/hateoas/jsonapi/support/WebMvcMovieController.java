@@ -15,9 +15,18 @@
  */
 package com.toedter.spring.hateoas.jsonapi.support;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -32,200 +41,220 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 /**
  * @author Kai Toedter
  */
 @RestController
 public class WebMvcMovieController {
 
-    private static Map<Integer, Movie> MOVIES;
+  private static Map<Integer, Movie> MOVIES;
 
-    public static void reset() {
+  public static void reset() {
+    MOVIES = new TreeMap<>();
 
-        MOVIES = new TreeMap<>();
+    MOVIES.put(1, new Movie("1", "Star Wars"));
+    MOVIES.put(2, new Movie("2", "Avengers"));
+  }
 
-        MOVIES.put(1, new Movie("1", "Star Wars"));
-        MOVIES.put(2, new Movie("2", "Avengers"));
+  @GetMapping("/movies")
+  public CollectionModel<EntityModel<Movie>> all() {
+    WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
+
+    Link selfLink = linkTo(controller.all()).withSelfRel();
+
+    return IntStream.range(1, MOVIES.size() + 1)
+      .mapToObj(this::findOne)
+      .collect(
+        Collectors.collectingAndThen(Collectors.toList(), it ->
+          CollectionModel.of(it, selfLink)
+        )
+      );
+  }
+
+  @GetMapping("/movies/{id}")
+  public EntityModel<Movie> findOne(@PathVariable Integer id) {
+    WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
+
+    Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
+
+    Movie movie = MOVIES.get(id);
+    return EntityModel.of(movie, selfLink);
+  }
+
+  @GetMapping("/moviesWithDirectors/{id}")
+  public RepresentationModel<?> findOneWidthDirectors(
+    @PathVariable Integer id
+  ) {
+    WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
+
+    Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
+
+    Movie movie = MOVIES.get(id);
+    if (movie instanceof MovieWithDirectors) {
+      List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel()
+        .model(movie);
+      for (Director director : directors) {
+        model = model.relationship("directors", director);
+      }
+      return model.build();
+    } else if (movie instanceof MovieWithSingleDirector) {
+      Director director = ((MovieWithSingleDirector) movie).getDirector();
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel()
+        .model(movie);
+      model = model.relationship("directors", director);
+      return model.build();
+    }
+    return EntityModel.of(movie, selfLink);
+  }
+
+  @GetMapping("/movieWithClassType")
+  public RepresentationModel<?> movieWithClassType() {
+    Movie movie = new Movie("1", "Star Wars");
+    return new MovieRepresentationModelWithoutJsonApiType(movie);
+  }
+
+  @GetMapping("/movieWithLastSeen")
+  public RepresentationModel<?> movieWithLastSeen() {
+    MovieWithLastSeen movie = new MovieWithLastSeen(
+      "1",
+      "Star Wars",
+      Instant.ofEpochSecond(1603465191)
+    );
+    return EntityModel.of(movie);
+  }
+
+  @PostMapping("/movies")
+  public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) {
+    int newMovieId = MOVIES.size() + 1;
+    String newMovieIdString = "" + newMovieId;
+    Movie movieContent = movie.getContent();
+    assert movieContent != null;
+    movieContent.setId(newMovieIdString);
+    MOVIES.put(newMovieId, movieContent);
+
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
+      .withSelfRel()
+      .expand();
+
+    return ResponseEntity.created(link.toUri()).build();
+  }
+
+  @PostMapping("/moviesWithJsonApiTypePolymorphism")
+  public ResponseEntity<?> newMovieWithJsonApiTypePolymorphism(
+    @RequestBody EntityModel<Movie> movie
+  ) {
+    int newMovieId = MOVIES.size() + 1;
+    String newMovieIdString = "" + newMovieId;
+    Movie movieContent = movie.getContent();
+    assert movieContent != null;
+    movieContent.setId(newMovieIdString);
+    MOVIES.put(newMovieId, movieContent);
+
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
+      .withSelfRel()
+      .expand();
+
+    return ResponseEntity.created(link.toUri()).build();
+  }
+
+  @PostMapping("/moviesWithPolymorphism")
+  public ResponseEntity<?> newMovieWithPolymorphism(
+    @RequestBody EntityModel<MovieWithJsonTypeInfo> movie
+  ) {
+    int newMovieId = MOVIES.size() + 1;
+    String newMovieIdString = "" + newMovieId;
+    MovieWithJsonTypeInfo movieContent = movie.getContent();
+    assert movieContent != null;
+    movieContent.setId(newMovieIdString);
+    MOVIES.put(newMovieId, movieContent);
+
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
+      .withSelfRel()
+      .expand();
+
+    return ResponseEntity.created(link.toUri()).build();
+  }
+
+  @PostMapping("/moviesWithDirectors")
+  public ResponseEntity<?> newMovieWithDirectors(
+    @RequestBody EntityModel<MovieWithDirectors> movie
+  ) {
+    int newMovieId = MOVIES.size() + 1;
+    String newMovieIdString = "" + newMovieId;
+    MovieWithDirectors movieContent = movie.getContent();
+    assert movieContent != null;
+    movieContent.setId(newMovieIdString);
+    MOVIES.put(newMovieId, movieContent);
+
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
+      .withSelfRel()
+      .expand();
+
+    return ResponseEntity.created(link.toUri()).build();
+  }
+
+  @PostMapping("/moviesWithSingleDirector")
+  public ResponseEntity<?> newMovieWithSingleDirector(
+    @RequestBody EntityModel<MovieWithSingleDirector> movie
+  ) {
+    int newMovieId = MOVIES.size() + 1;
+    String newMovieIdString = "" + newMovieId;
+    MovieWithSingleDirector movieContent = movie.getContent();
+    assert movieContent != null;
+    movieContent.setId(newMovieIdString);
+    MOVIES.put(newMovieId, movieContent);
+
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
+      .withSelfRel()
+      .expand();
+
+    return ResponseEntity.created(link.toUri()).build();
+  }
+
+  @PostMapping("/movieWithLastSeen")
+  public ResponseEntity<?> newLastSeenMovie(
+    @RequestBody EntityModel<MovieWithLastSeen> movie
+  ) {
+    return ResponseEntity.created(
+      linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()
+    ).build();
+  }
+
+  @PatchMapping("/movies/{id}")
+  public ResponseEntity<?> partiallyUpdateMovie(
+    @RequestBody EntityModel<Movie> movie,
+    @PathVariable Integer id
+  ) {
+    Movie newMovie = MOVIES.get(id);
+
+    assert movie.getContent() != null;
+
+    if (movie.getContent().getTitle() != null) {
+      newMovie = newMovie.withTitle(movie.getContent().getTitle());
     }
 
-    @GetMapping("/movies")
-    public CollectionModel<EntityModel<Movie>> all() {
-        WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
+    MOVIES.put(id, newMovie);
 
-        Link selfLink = linkTo(controller.all()).withSelfRel();
+    return ResponseEntity.noContent()
+      .location(findOne(id).getRequiredLink(IanaLinkRelations.SELF).toUri())
+      .build();
+  }
 
-        return IntStream.range(1, MOVIES.size() + 1)
-                .mapToObj(this::findOne)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), it -> CollectionModel.of(it, selfLink)));
-    }
-
-    @GetMapping("/movies/{id}")
-    public EntityModel<Movie> findOne(@PathVariable Integer id) {
-        WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
-
-        Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
-
-        Movie movie = MOVIES.get(id);
-        return EntityModel.of(
-                movie,
-                selfLink);
-    }
-
-    @GetMapping("/moviesWithDirectors/{id}")
-    public RepresentationModel<?> findOneWidthDirectors(@PathVariable Integer id) {
-        WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
-
-        Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
-
-        Movie movie = MOVIES.get(id);
-        if (movie instanceof MovieWithDirectors) {
-            List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
-            JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
-            for (Director director : directors) {
-                model = model.relationship("directors", director);
-            }
-            return model.build();
-        } else if (movie instanceof MovieWithSingleDirector) {
-            Director director = ((MovieWithSingleDirector) movie).getDirector();
-            JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
-            model = model.relationship("directors", director);
-            return model.build();
-        }
-        return EntityModel.of(
-                movie,
-                selfLink);
-    }
-
-    @GetMapping("/movieWithClassType")
-    public RepresentationModel<?> movieWithClassType() {
-        Movie movie = new Movie("1", "Star Wars");
-        return new MovieRepresentationModelWithoutJsonApiType(movie);
-    }
-
-    @GetMapping("/movieWithLastSeen")
-    public RepresentationModel<?> movieWithLastSeen() {
-        MovieWithLastSeen movie = new MovieWithLastSeen("1", "Star Wars",
-                Instant.ofEpochSecond(1603465191));
-        return EntityModel.of(movie);
-    }
-
-    @PostMapping("/movies")
-    public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movie) {
-        int newMovieId = MOVIES.size() + 1;
-        String newMovieIdString = "" + newMovieId;
-        Movie movieContent = movie.getContent();
-        assert movieContent != null;
-        movieContent.setId(newMovieIdString);
-        MOVIES.put(newMovieId, movieContent);
-
-        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
-
-        return ResponseEntity.created(link.toUri()).build();
-    }
-
-    @PostMapping("/moviesWithJsonApiTypePolymorphism")
-    public ResponseEntity<?> newMovieWithJsonApiTypePolymorphism(@RequestBody EntityModel<Movie> movie) {
-        int newMovieId = MOVIES.size() + 1;
-        String newMovieIdString = "" + newMovieId;
-        Movie movieContent = movie.getContent();
-        assert movieContent != null;
-        movieContent.setId(newMovieIdString);
-        MOVIES.put(newMovieId, movieContent);
-
-        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
-
-        return ResponseEntity.created(link.toUri()).build();
-    }
-
-    @PostMapping("/moviesWithPolymorphism")
-    public ResponseEntity<?> newMovieWithPolymorphism(@RequestBody EntityModel<MovieWithJsonTypeInfo> movie) {
-        int newMovieId = MOVIES.size() + 1;
-        String newMovieIdString = "" + newMovieId;
-        MovieWithJsonTypeInfo movieContent = movie.getContent();
-        assert movieContent != null;
-        movieContent.setId(newMovieIdString);
-        MOVIES.put(newMovieId, movieContent);
-
-        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
-
-        return ResponseEntity.created(link.toUri()).build();
-    }
-
-    @PostMapping("/moviesWithDirectors")
-    public ResponseEntity<?> newMovieWithDirectors(@RequestBody EntityModel<MovieWithDirectors> movie) {
-        int newMovieId = MOVIES.size() + 1;
-        String newMovieIdString = "" + newMovieId;
-        MovieWithDirectors movieContent = movie.getContent();
-        assert movieContent != null;
-        movieContent.setId(newMovieIdString);
-        MOVIES.put(newMovieId, movieContent);
-
-        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
-
-        return ResponseEntity.created(link.toUri()).build();
-    }
-
-    @PostMapping("/moviesWithSingleDirector")
-    public ResponseEntity<?> newMovieWithSingleDirector(@RequestBody EntityModel<MovieWithSingleDirector> movie) {
-        int newMovieId = MOVIES.size() + 1;
-        String newMovieIdString = "" + newMovieId;
-        MovieWithSingleDirector movieContent = movie.getContent();
-        assert movieContent != null;
-        movieContent.setId(newMovieIdString);
-        MOVIES.put(newMovieId, movieContent);
-
-        Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
-
-        return ResponseEntity.created(link.toUri()).build();
-    }
-
-    @PostMapping("/movieWithLastSeen")
-    public ResponseEntity<?> newLastSeenMovie(@RequestBody EntityModel<MovieWithLastSeen> movie) {
-        return ResponseEntity.created(linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()).build();
-    }
-
-    @PatchMapping("/movies/{id}")
-    public ResponseEntity<?> partiallyUpdateMovie(@RequestBody EntityModel<Movie> movie,
-                                                  @PathVariable Integer id) {
-
-        Movie newMovie = MOVIES.get(id);
-
-        assert movie.getContent() != null;
-
-        if (movie.getContent().getTitle() != null) {
-            newMovie = newMovie.withTitle(movie.getContent().getTitle());
-        }
-
-        MOVIES.put(id, newMovie);
-
-        return ResponseEntity
-                .noContent()
-                .location(findOne(id)
-                        .getRequiredLink(IanaLinkRelations.SELF)
-                        .toUri())
-                .build();
-    }
-
-    @GetMapping("/error")
-    public ResponseEntity<?> error() {
-        // tag::errors-builder[]
-        return ResponseEntity.badRequest().body(
-                JsonApiErrors.create().withError(
-                        JsonApiError.create()
-                                .withAboutLink("http://movie-db.com/problem")
-                                .withTitle("Movie-based problem")
-                                .withStatus(HttpStatus.BAD_REQUEST.toString())
-                                .withDetail("This is a test case")));
-        // end::errors-builder[]
-    }
+  @GetMapping("/error")
+  public ResponseEntity<?> error() {
+    // tag::errors-builder[]
+    return ResponseEntity.badRequest()
+      .body(
+        JsonApiErrors.create()
+          .withError(
+            JsonApiError.create()
+              .withAboutLink("http://movie-db.com/problem")
+              .withTitle("Movie-based problem")
+              .withStatus(HttpStatus.BAD_REQUEST.toString())
+              .withDetail("This is a test case")
+          )
+      );
+    // end::errors-builder[]
+  }
 }
