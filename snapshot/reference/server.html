@@ -48,8 +48,9 @@ Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
 @With
 
 </span><span class="fold-block">public class Movie {
-    private String id;
-    private String title;
+
+  private String id;
+  private String title;
 }
 </span></code></pre>
 </div>
@@ -341,15 +342,17 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 @AllArgsConstructor
 
 </span><span class="fold-block">public class MovieWithAnnotations {
-    @Id
-    private String myId;
-    @JsonApiType
-    private String type;
 
-    @JsonApiMeta
-    private String myMeta;
+  @Id
+  private String myId;
 
-    private String title;
+  @JsonApiType
+  private String type;
+
+  @JsonApiMeta
+  private String myMeta;
+
+  private String title;
 }
 </span></code></pre>
 </div>
@@ -391,7 +394,9 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
-final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel().model(movie).build();
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movie)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -407,8 +412,9 @@ A simple <code>Director</code> class could look like:</p>
 @With
 
 </span><span class="fold-block">public class Director {
-    private String id;
-    private String name;
+
+  private String id;
+  private String name;
 }
 </span></code></pre>
 </div>
@@ -421,11 +427,10 @@ A simple <code>Director</code> class could look like:</p>
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 Director director = new Director("1", "George Lucas");
 
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(movie)
-                .relationship("directors", director)
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movie)
+  .relationship("directors", director)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -460,12 +465,11 @@ you can build it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(EntityModel.of(movie))
-                .relationshipWithDataArray("directors")
-                .relationship("directors", director)
-                .build();
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(EntityModel.of(movie))
+  .relationshipWithDataArray("directors")
+  .relationship("directors", director)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -503,11 +507,10 @@ So,</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(EntityModel.of(movie))
-                .relationship("directors", Collections.singletonList(director))
-                .build();
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(EntityModel.of(movie))
+  .relationship("directors", Collections.singletonList(director))
+  .build();
 </code></pre>
 </div>
 </div>
@@ -530,15 +533,14 @@ Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
 
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(movie)
-                .relationship("directors", director1)
-                .relationship("directors", director2)
-                .relationship("relatedMovies", relatedMovie)
-                .included(director1)
-                .included(director2)
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movie)
+  .relationship("directors", director1)
+  .relationship("directors", director2)
+  .relationship("relatedMovies", relatedMovie)
+  .included(director1)
+  .included(director2)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -606,40 +608,46 @@ Movie relatedMovie = new Movie("2", "The Matrix 2");
 Director director1 = new Director("1", "Lana Wachowski");
 Director director2 = new Director("2", "Lilly Wachowski");
 
-final RepresentationModel&lt;?&gt; jsonApiModel1 =
-        jsonApiModel()
-                .model(movie)
-                .relationship("directors", director1)
-                .relationship("directors", director2)
-                .relationship("relatedMovies", EntityModel.of(relatedMovie))
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel1 = jsonApiModel()
+  .model(movie)
+  .relationship("directors", director1)
+  .relationship("directors", director2)
+  .relationship("relatedMovies", EntityModel.of(relatedMovie))
+  .build();
 
 Movie movie2 = new Movie("3", "Star Wars");
 Director director3 = new Director("3", "George Lucas");
 
-final RepresentationModel&lt;?&gt; jsonApiModel2 =
-        jsonApiModel()
-                .model(movie2)
-                .relationship("directors", director3)
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel2 = jsonApiModel()
+  .model(movie2)
+  .relationship("directors", director3)
+  .build();
 
 List&lt;RepresentationModel&lt;?&gt;&gt; movies = new ArrayList&lt;&gt;();
 movies.add(jsonApiModel1);
 movies.add(jsonApiModel2);
 
-PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
+PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
+  10,
+  1,
+  100,
+  10
+);
 Link selfLink = Link.of("http://localhost/movies").withSelfRel();
-final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(movies, pageMetadata, selfLink);
+final PagedModel&lt;RepresentationModel&lt;?&gt;&gt; pagedModel = PagedModel.of(
+  movies,
+  pageMetadata,
+  selfLink
+);
 
-RepresentationModel&lt;?&gt; pagedJasonApiModel =
-        jsonApiModel()
-                .model(pagedModel)
-                .included(director1)
-                .included(director2)
-                .included(director3)
-                .pageMeta()
-                .pageLinks("http://localhost/movies")
-                .build();
+RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
+  .model(pagedModel)
+  .included(director1)
+  .included(director2)
+  .included(director3)
+  .pageMeta()
+  .pageLinks("http://localhost/movies")
+  .build();
 </code></pre>
 </div>
 </div>
@@ -741,11 +749,10 @@ An empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(movie)
-                .relationship("director", (Object)null)
-                .build();
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movie)
+  .relationship("director", (Object) null)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -754,11 +761,10 @@ An empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(movie)
-                .relationship("directors", Collections.emptyList())
-                .build();
+<pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movie)
+  .relationship("directors", Collections.emptyList())
+  .build();
 </code></pre>
 </div>
 </div>
@@ -783,10 +789,12 @@ and the builder could be used for the inclusion, like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">if (include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals(DIRECTORS)) {
-    for (Movie movie : pagedResult.getContent()) {
-        jsonApiModelBuilder.included(movie.getDirectors());
-    }
+<pre class="highlight"><code class="language-java" data-lang="java">if (
+  include != null &amp;&amp; include.length == 1 &amp;&amp; include[0].equals(DIRECTORS)
+) {
+  for (Movie movie : pagedResult.getContent()) {
+    jsonApiModelBuilder.included(movie.getDirectors());
+  }
 }
 </code></pre>
 </div>
@@ -806,33 +814,33 @@ resources. Here is an example that also illustrates the different levels of meta
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">Director director = new Director("3", "George Lucas");
-final RepresentationModel&lt;?&gt; directorModel =
-        jsonApiModel()
-                .model(EntityModel.of(director))
-                .meta("director-meta", "director-meta-value")
-                .build();
+final RepresentationModel&lt;?&gt; directorModel = jsonApiModel()
+  .model(EntityModel.of(director))
+  .meta("director-meta", "director-meta-value")
+  .build();
 
 Map&lt;String, Object&gt; relationshipMeta = new HashMap&lt;&gt;();
 relationshipMeta.put("relationship-meta", "relationship-meta-value");
 
 Map&lt;String, Object&gt; directorRelationshipMeta = new HashMap&lt;&gt;();
-directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
+directorRelationshipMeta.put(
+  "director-relationship-meta",
+  "director-relationship-meta-value"
+);
 
 Movie movie = new Movie("1", "Star Wars");
-final RepresentationModel&lt;?&gt; movieModel =
-        jsonApiModel()
-                .model(movie)
-                .meta("movie-meta", "movie-meta-value")
-                .relationship("directors", director, directorRelationshipMeta)
-                .relationship("directors", relationshipMeta)
-                .build();
+final RepresentationModel&lt;?&gt; movieModel = jsonApiModel()
+  .model(movie)
+  .meta("movie-meta", "movie-meta-value")
+  .relationship("directors", director, directorRelationshipMeta)
+  .relationship("directors", relationshipMeta)
+  .build();
 
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(movieModel)
-                .meta("top-level-meta", "top-level-meta-value")
-                .included(directorModel)
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(movieModel)
+  .meta("top-level-meta", "top-level-meta-value")
+  .included(directorModel)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -897,17 +905,20 @@ the attributes <code>name</code> and <code>born</code>, and a movie would have t
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
-DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
+DirectorWithMovies director = new DirectorWithMovies(
+  "3",
+  "George Lucas",
+  1944
+);
 director.setMovies(Collections.singletonList(movie));
 
-final RepresentationModel&lt;?&gt; jsonApiModel =
-        jsonApiModel()
-                .model(EntityModel.of(director))
-                .fields("directors", "name")
-                .fields("movies", "title")
-                .relationship("movies", movie)
-                .included(movie)
-                .build();
+final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
+  .model(EntityModel.of(director))
+  .fields("directors", "name")
+  .fields("movies", "title")
+  .relationship("movies", movie)
+  .included(movie)
+  .build();
 </code></pre>
 </div>
 </div>
@@ -1007,12 +1018,21 @@ First you have to enable this experimental feature in the configuration, like</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">final Affordance newMovieAffordance =
-        afford(methodOn(MovieController.class).newMovie(null));
+<pre class="highlight"><code class="language-java" data-lang="java">final Affordance newMovieAffordance = afford(
+  methodOn(MovieController.class).newMovie(null)
+);
 
-Link selfLink = linkTo(MovieController.class).slash("movies" + uriParams
-        + "&amp;page[number]=" + pagedResult.getNumber()
-        + "&amp;page[size]=" + pagedResult.getSize()).withSelfRel().andAffordance(newMovieAffordance);
+Link selfLink = linkTo(MovieController.class)
+  .slash(
+    "movies" +
+    uriParams +
+    "&amp;page[number]=" +
+    pagedResult.getNumber() +
+    "&amp;page[size]=" +
+    pagedResult.getSize()
+  )
+  .withSelfRel()
+  .andAffordance(newMovieAffordance);
 </code></pre>
 </div>
 </div>
@@ -1160,12 +1180,13 @@ real director objects to the movie.</p>
 @With
 
 </span><span class="fold-block">public class MovieWithDirectors extends Movie {
-    @JsonApiType
-    String myType = "movies";
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    List&lt;Director&gt; directors;
+  @JsonApiType
+  String myType = "movies";
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  List&lt;Director&gt; directors;
 }
 </span></code></pre>
 </div>
@@ -1243,11 +1264,12 @@ annotation.</p>
 @With
 
 </span><span class="fold-block">public class DirectorWithType {
-    private String id;
-    private String name;
 
-    @JsonApiType
-    private  String directorType;
+  private String id;
+  private String name;
+
+  @JsonApiType
+  private String directorType;
 }
 </span></code></pre>
 </div>
@@ -1260,15 +1282,16 @@ annotation.</p>
 @With
 
 </span><span class="fold-block">public class MovieWithTypedDirectors {
-    private String id;
-    private String title;
 
-    @JsonApiType
-    String myType;
+  private String id;
+  private String title;
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    List&lt;DirectorWithType&gt; directors;
+  @JsonApiType
+  String myType;
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  List&lt;DirectorWithType&gt; directors;
 }
 </span></code></pre>
 </div>
@@ -1410,8 +1433,9 @@ So a JSON like</p>
 @JsonApiTypeForClass("movies")
 
 </span><span class="fold-block">public class MovieWithUUID {
-    private UUID id;
-    private String title;
+
+  private UUID id;
+  private String title;
 }
 </span></code></pre>
 </div>
@@ -1483,12 +1507,13 @@ otherwise an <code>IllegalArgumentException</code> is thrown.</p>
 @With
 
 </span><span class="fold-block">public class MovieWithDirectors extends Movie {
-    @JsonApiType
-    String myType = "movies";
 
-    @JsonIgnore
-    @JsonApiRelationships("directors")
-    List&lt;Director&gt; directors;
+  @JsonApiType
+  String myType = "movies";
+
+  @JsonIgnore
+  @JsonApiRelationships("directors")
+  List&lt;Director&gt; directors;
 }
 </span></code></pre>
 </div>
@@ -1651,16 +1676,17 @@ Here is an example:</p>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class PolymorphicRelationEntity {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    @JsonApiRelationships("superEntities")
-    @JsonIgnore
-    @Getter
-    private final List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
+  @JsonApiType
+  private final String type = null;
+
+  @JsonApiRelationships("superEntities")
+  @JsonIgnore
+  @Getter
+  private final List&lt;SuperEntity&lt;?&gt;&gt; relation = null;
 }
 </code></pre>
 </div>
@@ -1668,12 +1694,14 @@ public class PolymorphicRelationEntity {
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
-        @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2")
-})
+@JsonSubTypes(
+  {
+    @JsonSubTypes.Type(value = SuperEChild.class, name = "superEChild"),
+    @JsonSubTypes.Type(value = SuperEChild2.class, name = "superEChild2"),
+  }
+)
 public interface SuperEntity&lt;T&gt; {
-    T getT();
+  T getT();
 }
 </code></pre>
 </div>
@@ -1682,16 +1710,17 @@ public interface SuperEntity&lt;T&gt; {
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEntity&lt;T&gt; {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    @Override
-    public T getT() {
-        return null;
-    }
+  @JsonApiType
+  private final String type = null;
+
+  @Override
+  public T getT() {
+    return null;
+  }
 }
 </code></pre>
 </div>
@@ -1700,18 +1729,19 @@ public class SuperEChild&lt;T extends Collection&lt;?&gt;&gt; implements SuperEn
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@NoArgsConstructor
 public class SuperEChild2 implements SuperEntity&lt;String&gt; {
-    @JsonApiId
-    private String id;
 
-    @JsonApiType
-    private final String type = null;
+  @JsonApiId
+  private String id;
 
-    private final String extraAttribute = "";
+  @JsonApiType
+  private final String type = null;
 
-    @Override
-    public String getT() {
-        return null;
-    }
+  private final String extraAttribute = "";
+
+  @Override
+  public String getT() {
+    return null;
+  }
 }
 </code></pre>
 </div>
@@ -1774,13 +1804,17 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
-        JsonApiErrors.create().withError(
-                JsonApiError.create()
-                        .withAboutLink("http://movie-db.com/problem")
-                        .withTitle("Movie-based problem")
-                        .withStatus(HttpStatus.BAD_REQUEST.toString())
-                        .withDetail("This is a test case")));
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest()
+  .body(
+    JsonApiErrors.create()
+      .withError(
+        JsonApiError.create()
+          .withAboutLink("http://movie-db.com/problem")
+          .withTitle("Movie-based problem")
+          .withStatus(HttpStatus.BAD_REQUEST.toString())
+          .withDetail("This is a test case")
+      )
+  );
 </code></pre>
 </div>
 </div>
@@ -1814,26 +1848,34 @@ to JSON:API error responses, you could implement a <code>@ControllerAdvice</code
 <pre class="highlight"><code class="language-java" data-lang="java">@ControllerAdvice(annotations = RestController.class)
 @Slf4j
 public class ExceptionControllerAdvice {
-    /**
-     * Handles all manually thrown exceptions of type JsonApiErrorsException.
-     */
-    @ExceptionHandler
-    public ResponseEntity&lt;JsonApiErrors&gt; handle(JsonApiErrorsException ex) {
-        log.error("JSON:API error: Http status:{}, message:{}", ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(ex.getStatus()).body(ex.getErrors());
-    }
 
-    /**
-     * Handles all exceptions which are not of type JsonAPIErrorsException and treats
-     * them as internal errors or maps specific exceptions to specific HTTP status codes.
-     */
-    @ExceptionHandler
-    public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
-        log.error("Internal error: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-                body(JsonApiErrors.create().withError(
-                        CommonErrors.newInternalServerError().withDetail(ex.getMessage())));
-    }
+  /**
+   * Handles all manually thrown exceptions of type JsonApiErrorsException.
+   */
+  @ExceptionHandler
+  public ResponseEntity&lt;JsonApiErrors&gt; handle(JsonApiErrorsException ex) {
+    log.error(
+      "JSON:API error: Http status:{}, message:{}",
+      ex.getStatus(),
+      ex.getMessage()
+    );
+    return ResponseEntity.status(ex.getStatus()).body(ex.getErrors());
+  }
+
+  /**
+   * Handles all exceptions which are not of type JsonAPIErrorsException and treats
+   * them as internal errors or maps specific exceptions to specific HTTP status codes.
+   */
+  @ExceptionHandler
+  public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
+    log.error("Internal error: {}", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+      JsonApiErrors.create()
+        .withError(
+          CommonErrors.newInternalServerError().withDetail(ex.getMessage())
+        )
+    );
+  }
 }
 </code></pre>
 </div>
@@ -1863,20 +1905,21 @@ public class ExceptionControllerAdvice {
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@Getter
 public class JsonApiErrorsException extends RuntimeException {
-    private final transient JsonApiErrors errors;
-    private final HttpStatus status;
 
-    public JsonApiErrorsException(JsonApiErrors errors, HttpStatus status) {
-        super();
-        this.errors = errors;
-        this.status = status;
-    }
+  private final transient JsonApiErrors errors;
+  private final HttpStatus status;
 
-    public JsonApiErrorsException(JsonApiError error) {
-        super();
-        this.errors = JsonApiErrors.create().withError(error);
-        this.status = HttpStatus.valueOf(Integer.parseInt(error.getStatus()));
-    }
+  public JsonApiErrorsException(JsonApiErrors errors, HttpStatus status) {
+    super();
+    this.errors = errors;
+    this.status = status;
+  }
+
+  public JsonApiErrorsException(JsonApiError error) {
+    super();
+    this.errors = JsonApiErrors.create().withError(error);
+    this.status = HttpStatus.valueOf(Integer.parseInt(error.getStatus()));
+  }
 }
 </code></pre>
 </div>
@@ -1887,40 +1930,48 @@ public class JsonApiErrorsException extends RuntimeException {
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">public class CommonErrors {
-    private CommonErrors() {
-    }
 
-    private static final JsonApiError resourceNotFound = JsonApiError.create()
-        .withCode("xrn:err:platform:resourceNotFound")
-        .withTitle("Resource Not Found")
-        .withStatus("404");
+  private CommonErrors() {}
 
-    private static final JsonApiError badRequest = JsonApiError.create()
-            .withCode("xrn:err:platform:badRequest")
-            .withTitle("Bad Request")
-            .withStatus("400");
+  private static final JsonApiError resourceNotFound = JsonApiError.create()
+    .withCode("xrn:err:platform:resourceNotFound")
+    .withTitle("Resource Not Found")
+    .withStatus("404");
 
-    private static final JsonApiError internalServerError = JsonApiError.create()
-        .withCode("xrn:err:platform:internalServerError")
-        .withTitle("Internal server error")
-        .withStatus("500");
+  private static final JsonApiError badRequest = JsonApiError.create()
+    .withCode("xrn:err:platform:badRequest")
+    .withTitle("Bad Request")
+    .withStatus("400");
 
-    public static JsonApiError newResourceNotFound(String resourceType, String resourceId) {
-        return resourceNotFound
-                .withDetail("Resource of type '" + resourceType + "' with id '" + resourceId + "' not found.")
-                .withId(java.util.UUID.randomUUID().toString());
-    }
+  private static final JsonApiError internalServerError = JsonApiError.create()
+    .withCode("xrn:err:platform:internalServerError")
+    .withTitle("Internal server error")
+    .withStatus("500");
 
-    public static JsonApiError newBadRequestError(String message) {
-        return badRequest
-                .withId(java.util.UUID.randomUUID().toString())
-                .withDetail(message);
-    }
+  public static JsonApiError newResourceNotFound(
+    String resourceType,
+    String resourceId
+  ) {
+    return resourceNotFound
+      .withDetail(
+        "Resource of type '" +
+        resourceType +
+        "' with id '" +
+        resourceId +
+        "' not found."
+      )
+      .withId(java.util.UUID.randomUUID().toString());
+  }
 
-    public static JsonApiError newInternalServerError() {
-        return internalServerError
-            .withId(java.util.UUID.randomUUID().toString());
-    }
+  public static JsonApiError newBadRequestError(String message) {
+    return badRequest
+      .withId(java.util.UUID.randomUUID().toString())
+      .withDetail(message);
+  }
+
+  public static JsonApiError newInternalServerError() {
+    return internalServerError.withId(java.util.UUID.randomUUID().toString());
+  }
 }
 </code></pre>
 </div>
@@ -1930,8 +1981,11 @@ public class JsonApiErrorsException extends RuntimeException {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">.orElseThrow(() -&gt; new JsonApiErrorsException(
-        CommonErrors.newResourceNotFound("movies", id.toString())));
+<pre class="highlight"><code class="language-java" data-lang="java">.orElseThrow(() -&gt;
+  new JsonApiErrorsException(
+    CommonErrors.newResourceNotFound("movies", id.toString())
+  )
+);
 </code></pre>
 </div>
 </div>
@@ -1948,7 +2002,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.2-SNAPSHOT<br>
-Last updated 2024-12-21 16:25:03 UTC
+Last updated 2025-01-08 13:28:44 UTC
 </div>
 </div>
 </div>

@@ -71,8 +71,9 @@ where the <code>Movie</code> class looks like</p>
 @With
 
 </span><span class="fold-block">public class Movie {
-    private String id;
-    private String title;
+
+  private String id;
+  private String title;
 }
 </span></code></pre>
 </div>
@@ -217,17 +218,18 @@ The following example shows how such a configuration can look like:</p>
 <pre class="highlight"><code class="language-java" data-lang="java">@Configuration
 @EnableHypermediaSupport(type = {})
 static class Config {
-    public @Bean
-    RestTemplate template() {
-        return new RestTemplate();
-    }
 
-    @Bean
-    public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-            ObjectProvider&lt;JsonApiConfiguration&gt; configuration,
-            AutowireCapableBeanFactory beanFactory) {
-        return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
-    }
+  public @Bean RestTemplate template() {
+    return new RestTemplate();
+  }
+
+  @Bean
+  public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
+    ObjectProvider&lt;JsonApiConfiguration&gt; configuration,
+    AutowireCapableBeanFactory beanFactory
+  ) {
+    return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
+  }
 }
 </code></pre>
 </div>
@@ -244,7 +246,9 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">new JsonApiConfiguration().withJsonApiIdNotSerializedForValue("doNotSerialize"));
+<pre class="highlight"><code class="language-java" data-lang="java">  new JsonApiConfiguration()
+    .withJsonApiIdNotSerializedForValue("doNotSerialize")
+);
 </code></pre>
 </div>
 </div>
@@ -305,7 +309,9 @@ is exposed as a Spring bean.</p>
 Links links = linkDiscoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
-assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
+assertThat(links)
+  .map(Link::getHref)
+  .contains("http://localhost/movies/1");
 </code></pre>
 </div>
 </div>
@@ -315,7 +321,7 @@ assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 <div id="footer">
 <div id="footer-text">
 Version 2.1.2-SNAPSHOT<br>
-Last updated 2024-12-21 16:25:03 UTC
+Last updated 2025-01-08 13:28:44 UTC
 </div>
 </div>
 </div>
