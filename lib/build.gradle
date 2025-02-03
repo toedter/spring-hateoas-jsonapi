@@ -6,7 +6,7 @@ plugins {
     id 'java'
     id 'war'
     id 'jacoco'
-    id 'io.freefair.lombok' version '8.12'
+    id 'io.freefair.lombok' version '8.12.1'
     id 'org.asciidoctor.jvm.convert' version '4.0.4'
     id 'maven-publish'
     id 'signing'
