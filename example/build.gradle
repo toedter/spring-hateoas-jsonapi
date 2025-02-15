@@ -7,15 +7,14 @@ plugins {
 
 group = 'com.toedter'
 version = '2.1.2-SNAPSHOT'
-sourceCompatibility = '1.17'
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/snapshot' }
-    maven { url 'https://repo.spring.io/milestone' }
+    maven { url = 'https://repo.spring.io/snapshot' }
+    maven { url = 'https://repo.spring.io/milestone' }
 // if you want to use a snapshot version from oss.sonatype.org
 //    maven {
-//        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+//        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
 //    }
 }
 
@@ -40,6 +39,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 bootJar {

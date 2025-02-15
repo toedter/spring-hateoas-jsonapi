@@ -17,13 +17,12 @@ plugins {
 
 group = 'com.toedter'
 version = '2.1.2-SNAPSHOT'
-sourceCompatibility = '1.17'
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/release' }
-    maven { url 'https://repo.spring.io/milestone' }
-    maven { url 'https://repo.spring.io/snapshot' }
+    maven { url = 'https://repo.spring.io/release' }
+    maven { url = 'https://repo.spring.io/milestone' }
+    maven { url = 'https://repo.spring.io/snapshot' }
 }
 
 configurations {
@@ -65,6 +64,14 @@ test {
     finalizedBy jacocoTestReport
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 jar {
     archivesBaseName = 'spring-hateoas-jsonapi'
     manifest {
@@ -98,14 +105,14 @@ tasks.register('doc') {
 
     doLast {
         copy {
-            from "$buildDir/docs/javadoc"
-            into "$buildDir/docs/gh-pages/snapshot/api"
+            from "$layout.buildDirectory/docs/javadoc"
+            into "$layout.buildDirectory/docs/gh-pages/snapshot/api"
             filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
         }
 
         copy {
-            from "$buildDir/docs/asciidoc"
-            into "$buildDir/docs/gh-pages/snapshot/reference"
+            from "$layout.buildDirectory/docs/asciidoc"
+            into "$layout.buildDirectory/docs/gh-pages/snapshot/reference"
         }
     }
 }
@@ -162,13 +169,13 @@ publishing {
     repositories {
         maven {
             credentials {
-                username System.getenv('OSSRH_USERNAME')
-                password System.getenv('OSSRH_PASSWORD')
+                username = System.getenv('OSSRH_USERNAME')
+                password = System.getenv('OSSRH_PASSWORD')
             }
             if (project.version.endsWith('-SNAPSHOT')) {
-                url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
             } else {
-                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
             }
         }
     }
