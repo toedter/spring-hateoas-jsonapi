@@ -19,11 +19,13 @@ package com.toedter.spring.hateoas.jsonapi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
-import org.springframework.lang.Nullable;
 
 /**
  * This class represents a JSON:API object compliant to the
@@ -32,6 +34,7 @@ import org.springframework.lang.Nullable;
 @Getter(onMethod_ = { @JsonProperty })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor(force = true)
 public class JsonApiObject {
 
   /**
