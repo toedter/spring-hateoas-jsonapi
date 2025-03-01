@@ -16,23 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
-import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
-import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
-import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
-import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
-
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -43,6 +26,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
+import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
+import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
+import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * @author Kai Toedter
