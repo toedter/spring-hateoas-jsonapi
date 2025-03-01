@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Client Side support</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body id="client-side-support" class="article"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<h1>Client Side support</h1>
+<div class="details">
+<span id="revnumber">version 2.1.4-SNAPSHOT</span>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="deserialization"><a class="anchor" href="#deserialization"></a>Deserialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+models are supported.</p>
+</div>
+<div class="paragraph">
+<p>For example, a JSON structured like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized to an object of class <code>EntityModel&lt;Movie&gt;</code>,
+where the <code>Movie</code> class looks like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="fold-block hide-when-folded">@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@With
+
+</span><span class="fold-block">public class Movie {
+
+  private String id;
+  private String title;
+}
+</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please be aware that the deserialization mechanism is currently not able to deserialize all types of
+complex JSON:API structures that can be built with JSON:API model builder, but a few things can already be done:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Deserialized meta</p>
+</li>
+<li>
+<p>Deserializing included resources into the relationship DTOs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, a JSON like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": [
+    {
+      "id": "1",
+      "type": "movies",
+      "attributes": {
+        "title": "The Matrix"
+      },
+      "relationships": {
+        "relatedMovies": {
+          "data": {
+            "id": "2",
+            "type": "movies"
+          }
+        },
+        "directors": {
+          "data": [
+            {
+              "id": "1",
+              "type": "directors"
+            },
+            {
+              "id": "2",
+              "type": "directors"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "movies",
+      "attributes": {
+        "title": "Star Wars"
+      },
+      "relationships": {
+        "directors": {
+          "data": {
+            "id": "3",
+            "type": "directors"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "1",
+      "type": "directors",
+      "attributes": {
+        "name": "Lana Wachowski"
+      }
+    },
+    {
+      "id": "2",
+      "type": "directors",
+      "attributes": {
+        "name": "Lilly Wachowski"
+      }
+    },
+    {
+      "id": "3",
+      "type": "directors",
+      "attributes": {
+        "name": "George Lucas"
+      }
+    }
+  ],
+  "links": {
+    "self": "http://localhost/movies",
+    "first": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "prev": "http://localhost/movies?page%5Bnumber%5D=0&amp;page%5Bsize%5D=10",
+    "next": "http://localhost/movies?page%5Bnumber%5D=2&amp;page%5Bsize%5D=10",
+    "last": "http://localhost/movies?page%5Bnumber%5D=9&amp;page%5Bsize%5D=10"
+  },
+  "meta": {
+    "page": {
+      "size": 10,
+      "totalElements": 100,
+      "totalPages": 10,
+      "number": 1
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>would be deserialized in a <code>CollectionModel&lt;EntityModel&lt;MovieWithDirectors&gt;&gt;</code>, so that all the names
+of the directors are set on the Java side.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>CollectionModel&lt;MovieWithDirectors&gt;</code> would NOT resolve the director names, because deserialization
+of JSON:API specific things like relationships only works with Spring HATEOAS representation models.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>More examples for deserialization of relationships you find in the section <a href="#server-deserialization">[server-deserialization]</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="resttemplate"><a class="anchor" href="#resttemplate"></a>RestTemplate</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to write a client that deserializes server responses into Java objects,
+you can use RestTemplate, but with a little extra configuration.
+The following example shows how such a configuration can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableHypermediaSupport(type = {})
+static class Config {
+
+  public @Bean RestTemplate template() {
+    return new RestTemplate();
+  }
+
+  @Bean
+  public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
+    ObjectProvider&lt;JsonApiConfiguration&gt; configuration,
+    AutowireCapableBeanFactory beanFactory
+  ) {
+    return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
+  }
+}
+</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>Creating POST requests without serialized JSON:API id</h3>
+<div class="paragraph">
+<p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
+and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
+that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you specify a configuration like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">  new JsonApiConfiguration()
+    .withJsonApiIdNotSerializedForValue("doNotSerialize")
+);
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and create a Movie DTO with this id, like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("doNotSerialize", "Star Wars");
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the resulting JSON would look like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="traverson"><a class="anchor" href="#traverson"></a>Traverson</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
+implementation provided through {spring-hateoas-url}[Spring HATEOAS].</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="link-discovery"><a class="anchor" href="#link-discovery"></a>Link Discovery</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
+type in it.
+{spring-hateoas-url}[Spring HATEOAS] provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+for the configured hypermedia types.
+When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
+is exposed as a Spring bean.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can set up and use an instance as follows
+(<code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">LinkDiscoverer linkDiscoverer = new JsonApiLinkDiscoverer();
+Links links = linkDiscoverer.findLinksWithRel(SELF, source);
+
+assertThat(links.hasLink("self")).isTrue();
+assertThat(links)
+  .map(Link::getHref)
+  .contains("http://localhost/movies/1");
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.1.4-SNAPSHOT<br>
+Last updated 2025-03-01 12:19:32 UTC
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
