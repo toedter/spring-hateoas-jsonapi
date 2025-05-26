@@ -11,7 +11,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.4.5' apply false
+    id 'org.springframework.boot' version '3.5.0' apply false
     id 'org.sonarqube' version '6.2.0.5505'
 }
 
@@ -42,7 +42,7 @@ dependencies {
     providedCompile 'com.google.code.findbugs:jsr305:3.0.2'
     providedCompile 'jakarta.servlet:jakarta.servlet-api'
 
-    testImplementation 'org.springframework:spring-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.springframework:spring-webmvc'
     testImplementation 'org.springframework:spring-webflux'
@@ -54,6 +54,8 @@ dependencies {
     testImplementation 'jakarta.persistence:jakarta.persistence-api'
     testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     testImplementation 'com.networknt:json-schema-validator:1.5.7'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     docs 'io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.7'
 }
