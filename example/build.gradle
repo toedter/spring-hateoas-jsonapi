@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '2.1.4'
+version = '2.1.5-SNAPSHOT'
 
 repositories {
     mavenCentral()
