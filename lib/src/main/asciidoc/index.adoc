@@ -25,7 +25,7 @@ Kai Tödter
 
 This project provides JSON:API media type support for Spring HATEOAS.
 
-(C) 2024 The original authors.
+(C) 2025 The original authors.
 
 NOTE: Copies of this document may be made for your own use and for distribution to others,
 provided that you do not charge any fee for such copies and further provided that each copy
