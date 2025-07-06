@@ -37,7 +37,7 @@ contains this Copyright Notice, whether distributed in print or electronically.
 * Version control: https://github.com/toedter/spring-hateoas-jsonapi
 * Bugtracker: https://github.com/toedter/spring-hateoas-jsonapi/issues
 * Release repository: https://mvnrepository.com/artifact/com.toedter/spring-hateoas-jsonapi[Maven Central]
-* Snapshot repository: link:++https://oss.sonatype.org/#nexus-search;gav~com.toedter~spring-hateoas-jsonapi~~~~kw,versionexpand++[Sonatype OSS Repository]
+* Snapshot repository: link:https://central.sonatype.com/repository/maven-snapshots/[Maven Central Snapshots Repository]
 
 include::introduction.adoc[leveloffset=+1]
 include::setup.adoc[leveloffset=+1]

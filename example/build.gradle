@@ -12,9 +12,9 @@ repositories {
     mavenCentral()
     maven { url = 'https://repo.spring.io/snapshot' }
     maven { url = 'https://repo.spring.io/milestone' }
-// if you want to use a snapshot version from oss.sonatype.org
+//  if you want to use a snapshot version from maven central, uncomment the following line
 //    maven {
-//        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+//        url = 'https://central.sonatype.com/repository/maven-snapshots/'
 //    }
 }
 
@@ -25,15 +25,19 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 
-    // if you want to use the released version, use
+    // if you want to use the SNAPSHOT version from maven central
+    // implementation 'com.toedter:spring-hateoas-jsonapi:2.1.5-SNAPSHOT'
+
+    // if you want to use the released version from maven central
     // implementation 'com.toedter:spring-hateoas-jsonapi:2.1.4'
+
+    // if you want to use local version, use
     implementation project(':lib')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    // runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.hsqldb:hsqldb'
 }
 
