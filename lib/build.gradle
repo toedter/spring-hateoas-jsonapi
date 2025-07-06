@@ -175,8 +175,8 @@ publishing {
                 password = System.getenv('OSSRH_PASSWORD')
             }
             if (project.version.endsWith('-SNAPSHOT')) {
-                name = 'ossrh-staging-api'
-                url = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+                name = 'central-portal-snapshots'
+                url = 'https://central.sonatype.com/repository/maven-snapshots/'
             } else {
                 url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
             }
