@@ -178,7 +178,7 @@ publishing {
                 name = 'central-portal-snapshots'
                 url = 'https://central.sonatype.com/repository/maven-snapshots/'
             } else {
-                url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                url = 'https://central.sonatype.com/staging/deploy/maven2/'
             }
         }
     }
