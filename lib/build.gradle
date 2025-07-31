@@ -75,7 +75,7 @@ java {
 }
 
 jar {
-    archivesBaseName = 'spring-hateoas-jsonapi'
+    archiveBaseName = 'spring-hateoas-jsonapi'
     manifest {
         attributes(
                 'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),

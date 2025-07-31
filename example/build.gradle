@@ -54,5 +54,5 @@ java {
 }
 
 bootJar {
-    archivesBaseName = "spring-hateoas-jsonapi-example"
+    archiveBaseName = "spring-hateoas-jsonapi-example"
 }
