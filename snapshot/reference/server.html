@@ -1025,11 +1025,11 @@ First you have to enable this experimental feature in the configuration, like</p
 Link selfLink = linkTo(MovieController.class)
   .slash(
     "movies" +
-    uriParams +
-    "&amp;page[number]=" +
-    pagedResult.getNumber() +
-    "&amp;page[size]=" +
-    pagedResult.getSize()
+      uriParams +
+      "&amp;page[number]=" +
+      pagedResult.getNumber() +
+      "&amp;page[size]=" +
+      pagedResult.getSize()
   )
   .withSelfRel()
   .andAffordance(newMovieAffordance);
@@ -1804,17 +1804,15 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest()
-  .body(
-    JsonApiErrors.create()
-      .withError(
-        JsonApiError.create()
-          .withAboutLink("http://movie-db.com/problem")
-          .withTitle("Movie-based problem")
-          .withStatus(HttpStatus.BAD_REQUEST.toString())
-          .withDetail("This is a test case")
-      )
-  );
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
+  JsonApiErrors.create().withError(
+    JsonApiError.create()
+      .withAboutLink("http://movie-db.com/problem")
+      .withTitle("Movie-based problem")
+      .withStatus(HttpStatus.BAD_REQUEST.toString())
+      .withDetail("This is a test case")
+  )
+);
 </code></pre>
 </div>
 </div>
@@ -1870,10 +1868,9 @@ public class ExceptionControllerAdvice {
   public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
     log.error("Internal error: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-      JsonApiErrors.create()
-        .withError(
-          CommonErrors.newInternalServerError().withDetail(ex.getMessage())
-        )
+      JsonApiErrors.create().withError(
+        CommonErrors.newInternalServerError().withDetail(ex.getMessage())
+      )
     );
   }
 }
@@ -1955,10 +1952,10 @@ public class JsonApiErrorsException extends RuntimeException {
     return resourceNotFound
       .withDetail(
         "Resource of type '" +
-        resourceType +
-        "' with id '" +
-        resourceId +
-        "' not found."
+          resourceType +
+          "' with id '" +
+          resourceId +
+          "' not found."
       )
       .withId(java.util.UUID.randomUUID().toString());
   }
@@ -2002,7 +1999,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-01 14:33:43 UTC
+Last updated 2025-12-02 19:02:32 UTC
 </div>
 </div>
 </div>
