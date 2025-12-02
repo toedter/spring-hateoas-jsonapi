@@ -34,10 +34,9 @@ public class ExceptionControllerAdvice {
   public ResponseEntity<JsonApiErrors> handle(Exception ex) {
     log.error("Internal error: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-      JsonApiErrors.create()
-        .withError(
-          CommonErrors.newInternalServerError().withDetail(ex.getMessage())
-        )
+      JsonApiErrors.create().withError(
+        CommonErrors.newInternalServerError().withDetail(ex.getMessage())
+      )
     );
   }
 }

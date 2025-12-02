@@ -109,8 +109,8 @@ class JsonApiRelationshipUnitTest {
     );
     //noinspection unchecked
     List<JsonApiResourceIdentifier> data = (List<
-        JsonApiResourceIdentifier
-      >) jsonApiRelationship.getData();
+      JsonApiResourceIdentifier
+    >) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
@@ -192,8 +192,8 @@ class JsonApiRelationshipUnitTest {
     jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
     List<JsonApiResourceIdentifier> data = (List<
-        JsonApiResourceIdentifier
-      >) jsonApiRelationship.getData();
+      JsonApiResourceIdentifier
+    >) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
@@ -210,8 +210,8 @@ class JsonApiRelationshipUnitTest {
     );
 
     List<JsonApiResourceIdentifier> data = (List<
-        JsonApiResourceIdentifier
-      >) jsonApiRelationship.getData();
+      JsonApiResourceIdentifier
+    >) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
@@ -229,8 +229,8 @@ class JsonApiRelationshipUnitTest {
     );
 
     List<JsonApiResourceIdentifier> data = (List<
-        JsonApiResourceIdentifier
-      >) jsonApiRelationship.getData();
+      JsonApiResourceIdentifier
+    >) jsonApiRelationship.getData();
 
     assertThat(data).hasSize(1);
   }
@@ -254,8 +254,8 @@ class JsonApiRelationshipUnitTest {
     jsonApiRelationship = jsonApiRelationship.addDataCollection(movies);
 
     List<JsonApiResourceIdentifier> data = (List<
-        JsonApiResourceIdentifier
-      >) jsonApiRelationship.getData();
+      JsonApiResourceIdentifier
+    >) jsonApiRelationship.getData();
 
     assertThat(data).hasSize(4);
   }

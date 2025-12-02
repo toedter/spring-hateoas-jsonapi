@@ -46,43 +46,43 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
     this.beanFactory = beanFactory;
 
     this.serializers.put(
-        JsonApiRepresentationModelSerializer.class,
-        new JsonApiRepresentationModelSerializer(jsonApiConfiguration)
-      );
+      JsonApiRepresentationModelSerializer.class,
+      new JsonApiRepresentationModelSerializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiEntityModelSerializer.class,
-        new JsonApiEntityModelSerializer(jsonApiConfiguration)
-      );
+      JsonApiEntityModelSerializer.class,
+      new JsonApiEntityModelSerializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiCollectionModelSerializer.class,
-        new JsonApiCollectionModelSerializer(jsonApiConfiguration)
-      );
+      JsonApiCollectionModelSerializer.class,
+      new JsonApiCollectionModelSerializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiPagedModelSerializer.class,
-        new JsonApiPagedModelSerializer(jsonApiConfiguration)
-      );
+      JsonApiPagedModelSerializer.class,
+      new JsonApiPagedModelSerializer(jsonApiConfiguration)
+    );
 
     this.serializers.put(
-        JsonApiRelationshipSerializer.class,
-        new JsonApiRelationshipSerializer(jsonApiConfiguration)
-      );
+      JsonApiRelationshipSerializer.class,
+      new JsonApiRelationshipSerializer(jsonApiConfiguration)
+    );
 
     this.serializers.put(
-        JsonApiRepresentationModelDeserializer.class,
-        new JsonApiRepresentationModelDeserializer(jsonApiConfiguration)
-      );
+      JsonApiRepresentationModelDeserializer.class,
+      new JsonApiRepresentationModelDeserializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiEntityModelDeserializer.class,
-        new JsonApiEntityModelDeserializer(jsonApiConfiguration)
-      );
+      JsonApiEntityModelDeserializer.class,
+      new JsonApiEntityModelDeserializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiCollectionModelDeserializer.class,
-        new JsonApiCollectionModelDeserializer(jsonApiConfiguration)
-      );
+      JsonApiCollectionModelDeserializer.class,
+      new JsonApiCollectionModelDeserializer(jsonApiConfiguration)
+    );
     this.serializers.put(
-        JsonApiPagedModelDeserializer.class,
-        new JsonApiPagedModelDeserializer(jsonApiConfiguration)
-      );
+      JsonApiPagedModelDeserializer.class,
+      new JsonApiPagedModelDeserializer(jsonApiConfiguration)
+    );
   }
 
   @Override

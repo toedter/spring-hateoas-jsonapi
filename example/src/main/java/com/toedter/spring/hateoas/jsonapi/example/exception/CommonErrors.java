@@ -29,10 +29,10 @@ public class CommonErrors {
     return resourceNotFound
       .withDetail(
         "Resource of type '" +
-        resourceType +
-        "' with id '" +
-        resourceId +
-        "' not found."
+          resourceType +
+          "' with id '" +
+          resourceId +
+          "' not found."
       )
       .withId(java.util.UUID.randomUUID().toString());
   }

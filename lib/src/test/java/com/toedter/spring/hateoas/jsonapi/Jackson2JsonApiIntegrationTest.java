@@ -522,8 +522,9 @@ class Jackson2JsonApiIntegrationTest {
   void should_serialize_movie_without_id() throws Exception {
     mapper = createObjectMapper(
       // tag::noIdMarker[]
-      new JsonApiConfiguration()
-        .withJsonApiIdNotSerializedForValue("doNotSerialize")
+      new JsonApiConfiguration().withJsonApiIdNotSerializedForValue(
+        "doNotSerialize"
+      )
     );
     // end::noIdMarker[]
 
@@ -1271,8 +1272,9 @@ class Jackson2JsonApiIntegrationTest {
     entityModel.add(complexLink);
 
     mapper = createObjectMapper(
-      new JsonApiConfiguration()
-        .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+      new JsonApiConfiguration().withJsonApi11LinkPropertiesRemovedFromLinkMeta(
+        false
+      )
     );
 
     String movieJson = mapper.writeValueAsString(entityModel);
@@ -1317,8 +1319,9 @@ class Jackson2JsonApiIntegrationTest {
     movieEntityModel.add(bigLink);
 
     mapper = createObjectMapper(
-      new JsonApiConfiguration()
-        .withJsonApi11LinkPropertiesRemovedFromLinkMeta(true)
+      new JsonApiConfiguration().withJsonApi11LinkPropertiesRemovedFromLinkMeta(
+        true
+      )
     );
 
     final String movieJson = mapper.writeValueAsString(movieEntityModel);
@@ -1913,10 +1916,9 @@ class Jackson2JsonApiIntegrationTest {
     );
 
     mapper = createObjectMapper(
-      new JsonApiConfiguration()
-        .withAffordancesRenderedAsLinkMeta(
-          JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
-        )
+      new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
+        JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
+      )
     );
     String moviesJson = mapper.writeValueAsString(movieModel);
     compareWithFile(moviesJson, "moviesCollectionModelWithAffordances.json");
@@ -1936,10 +1938,9 @@ class Jackson2JsonApiIntegrationTest {
     );
 
     mapper = createObjectMapper(
-      new JsonApiConfiguration()
-        .withAffordancesRenderedAsLinkMeta(
-          JsonApiConfiguration.AffordanceType.HAL_FORMS
-        )
+      new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
+        JsonApiConfiguration.AffordanceType.HAL_FORMS
+      )
     );
     String moviesJson = mapper.writeValueAsString(movieModel);
     compareWithFile(

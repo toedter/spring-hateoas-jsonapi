@@ -167,14 +167,13 @@ public class WebFluxMovieController {
 
   @GetMapping("/error")
   public ResponseEntity<?> error() {
-    JsonApiErrors body = JsonApiErrors.create()
-      .withError(
-        JsonApiError.create()
-          .withAboutLink("http://movie-db.com/problem")
-          .withTitle("Movie-based problem")
-          .withStatus(HttpStatus.BAD_REQUEST.toString())
-          .withDetail("This is a test case")
-      );
+    JsonApiErrors body = JsonApiErrors.create().withError(
+      JsonApiError.create()
+        .withAboutLink("http://movie-db.com/problem")
+        .withTitle("Movie-based problem")
+        .withStatus(HttpStatus.BAD_REQUEST.toString())
+        .withDetail("This is a test case")
+    );
     return ResponseEntity.badRequest().body(body);
   }
 }

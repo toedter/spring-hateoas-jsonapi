@@ -16,17 +16,18 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
+
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 /**
  * {@link LinkDiscoverer} implementation based on JSON:API link structure.
@@ -119,8 +120,10 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   private Links getLinks(String json) {
     try {
-      JsonApiDocument jsonApiDocument =
-        this.mapper.readValue(json, JsonApiDocument.class);
+      JsonApiDocument jsonApiDocument = this.mapper.readValue(
+        json,
+        JsonApiDocument.class
+      );
       final Links links = jsonApiDocument.getLinks();
       if (links != null) {
         return links;
@@ -139,8 +142,10 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   private Links getLinks(InputStream stream) {
     try {
-      JsonApiDocument jsonApiDocument =
-        this.mapper.readValue(stream, JsonApiDocument.class);
+      JsonApiDocument jsonApiDocument = this.mapper.readValue(
+        stream,
+        JsonApiDocument.class
+      );
       final Links links = jsonApiDocument.getLinks();
       if (links != null) {
         return links;

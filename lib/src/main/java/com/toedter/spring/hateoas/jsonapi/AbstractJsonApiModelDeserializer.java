@@ -25,18 +25,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 abstract class AbstractJsonApiModelDeserializer<T>
@@ -51,8 +52,10 @@ abstract class AbstractJsonApiModelDeserializer<T>
 
   AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     this(
-      TypeFactory.defaultInstance()
-        .constructSimpleType(JsonApiDocument.class, new JavaType[0]),
+      TypeFactory.defaultInstance().constructSimpleType(
+        JsonApiDocument.class,
+        new JavaType[0]
+      ),
       jsonApiConfiguration
     );
   }
@@ -87,19 +90,19 @@ abstract class AbstractJsonApiModelDeserializer<T>
     if (doc.getData() instanceof Collection<?>) {
       final boolean isEntityModelCollectionFinal = isEntityModelCollection;
       List<HashMap<String, Object>> collection = (List<
-          HashMap<String, Object>
-        >) doc.getData();
+        HashMap<String, Object>
+      >) doc.getData();
       Assert.notNull(collection, "JsonApiDocument data must not be null!");
       List<Object> resources = collection
         .stream()
         .map(data ->
           this.convertToResource(
-              data,
-              isEntityModelCollectionFinal,
-              doc,
-              null,
-              false
-            )
+            data,
+            isEntityModelCollectionFinal,
+            doc,
+            null,
+            false
+          )
         )
         .toList();
       return convertToRepresentationModel(resources, doc);
@@ -213,8 +216,10 @@ abstract class AbstractJsonApiModelDeserializer<T>
     );
 
     if (wrapInEntityModel) {
-      Links links =
-        this.objectMapper.convertValue(data.get("links"), Links.class);
+      Links links = this.objectMapper.convertValue(
+        data.get("links"),
+        Links.class
+      );
       if (links == null) {
         links = Links.NONE;
       }

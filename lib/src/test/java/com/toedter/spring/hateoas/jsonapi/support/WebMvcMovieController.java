@@ -92,16 +92,18 @@ public class WebMvcMovieController {
     Movie movie = MOVIES.get(id);
     if (movie instanceof MovieWithDirectors) {
       List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
-      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel()
-        .model(movie);
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(
+        movie
+      );
       for (Director director : directors) {
         model = model.relationship("directors", director);
       }
       return model.build();
     } else if (movie instanceof MovieWithSingleDirector) {
       Director director = ((MovieWithSingleDirector) movie).getDirector();
-      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel()
-        .model(movie);
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(
+        movie
+      );
       model = model.relationship("directors", director);
       return model.build();
     }
@@ -244,17 +246,15 @@ public class WebMvcMovieController {
   @GetMapping("/error")
   public ResponseEntity<?> error() {
     // tag::errors-builder[]
-    return ResponseEntity.badRequest()
-      .body(
-        JsonApiErrors.create()
-          .withError(
-            JsonApiError.create()
-              .withAboutLink("http://movie-db.com/problem")
-              .withTitle("Movie-based problem")
-              .withStatus(HttpStatus.BAD_REQUEST.toString())
-              .withDetail("This is a test case")
-          )
-      );
+    return ResponseEntity.badRequest().body(
+      JsonApiErrors.create().withError(
+        JsonApiError.create()
+          .withAboutLink("http://movie-db.com/problem")
+          .withTitle("Movie-based problem")
+          .withStatus(HttpStatus.BAD_REQUEST.toString())
+          .withDetail("This is a test case")
+      )
+    );
     // end::errors-builder[]
   }
 }

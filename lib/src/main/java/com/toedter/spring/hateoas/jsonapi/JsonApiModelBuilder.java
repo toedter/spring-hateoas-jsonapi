@@ -622,25 +622,25 @@ public class JsonApiModelBuilder {
     if (pageNumber > 0) {
       Link firstLink = Link.of(
         linkBase +
-        paramStart +
-        pageNumberRequestParam +
-        "=0&" +
-        pageSizeRequestParam +
-        "=" +
-        pageSize
+          paramStart +
+          pageNumberRequestParam +
+          "=0&" +
+          pageSizeRequestParam +
+          "=" +
+          pageSize
       ).withRel(IanaLinkRelations.FIRST);
       paginationLinks.add(firstLink);
 
       Link prevLink = Link.of(
         linkBase +
-        paramStart +
-        pageNumberRequestParam +
-        "=" +
-        (pageNumber - 1) +
-        "&" +
-        pageSizeRequestParam +
-        "=" +
-        pageSize
+          paramStart +
+          pageNumberRequestParam +
+          "=" +
+          (pageNumber - 1) +
+          "&" +
+          pageSizeRequestParam +
+          "=" +
+          pageSize
       ).withRel(IanaLinkRelations.PREV);
       paginationLinks.add(prevLink);
     }
@@ -648,27 +648,27 @@ public class JsonApiModelBuilder {
     if (pageNumber < totalPages - 1) {
       Link nextLink = Link.of(
         linkBase +
-        paramStart +
-        pageNumberRequestParam +
-        "=" +
-        (pageNumber + 1) +
-        "&" +
-        pageSizeRequestParam +
-        "=" +
-        pageSize
+          paramStart +
+          pageNumberRequestParam +
+          "=" +
+          (pageNumber + 1) +
+          "&" +
+          pageSizeRequestParam +
+          "=" +
+          pageSize
       ).withRel(IanaLinkRelations.NEXT);
       paginationLinks.add(nextLink);
 
       Link lastLink = Link.of(
         linkBase +
-        paramStart +
-        pageNumberRequestParam +
-        "=" +
-        (totalPages - 1) +
-        "&" +
-        pageSizeRequestParam +
-        "=" +
-        pageSize
+          paramStart +
+          pageNumberRequestParam +
+          "=" +
+          (totalPages - 1) +
+          "&" +
+          pageSizeRequestParam +
+          "=" +
+          pageSize
       ).withRel(IanaLinkRelations.LAST);
       paginationLinks.add(lastLink);
     }
@@ -707,7 +707,7 @@ public class JsonApiModelBuilder {
       if (!jsonApiRelationship.isValid()) {
         throw new IllegalStateException(
           "Cannot build representation model: JSON:API relationship validation error for: " +
-          jsonApiRelationship
+            jsonApiRelationship
         );
       }
     }
@@ -739,8 +739,9 @@ public class JsonApiModelBuilder {
       throw new IllegalStateException("Model object must be a PagedModel.");
     }
 
-    final PagedModel.PageMetadata metadata =
-      ((PagedModel<?>) model).getMetadata();
+    final PagedModel.PageMetadata metadata = ((PagedModel<
+        ?
+      >) model).getMetadata();
 
     if (metadata == null) {
       throw new IllegalStateException(

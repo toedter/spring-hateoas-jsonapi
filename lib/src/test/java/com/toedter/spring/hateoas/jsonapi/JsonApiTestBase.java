@@ -40,8 +40,10 @@ public abstract class JsonApiTestBase {
   String readFile(String fileName) throws IOException {
     File file = new ClassPathResource(fileName, getClass()).getFile();
     ObjectMapper objectMapper = new ObjectMapper();
-    JsonMapper.builder()
-      .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+    JsonMapper.builder().configure(
+      MapperFeature.SORT_PROPERTIES_ALPHABETICALLY,
+      true
+    );
     return objectMapper.readValue(file, JsonNode.class).toString();
   }
 

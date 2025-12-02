@@ -113,8 +113,7 @@ class JsonApiSpringBootMockMvcIntegrationTest {
 
   @Test
   void should_post_movie() throws Exception {
-    String movieJson =
-      """
+    String movieJson = """
       {
         "data": {
           "type": "movies",
@@ -146,8 +145,7 @@ class JsonApiSpringBootMockMvcIntegrationTest {
 
   @Test
   void should_post_movie_with_jsonapi_version() throws Exception {
-    String movieJson =
-      """
+    String movieJson = """
       {
         "jsonapi": {
           "version": "1.1"

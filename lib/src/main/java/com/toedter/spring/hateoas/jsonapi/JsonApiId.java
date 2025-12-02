@@ -30,5 +30,4 @@ import java.lang.annotation.Target;
  */
 @Target({ METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface JsonApiId {
-}
+public @interface JsonApiId {}

@@ -92,8 +92,10 @@ class AbstractJsonApiModelDeserializerUnitTest {
 
     class TestWitNoConstructor {}
 
-    JavaType javaType = TypeFactory.defaultInstance()
-      .constructSimpleType(TestWitNoConstructor.class, new JavaType[0]);
+    JavaType javaType = TypeFactory.defaultInstance().constructSimpleType(
+      TestWitNoConstructor.class,
+      new JavaType[0]
+    );
     testJsonApiDeserializer = new TestJsonApiDeserializer(
       javaType,
       new JsonApiConfiguration()

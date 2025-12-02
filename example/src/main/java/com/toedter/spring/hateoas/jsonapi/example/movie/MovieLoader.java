@@ -71,10 +71,10 @@ class MovieLoader {
           }
           log.info(
             "adding movie \"" +
-            movie.getTitle() +
-            "\" to director \"" +
-            directorName.trim() +
-            "\"."
+              movie.getTitle() +
+              "\" to director \"" +
+              directorName.trim() +
+              "\"."
           );
           director.addMovie(movie);
           directorRepository.save(director);

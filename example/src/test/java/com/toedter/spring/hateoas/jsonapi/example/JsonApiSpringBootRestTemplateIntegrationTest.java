@@ -75,8 +75,8 @@ class JsonApiSpringBootRestTemplateIntegrationTest {
 
     ResponseEntity<String> response = restTemplate.exchange(
       "/api/movies/" +
-      savedMovie.getId() +
-      "?fields[movies]=title,year,rating,directors",
+        savedMovie.getId() +
+        "?fields[movies]=title,year,rating,directors",
       HttpMethod.GET,
       entity,
       String.class

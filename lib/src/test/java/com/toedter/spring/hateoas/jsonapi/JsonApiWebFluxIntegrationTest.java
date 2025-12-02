@@ -64,34 +64,32 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie() throws Exception {
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/movies/1")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/movies/1")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieEntityModelWithLinks.json");
   }
 
   @Test
   void should_get_collection_of_movies() throws Exception {
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/movies")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/movies")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "moviesCollectionModel.json");
   }
@@ -110,17 +108,16 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
       .expectHeader()
       .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
 
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/movies/3")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/movies/3")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieCreated.json");
   }
@@ -139,17 +136,16 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
       .expectHeader()
       .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
 
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/moviesWithDirectors/3")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/moviesWithDirectors/3")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieCreatedWithDirectors.json");
   }
@@ -168,34 +164,32 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
       .expectHeader()
       .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/1");
 
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/movies/1")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/movies/1")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "patchedMovie.json");
   }
 
   @Test
   void should_return_error() throws Exception {
-    EntityExchangeResult<String> result =
-      this.testClient.get()
-        .uri("http://localhost/error")
-        .accept(JSON_API)
-        .exchange()
-        .expectStatus()
-        .isBadRequest()
-        .expectHeader()
-        .contentType(JSON_API)
-        .expectBody(String.class)
-        .returnResult();
+    EntityExchangeResult<String> result = this.testClient.get()
+      .uri("http://localhost/error")
+      .accept(JSON_API)
+      .exchange()
+      .expectStatus()
+      .isBadRequest()
+      .expectHeader()
+      .contentType(JSON_API)
+      .expectBody(String.class)
+      .returnResult();
 
     compareWithFile(result.getResponseBody(), "errorsMvcExample.json");
   }

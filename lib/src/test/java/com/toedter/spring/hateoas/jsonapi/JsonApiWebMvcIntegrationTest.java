@@ -72,36 +72,35 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie() throws Exception {
-    String movieJson =
-      this.mockMvc.perform(get("/movies/1").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(get("/movies/1").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "movieEntityModelWithLinks.json");
   }
 
   @Test
   void should_get_collection_of_movies() throws Exception {
-    String moviesJson =
-      this.mockMvc.perform(get("/movies").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String moviesJson = this.mockMvc.perform(get("/movies").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(moviesJson, "moviesCollectionModel.json");
   }
 
   @Test
   void should_get_last_seen_movie() throws Exception {
-    String movieJson =
-      this.mockMvc.perform(get("/movieWithLastSeen").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(
+        get("/movieWithLastSeen").accept(JSON_API)
+      )
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "movieWithLastSeen.json");
   }
@@ -116,12 +115,11 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/movies/3").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(get("/movies/3").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "movieCreated.json");
   }
@@ -138,12 +136,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(
+        get("/moviesWithDirectors/3").accept(JSON_API)
+      )
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "polymorphicMovie.json");
   }
@@ -162,12 +161,11 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/movies/3").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(get("/movies/3").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "polymorphicMovieWithCustomType.json");
   }
@@ -179,10 +177,10 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
 
     Assertions.assertThrows(Exception.class, () ->
       this.mockMvc.perform(
-          post("/moviesWithJsonApiTypePolymorphism")
-            .content(input)
-            .contentType(JSON_API)
-        )
+        post("/moviesWithJsonApiTypePolymorphism")
+          .content(input)
+          .contentType(JSON_API)
+      )
     );
   }
 
@@ -198,12 +196,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(
+        get("/moviesWithDirectors/3").accept(JSON_API)
+      )
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "movieCreatedWithDirectors.json");
   }
@@ -220,12 +219,13 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/3")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/moviesWithDirectors/3").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(
+        get("/moviesWithDirectors/3").accept(JSON_API)
+      )
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "movieCreatedWithSingleDirector.json");
   }
@@ -239,11 +239,10 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
       )
       .andExpect(status().isCreated())
       .andExpect(
-        header()
-          .stringValues(
-            HttpHeaders.LOCATION,
-            "http://localhost/movieWithLastSeen"
-          )
+        header().stringValues(
+          HttpHeaders.LOCATION,
+          "http://localhost/movieWithLastSeen"
+        )
       );
   }
 
@@ -259,24 +258,22 @@ class JsonApiWebMvcIntegrationTest extends JsonApiTestBase {
         header().stringValues(HttpHeaders.LOCATION, "http://localhost/movies/1")
       );
 
-    String movieJson =
-      this.mockMvc.perform(get("/movies/1").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(get("/movies/1").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(movieJson, "patchedMovie.json");
   }
 
   @Test
   void should_return_error() throws Exception {
-    String errorJson =
-      this.mockMvc.perform(get("/error").accept(JSON_API))
-        .andExpect(status().isBadRequest())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String errorJson = this.mockMvc.perform(get("/error").accept(JSON_API))
+      .andExpect(status().isBadRequest())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(errorJson, "errorsMvcExample.json");
   }

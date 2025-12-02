@@ -130,11 +130,11 @@ public class MovieController {
     Link selfLink = linkTo(MovieController.class)
       .slash(
         "movies" +
-        uriParams +
-        "&page[number]=" +
-        pagedResult.getNumber() +
-        "&page[size]=" +
-        pagedResult.getSize()
+          uriParams +
+          "&page[number]=" +
+          pagedResult.getNumber() +
+          "&page[size]=" +
+          pagedResult.getSize()
       )
       .withSelfRel()
       .andAffordance(newMovieAffordance);
@@ -325,12 +325,11 @@ public class MovieController {
       }) //
       .map(uri -> ResponseEntity.noContent().location(uri).build())
       .orElse(
-        ResponseEntity.badRequest()
-          .body(
-            CommonErrors.newBadRequestError(
-              "Unable to update " + existingMovie + " partially"
-            )
+        ResponseEntity.badRequest().body(
+          CommonErrors.newBadRequestError(
+            "Unable to update " + existingMovie + " partially"
           )
+        )
       );
   }
 

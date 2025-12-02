@@ -73,11 +73,8 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
   @Override
   @SuppressWarnings("deprecation")
-  public void serialize(
-    T value,
-    JsonGenerator gen,
-    SerializerProvider provider
-  ) throws IOException {
+  public void serialize(T value, JsonGenerator gen, SerializerProvider provider)
+    throws IOException {
     CollectionModel<?> collectionModel = null;
     if (value instanceof JsonApiModel jsonApiModel) {
       Object content = jsonApiModel.getContent();

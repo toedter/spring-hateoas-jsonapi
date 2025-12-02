@@ -66,12 +66,11 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie_with_version() throws Exception {
-    String movieJson =
-      this.mockMvc.perform(get("/movies/1").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(get("/movies/1").accept(JSON_API))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(
       movieJson,
@@ -81,12 +80,13 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie_with_configured_type() throws Exception {
-    String movieJson =
-      this.mockMvc.perform(get("/movieWithClassType").accept(JSON_API))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    String movieJson = this.mockMvc.perform(
+        get("/movieWithClassType").accept(JSON_API)
+      )
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
 
     compareWithFile(
       movieJson,

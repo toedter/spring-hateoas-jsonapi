@@ -44,8 +44,10 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
 
   protected JsonApiLinksDeserializer() {
     super(
-      TypeFactory.defaultInstance()
-        .constructCollectionLikeType(List.class, Link.class)
+      TypeFactory.defaultInstance().constructCollectionLikeType(
+        List.class,
+        Link.class
+      )
     );
   }
 

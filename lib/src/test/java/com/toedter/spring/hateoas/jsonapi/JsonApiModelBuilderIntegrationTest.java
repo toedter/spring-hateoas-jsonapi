@@ -111,8 +111,9 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     var configuredMapper = new ObjectMapper();
     configuration.configureObjectMapper(
       configuredMapper,
-      new JsonApiConfiguration()
-        .withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF))
+      new JsonApiConfiguration().withLinksNotUrlEncoded(
+        Set.of(IanaLinkRelations.SELF)
+      )
     );
     final String movieJson = configuredMapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "emptyModelWithEncodedSelfLink.json");

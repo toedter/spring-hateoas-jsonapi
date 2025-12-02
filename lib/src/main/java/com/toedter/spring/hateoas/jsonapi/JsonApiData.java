@@ -285,7 +285,7 @@ class JsonApiData {
         } catch (IllegalAccessException e) {
           throw new IllegalArgumentException(
             "Cannot get JSON:API meta data from annotated property: " +
-            field.getName(),
+              field.getName(),
             e
           );
         }
@@ -312,7 +312,7 @@ class JsonApiData {
         } catch (Exception e) {
           throw new IllegalArgumentException(
             "Cannot get JSON:API meta data from annotated method: " +
-            method.getName(),
+              method.getName(),
             e
           );
         }

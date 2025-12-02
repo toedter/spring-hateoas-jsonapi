@@ -70,9 +70,9 @@ public class JsonApiMediaTypeConfiguration
   @NonNull
   public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
     return this.configureObjectMapper(
-        mapper,
-        configuration.getIfAvailable(JsonApiConfiguration::new)
-      );
+      mapper,
+      configuration.getIfAvailable(JsonApiConfiguration::new)
+    );
   }
 
   @NonNull

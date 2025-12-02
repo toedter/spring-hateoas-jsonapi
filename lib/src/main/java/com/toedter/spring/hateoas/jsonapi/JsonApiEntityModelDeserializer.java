@@ -78,9 +78,9 @@ class JsonApiEntityModelDeserializer
       }
 
       HashMap<String, Object> relationships = (HashMap<
-          String,
-          Object
-        >) ((HashMap<String, Object>) doc.getData()).get("relationships");
+        String,
+        Object
+      >) ((HashMap<String, Object>) doc.getData()).get("relationships");
 
       Object content = entityModel.getContent();
       if (relationships != null) {
@@ -114,13 +114,13 @@ class JsonApiEntityModelDeserializer
                     List<HashMap<String, Object>> jsonApiRelationships = null;
                     if (data instanceof List) {
                       jsonApiRelationships = (List<
-                          HashMap<String, Object>
-                        >) data;
+                        HashMap<String, Object>
+                      >) data;
                     } else if (data instanceof HashMap) {
                       HashMap<String, Object> castedData = (HashMap<
-                          String,
-                          Object
-                        >) data;
+                        String,
+                        Object
+                      >) data;
                       jsonApiRelationships = Collections.singletonList(
                         castedData
                       );
@@ -151,9 +151,9 @@ class JsonApiEntityModelDeserializer
                 } else {
                   // we expect a concrete type otherwise, like "Director"
                   HashMap<String, Object> data = (HashMap<
-                      String,
-                      Object
-                    >) ((HashMap<?, ?>) relationship).get("data");
+                    String,
+                    Object
+                  >) ((HashMap<?, ?>) relationship).get("data");
                   Object newInstance = createRelationship(
                     doc,
                     genericType,
@@ -188,7 +188,7 @@ class JsonApiEntityModelDeserializer
             } catch (IllegalAccessException e) {
               throw new IllegalArgumentException(
                 "Cannot set JSON:API meta data for annotated field: " +
-                field.getName(),
+                  field.getName(),
                 e
               );
             }
@@ -215,7 +215,7 @@ class JsonApiEntityModelDeserializer
             } catch (Exception e) {
               throw new IllegalArgumentException(
                 "Cannot set JSON:API meta data for annotated method: " +
-                method.getName(),
+                  method.getName(),
                 e
               );
             }
