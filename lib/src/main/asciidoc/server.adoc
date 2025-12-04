@@ -81,6 +81,69 @@ https://jsonapi.org/format/#document-resource-object-links[resource link] is `se
 By default, all other links will _not_ be serialized. If you want to serialize links that are non-compliant
 with JSON:API, you can use a specific configuration, (see <<links-configuration>>).
 
+[[link-placement]]
+== Link Placement
+
+The JSON:API specification allows links to be placed at two different levels in the document:
+
+* **Document level (top-level)** - Links appear at the top level of the JSON document (default behavior)
+* **Resource level** - Links appear inside the resource object within the "data" section
+
+By default, this library places links at the document level for single resource (EntityModel) serialization.
+However, you can configure this behavior using the `LinksAsResourceLevelLinks` configuration option
+(see <<links-placement-configuration>>).
+
+=== Document Level Links (Default)
+
+When using the default configuration, links from an EntityModel are placed at the document level:
+
+[source, java, indent=0]
+----
+Movie movie = new Movie("1", "Star Wars");
+EntityModel<Movie> entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+
+// Default configuration - links at document level
+JsonApiConfiguration config = new JsonApiConfiguration();
+----
+
+This produces the following JSON:
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithLinksAtDocumentLevel.json[]
+----
+
+=== Resource Level Links
+
+To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true`:
+
+[source, java, indent=0]
+----
+Movie movie = new Movie("1", "Star Wars");
+EntityModel<Movie> entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+
+// Configure links at resource level
+JsonApiConfiguration config = new JsonApiConfiguration()
+    .withLinksAsResourceLevelLinks(true);
+----
+
+This produces the following JSON:
+
+[source, json]
+----
+include::{test-resources-dir}/movieEntityModelWithLinksAtResourceLevel.json[]
+----
+
+NOTE: This configuration only affects single resource (EntityModel) serialization. Collection models (CollectionModel)
+and paged models (PagedModel) are not affected by this setting.
+
+Both approaches are valid according to the JSON:API specification. Choose the approach that best fits your API design:
+
+* **Document level** - Common pattern, provides clear separation between document metadata and resource data
+* **Resource level** - Keeps all resource-related information co-located, which some API consumers may prefer
+
 [[annotations]]
 == Annotations
 
@@ -229,7 +292,7 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
-=== Explicit configuration of empty relationships
+=== Explicit Configuration of empty Relationships
 
 The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see link:https://jsonapi.org/format/#document-resource-object-linkage[JSON:API specification]).

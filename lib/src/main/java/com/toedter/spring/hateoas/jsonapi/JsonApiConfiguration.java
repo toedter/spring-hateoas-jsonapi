@@ -278,6 +278,29 @@ public class JsonApiConfiguration {
   @Getter
   private final Set<LinkRelation> linksNotUrlEncoded;
 
+  /**
+   * Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.
+   * <p>
+   * According to the JSON:API specification, links can be placed at:
+   * <ul>
+   *   <li>Document level (top-level) - the default behavior</li>
+   *   <li>Resource level (within the resource object in the "data" section)</li>
+   * </ul>
+   * <p>
+   * When set to {@literal true}, links from EntityModel are placed at the resource level
+   * (inside the resource object). When set to {@literal false}, links are placed at the
+   * document level (top-level).
+   * <p>
+   * Note: This configuration only affects single resource serialization (EntityModel).
+   * Collection resources and relationships are not affected by this setting.
+   *
+   * @param linksAsResourceLevelLinks The new value of this configuration's linksAsResourceLevelLinks
+   * @return The default is {@literal false} (links at document level).
+   */
+  @With
+  @Getter
+  private final boolean linksAsResourceLevelLinks;
+
   @With(AccessLevel.PRIVATE)
   private final Map<Class<?>, String> typeForClass;
 
@@ -375,6 +398,7 @@ public class JsonApiConfiguration {
     this.jsonApi11LinkPropertiesRemovedFromLinkMeta = true;
     this.jsonApiCompliantLinks = true;
     this.linksNotUrlEncoded = new HashSet<>();
+    this.linksAsResourceLevelLinks = false;
     this.objectMapperCustomizer = customObjectMapper -> {}; // Default to no action.
   }
 }

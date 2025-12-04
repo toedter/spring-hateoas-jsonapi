@@ -34,6 +34,8 @@ Be aware that using the default, Spring HATEOAS complex links are rendered in a 
 (related to version 1.x.x of this library that only supports JSON:API 1.0),
 since client might expect properties like title in the meta section. | true
 | LinksNotUrlEncoded | Set of link relations which are not URL encoded when serializing. Empty by default. | empty set
+[[links-placement-configuration]]
+| LinksAsResourceLevelLinks | Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization. When set to `true`, links are placed at the resource level (inside the resource object in the "data" section). When set to `false`, links are placed at the document level (top-level). See also <<link-placement>>. | false
 |===
 
 TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,
@@ -48,3 +50,26 @@ Here is an example of how you would implement a JSON:API configuration:
 ----
 include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
 ----
+
+=== Link Placement Configuration Example
+
+To configure links to appear at the resource level instead of the document level:
+
+[source, java, indent=0]
+----
+@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withLinksAsResourceLevelLinks(true);  // <1>
+    }
+}
+----
+<1> Enable resource-level links for single resource (EntityModel) serialization
+
+When this configuration is enabled, links from EntityModel will be placed inside the resource object
+in the "data" section instead of at the document top level. See <<link-placement>> for more details
+and examples.
+

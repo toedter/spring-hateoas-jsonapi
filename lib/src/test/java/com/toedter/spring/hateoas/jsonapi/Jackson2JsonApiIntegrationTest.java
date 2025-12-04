@@ -1366,6 +1366,33 @@ class Jackson2JsonApiIntegrationTest {
   }
 
   @Test
+  void should_serialize_links_at_resource_level_when_configured() throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    EntityModel<Movie> entityModel = EntityModel.of(movie);
+    entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+    entityModel.add(Link.of("http://localhost/movies/1/related").withRel("related"));
+
+    mapper = createObjectMapper(
+      new JsonApiConfiguration().withLinksAsResourceLevelLinks(true)
+    );
+
+    String movieJson = mapper.writeValueAsString(entityModel);
+    compareWithFile(movieJson, "movieEntityModelWithLinksAtResourceLevel.json");
+  }
+
+  @Test
+  void should_serialize_links_at_document_level_by_default() throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    EntityModel<Movie> entityModel = EntityModel.of(movie);
+    entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+
+    mapper = createObjectMapper(new JsonApiConfiguration());
+
+    String movieJson = mapper.writeValueAsString(entityModel);
+    compareWithFile(movieJson, "movieEntityModelWithLinksAtDocumentLevel.json");
+  }
+
+  @Test
   void should_render_jsonapi_version() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     EntityModel<Movie> entityModel = EntityModel.of(movie);

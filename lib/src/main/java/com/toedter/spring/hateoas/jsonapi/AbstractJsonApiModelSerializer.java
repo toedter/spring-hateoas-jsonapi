@@ -128,9 +128,18 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
       }
     }
 
+    // When linksAsResourceLevelLinks is true, don't put links at document level for EntityModel
+    Links documentLevelLinks = getLinksOrNull(value);
+    if (jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+        !(value instanceof CollectionModel) &&
+        !(value instanceof PagedModel)) {
+      // For single resources, links will be at resource level, so don't include at document level
+      documentLevelLinks = null;
+    }
+
     JsonApiDocument doc = new JsonApiDocument()
       .withData(data)
-      .withLinks(getLinksOrNull(value))
+      .withLinks(documentLevelLinks)
       .withIncluded(getIncluded(value));
 
     if (jsonApiConfiguration.isJsonApiVersionRendered()) {

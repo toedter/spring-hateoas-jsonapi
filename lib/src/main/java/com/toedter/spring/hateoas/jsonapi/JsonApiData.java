@@ -199,7 +199,15 @@ class JsonApiData {
     JsonApiResourceIdentifier.ResourceField idField;
     idField = JsonApiResourceIdentifier.getId(content, jsonApiConfiguration);
 
-    if (isSingleEntity || (links != null && links.isEmpty())) {
+    // Only clear links if not configured to be at resource level
+    if (!jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+        (isSingleEntity || (links != null && links.isEmpty()))) {
+      links = null;
+    }
+
+    // If configured for resource level links but links are empty, set to null
+    if (jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+        links != null && links.isEmpty()) {
       links = null;
     }
 
