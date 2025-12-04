@@ -256,9 +256,6 @@ However, you can configure this behavior using the <code>LinksAsResourceLevelLin
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
 entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
-
-// Default configuration - links at document level
-JsonApiConfiguration config = new JsonApiConfiguration();
 </code></pre>
 </div>
 </div>
@@ -285,17 +282,13 @@ JsonApiConfiguration config = new JsonApiConfiguration();
 <div class="sect2">
 <h3 id="_resource_level_links"><a class="anchor" href="#_resource_level_links"></a>Resource Level Links</h3>
 <div class="paragraph">
-<p>To place links at the resource level instead, configure <code>LinksAsResourceLevelLinks</code> to <code>true</code>:</p>
+<p>To place links at the resource level instead, configure <code>LinksAsResourceLevelLinks</code> to <code>true</code> (See <a href="#link-placement">Link Placement</a>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
 EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
 entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
-
-// Configure links at resource level
-JsonApiConfiguration config = new JsonApiConfiguration()
-    .withLinksAsResourceLevelLinks(true);
 </code></pre>
 </div>
 </div>
@@ -2142,7 +2135,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-04 14:15:25 UTC
+Last updated 2025-12-04 14:33:49 UTC
 </div>
 </div>
 </div>
