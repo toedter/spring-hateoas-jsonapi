@@ -113,7 +113,7 @@ include::{test-resources-dir}/movieEntityModelWithLinksAtDocumentLevel.json[]
 
 === Resource Level Links
 
-To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true` (See <<link-placement>>):
+To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true` (See <<link-placement-configuration-example>>):
 
 [source, java, indent=0]
 ----
