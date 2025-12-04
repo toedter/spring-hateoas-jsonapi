@@ -600,7 +600,12 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     final RepresentationModel<?> jsonApiModel = jsonApiModel()
       .model(EntityModel.of(movie))
       .relationshipWithNullData("directors")
-      .relationship("directors", "http://localhost/movies/1/relationships/directors", "http://localhost/movies/1/directors", null)
+      .relationship(
+        "directors",
+        "http://localhost/movies/1/relationships/directors",
+        "http://localhost/movies/1/directors",
+        null
+      )
       .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -614,7 +619,12 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     final RepresentationModel<?> jsonApiModel = jsonApiModel()
       .model(EntityModel.of(movie))
       .relationshipWithEmptyData("directors")
-      .relationship("directors", "http://localhost/movies/1/relationships/directors", "http://localhost/movies/1/directors", null)
+      .relationship(
+        "directors",
+        "http://localhost/movies/1/relationships/directors",
+        "http://localhost/movies/1/directors",
+        null
+      )
       .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -622,8 +632,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_replace_existing_relationship_data_with_null()
-    throws Exception {
+  void should_replace_existing_relationship_data_with_null() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
     final RepresentationModel<?> jsonApiModel = jsonApiModel()

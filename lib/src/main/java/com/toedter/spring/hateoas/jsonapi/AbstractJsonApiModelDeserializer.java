@@ -25,19 +25,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.mediatype.JacksonHelper;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.mediatype.JacksonHelper;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 @Slf4j
 abstract class AbstractJsonApiModelDeserializer<T>

@@ -379,7 +379,9 @@ class JsonApiRelationshipUnitTest {
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     //noinspection unchecked
-    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
+    Collection<Object> data = (Collection<
+      Object
+    >) jsonApiRelationship.getData();
     assertThat(data).isEmpty();
   }
 
@@ -439,7 +441,9 @@ class JsonApiRelationshipUnitTest {
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     //noinspection unchecked
-    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
+    Collection<Object> data = (Collection<
+      Object
+    >) jsonApiRelationship.getData();
     assertThat(data).isEmpty();
   }
 }
