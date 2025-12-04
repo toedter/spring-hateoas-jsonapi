@@ -385,6 +385,53 @@ public class JsonApiModelBuilder {
     return this;
   }
 
+  /**
+   * Adds or updates a {@literal relationship} with explicit null data.
+   * This will be serialized as {@literal "data": null} in JSON:API format,
+   * representing an empty to-one relationship as per the JSON:API specification.
+   * If there is already a relationship for the given name defined,
+   * the data will be replaced with null while preserving links and meta.
+   *
+   * @param name must not be {@literal null}.
+   * @return will never be {@literal null}.
+   */
+  public JsonApiModelBuilder relationshipWithNullData(String name) {
+    Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+
+    JsonApiRelationship jsonApiRelationship = relationships.get(name);
+    if (jsonApiRelationship == null) {
+      jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
+    } else {
+      jsonApiRelationship = jsonApiRelationship.withNullData();
+    }
+    relationships.put(name, jsonApiRelationship);
+
+    return this;
+  }
+
+  /**
+   * Adds or updates a {@literal relationship} with explicit empty array data.
+   * This will be serialized as {@literal "data": []} in JSON:API format,
+   * representing an empty to-many relationship as per the JSON:API specification.
+   * If there is already a relationship for the given name defined,
+   * the data will be replaced with an empty array while preserving links and meta.
+   *
+   * @param name must not be {@literal null}.
+   * @return will never be {@literal null}.
+   */
+  public JsonApiModelBuilder relationshipWithEmptyData(String name) {
+    Assert.notNull(name, RELATIONSHIP_NAME_MUST_NOT_BE_NULL);
+
+    JsonApiRelationship jsonApiRelationship = relationships.get(name);
+    if (jsonApiRelationship == null) {
+      jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
+    }
+    jsonApiRelationship = jsonApiRelationship.withEmptyData();
+    relationships.put(name, jsonApiRelationship);
+
+    return this;
+  }
+
   private JsonApiRelationship replaceLinks(
     @Nullable JsonApiRelationship jsonApiRelationship,
     @Nullable String selfLink,

@@ -229,21 +229,36 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
+=== Explicit configuration of empty relationships
+
 The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see link:https://jsonapi.org/format/#document-resource-object-linkage[JSON:API specification]).
-An empty to-one relationship can be added like
+
+For more explicit control over the serialization of empty relationships, you can use
+`relationshipWithNullData()` to create an empty to-one relationship (serialized as `"data": null`)
+or `relationshipWithEmptyData()` to create an empty to-many relationship (serialized as `"data": []`).
+
+An explicit empty to-one relationship can be added like
 
 [source, java, indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=empty-to-one-relationship]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=explicit-null-relationship]
 ----
 
-An empty to-many relationship can be added like
+This will produce `"data": null` in the relationship object, representing an empty to-one relationship.
+
+An explicit empty to-many relationship can be added like
 
 [source, java, indent=0]
 ----
-include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=empty-to-many-relationship]
+include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=explicit-empty-relationship]
 ----
+
+This will produce `"data": []` in the relationship object, representing an empty to-many relationship.
+
+These methods are particularly useful when you want to replace existing relationship data with null or empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
+The methods also preserve any existing links and meta information in the relationship.
 
 [[inclusion]]
 == Inclusion of related Resources

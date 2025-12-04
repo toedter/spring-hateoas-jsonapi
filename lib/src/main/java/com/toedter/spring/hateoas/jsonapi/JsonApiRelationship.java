@@ -67,6 +67,9 @@ class JsonApiRelationship {
   @JsonIgnore
   private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
 
+  @JsonIgnore
+  private final boolean dataExplicitlySet;
+
   @JsonCreator
   JsonApiRelationship(
     @JsonProperty("data") @Nullable Object data,
@@ -74,10 +77,21 @@ class JsonApiRelationship {
     @JsonProperty("meta") @Nullable Map<String, Object> meta,
     @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers
   ) {
+    this(data, links, meta, metaForResourceIdentifiers, true);
+  }
+
+  JsonApiRelationship(
+    @Nullable Object data,
+    @Nullable Links links,
+    @Nullable Map<String, Object> meta,
+    @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers,
+    boolean dataExplicitlySet
+  ) {
     this.data = data;
     this.links = links;
     this.meta = meta;
     this.metaForResourceIdentifiers = metaForResourceIdentifiers;
+    this.dataExplicitlySet = dataExplicitlySet;
   }
 
   @JsonCreator
@@ -86,7 +100,7 @@ class JsonApiRelationship {
     @JsonProperty("links") @Nullable Links links,
     @JsonProperty("meta") @Nullable Map<String, Object> meta
   ) {
-    this(data, links, meta, null);
+    this(data, links, meta, null, true);
   }
 
   public JsonApiRelationship addDataObject(@Nullable final Object object) {
@@ -111,7 +125,8 @@ class JsonApiRelationship {
         object,
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     } else {
       List<Object> dataList = new ArrayList<>();
@@ -125,7 +140,8 @@ class JsonApiRelationship {
         dataList,
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     }
   }
@@ -136,7 +152,8 @@ class JsonApiRelationship {
         collection,
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     } else {
       List<Object> dataList = new ArrayList<>();
@@ -150,7 +167,8 @@ class JsonApiRelationship {
         dataList,
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     }
   }
@@ -161,17 +179,53 @@ class JsonApiRelationship {
         Collections.emptyList(),
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     } else if (!(this.data instanceof Collection<?>)) {
       return new JsonApiRelationship(
         Collections.singletonList(this.data),
         this.links,
         this.meta,
-        this.metaForResourceIdentifiers
+        this.metaForResourceIdentifiers,
+        true
       );
     }
     return this;
+  }
+
+  /**
+   * Creates a relationship with explicit null data.
+   * This will be serialized as "data": null in JSON:API format,
+   * representing an empty to-one relationship.
+   *
+   * @return a new JsonApiRelationship with null data
+   */
+  public JsonApiRelationship withNullData() {
+    return new JsonApiRelationship(
+      null,
+      this.links,
+      this.meta,
+      this.metaForResourceIdentifiers,
+      true
+    );
+  }
+
+  /**
+   * Creates a relationship with explicit empty array data.
+   * This will be serialized as "data": [] in JSON:API format,
+   * representing an empty to-many relationship.
+   *
+   * @return a new JsonApiRelationship with empty array data
+   */
+  public JsonApiRelationship withEmptyData() {
+    return new JsonApiRelationship(
+      Collections.emptyList(),
+      this.links,
+      this.meta,
+      this.metaForResourceIdentifiers,
+      true
+    );
   }
 
   public static JsonApiRelationship of(EntityModel<?> entityModel) {
@@ -208,11 +262,11 @@ class JsonApiRelationship {
   }
 
   public static JsonApiRelationship of(Links links) {
-    return new JsonApiRelationship(null, links, null);
+    return new JsonApiRelationship(null, links, null, null, false);
   }
 
   public static JsonApiRelationship of(Map<String, Object> meta) {
-    return new JsonApiRelationship(null, null, meta);
+    return new JsonApiRelationship(null, null, meta, null, false);
   }
 
   @JsonIgnore

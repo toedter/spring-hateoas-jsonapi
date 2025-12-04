@@ -355,4 +355,91 @@ class JsonApiRelationshipUnitTest {
     );
     assertThat(jsonApiRelationship.isValid()).isFalse();
   }
+
+  @Test
+  void should_create_relationship_with_explicit_null_data() {
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      movie,
+      null,
+      null
+    );
+    jsonApiRelationship = jsonApiRelationship.withNullData();
+
+    assertThat(jsonApiRelationship.getData()).isNull();
+  }
+
+  @Test
+  void should_create_relationship_with_explicit_empty_data() {
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      movie,
+      null,
+      null
+    );
+    jsonApiRelationship = jsonApiRelationship.withEmptyData();
+
+    assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
+    //noinspection unchecked
+    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
+    assertThat(data).isEmpty();
+  }
+
+  @Test
+  void should_preserve_links_when_setting_null_data() {
+    Links links = Links.of(Link.of("http://localhost/test").withSelfRel());
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      movie,
+      links,
+      null
+    );
+    jsonApiRelationship = jsonApiRelationship.withNullData();
+
+    assertThat(jsonApiRelationship.getData()).isNull();
+    assertThat(jsonApiRelationship.getLinks()).isEqualTo(links);
+  }
+
+  @Test
+  void should_preserve_meta_when_setting_empty_data() {
+    Map<String, Object> meta = new HashMap<>();
+    meta.put("key", "value");
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      movie,
+      null,
+      meta
+    );
+    jsonApiRelationship = jsonApiRelationship.withEmptyData();
+
+    assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
+    assertThat(jsonApiRelationship.getMeta()).isEqualTo(meta);
+  }
+
+  @Test
+  void should_replace_collection_with_null_data() {
+    List<Movie> movies = new ArrayList<>();
+    movies.add(movie);
+    movies.add(new Movie("2", "Test Movie"));
+
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      movies,
+      null,
+      null
+    );
+    jsonApiRelationship = jsonApiRelationship.withNullData();
+
+    assertThat(jsonApiRelationship.getData()).isNull();
+  }
+
+  @Test
+  void should_replace_null_with_empty_data() {
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
+      null,
+      null,
+      null
+    );
+    jsonApiRelationship = jsonApiRelationship.withEmptyData();
+
+    assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
+    //noinspection unchecked
+    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
+    assertThat(data).isEmpty();
+  }
 }

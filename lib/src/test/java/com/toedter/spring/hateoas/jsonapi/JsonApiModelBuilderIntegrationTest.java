@@ -564,6 +564,94 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
+  void should_build_single_movie_with_null_relationship_data()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    // tag::explicit-null-relationship[]
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationshipWithNullData("directors")
+      .build();
+    // end::explicit-null-relationship[]
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithNullRelationship.json");
+  }
+
+  @Test
+  void should_build_single_movie_with_explicit_empty_relationship_data()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    // tag::explicit-empty-relationship[]
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationshipWithEmptyData("directors")
+      .build();
+    // end::explicit-empty-relationship[]
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
+  }
+
+  @Test
+  void should_build_single_movie_with_null_relationship_data_and_links()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationshipWithNullData("directors")
+      .relationship("directors", "http://localhost/movies/1/relationships/directors", "http://localhost/movies/1/directors", null)
+      .build();
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithNullRelationshipAndLinks.json");
+  }
+
+  @Test
+  void should_build_single_movie_with_empty_relationship_data_and_links()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationshipWithEmptyData("directors")
+      .relationship("directors", "http://localhost/movies/1/relationships/directors", "http://localhost/movies/1/directors", null)
+      .build();
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithEmptyRelationshipAndLinks.json");
+  }
+
+  @Test
+  void should_replace_existing_relationship_data_with_null()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    Director director = new Director("3", "George Lucas");
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationship("directors", director)
+      .relationshipWithNullData("directors")
+      .build();
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithNullRelationship.json");
+  }
+
+  @Test
+  void should_replace_existing_relationship_data_with_empty_array()
+    throws Exception {
+    Movie movie = new Movie("1", "Star Wars");
+    Director director = new Director("3", "George Lucas");
+    final RepresentationModel<?> jsonApiModel = jsonApiModel()
+      .model(EntityModel.of(movie))
+      .relationship("directors", director)
+      .relationshipWithEmptyData("directors")
+      .build();
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
+    compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
+  }
+
+  @Test
   void should_not_build_with_second_entity() {
     Movie movie = new Movie("1", "Star Wars");
 

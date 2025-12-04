@@ -16,52 +16,17 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import javax.annotation.Nullable;
-import lombok.Getter;
 import org.springframework.hateoas.Links;
 
 class JsonApiRelationshipSerializer
   extends AbstractJsonApiSerializer<JsonApiRelationship> {
 
   private final transient JsonApiConfiguration jsonApiConfiguration;
-
-  @Getter
-  private static class JsonApiRelationshipForSerialization {
-
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final Object data;
-
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private final Links links;
-
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private final Map<String, Object> meta;
-
-    public JsonApiRelationshipForSerialization(
-      @Nullable Object data,
-      @Nullable Links links,
-      @Nullable Map<String, Object> meta
-    ) {
-      this.data = data;
-      this.links = links;
-      this.meta = meta;
-    }
-  }
-
-  @Getter
-  private static class JsonApiNullDataRelationshipForSerialization {
-
-    private final Object data = null;
-  }
 
   public JsonApiRelationshipSerializer(
     JsonApiConfiguration jsonApiConfiguration
@@ -88,25 +53,31 @@ class JsonApiRelationshipSerializer
       }
     }
 
-    if (data == null && value.getLinks() == null && value.getMeta() == null) {
-      provider
-        .findValueSerializer(JsonApiNullDataRelationshipForSerialization.class)
-        .serialize(
-          new JsonApiNullDataRelationshipForSerialization(),
-          gen,
-          provider
-        );
-    } else {
-      JsonApiRelationshipForSerialization jsonApiRelationship =
-        new JsonApiRelationshipForSerialization(
-          data,
-          value.getLinks(),
-          value.getMeta()
-        );
+    // Start writing the relationship object
+    gen.writeStartObject();
 
-      provider
-        .findValueSerializer(JsonApiRelationshipForSerialization.class)
-        .serialize(jsonApiRelationship, gen, provider);
+    // Handle data field serialization
+    if (value.isDataExplicitlySet()) {
+      // When data is explicitly set (even if null), always serialize it
+      gen.writeObjectField("data", data);
+    } else if (data != null) {
+      // When data is not explicitly set but is present, serialize it
+      gen.writeObjectField("data", data);
     }
+    // If data is not explicitly set and is null, omit the field entirely
+
+    // Handle links field serialization
+    Links links = value.getLinks();
+    if (links != null && !links.isEmpty()) {
+      gen.writeObjectField("links", links);
+    }
+
+    // Handle meta field serialization
+    Map<String, Object> meta = value.getMeta();
+    if (meta != null && !meta.isEmpty()) {
+      gen.writeObjectField("meta", meta);
+    }
+
+    gen.writeEndObject();
   }
 }

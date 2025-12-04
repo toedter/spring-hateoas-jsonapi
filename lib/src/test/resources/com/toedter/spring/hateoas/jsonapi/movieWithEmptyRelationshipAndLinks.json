@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "relationships": {
+      "directors": {
+        "data": [],
+        "links": {
+          "self": "http://localhost/movies/1/relationships/directors",
+          "related": "http://localhost/movies/1/directors"
+        }
+      }
+    }
+  }
+}
+
