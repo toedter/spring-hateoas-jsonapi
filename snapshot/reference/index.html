@@ -32,7 +32,7 @@
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
 <span id="revnumber">version 2.1.5-SNAPSHOT,</span>
-<span id="revdate">2025-12-02</span>
+<span id="revdate">2025-12-04</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -50,7 +50,11 @@
 <li><a href="#representation-models">3.1. Representation Models</a></li>
 <li><a href="#links">3.2. Links</a></li>
 <li><a href="#annotations">3.3. Annotations</a></li>
-<li><a href="#jsonapi-builder">3.4. JSON:API Builder</a></li>
+<li><a href="#jsonapi-builder">3.4. JSON:API Builder</a>
+<ul class="sectlevel3">
+<li><a href="#explicit-configuration-of-empty-relationships">3.4.1. Explicit configuration of empty relationships</a></li>
+</ul>
+</li>
 <li><a href="#inclusion">3.5. Inclusion of related Resources</a></li>
 <li><a href="#Nesting">3.6. Nesting of JsonApiModels</a></li>
 <li><a href="#sparse-fielsets">3.7. Sparse Fieldsets</a></li>
@@ -977,30 +981,51 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 }</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>3.4.1. Explicit configuration of empty relationships</h4>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
-(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).
-An empty to-one relationship can be added like</p>
+(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
+</div>
+<div class="paragraph">
+<p>For more explicit control over the serialization of empty relationships, you can use
+<code>relationshipWithNullData()</code> to create an empty to-one relationship (serialized as <code>"data": null</code>)
+or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("director", (Object) null)
+  .model(EntityModel.of(movie))
+  .relationshipWithNullData("directors")
   .build();
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>An empty to-many relationship can be added like</p>
+<p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-many relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("directors", Collections.emptyList())
+  .model(EntityModel.of(movie))
+  .relationshipWithEmptyData("directors")
   .build();
 </code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
+</div>
+<div class="paragraph">
+<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
+The methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
@@ -2644,7 +2669,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-02 19:11:00 UTC
+Last updated 2025-12-04 13:25:40 UTC
 </div>
 </div>
 </div>

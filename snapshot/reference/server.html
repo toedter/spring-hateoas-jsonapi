@@ -742,30 +742,51 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_explicit_configuration_of_empty_relationships"><a class="anchor" href="#_explicit_configuration_of_empty_relationships"></a>Explicit configuration of empty relationships</h3>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
-(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).
-An empty to-one relationship can be added like</p>
+(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
+</div>
+<div class="paragraph">
+<p>For more explicit control over the serialization of empty relationships, you can use
+<code>relationshipWithNullData()</code> to create an empty to-one relationship (serialized as <code>"data": null</code>)
+or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("director", (Object) null)
+  .model(EntityModel.of(movie))
+  .relationshipWithNullData("directors")
   .build();
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>An empty to-many relationship can be added like</p>
+<p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-many relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("directors", Collections.emptyList())
+  .model(EntityModel.of(movie))
+  .relationshipWithEmptyData("directors")
   .build();
 </code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
+</div>
+<div class="paragraph">
+<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
+The methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
@@ -1999,7 +2020,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-02 19:11:00 UTC
+Last updated 2025-12-04 13:25:40 UTC
 </div>
 </div>
 </div>
