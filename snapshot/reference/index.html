@@ -494,7 +494,7 @@ with JSON:API, you can use a specific configuration, (see <a href="#links-config
 </div>
 <div class="paragraph">
 <p>By default, this library places links at the document level for single resource (EntityModel) serialization.
-However, you can configure this behavior using the <code>LinksAsResourceLevelLinks</code> configuration option
+However, you can configure this behavior using the <code>LinksAtResourceLevel</code> configuration option
 (see <a href="#links-placement-configuration">[links-placement-configuration]</a>).</p>
 </div>
 <div class="sect3">
@@ -533,7 +533,7 @@ entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
 <div class="sect3">
 <h4 id="resource-level-links"><a class="anchor" href="#resource-level-links"></a>3.3.2. Resource Level Links</h4>
 <div class="paragraph">
-<p>To place links at the resource level instead, configure <code>LinksAsResourceLevelLinks</code> to <code>true</code> (See <a href="#link-placement-configuration-example">Link Placement Configuration Example</a>):</p>
+<p>To place links at the resource level instead, configure <code>LinksAtResourceLevel</code> to <code>true</code> (See <a href="#link-placement-configuration-example">Link Placement Configuration Example</a>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2740,7 +2740,7 @@ since client might expect properties like title in the meta section.</p></td>
 <a id="links-placement-configuration"></a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LinksAsResourceLevelLinks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LinksAtResourceLevel</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization. When set to <code>true</code>, links are placed at the resource level (inside the resource object in the "data" section). When set to <code>false</code>, links are placed at the document level (top-level). See also <a href="#link-placement">Link Placement</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
@@ -2805,7 +2805,7 @@ public class JsonApiConfig {
     @Bean
     public JsonApiConfiguration jsonApiConfiguration() {
         return new JsonApiConfiguration()
-            .withLinksAsResourceLevelLinks(true);  <i class="conum" data-value="1"></i><b>(1)</b>
+            .withLinksAtResourceLevel(true);  <i class="conum" data-value="1"></i><b>(1)</b>
     }
 }
 </code></pre>
@@ -2831,7 +2831,7 @@ and examples.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-04 14:39:25 UTC
+Last updated 2025-12-04 18:07:46 UTC
 </div>
 </div>
 </div>

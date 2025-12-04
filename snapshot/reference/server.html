@@ -243,7 +243,7 @@ with JSON:API, you can use a specific configuration, (see <a href="#links-config
 </div>
 <div class="paragraph">
 <p>By default, this library places links at the document level for single resource (EntityModel) serialization.
-However, you can configure this behavior using the <code>LinksAsResourceLevelLinks</code> configuration option
+However, you can configure this behavior using the <code>LinksAtResourceLevel</code> configuration option
 (see <a href="#links-placement-configuration">[links-placement-configuration]</a>).</p>
 </div>
 <div class="sect2">
@@ -282,7 +282,7 @@ entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
 <div class="sect2">
 <h3 id="_resource_level_links"><a class="anchor" href="#_resource_level_links"></a>Resource Level Links</h3>
 <div class="paragraph">
-<p>To place links at the resource level instead, configure <code>LinksAsResourceLevelLinks</code> to <code>true</code> (See <a href="#link-placement-configuration-example">[link-placement-configuration-example]</a>):</p>
+<p>To place links at the resource level instead, configure <code>LinksAtResourceLevel</code> to <code>true</code> (See <a href="#link-placement-configuration-example">[link-placement-configuration-example]</a>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2135,7 +2135,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 2.1.5-SNAPSHOT<br>
-Last updated 2025-12-04 14:39:25 UTC
+Last updated 2025-12-04 18:07:46 UTC
 </div>
 </div>
 </div>
