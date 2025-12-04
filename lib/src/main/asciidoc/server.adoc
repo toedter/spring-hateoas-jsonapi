@@ -90,7 +90,7 @@ The JSON:API specification allows links to be placed at two different levels in 
 * **Resource level** - Links appear inside the resource object within the "data" section
 
 By default, this library places links at the document level for single resource (EntityModel) serialization.
-However, you can configure this behavior using the `LinksAsResourceLevelLinks` configuration option
+However, you can configure this behavior using the `LinksAtResourceLevel` configuration option
 (see <<links-placement-configuration>>).
 
 === Document Level Links (Default)
@@ -113,7 +113,7 @@ include::{test-resources-dir}/movieEntityModelWithLinksAtDocumentLevel.json[]
 
 === Resource Level Links
 
-To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true` (See <<link-placement-configuration-example>>):
+To place links at the resource level instead, configure `LinksAtResourceLevel` to `true` (See <<link-placement-configuration-example>>):
 
 [source, java, indent=0]
 ----

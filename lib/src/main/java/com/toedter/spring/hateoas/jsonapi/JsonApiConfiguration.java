@@ -17,11 +17,6 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +24,12 @@ import lombok.With;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * JSON:API specific configuration.
@@ -294,12 +295,12 @@ public class JsonApiConfiguration {
    * Note: This configuration only affects single resource serialization (EntityModel).
    * Collection resources and relationships are not affected by this setting.
    *
-   * @param linksAsResourceLevelLinks The new value of this configuration's linksAsResourceLevelLinks
+   * @param linksAtResourceLevel The new value of this configuration's linksAtResourceLevel
    * @return The default is {@literal false} (links at document level).
    */
   @With
   @Getter
-  private final boolean linksAsResourceLevelLinks;
+  private final boolean linksAtResourceLevel;
 
   @With(AccessLevel.PRIVATE)
   private final Map<Class<?>, String> typeForClass;
@@ -398,7 +399,7 @@ public class JsonApiConfiguration {
     this.jsonApi11LinkPropertiesRemovedFromLinkMeta = true;
     this.jsonApiCompliantLinks = true;
     this.linksNotUrlEncoded = new HashSet<>();
-    this.linksAsResourceLevelLinks = false;
+    this.linksAtResourceLevel = false;
     this.objectMapperCustomizer = customObjectMapper -> {}; // Default to no action.
   }
 }

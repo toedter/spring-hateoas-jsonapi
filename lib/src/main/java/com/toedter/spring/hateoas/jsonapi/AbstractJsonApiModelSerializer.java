@@ -20,11 +20,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import lombok.extern.java.Log;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -32,6 +27,12 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Log
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
@@ -128,9 +129,9 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
       }
     }
 
-    // When linksAsResourceLevelLinks is true, don't put links at document level for EntityModel
+    // When linksAtResourceLevel is true, don't put links at document level for EntityModel
     Links documentLevelLinks = getLinksOrNull(value);
-    if (jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+    if (jsonApiConfiguration.isLinksAtResourceLevel() &&
         !(value instanceof CollectionModel) &&
         !(value instanceof PagedModel)) {
       // For single resources, links will be at resource level, so don't include at document level

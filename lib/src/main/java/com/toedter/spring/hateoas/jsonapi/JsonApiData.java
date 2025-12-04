@@ -16,26 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
@@ -48,6 +34,21 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
 @Getter(onMethod_ = { @JsonProperty })
 @With(AccessLevel.PACKAGE)
@@ -200,13 +201,13 @@ class JsonApiData {
     idField = JsonApiResourceIdentifier.getId(content, jsonApiConfiguration);
 
     // Only clear links if not configured to be at resource level
-    if (!jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+    if (!jsonApiConfiguration.isLinksAtResourceLevel() &&
         (isSingleEntity || (links != null && links.isEmpty()))) {
       links = null;
     }
 
     // If configured for resource level links but links are empty, set to null
-    if (jsonApiConfiguration.isLinksAsResourceLevelLinks() &&
+    if (jsonApiConfiguration.isLinksAtResourceLevel() &&
         links != null && links.isEmpty()) {
       links = null;
     }
