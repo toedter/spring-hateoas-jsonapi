@@ -102,9 +102,6 @@ When using the default configuration, links from an EntityModel are placed at th
 Movie movie = new Movie("1", "Star Wars");
 EntityModel<Movie> entityModel = EntityModel.of(movie);
 entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
-
-// Default configuration - links at document level
-JsonApiConfiguration config = new JsonApiConfiguration();
 ----
 
 This produces the following JSON:
@@ -116,17 +113,13 @@ include::{test-resources-dir}/movieEntityModelWithLinksAtDocumentLevel.json[]
 
 === Resource Level Links
 
-To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true`:
+To place links at the resource level instead, configure `LinksAsResourceLevelLinks` to `true` (See <<link-placement>>):
 
 [source, java, indent=0]
 ----
 Movie movie = new Movie("1", "Star Wars");
 EntityModel<Movie> entityModel = EntityModel.of(movie);
 entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
-
-// Configure links at resource level
-JsonApiConfiguration config = new JsonApiConfiguration()
-    .withLinksAsResourceLevelLinks(true);
 ----
 
 This produces the following JSON:
