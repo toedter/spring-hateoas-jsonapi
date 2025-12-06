@@ -13,6 +13,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.5.8' apply false
     id 'org.sonarqube' version '7.2.0.6526'
+    id "com.vanniktech.maven.publish" version "0.35.0"
 }
 
 group = 'com.toedter'
@@ -139,62 +140,37 @@ javadoc {
     exclude 'org/springframework/hateoas/mediatype/hal/forms/**'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'spring-hateoas-jsonapi'
-            from components.java
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
 
-            pom {
-                name = 'JSON:API for Spring HATEOAS'
-                description = 'Implementation of the media type application/vnd.api+json (JSON:API) to be integrated in Spring HATEOAS.'
-                url = 'https://github.com/toedter/spring-hateoas-jsonapi'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'toedter'
-                        name = 'Kai Toedter'
-                        email = 'kai@toedter.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/toedter/spring-hateoas-jsonapi.git'
-                }
+    coordinates(
+            project.group as String,
+            jar.archiveBaseName.get(),
+            project.version as String
+    )
+
+    pom {
+        name = 'JSON:API for Spring HATEOAS'
+        description = 'Implementation of the media type application/vnd.api+json (JSON:API) to be integrated in Spring HATEOAS.'
+        url = 'https://github.com/toedter/spring-hateoas-jsonapi'
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
             }
         }
-    }
-    repositories {
-        maven {
-            credentials {
-                username = System.getenv('OSSRH_USERNAME')
-                password = System.getenv('OSSRH_PASSWORD')
-            }
-            if (project.version.endsWith('-SNAPSHOT')) {
-                name = 'central-portal-snapshots'
-                url = 'https://central.sonatype.com/repository/maven-snapshots/'
-            } else {
-                name = 'ossrh-staging-api'
-                url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+        developers {
+            developer {
+                id = 'toedter'
+                name = 'Kai Toedter'
+                email = 'kai@toedter.com'
             }
         }
+        scm {
+            url = 'https://github.com/toedter/spring-hateoas-jsonapi.git'
+        }
     }
-}
-
-// we don't publish the gradle module metadata
-tasks.withType(GenerateModuleMetadata).configureEach {
-    enabled = false
-}
-
-signing {
-    def signingKey = findProperty('signingKey')
-    def signingPassword = findProperty('signingPassword')
-    useInMemoryPgpKeys(signingKey as String, signingPassword as String)
-    sign publishing.publications.mavenJava
 }
 
 sonarqube {
