@@ -45,6 +45,15 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar
+      - name: Create gradle.properties for Maven Central Publishing
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+            mkdir -p ~/.gradle
+            echo "mavenCentralUsername=${{ secrets.secrets.MAVEN_CENTRAL_USERNAME }}" >> ~/.gradle/gradle.properties
+            echo "mavenCentralPassword=${{ secrets.MAVEN_CENTRAL_PASSWORD }}" >> ~/.gradle/gradle.properties
+            echo "signingInMemoryKey=${{ secrets.SIGNING_IN_MEMORY_KEY }}" >> ~/.gradle/gradle.properties
+            echo "signingInMemoryKeyId=${{ secrets.signingInMemoryKeyId }}" >> ~/.gradle/gradle.properties
+            echo "signingInMemoryKeyPassword=${{ SIGNING_IN_MEMORY_KEY_PASSWORD }}" >> ~/.gradle/gradle.properties
       - name: Publish to Maven
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
@@ -52,11 +61,6 @@ jobs:
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_IN_MEMORY_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: ./gradlew publishToMavenCentral
       - name: Archive reports (for lib only)
         if: ${{ always() }}
