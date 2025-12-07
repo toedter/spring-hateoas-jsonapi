@@ -49,11 +49,11 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
             mkdir -p ~/.gradle
-            echo "mavenCentralUsername=${{ secrets.secrets.MAVEN_CENTRAL_USERNAME }}" >> ~/.gradle/gradle.properties
+            echo "mavenCentralUsername=${{ secrets.MAVEN_CENTRAL_USERNAME }}" >> ~/.gradle/gradle.properties
             echo "mavenCentralPassword=${{ secrets.MAVEN_CENTRAL_PASSWORD }}" >> ~/.gradle/gradle.properties
             echo "signingInMemoryKey=${{ secrets.SIGNING_IN_MEMORY_KEY }}" >> ~/.gradle/gradle.properties
-            echo "signingInMemoryKeyId=${{ secrets.signingInMemoryKeyId }}" >> ~/.gradle/gradle.properties
-            echo "signingInMemoryKeyPassword=${{ SIGNING_IN_MEMORY_KEY_PASSWORD }}" >> ~/.gradle/gradle.properties
+            echo "signingInMemoryKeyId=${{ secrets.SIGNING_IN_MEMORY_KEY_ID }}" >> ~/.gradle/gradle.properties
+            echo "signingInMemoryKeyPassword=${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}" >> ~/.gradle/gradle.properties
       - name: Publish to Maven
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
