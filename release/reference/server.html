@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Server Side support</h1>
 <div class="details">
-<span id="revnumber">version 2.1.4</span>
+<span id="revnumber">version 2.2.0</span>
 </div>
 </div>
 <div id="content">
@@ -222,6 +222,121 @@ both as top-level link properties <em>and</em> in the meta section, you can conf
 <div class="paragraph">
 <p>By default, all other links will <em>not</em> be serialized. If you want to serialize links that are non-compliant
 with JSON:API, you can use a specific configuration, (see <a href="#links-configuration">[links-configuration]</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="link-placement"><a class="anchor" href="#link-placement"></a>Link Placement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The JSON:API specification allows links to be placed at two different levels in the document:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Document level (top-level)</strong> - Links appear at the top level of the JSON document (default behavior)</p>
+</li>
+<li>
+<p><strong>Resource level</strong> - Links appear inside the resource object within the "data" section</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default, this library places links at the document level for single resource (EntityModel) serialization.
+However, you can configure this behavior using the <code>LinksAtResourceLevel</code> configuration option
+(see <a href="#links-placement-configuration">[links-placement-configuration]</a>).</p>
+</div>
+<div class="sect2">
+<h3 id="_document_level_links_default"><a class="anchor" href="#_document_level_links_default"></a>Document Level Links (Default)</h3>
+<div class="paragraph">
+<p>When using the default configuration, links from an EntityModel are placed at the document level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces the following JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resource_level_links"><a class="anchor" href="#_resource_level_links"></a>Resource Level Links</h3>
+<div class="paragraph">
+<p>To place links at the resource level instead, configure <code>LinksAtResourceLevel</code> to <code>true</code> (See <a href="#link-placement-configuration-example">[link-placement-configuration-example]</a>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces the following JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "links": {
+      "self": "http://localhost/movies/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This configuration only affects single resource (EntityModel) serialization. Collection models (CollectionModel)
+and paged models (PagedModel) are not affected by this setting.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Both approaches are valid according to the JSON:API specification. Choose the approach that best fits your API design:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Document level</strong> - Common pattern, provides clear separation between document metadata and resource data</p>
+</li>
+<li>
+<p><strong>Resource level</strong> - Keeps all resource-related information co-located, which some API consumers may prefer</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -742,30 +857,51 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_explicit_configuration_of_empty_relationships"><a class="anchor" href="#_explicit_configuration_of_empty_relationships"></a>Explicit Configuration of empty Relationships</h3>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
-(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).
-An empty to-one relationship can be added like</p>
+(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
+</div>
+<div class="paragraph">
+<p>For more explicit control over the serialization of empty relationships, you can use
+<code>relationshipWithNullData()</code> to create an empty to-one relationship (serialized as <code>"data": null</code>)
+or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("director", (Object) null)
+  .model(EntityModel.of(movie))
+  .relationshipWithNullData("directors")
   .build();
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>An empty to-many relationship can be added like</p>
+<p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-many relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("directors", Collections.emptyList())
+  .model(EntityModel.of(movie))
+  .relationshipWithEmptyData("directors")
   .build();
 </code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
+</div>
+<div class="paragraph">
+<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
+The methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
@@ -1025,11 +1161,11 @@ First you have to enable this experimental feature in the configuration, like</p
 Link selfLink = linkTo(MovieController.class)
   .slash(
     "movies" +
-    uriParams +
-    "&amp;page[number]=" +
-    pagedResult.getNumber() +
-    "&amp;page[size]=" +
-    pagedResult.getSize()
+      uriParams +
+      "&amp;page[number]=" +
+      pagedResult.getNumber() +
+      "&amp;page[size]=" +
+      pagedResult.getSize()
   )
   .withSelfRel()
   .andAffordance(newMovieAffordance);
@@ -1804,17 +1940,15 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest()
-  .body(
-    JsonApiErrors.create()
-      .withError(
-        JsonApiError.create()
-          .withAboutLink("http://movie-db.com/problem")
-          .withTitle("Movie-based problem")
-          .withStatus(HttpStatus.BAD_REQUEST.toString())
-          .withDetail("This is a test case")
-      )
-  );
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
+  JsonApiErrors.create().withError(
+    JsonApiError.create()
+      .withAboutLink("http://movie-db.com/problem")
+      .withTitle("Movie-based problem")
+      .withStatus(HttpStatus.BAD_REQUEST.toString())
+      .withDetail("This is a test case")
+  )
+);
 </code></pre>
 </div>
 </div>
@@ -1870,10 +2004,9 @@ public class ExceptionControllerAdvice {
   public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
     log.error("Internal error: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-      JsonApiErrors.create()
-        .withError(
-          CommonErrors.newInternalServerError().withDetail(ex.getMessage())
-        )
+      JsonApiErrors.create().withError(
+        CommonErrors.newInternalServerError().withDetail(ex.getMessage())
+      )
     );
   }
 }
@@ -1955,10 +2088,10 @@ public class JsonApiErrorsException extends RuntimeException {
     return resourceNotFound
       .withDetail(
         "Resource of type '" +
-        resourceType +
-        "' with id '" +
-        resourceId +
-        "' not found."
+          resourceType +
+          "' with id '" +
+          resourceId +
+          "' not found."
       )
       .withId(java.util.UUID.randomUUID().toString());
   }
@@ -2001,8 +2134,8 @@ public class JsonApiErrorsException extends RuntimeException {
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.4<br>
-Last updated 2025-05-27 06:39:23 UTC
+Version 2.2.0<br>
+Last updated 2025-12-07 14:14:32 UTC
 </div>
 </div>
 </div>

@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 2.1.4,</span>
-<span id="revdate">2025-05-27</span>
+<span id="revnumber">version 2.2.0,</span>
+<span id="revdate">2025-12-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -49,24 +49,34 @@
 <ul class="sectlevel2">
 <li><a href="#representation-models">3.1. Representation Models</a></li>
 <li><a href="#links">3.2. Links</a></li>
-<li><a href="#annotations">3.3. Annotations</a></li>
-<li><a href="#jsonapi-builder">3.4. JSON:API Builder</a></li>
-<li><a href="#inclusion">3.5. Inclusion of related Resources</a></li>
-<li><a href="#Nesting">3.6. Nesting of JsonApiModels</a></li>
-<li><a href="#sparse-fielsets">3.7. Sparse Fieldsets</a></li>
-<li><a href="#affordances">3.8. Spring HATEOAS Affordances</a></li>
-<li><a href="#Creating">3.9. Creating Resources with HTTP POST</a></li>
-<li><a href="#server-deserialization">3.10. Deserialization of JSON:API types</a></li>
-<li><a href="#collection-model-deserialization">3.11. Deserialization of PagedModels</a></li>
-<li><a href="#uuid">3.12. UUID Deserialization</a></li>
-<li><a href="#polymorphy">3.13. Polymorphic Deserialization</a>
+<li><a href="#link-placement">3.3. Link Placement</a>
 <ul class="sectlevel3">
-<li><a href="#jackson-annotations">3.13.1. Jackson Annotations</a></li>
+<li><a href="#document-level-links-default">3.3.1. Document Level Links (Default)</a></li>
+<li><a href="#resource-level-links">3.3.2. Resource Level Links</a></li>
 </ul>
 </li>
-<li><a href="#error-handling">3.14. Error Handling</a>
+<li><a href="#annotations">3.4. Annotations</a></li>
+<li><a href="#jsonapi-builder">3.5. JSON:API Builder</a>
 <ul class="sectlevel3">
-<li><a href="#more-generic-error-handling">3.14.1. More Generic Error Handling</a></li>
+<li><a href="#explicit-configuration-of-empty-relationships">3.5.1. Explicit Configuration of empty Relationships</a></li>
+</ul>
+</li>
+<li><a href="#inclusion">3.6. Inclusion of related Resources</a></li>
+<li><a href="#Nesting">3.7. Nesting of JsonApiModels</a></li>
+<li><a href="#sparse-fielsets">3.8. Sparse Fieldsets</a></li>
+<li><a href="#affordances">3.9. Spring HATEOAS Affordances</a></li>
+<li><a href="#Creating">3.10. Creating Resources with HTTP POST</a></li>
+<li><a href="#server-deserialization">3.11. Deserialization of JSON:API types</a></li>
+<li><a href="#collection-model-deserialization">3.12. Deserialization of PagedModels</a></li>
+<li><a href="#uuid">3.13. UUID Deserialization</a></li>
+<li><a href="#polymorphy">3.14. Polymorphic Deserialization</a>
+<ul class="sectlevel3">
+<li><a href="#jackson-annotations">3.14.1. Jackson Annotations</a></li>
+</ul>
+</li>
+<li><a href="#error-handling">3.15. Error Handling</a>
+<ul class="sectlevel3">
+<li><a href="#more-generic-error-handling">3.15.1. More Generic Error Handling</a></li>
 </ul>
 </li>
 </ul>
@@ -83,7 +93,11 @@
 <li><a href="#link-discovery">4.4. Link Discovery</a></li>
 </ul>
 </li>
-<li><a href="#configuration">5. Configuration</a></li>
+<li><a href="#configuration">5. Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#link-placement-configuration-example">5.1. Link Placement Configuration Example</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -94,7 +108,7 @@
 <p>This project provides JSON:API media type support for Spring HATEOAS.</p>
 </div>
 <div class="paragraph">
-<p>&#169; 2024 The original authors.</p>
+<p>&#169; 2025 The original authors.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -127,7 +141,7 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <p>Release repository: <a href="https://mvnrepository.com/artifact/com.toedter/spring-hateoas-jsonapi">Maven Central</a></p>
 </li>
 <li>
-<p>Snapshot repository: <a href="https://oss.sonatype.org/#nexus-search;gav~com.toedter~spring-hateoas-jsonapi~~~~kw,versionexpand">Sonatype OSS Repository</a></p>
+<p>Snapshot repository: <a href="https://central.sonatype.com/repository/maven-snapshots/">Maven Central Snapshots Repository</a></p>
 </li>
 </ul>
 </div>
@@ -139,13 +153,13 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <div class="sect2">
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
-<p>JSON:API for Spring HATEOAS is based on version 2.5.0 of Spring HATEOAS.
+<p>JSON:API for Spring HATEOAS is based on version 2.5.1 of Spring HATEOAS.
 For further understanding of this document, please be aware of both</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/2.5.0/reference/html/">Spring HATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -253,7 +267,7 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <div class="listingblock primary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.1.4'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
 </code></pre>
 </div>
 </div>
@@ -263,12 +277,12 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;2.1.4&lt;/version&gt;
+    &lt;version&gt;2.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>2.1.5-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
+<p>The latest published snapshot version is <code>2.2.1-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
 </div>
 </div>
 </div>
@@ -464,7 +478,120 @@ with JSON:API, you can use a specific configuration, (see <a href="#links-config
 </div>
 </div>
 <div class="sect2">
-<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.3. Annotations</h3>
+<h3 id="link-placement"><a class="anchor" href="#link-placement"></a>3.3. Link Placement</h3>
+<div class="paragraph">
+<p>The JSON:API specification allows links to be placed at two different levels in the document:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Document level (top-level)</strong> - Links appear at the top level of the JSON document (default behavior)</p>
+</li>
+<li>
+<p><strong>Resource level</strong> - Links appear inside the resource object within the "data" section</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default, this library places links at the document level for single resource (EntityModel) serialization.
+However, you can configure this behavior using the <code>LinksAtResourceLevel</code> configuration option
+(see <a href="#links-placement-configuration">[links-placement-configuration]</a>).</p>
+</div>
+<div class="sect3">
+<h4 id="document-level-links-default"><a class="anchor" href="#document-level-links-default"></a>3.3.1. Document Level Links (Default)</h4>
+<div class="paragraph">
+<p>When using the default configuration, links from an EntityModel are placed at the document level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces the following JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    }
+  },
+  "links": {
+    "self": "http://localhost/movies/1"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-level-links"><a class="anchor" href="#resource-level-links"></a>3.3.2. Resource Level Links</h4>
+<div class="paragraph">
+<p>To place links at the resource level instead, configure <code>LinksAtResourceLevel</code> to <code>true</code> (See <a href="#link-placement-configuration-example">Link Placement Configuration Example</a>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Movie movie = new Movie("1", "Star Wars");
+EntityModel&lt;Movie&gt; entityModel = EntityModel.of(movie);
+entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces the following JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "id": "1",
+    "type": "movies",
+    "attributes": {
+      "title": "Star Wars"
+    },
+    "links": {
+      "self": "http://localhost/movies/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This configuration only affects single resource (EntityModel) serialization. Collection models (CollectionModel)
+and paged models (PagedModel) are not affected by this setting.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Both approaches are valid according to the JSON:API specification. Choose the approach that best fits your API design:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Document level</strong> - Common pattern, provides clear separation between document metadata and resource data</p>
+</li>
+<li>
+<p><strong>Resource level</strong> - Keeps all resource-related information co-located, which some API consumers may prefer</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.4. Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.</p>
@@ -615,7 +742,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.4. JSON:API Builder</h3>
+<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.5. JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
@@ -977,35 +1104,56 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 }</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>3.5.1. Explicit Configuration of empty Relationships</h4>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
-(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).
-An empty to-one relationship can be added like</p>
+(see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
+</div>
+<div class="paragraph">
+<p>For more explicit control over the serialization of empty relationships, you can use
+<code>relationshipWithNullData()</code> to create an empty to-one relationship (serialized as <code>"data": null</code>)
+or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-one relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("director", (Object) null)
+  .model(EntityModel.of(movie))
+  .relationshipWithNullData("directors")
   .build();
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>An empty to-many relationship can be added like</p>
+<p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
+</div>
+<div class="paragraph">
+<p>An explicit empty to-many relationship can be added like</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
-  .model(movie)
-  .relationship("directors", Collections.emptyList())
+  .model(EntityModel.of(movie))
+  .relationshipWithEmptyData("directors")
   .build();
 </code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
+</div>
+<div class="paragraph">
+<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
+The methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.5. Inclusion of related Resources</h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.6. Inclusion of related Resources</h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
@@ -1037,7 +1185,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.6. Nesting of JsonApiModels</h3>
+<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.7. Nesting of JsonApiModels</h3>
 <div class="paragraph">
 <p>When using the model builder, <code>JsonApiModel</code> instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
@@ -1125,7 +1273,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="sect2">
-<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.7. Sparse Fieldsets</h3>
+<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.8. Sparse Fieldsets</h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
 by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
@@ -1221,10 +1369,10 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 </div>
 <div class="sect2">
-<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.8. Spring HATEOAS Affordances</h3>
+<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.9. Spring HATEOAS Affordances</h3>
 <div class="paragraph">
 <p>Spring HATEOAS provides a generic, media type independent API for
-2.5.0/reference/html/#server.affordances[affordances].
+2.5.1/reference/html/#server.affordances[affordances].
 Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
 information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
@@ -1252,11 +1400,11 @@ First you have to enable this experimental feature in the configuration, like</p
 Link selfLink = linkTo(MovieController.class)
   .slash(
     "movies" +
-    uriParams +
-    "&amp;page[number]=" +
-    pagedResult.getNumber() +
-    "&amp;page[size]=" +
-    pagedResult.getSize()
+      uriParams +
+      "&amp;page[number]=" +
+      pagedResult.getNumber() +
+      "&amp;page[size]=" +
+      pagedResult.getSize()
   )
   .withSelfRel()
   .andAffordance(newMovieAffordance);
@@ -1336,7 +1484,7 @@ If you want to get property information like required, you have to include a dep
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.9. Creating Resources with HTTP POST</h3>
+<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.10. Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
@@ -1469,7 +1617,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.10. Deserialization of JSON:API types</h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.11. Deserialization of JSON:API types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1568,7 +1716,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.11. Deserialization of PagedModels</h3>
+<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.12. Deserialization of PagedModels</h3>
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
 it is sometimes handy to be able to deserialize collection models and paged models. This is
@@ -1622,7 +1770,7 @@ The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;M
 </div>
 </div>
 <div class="sect2">
-<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.12. UUID Deserialization</h3>
+<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.13. UUID Deserialization</h3>
 <div class="paragraph">
 <p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
 So a JSON like</p>
@@ -1661,7 +1809,7 @@ So a JSON like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.13. Polymorphic Deserialization</h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.14. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
 assigning a JSON:API type to a Java class and then also switching on, that the mappings should
@@ -1784,7 +1932,7 @@ But the first director would be an instance of class <code>Director</code>,
 while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
 </div>
 <div class="sect3">
-<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.13.1. Jackson Annotations</h4>
+<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.14.1. Jackson Annotations</h4>
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
@@ -2010,7 +2158,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.14. Error Handling</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.15. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -2019,17 +2167,15 @@ Right now there is the restriction, that the type attribute of both
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest()
-  .body(
-    JsonApiErrors.create()
-      .withError(
-        JsonApiError.create()
-          .withAboutLink("http://movie-db.com/problem")
-          .withTitle("Movie-based problem")
-          .withStatus(HttpStatus.BAD_REQUEST.toString())
-          .withDetail("This is a test case")
-      )
-  );
+<pre class="highlight"><code class="language-java" data-lang="java">return ResponseEntity.badRequest().body(
+  JsonApiErrors.create().withError(
+    JsonApiError.create()
+      .withAboutLink("http://movie-db.com/problem")
+      .withTitle("Movie-based problem")
+      .withStatus(HttpStatus.BAD_REQUEST.toString())
+      .withDetail("This is a test case")
+  )
+);
 </code></pre>
 </div>
 </div>
@@ -2053,7 +2199,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect3">
-<h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>3.14.1. More Generic Error Handling</h4>
+<h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>3.15.1. More Generic Error Handling</h4>
 <div class="paragraph">
 <p>If you want to implement a more generic error handling that converts exceptions
 to JSON:API error responses, you could implement a <code>@ControllerAdvice</code> like:</p>
@@ -2085,10 +2231,9 @@ public class ExceptionControllerAdvice {
   public ResponseEntity&lt;JsonApiErrors&gt; handle(Exception ex) {
     log.error("Internal error: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-      JsonApiErrors.create()
-        .withError(
-          CommonErrors.newInternalServerError().withDetail(ex.getMessage())
-        )
+      JsonApiErrors.create().withError(
+        CommonErrors.newInternalServerError().withDetail(ex.getMessage())
+      )
     );
   }
 }
@@ -2170,10 +2315,10 @@ public class JsonApiErrorsException extends RuntimeException {
     return resourceNotFound
       .withDetail(
         "Resource of type '" +
-        resourceType +
-        "' with id '" +
-        resourceId +
-        "' not found."
+          resourceType +
+          "' with id '" +
+          resourceId +
+          "' not found."
       )
       .withId(java.util.UUID.randomUUID().toString());
   }
@@ -2427,8 +2572,9 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">  new JsonApiConfiguration()
-    .withJsonApiIdNotSerializedForValue("doNotSerialize")
+<pre class="highlight"><code class="language-java" data-lang="java">  new JsonApiConfiguration().withJsonApiIdNotSerializedForValue(
+    "doNotSerialize"
+  )
 );
 </code></pre>
 </div>
@@ -2463,7 +2609,7 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 <h3 id="traverson"><a class="anchor" href="#traverson"></a>4.3. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/2.5.0/reference/html/">Spring HATEOAS</a>.</p>
+implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2471,7 +2617,7 @@ implementation provided through <a href="https://docs.spring.io/spring-hateoas/d
 <div class="paragraph">
 <p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
-<a href="https://docs.spring.io/spring-hateoas/docs/2.5.0/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+<a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
 When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
 is exposed as a Spring bean.</p>
@@ -2590,7 +2736,13 @@ since client might expect properties like title in the meta section.</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LinksNotUrlEncoded</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing. Empty by default.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">empty set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">empty set
+<a id="links-placement-configuration"></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LinksAtResourceLevel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization. When set to <code>true</code>, links are placed at the resource level (inside the resource object in the "data" section). When set to <code>false</code>, links are placed at the document level (top-level). See also <a href="#link-placement">Link Placement</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
@@ -2640,13 +2792,46 @@ JsonApiConfiguration jsonApiConfiguration() {
 </code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="link-placement-configuration-example"><a class="anchor" href="#link-placement-configuration-example"></a>5.1. Link Placement Configuration Example</h4>
+<div class="paragraph">
+<p>To configure links to appear at the resource level instead of the document level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withLinksAtResourceLevel(true);  <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable resource-level links for single resource (EntityModel) serialization</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When this configuration is enabled, links from EntityModel will be placed inside the resource object
+in the "data" section instead of at the document top level. See <a href="#link-placement">Link Placement</a> for more details
+and examples.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.4<br>
-Last updated 2025-05-27 06:39:23 UTC
+Version 2.2.0<br>
+Last updated 2025-12-07 14:14:32 UTC
 </div>
 </div>
 </div>

@@ -29,10 +29,12 @@
 <div id="header">
 <h1>Configuration</h1>
 <div class="details">
-<span id="revnumber">version 2.1.4</span>
+<span id="revnumber">version 2.2.0</span>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>There are several options for how to change the output of the JSON:API rendering.</p>
 </div>
@@ -125,7 +127,13 @@ since client might expect properties like title in the meta section.</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LinksNotUrlEncoded</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing. Empty by default.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">empty set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">empty set
+<a id="links-placement-configuration"></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LinksAtResourceLevel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization. When set to <code>true</code>, links are placed at the resource level (inside the resource object in the "data" section). When set to <code>false</code>, links are placed at the document level (top-level). See also <a href="#link-placement">[link-placement]</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
@@ -176,10 +184,45 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_link_placement_configuration_example"><a class="anchor" href="#_link_placement_configuration_example"></a>Link Placement Configuration Example</h3>
+<div class="paragraph">
+<p>To configure links to appear at the resource level instead of the document level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withLinksAtResourceLevel(true);  <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable resource-level links for single resource (EntityModel) serialization</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When this configuration is enabled, links from EntityModel will be placed inside the resource object
+in the "data" section instead of at the document top level. See <a href="#link-placement">[link-placement]</a> for more details
+and examples.</p>
+</div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.4<br>
-Last updated 2025-05-27 06:39:23 UTC
+Version 2.2.0<br>
+Last updated 2025-12-07 14:14:32 UTC
 </div>
 </div>
 </div>
