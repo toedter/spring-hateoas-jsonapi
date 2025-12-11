@@ -16,7 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -24,10 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.IanaLinkRelations;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")
@@ -109,8 +108,9 @@ class JsonApiConfigurationUnitTest {
 
   @Test
   void should_customize_object_mapper() {
-    JsonMapper.Builder builder = JsonMapper.builder()
-      .disable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+    JsonMapper.Builder builder = JsonMapper.builder().disable(
+      DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
+    );
 
     JsonMapper jsonMapper = new JsonApiConfiguration()
       .withMapperCustomizer(b ->
@@ -120,7 +120,9 @@ class JsonApiConfigurationUnitTest {
       .build();
 
     assertThat(
-      jsonMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+      jsonMapper.isEnabled(
+        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
+      )
     ).isTrue();
   }
 

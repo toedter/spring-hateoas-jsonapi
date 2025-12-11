@@ -17,6 +17,10 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.extern.java.Log;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -27,11 +31,6 @@ import org.springframework.lang.Nullable;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 @Log
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
@@ -72,7 +71,11 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
   @Override
   @SuppressWarnings("deprecation")
-  public void serialize(T value, JsonGenerator gen, SerializationContext provider) {
+  public void serialize(
+    T value,
+    JsonGenerator gen,
+    SerializationContext provider
+  ) {
     CollectionModel<?> collectionModel = null;
     if (value instanceof JsonApiModel jsonApiModel) {
       Object content = jsonApiModel.getContent();

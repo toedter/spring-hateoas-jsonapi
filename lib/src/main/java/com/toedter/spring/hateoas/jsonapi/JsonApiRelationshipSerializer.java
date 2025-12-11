@@ -16,12 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.Collection;
+import java.util.Map;
 import org.springframework.hateoas.Links;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
-
-import java.util.Collection;
-import java.util.Map;
 
 class JsonApiRelationshipSerializer
   extends AbstractJsonApiSerializer<JsonApiRelationship> {

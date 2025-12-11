@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +33,6 @@ import tools.jackson.databind.jsontype.TypeIdResolver;
 import tools.jackson.databind.jsontype.TypeResolverBuilder;
 import tools.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import tools.jackson.databind.jsontype.impl.TypeIdResolverBase;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiHandlerInitiator Unit Test")
@@ -53,12 +53,19 @@ class JsonApiHandlerInitiatorUnitTest {
   static class TestTypeIdResolver extends TypeIdResolverBase {
 
     @Override
-    public String idFromValue(tools.jackson.databind.DatabindContext context, Object value) {
+    public String idFromValue(
+      tools.jackson.databind.DatabindContext context,
+      Object value
+    ) {
       return null;
     }
 
     @Override
-    public String idFromValueAndType(tools.jackson.databind.DatabindContext context, Object value, Class<?> suggestedType) {
+    public String idFromValueAndType(
+      tools.jackson.databind.DatabindContext context,
+      Object value,
+      Class<?> suggestedType
+    ) {
       return null;
     }
 
@@ -106,7 +113,9 @@ class JsonApiHandlerInitiatorUnitTest {
         null,
         JsonApiEntityModelSerializer.class
       );
-    assertThat(valueSerializer).isInstanceOf(JsonApiEntityModelSerializer.class);
+    assertThat(valueSerializer).isInstanceOf(
+      JsonApiEntityModelSerializer.class
+    );
   }
 
   @Test

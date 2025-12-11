@@ -31,8 +31,14 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.MockRestServiceServer.createServer;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
+import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -57,13 +63,6 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.client.MockRestServiceServer.createServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
  * Integration tests for {@link TypeReferences}.

@@ -16,6 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
@@ -32,15 +37,8 @@ import tools.jackson.databind.deser.std.StdDeserializer;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.type.TypeFactory;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Slf4j
-abstract class AbstractJsonApiModelDeserializer<T>
-  extends StdDeserializer<T> {
+abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
 
   protected final JsonMapper jsonMapper;
   protected final JavaType contentType;
@@ -68,8 +66,8 @@ abstract class AbstractJsonApiModelDeserializer<T>
     this.jsonMapper = jsonApiConfiguration.getJsonMapper();
 
     plainJsonMapper = JsonMapper.builder()
-            .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-            .build();
+      .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+      .build();
   }
 
   @Override
@@ -119,7 +117,6 @@ abstract class AbstractJsonApiModelDeserializer<T>
       doc
     );
   }
-
 
   @Override
   public ValueDeserializer<?> createContextual(
@@ -172,10 +169,7 @@ abstract class AbstractJsonApiModelDeserializer<T>
 
     if (attributes != null) {
       // we have to use the plain json mapper to not get in conflict with links deserialization
-      objectFromProperties = plainJsonMapper.convertValue(
-        attributes,
-        rootType
-      );
+      objectFromProperties = plainJsonMapper.convertValue(attributes, rootType);
     } else {
       try {
         if (useDataForCreation) {
@@ -208,7 +202,8 @@ abstract class AbstractJsonApiModelDeserializer<T>
       Object linksData = data.get("links");
       if (linksData != null && linksData instanceof Map) {
         // Use JsonApiLinksDeserializer to properly deserialize links
-        JsonApiLinksDeserializer linksDeserializer = new JsonApiLinksDeserializer();
+        JsonApiLinksDeserializer linksDeserializer =
+          new JsonApiLinksDeserializer();
         links = linksDeserializer.deserialize((Map<String, Object>) linksData);
       }
       JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =

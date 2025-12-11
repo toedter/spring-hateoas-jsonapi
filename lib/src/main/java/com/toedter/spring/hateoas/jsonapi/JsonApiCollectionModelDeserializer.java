@@ -16,15 +16,14 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 
-import java.util.List;
-
 class JsonApiCollectionModelDeserializer
-  extends AbstractJsonApiModelDeserializer<CollectionModel<?>>{
+  extends AbstractJsonApiModelDeserializer<CollectionModel<?>> {
 
   JsonApiCollectionModelDeserializer(
     JsonApiConfiguration jsonApiConfiguration

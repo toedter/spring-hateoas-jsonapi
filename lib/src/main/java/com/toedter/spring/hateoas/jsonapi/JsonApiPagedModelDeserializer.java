@@ -16,13 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.List;
+import java.util.Map;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
-
-import java.util.List;
-import java.util.Map;
 
 class JsonApiPagedModelDeserializer
   extends AbstractJsonApiModelDeserializer<PagedModel<?>> {

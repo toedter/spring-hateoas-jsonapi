@@ -16,10 +16,24 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
@@ -34,21 +48,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
 @Getter(onMethod_ = { @JsonProperty })
 @With(AccessLevel.PACKAGE)

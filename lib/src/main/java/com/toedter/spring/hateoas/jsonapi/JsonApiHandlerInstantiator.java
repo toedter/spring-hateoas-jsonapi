@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.lang.Nullable;
@@ -29,9 +31,6 @@ import tools.jackson.databind.cfg.MapperConfig;
 import tools.jackson.databind.introspect.Annotated;
 import tools.jackson.databind.jsontype.TypeIdResolver;
 import tools.jackson.databind.jsontype.TypeResolverBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 class JsonApiHandlerInstantiator extends HandlerInstantiator {
 

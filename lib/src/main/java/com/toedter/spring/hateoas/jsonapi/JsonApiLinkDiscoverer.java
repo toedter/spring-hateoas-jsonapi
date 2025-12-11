@@ -16,17 +16,16 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+
+import java.io.InputStream;
+import java.util.Optional;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.io.InputStream;
-import java.util.Optional;
-
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 /**
  * {@link LinkDiscoverer} implementation based on JSON:API link structure.
@@ -41,7 +40,10 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    * Constructor for {@link MediaTypes#JSON_API}.
    */
   public JsonApiLinkDiscoverer() {
-    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(null, null);
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
+      null,
+      null
+    );
     JsonApiConfiguration jsonApiConfig = new JsonApiConfiguration();
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = config.configureJsonMapper(builder);

@@ -16,7 +16,17 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Affordance;
@@ -32,17 +42,6 @@ import org.springframework.web.util.UriUtils;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 

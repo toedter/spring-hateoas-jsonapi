@@ -16,10 +16,20 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.toedter.spring.hateoas.jsonapi.support.Director;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithMovies;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -33,17 +43,6 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Integration Test")
@@ -110,8 +109,10 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
       )
       .build();
 
-    var jsonApiConfiguration = new JsonApiConfiguration()
-      .withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF));
+    var jsonApiConfiguration =
+      new JsonApiConfiguration().withLinksNotUrlEncoded(
+        Set.of(IanaLinkRelations.SELF)
+      );
     mapper = createJsonMapper(jsonApiConfiguration);
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -787,22 +788,21 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   @Test
   void should_build_single_movie_model_with_relationship_included_type_config()
     throws Exception {
-
     JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration()
-            .withPluralizedTypeRendered(false)
-            .withLowerCasedTypeRendered(false);
+      .withPluralizedTypeRendered(false)
+      .withLowerCasedTypeRendered(false);
 
     // Create ObjectProvider that supplies the given JsonApiConfiguration
     ObjectProvider<JsonApiConfiguration> configProvider =
-            new ObjectProvider<>() {
-              @Override
-              public JsonApiConfiguration getObject() {
-                return jsonApiConfiguration;
-              }
-            };
+      new ObjectProvider<>() {
+        @Override
+        public JsonApiConfiguration getObject() {
+          return jsonApiConfiguration;
+        }
+      };
 
     JsonApiMediaTypeConfiguration configuration =
-            new JsonApiMediaTypeConfiguration(configProvider, null);
+      new JsonApiMediaTypeConfiguration(configProvider, null);
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
     mapper = builder.build();

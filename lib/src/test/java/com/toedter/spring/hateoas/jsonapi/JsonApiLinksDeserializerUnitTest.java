@@ -23,7 +23,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiLinksDeserializer Unit Test")
 class JsonApiLinksDeserializerUnitTest extends JsonApiTestBase {
-
   // Note: getContentDeserializer() no longer exists in Jackson 3
   // This method was removed when migrating from ContainerDeserializerBase to StdDeserializer
 }

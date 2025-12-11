@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -25,9 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Spring configuration for JSON:API support.
@@ -58,14 +57,15 @@ public class JsonApiMediaTypeConfiguration
    */
   @Override
   public JsonMapper.Builder configureJsonMapper(JsonMapper.Builder builder) {
-
     JsonApiConfiguration jsonApiConfiguration = configuration != null
       ? configuration.getIfAvailable(JsonApiConfiguration::new)
       : new JsonApiConfiguration();
 
     builder = builder
       .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-      .handlerInstantiator(new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory))
+      .handlerInstantiator(
+        new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory)
+      )
       .addModule(new Jackson2JsonApiModule(jsonApiConfiguration));
 
     return jsonApiConfiguration.customize(builder);

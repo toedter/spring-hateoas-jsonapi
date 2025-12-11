@@ -16,6 +16,9 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,10 +28,6 @@ import org.springframework.http.MediaType;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiMediaTypeConfiguration Unit Test")
@@ -54,7 +53,9 @@ class JsonApiMediaTypeConfigurationUnitTest {
   void should_return_configured_object_mapper() {
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
-    JsonMapper jsonMapper = new JsonApiConfiguration().customize(builder).build();
+    JsonMapper jsonMapper = new JsonApiConfiguration()
+      .customize(builder)
+      .build();
 
     assertThat(
       jsonMapper.isEnabled(
@@ -62,9 +63,7 @@ class JsonApiMediaTypeConfigurationUnitTest {
       )
     ).isFalse();
     assertThat(
-      jsonMapper.isEnabled(
-        DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY
-      )
+      jsonMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     ).isFalse();
     assertThat(
       jsonMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)

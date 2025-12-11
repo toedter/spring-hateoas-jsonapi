@@ -21,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
@@ -29,14 +36,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * This class is used to build a JSON:API presentation model that uses relationships.

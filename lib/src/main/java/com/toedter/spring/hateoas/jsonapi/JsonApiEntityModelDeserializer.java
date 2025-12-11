@@ -16,13 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import tools.jackson.databind.JavaType;
-import tools.jackson.databind.ValueDeserializer;
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,8 +30,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
 
 @SuppressWarnings("squid:S3011")
 class JsonApiEntityModelDeserializer

@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.HashMap;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,9 +28,6 @@ import org.springframework.hateoas.EntityModel;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.type.TypeFactory;
-
-import java.util.HashMap;
-import java.util.List;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")

@@ -15,6 +15,14 @@
  */
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
 import com.toedter.spring.hateoas.jsonapi.support.MovieDerivedWithTypeForClass;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithAnnotations;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
@@ -38,14 +46,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * @author Kai Toedter

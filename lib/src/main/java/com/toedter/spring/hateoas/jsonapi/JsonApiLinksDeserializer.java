@@ -16,18 +16,17 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.deser.std.StdDeserializer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 class JsonApiLinksDeserializer extends StdDeserializer<Links> {
 

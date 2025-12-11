@@ -16,6 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,12 +29,6 @@ import org.springframework.hateoas.LinkRelation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.UnaryOperator;
 
 /**
  * JSON:API specific configuration.

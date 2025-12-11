@@ -16,13 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import java.util.List;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.util.Assert;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
-
-import java.util.List;
 
 class JsonApiRepresentationModelDeserializer
   extends AbstractJsonApiModelDeserializer<RepresentationModel<?>> {

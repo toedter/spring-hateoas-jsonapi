@@ -16,6 +16,9 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,10 +26,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.HashMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiErrors Test")
@@ -40,7 +39,8 @@ class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
       new JsonApiMediaTypeConfiguration(null, null);
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
-    mapper = new JsonApiConfiguration().customize(builder)
+    mapper = new JsonApiConfiguration()
+      .customize(builder)
       .disable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
       .build();
   }
