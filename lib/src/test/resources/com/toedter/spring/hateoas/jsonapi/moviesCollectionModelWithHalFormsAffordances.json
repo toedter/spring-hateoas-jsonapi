@@ -13,7 +13,7 @@
       "href": "https://mymovies.com",
       "meta": {
         "hal-forms-templates": {
-          "default": {
+          "create-movie": {
             "method": "POST",
             "properties": [
               {

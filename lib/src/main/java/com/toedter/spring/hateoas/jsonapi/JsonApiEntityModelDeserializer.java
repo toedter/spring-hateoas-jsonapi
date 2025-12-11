@@ -16,11 +16,14 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -33,16 +36,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Links;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
 @SuppressWarnings("squid:S3011")
 class JsonApiEntityModelDeserializer
-  extends AbstractJsonApiModelDeserializer<EntityModel<?>>
-  implements ContextualDeserializer {
+  extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
 
   public static final String CANNOT_DESERIALIZE_INPUT_TO_ENTITY_MODEL =
     "Cannot deserialize input to EntityModel";
@@ -254,12 +253,12 @@ class JsonApiEntityModelDeserializer
       entry,
       true,
       doc,
-      objectMapper.constructType(typeArgument),
+      jsonMapper.constructType(typeArgument),
       true
     );
   }
 
-  protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+  protected ValueDeserializer<?> createJsonDeserializer(JavaType type) {
     return new JsonApiEntityModelDeserializer(type, jsonApiConfiguration);
   }
 

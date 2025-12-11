@@ -6,7 +6,7 @@ To enable the JSON:API media type you just need to add this module as a dependen
 [source,groovy,indent=0,role="primary"]
 .Gradle
 ----
-implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
+implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
 ----
 
 [source,xml,indent=0,role="secondary"]
@@ -15,9 +15,32 @@ implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>2.2.0</version>
+    <version>3.0.0</version>
 </dependency>
 ----
 
-The latest published snapshot version is `2.2.1-SNAPSHOT`. The 2.x.x stream is based on Spring Boot 3.x.x.
+The latest published snapshot version is `3.0.1-SNAPSHOT`.
+
+== Version Requirements
+
+This library requires:
+
+* *Spring Boot 4.x* (Spring Framework 7.x)
+* *Jackson 3.x* (tools.jackson.*)
+* *Java 17 or later*
+
+[NOTE]
+====
+Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+
+This is a breaking change if you:
+
+* **Use deprecated APIs**: All deprecated APIs have been **removed** (`withJsonApiVersionRendered()` and `withObjectMapperCustomizer()`)
+* Use custom Jackson serializers/deserializers with the old `com.fasterxml.jackson.*` package
+* Directly interact with the Jackson `ObjectMapper` API
+
+The Jackson 3 API uses the `tools.jackson.*` package namespace instead of `com.fasterxml.jackson.*`.
+
+See the <<migration-3-0-0,Migration Guide>> for detailed migration instructions.
+====
 

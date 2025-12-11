@@ -16,12 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.toedter.spring.hateoas.jsonapi.support.MovieRepresentationModelWithoutJsonApiType;
 import com.toedter.spring.hateoas.jsonapi.support.WebMvcMovieController;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +36,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * @author Kai Toedter
@@ -128,13 +127,7 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
         .withEmptyAttributesObjectSerialized(false)
         .withJsonApiIdNotSerializedForValue("-1")
         .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-        .withJsonApiCompliantLinks(false)
-        .withObjectMapperCustomizer(objectMapper ->
-          objectMapper.configure(
-            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-            true
-          )
-        );
+        .withJsonApiCompliantLinks(false);
     }
     // end::jsonApiConfig[]
   }

@@ -16,12 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
+import org.springframework.hateoas.Links;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+
 import java.util.Collection;
 import java.util.Map;
-import org.springframework.hateoas.Links;
 
 class JsonApiRelationshipSerializer
   extends AbstractJsonApiSerializer<JsonApiRelationship> {
@@ -39,8 +39,8 @@ class JsonApiRelationshipSerializer
   public void serialize(
     JsonApiRelationship value,
     JsonGenerator gen,
-    SerializerProvider provider
-  ) throws IOException {
+    SerializationContext provider
+  ) {
     Object data = value.getData();
     if (data != null) {
       if (data instanceof Collection) {
@@ -59,23 +59,27 @@ class JsonApiRelationshipSerializer
     // Handle data field serialization
     if (value.isDataExplicitlySet()) {
       // When data is explicitly set (even if null), always serialize it
-      gen.writeObjectField("data", data);
+      gen.writeName("data");
+      gen.writePOJO(data);
     } else if (data != null) {
       // When data is not explicitly set but is present, serialize it
-      gen.writeObjectField("data", data);
+      gen.writeName("data");
+      gen.writePOJO(data);
     }
     // If data is not explicitly set and is null, omit the field entirely
 
     // Handle links field serialization
     Links links = value.getLinks();
     if (links != null && !links.isEmpty()) {
-      gen.writeObjectField("links", links);
+      gen.writeName("links");
+      gen.writePOJO(links);
     }
 
     // Handle meta field serialization
     Map<String, Object> meta = value.getMeta();
     if (meta != null && !meta.isEmpty()) {
-      gen.writeObjectField("meta", meta);
+      gen.writeName("meta");
+      gen.writePOJO(meta);
     }
 
     gen.writeEndObject();

@@ -16,17 +16,16 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import java.util.List;
-import java.util.Map;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+
+import java.util.List;
+import java.util.Map;
 
 class JsonApiPagedModelDeserializer
-  extends AbstractJsonApiModelDeserializer<PagedModel<?>>
-  implements ContextualDeserializer {
+  extends AbstractJsonApiModelDeserializer<PagedModel<?>> {
 
   public JsonApiPagedModelDeserializer(
     JsonApiConfiguration jsonApiConfiguration
@@ -68,7 +67,7 @@ class JsonApiPagedModelDeserializer
     return PagedModel.of(resources, pageMetadata, links);
   }
 
-  protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+  protected ValueDeserializer<?> createJsonDeserializer(JavaType type) {
     return new JsonApiPagedModelDeserializer(type, jsonApiConfiguration);
   }
 }

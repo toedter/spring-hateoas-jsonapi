@@ -16,12 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +23,13 @@ import lombok.With;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 
 /**
  * JSON:API specific configuration.
@@ -79,26 +80,6 @@ public class JsonApiConfiguration {
   @With
   @Getter
   private final boolean lowerCasedTypeRendered;
-
-  /**
-   * Indicates if the JSON:API version is rendered.
-   * <p>
-   * If set to true, each rendered JSON:API document will start with
-   * </p>
-   * <pre>
-   * "jsonapi": {
-   *    "version": "1.1"
-   * }
-   * </pre>
-   *
-   * @param jsonApiVersionRendered The new value of this configuration's jsonApiVersionRendered
-   * @return The default is {@literal false}.
-   * @deprecated since 2.0.0, prefer {@link #jsonApiObject}
-   */
-  @With
-  @Getter
-  @Deprecated(since = "2.0.0")
-  private final boolean jsonApiVersionRendered;
 
   /**
    * Indicates if the JSON:API object is rendered.
@@ -221,13 +202,29 @@ public class JsonApiConfiguration {
   private final String jsonApiIdNotSerializedForValue;
 
   /**
-   * You can pass a lambda expression to customize the ObjectMapper used
-   * for serialization.
+   * A customizer function that allows modification of the {@link JsonMapper.Builder}
+   * used for JSON:API serialization and deserialization.
+   * <p>
+   * This customizer is applied when calling {@link #customize(JsonMapper.Builder)}
+   * and allows you to configure additional Jackson features, modules, or settings
+   * that are not directly exposed through this configuration class.
+   * </p>
+   * <p>
+   * Example usage:
+   * </p>
+   * <pre>
+   * JsonApiConfiguration config = new JsonApiConfiguration()
+   *     .withMapperCustomizer(builder -&gt; builder
+   *         .enable(SerializationFeature.INDENT_OUTPUT)
+   *         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
+   * </pre>
    *
-   * @param objectMapperCustomizer the ObjectMapper customizer
+   * @param mapperCustomizer A unary operator that takes a {@link JsonMapper.Builder} and returns
+   *                         a modified {@link JsonMapper.Builder}. If {@literal null}, no customization is applied.
+   * @return A clone of this object with the updated mapper customizer.
    */
   @With
-  private final Consumer<ObjectMapper> objectMapperCustomizer;
+  private final UnaryOperator<JsonMapper.Builder> mapperCustomizer;
 
   /**
    * JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
@@ -304,32 +301,28 @@ public class JsonApiConfiguration {
   @With(AccessLevel.PRIVATE)
   private final Map<Class<?>, String> typeForClass;
 
-  private ObjectMapper objectMapper;
+  /**
+   * Customizes the given {@link JsonMapper.Builder} with the registered callback.
+   *
+   * @param builder must not be {@literal null}.
+   * @return will never be {@literal null}.
+   */
+  public JsonMapper.Builder customize(JsonMapper.Builder builder) {
+    Assert.notNull(builder, "Mapper builder must not be null!");
+    return mapperCustomizer == null ? builder : mapperCustomizer.apply(builder);
+  }
 
   /**
-   * Customizes the object mapper if a customizer was set with
-   * {@literal withObjectMapperCustomizer}.
+   * Returns a configured {@link JsonMapper} instance.
+   * <p>
+   * This method creates a new {@link JsonMapper} with the customizations
+   * applied through the {@link #mapperCustomizer}.
+   * </p>
    *
-   * @param objectMapper the object mapper to be customized
-   * @return this JsonApiConfiguration
+   * @return A configured {@link JsonMapper} instance.
    */
-  public JsonApiConfiguration customize(ObjectMapper objectMapper) {
-    this.objectMapperCustomizer.accept(objectMapper);
-    return this;
-  }
-
-  /*
-     This method is used only internally by the deserializers
-     */
-  ObjectMapper getObjectMapper() {
-    return objectMapper;
-  }
-
-  /*
-      This method is used only internally by the deserializers
-     */
-  void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public JsonMapper getJsonMapper() {
+    return customize(JsonMapper.builder()).build();
   }
 
   /**
@@ -387,7 +380,6 @@ public class JsonApiConfiguration {
   public JsonApiConfiguration() {
     this.pluralizedTypeRendered = true;
     this.lowerCasedTypeRendered = true;
-    this.jsonApiVersionRendered = false;
     this.jsonApiObject = null;
     this.pageMetaAutomaticallyCreated = true;
     this.typeForClass = new LinkedHashMap<>();
@@ -399,6 +391,6 @@ public class JsonApiConfiguration {
     this.jsonApiCompliantLinks = true;
     this.linksNotUrlEncoded = new HashSet<>();
     this.linksAtResourceLevel = false;
-    this.objectMapperCustomizer = customObjectMapper -> {}; // Default to no action.
+    this.mapperCustomizer = UnaryOperator.identity();
   }
 }

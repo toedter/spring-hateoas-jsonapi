@@ -16,25 +16,23 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.KeyDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
-import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.KeyDeserializer;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.jsontype.TypeIdResolver;
+import tools.jackson.databind.jsontype.TypeResolverBuilder;
+import tools.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import tools.jackson.databind.jsontype.impl.TypeIdResolverBase;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiHandlerInitiator Unit Test")
@@ -45,8 +43,7 @@ class JsonApiHandlerInitiatorUnitTest {
   static class TestKeyDeserializer extends KeyDeserializer {
 
     @Override
-    public Object deserializeKey(String key, DeserializationContext ctxt)
-      throws IOException {
+    public Object deserializeKey(String key, DeserializationContext ctxt) {
       return null;
     }
 
@@ -56,12 +53,12 @@ class JsonApiHandlerInitiatorUnitTest {
   static class TestTypeIdResolver extends TypeIdResolverBase {
 
     @Override
-    public String idFromValue(Object value) {
+    public String idFromValue(tools.jackson.databind.DatabindContext context, Object value) {
       return null;
     }
 
     @Override
-    public String idFromValueAndType(Object value, Class<?> suggestedType) {
+    public String idFromValueAndType(tools.jackson.databind.DatabindContext context, Object value, Class<?> suggestedType) {
       return null;
     }
 
@@ -73,14 +70,10 @@ class JsonApiHandlerInitiatorUnitTest {
     public TestTypeIdResolver() {}
   }
 
-  static class TestTypeResolverBuilder
-    extends ObjectMapper.DefaultTypeResolverBuilder {
+  static class TestTypeResolverBuilder extends StdTypeResolverBuilder {
 
     public TestTypeResolverBuilder() {
-      super(
-        ObjectMapper.DefaultTyping.NON_FINAL,
-        LaissezFaireSubTypeValidator.instance
-      );
+      super();
     }
   }
 
@@ -94,26 +87,26 @@ class JsonApiHandlerInitiatorUnitTest {
 
   @Test
   void should_get_deserialzer_instance() {
-    JsonDeserializer<?> jsonDeserializer =
+    ValueDeserializer<?> valueDeserializer =
       jsonApiHandlerInstantiator.deserializerInstance(
         null,
         null,
         JsonApiEntityModelDeserializer.class
       );
-    assertThat(jsonDeserializer).isInstanceOf(
+    assertThat(valueDeserializer).isInstanceOf(
       JsonApiEntityModelDeserializer.class
     );
   }
 
   @Test
   void should_get_serialzer_instance() {
-    JsonSerializer<?> jsonSerializer =
+    ValueSerializer<?> valueSerializer =
       jsonApiHandlerInstantiator.serializerInstance(
         null,
         null,
         JsonApiEntityModelSerializer.class
       );
-    assertThat(jsonSerializer).isInstanceOf(JsonApiEntityModelSerializer.class);
+    assertThat(valueSerializer).isInstanceOf(JsonApiEntityModelSerializer.class);
   }
 
   @Test

@@ -16,22 +16,23 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
-import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 
 @Component
 @Slf4j
@@ -44,7 +45,7 @@ class MovieLoader {
   ) {
     return args -> {
       String moviesJson;
-      ObjectMapper mapper = new ObjectMapper();
+      JsonMapper mapper = JsonMapper.builder().build();
 
       File file = ResourceUtils.getFile(
         "classpath:static/movie-data/movies-250.json"

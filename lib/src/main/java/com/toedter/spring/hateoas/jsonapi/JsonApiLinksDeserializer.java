@@ -16,23 +16,20 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import java.io.IOException;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.deser.std.StdDeserializer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
-import org.springframework.lang.Nullable;
 
-class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
+class JsonApiLinksDeserializer extends StdDeserializer<Links> {
 
   private static final String HREFLANG = "hreflang";
   private static final String TITLE = "title";
@@ -43,28 +40,16 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
   private static final String NAME = "name";
 
   protected JsonApiLinksDeserializer() {
-    super(
-      TypeFactory.defaultInstance().constructCollectionLikeType(
-        List.class,
-        Link.class
-      )
-    );
+    super(Links.class);
   }
 
   @Override
-  @Nullable
-  public JsonDeserializer<Object> getContentDeserializer() {
-    return null;
-  }
-
-  @Override
-  public Links deserialize(JsonParser jp, DeserializationContext ctxt)
-    throws IOException {
+  public Links deserialize(JsonParser jp, DeserializationContext ctxt) {
     JavaType type = ctxt
       .getTypeFactory()
       .constructMapType(HashMap.class, String.class, Object.class);
     List<Link> links = new ArrayList<>();
-    Map<String, Object> jsonApiLinks = jp.getCodec().readValue(jp, type);
+    Map<String, Object> jsonApiLinks = jp.readValueAs(type);
     jsonApiLinks.forEach((rel, object) -> {
       if (object instanceof List) {
         for (Object linkObject : (List<?>) object) {
@@ -130,5 +115,23 @@ class JsonApiLinksDeserializer extends ContainerDeserializerBase<Links> {
       link = link.withType(linkedHashMap.get(TYPE).toString());
     }
     return link;
+  }
+
+  /**
+   * Helper method to deserialize links from a Map object.
+   * This is useful when links data is already parsed as a Map.
+   */
+  Links deserialize(Map<String, Object> jsonApiLinks) {
+    List<Link> links = new ArrayList<>();
+    jsonApiLinks.forEach((rel, object) -> {
+      if (object instanceof List) {
+        for (Object linkObject : (List<?>) object) {
+          deserializeLink(links, rel, linkObject);
+        }
+      } else {
+        deserializeLink(links, rel, object);
+      }
+    });
+    return Links.of(links);
   }
 }

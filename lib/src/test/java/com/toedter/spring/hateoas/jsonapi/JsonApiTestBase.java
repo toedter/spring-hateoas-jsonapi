@@ -16,16 +16,16 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.io.ClassPathResource;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import org.springframework.core.io.ClassPathResource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Kai Toedter
@@ -33,21 +33,59 @@ import org.springframework.core.io.ClassPathResource;
 public abstract class JsonApiTestBase {
 
   void compareWithFile(String json, String fileName) throws Exception {
-    String fileContent = readFile(fileName);
-    assertThat(json).isEqualTo(fileContent);
+    compareWithFile(json, fileName, true);
+  }
+
+  void compareWithFile(
+          String json,
+          String fileName,
+          boolean validateSchema
+  ) throws Exception {
+    File file = new ClassPathResource(fileName, getClass()).getFile();
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    JsonNode expectedJsonNode = jsonMapper.readValue(file, JsonNode.class);
+    JsonNode actualJsonNode = jsonMapper.readValue(json, JsonNode.class);
+    assertThat(actualJsonNode).isEqualTo(expectedJsonNode);
+
+//    if (validateSchema) {
+//      Set<ValidationMessage> errors = schema.validate(jsonNode);
+//      assertThat(errors).isEmpty();
+//    }
   }
 
   String readFile(String fileName) throws IOException {
     File file = new ClassPathResource(fileName, getClass()).getFile();
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonMapper.builder().configure(
-      MapperFeature.SORT_PROPERTIES_ALPHABETICALLY,
-      true
-    );
-    return objectMapper.readValue(file, JsonNode.class).toString();
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    return jsonMapper.readValue(file, JsonNode.class).toString();
+  }
+
+  JsonNode readFileAsJsonNode(String fileName) throws IOException {
+    File file = new ClassPathResource(fileName, getClass()).getFile();
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    return jsonMapper.readValue(file, JsonNode.class);
   }
 
   InputStream getStream(String fileName) throws IOException {
     return new ClassPathResource(fileName, getClass()).getInputStream();
   }
+
+  JsonMapper createJsonMapper(
+          JsonApiConfiguration jsonApiConfiguration
+  ) {
+    // Create ObjectProvider that supplies the given JsonApiConfiguration
+    ObjectProvider<JsonApiConfiguration> configProvider =
+            new ObjectProvider<>() {
+              @Override
+              public JsonApiConfiguration getObject() {
+                return jsonApiConfiguration;
+              }
+            };
+
+    JsonApiMediaTypeConfiguration configuration =
+            new JsonApiMediaTypeConfiguration(configProvider, null);
+    JsonMapper.Builder builder = JsonMapper.builder();
+    builder = configuration.configureJsonMapper(builder);
+    return builder.build();
+  }
+
 }

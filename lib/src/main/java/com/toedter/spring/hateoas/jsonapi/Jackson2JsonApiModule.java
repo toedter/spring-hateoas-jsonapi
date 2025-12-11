@@ -16,16 +16,16 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
+import tools.jackson.core.Version;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.module.SimpleModule;
 
 /**
  * Jackson {@link SimpleModule} for {@literal JSON:API} serializers and deserializers.
@@ -63,6 +63,13 @@ public class Jackson2JsonApiModule extends SimpleModule {
     addSerializer(Links.class, jsonApiLinksSerializer);
 
     addDeserializer(Links.class, new JsonApiLinksDeserializer());
+
+    // Register JsonApiRelationshipSerializer to convert relationship data to resource identifiers
+    if (jsonApiConfiguration != null) {
+      JsonApiRelationshipSerializer jsonApiRelationshipSerializer =
+        new JsonApiRelationshipSerializer(jsonApiConfiguration);
+      addSerializer(JsonApiRelationship.class, jsonApiRelationshipSerializer);
+    }
   }
 
   /**
@@ -72,6 +79,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
     this(null);
   }
 
+  // Jackson 3: Mixins with annotations to register custom serializers/deserializers
   @JsonSerialize(using = JsonApiEntityModelSerializer.class)
   @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
   abstract static class EntityModelMixin<T> extends EntityModel<T> {}

@@ -16,21 +16,22 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.KeyDeserializer;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
-import com.fasterxml.jackson.databind.introspect.Annotated;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
-import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.lang.Nullable;
+import tools.jackson.databind.DeserializationConfig;
+import tools.jackson.databind.KeyDeserializer;
+import tools.jackson.databind.SerializationConfig;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.cfg.HandlerInstantiator;
+import tools.jackson.databind.cfg.MapperConfig;
+import tools.jackson.databind.introspect.Annotated;
+import tools.jackson.databind.jsontype.TypeIdResolver;
+import tools.jackson.databind.jsontype.TypeResolverBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 class JsonApiHandlerInstantiator extends HandlerInstantiator {
 
@@ -86,12 +87,12 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
   }
 
   @Override
-  public JsonDeserializer<?> deserializerInstance(
+  public ValueDeserializer<?> deserializerInstance(
     DeserializationConfig config,
     Annotated annotated,
     Class<?> deserClass
   ) {
-    return (JsonDeserializer<?>) findInstance(deserClass);
+    return (ValueDeserializer<?>) findInstance(deserClass);
   }
 
   @Override
@@ -104,12 +105,12 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
   }
 
   @Override
-  public JsonSerializer<?> serializerInstance(
+  public ValueSerializer<?> serializerInstance(
     SerializationConfig config,
     Annotated annotated,
     Class<?> serClass
   ) {
-    return (JsonSerializer<?>) findInstance(serClass);
+    return (ValueSerializer<?>) findInstance(serClass);
   }
 
   @Override

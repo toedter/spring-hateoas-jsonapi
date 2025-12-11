@@ -16,13 +16,9 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import com.fasterxml.jackson.databind.ser.ContainerSerializer;
-import org.springframework.lang.Nullable;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
+abstract class AbstractJsonApiSerializer<T> extends StdSerializer<T> {
 
   protected AbstractJsonApiSerializer(Class<T> t) {
     super(t);
@@ -30,30 +26,5 @@ abstract class AbstractJsonApiSerializer<T> extends ContainerSerializer<T> {
 
   protected AbstractJsonApiSerializer(Class<?> t, boolean dummy) {
     super(t, dummy);
-  }
-
-  @Override
-  @Nullable
-  public JavaType getContentType() {
-    return null;
-  }
-
-  @Override
-  @Nullable
-  public JsonSerializer<?> getContentSerializer() {
-    return null;
-  }
-
-  @Override
-  public boolean hasSingleElement(T value) {
-    return false;
-  }
-
-  @Override
-  @Nullable
-  protected ContainerSerializer<?> _withValueTypeSerializer(
-    TypeSerializer vts
-  ) {
-    return null;
   }
 }

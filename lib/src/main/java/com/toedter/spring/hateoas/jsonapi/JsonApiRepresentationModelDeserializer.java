@@ -16,17 +16,16 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import java.util.List;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.util.Assert;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+
+import java.util.List;
 
 class JsonApiRepresentationModelDeserializer
-  extends AbstractJsonApiModelDeserializer<RepresentationModel<?>>
-  implements ContextualDeserializer {
+  extends AbstractJsonApiModelDeserializer<RepresentationModel<?>> {
 
   public static final String CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL =
     "Cannot deserialize input to RepresentationModel";
@@ -70,7 +69,7 @@ class JsonApiRepresentationModelDeserializer
     );
   }
 
-  protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+  protected ValueDeserializer<?> createJsonDeserializer(JavaType type) {
     return new JsonApiRepresentationModelDeserializer(
       type,
       jsonApiConfiguration

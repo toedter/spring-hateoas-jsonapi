@@ -17,14 +17,6 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import lombok.extern.java.Log;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -32,13 +24,21 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Log
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
   extends AbstractJsonApiSerializer<T> {
 
   private final transient JsonApiConfiguration jsonApiConfiguration;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
   private static class JsonApiDocumentWithoutSerializedData
     extends JsonApiDocument {
@@ -67,14 +67,12 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
   ) {
     super(t, false);
     this.jsonApiConfiguration = jsonApiConfiguration;
-    this.objectMapper = new ObjectMapper();
-    jsonApiConfiguration.customize(objectMapper);
+    this.jsonMapper = jsonApiConfiguration.getJsonMapper();
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public void serialize(T value, JsonGenerator gen, SerializerProvider provider)
-    throws IOException {
+  public void serialize(T value, JsonGenerator gen, SerializationContext provider) {
     CollectionModel<?> collectionModel = null;
     if (value instanceof JsonApiModel jsonApiModel) {
       Object content = jsonApiModel.getContent();
@@ -91,7 +89,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     if (collectionModel != null) {
       data = JsonApiData.extractCollectionContent(
         collectionModel,
-        objectMapper,
+        jsonMapper,
         jsonApiConfiguration,
         null,
         false
@@ -108,7 +106,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(
           content,
           true,
-          objectMapper,
+          jsonMapper,
           jsonApiConfiguration,
           null
         );
@@ -120,7 +118,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(
           value,
           true,
-          objectMapper,
+          jsonMapper,
           jsonApiConfiguration,
           null
         );
@@ -143,10 +141,6 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
       .withData(data)
       .withLinks(documentLevelLinks)
       .withIncluded(getIncluded(value));
-
-    if (jsonApiConfiguration.isJsonApiVersionRendered()) {
-      doc = doc.withJsonapi(new JsonApiObject(true));
-    }
 
     JsonApiObject jsonApiObject = jsonApiConfiguration.getJsonApiObject();
     if (
@@ -252,7 +246,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
         CollectionModel.of(includedEntities);
       return JsonApiData.extractCollectionContent(
         collectionModel,
-        objectMapper,
+        jsonMapper,
         jsonApiConfiguration,
         jsonApiModel.getSparseFieldsets(),
         true

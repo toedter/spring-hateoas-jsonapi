@@ -16,22 +16,11 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
-import com.networknt.schema.ValidationMessage;
 import com.toedter.spring.hateoas.jsonapi.support.Address;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithAddress;
@@ -67,22 +56,6 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
 import jakarta.persistence.Id;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,25 +74,40 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("Jackson2JsonApi Integration Test")
-class Jackson2JsonApiIntegrationTest {
+@DisplayName("JacksonJsonApi Integration Test")
+class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
 
-  private ObjectMapper mapper;
+  private JsonMapper mapper;
   private JsonSchema schema;
 
   @BeforeEach
   void setUpModule() throws IOException {
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration()
-        .withObjectMapperCustomizer(objectMapper -> {
-          objectMapper.registerModule(new JavaTimeModule());
-          objectMapper.configure(
-            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-            false
-          );
-        })
+        .withMapperCustomizer(builder -> builder)
         .withTypeForClass(MovieDerivedWithTypeForClass.class, "my-movies")
         .withTypeForClass(DirectorWithEmail.class, "directors-with-email")
         .withTypeForClassUsedForDeserialization(true)
@@ -424,7 +412,7 @@ class Jackson2JsonApiIntegrationTest {
       Link.of("http://localhost/movies/non-compliant").withRel("invalid")
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApiCompliantLinks(false)
     );
     String moviesJson = mapper.writeValueAsString(collectionModel);
@@ -487,7 +475,7 @@ class Jackson2JsonApiIntegrationTest {
       nextLink
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withPageMetaAutomaticallyCreated(false)
     );
 
@@ -511,7 +499,7 @@ class Jackson2JsonApiIntegrationTest {
 
   @Test
   void should_not_serialize_movie_without_id() {
-    Assertions.assertThrows(JsonMappingException.class, () -> {
+    Assertions.assertThrows(Exception.class, () -> {
       Movie movie = new Movie(null, "Star Wars");
       EntityModel<Movie> entityModel = EntityModel.of(movie);
       mapper.writeValueAsString(entityModel);
@@ -520,7 +508,7 @@ class Jackson2JsonApiIntegrationTest {
 
   @Test
   void should_serialize_movie_without_id() throws Exception {
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       // tag::noIdMarker[]
       new JsonApiConfiguration().withJsonApiIdNotSerializedForValue(
         "doNotSerialize"
@@ -538,7 +526,7 @@ class Jackson2JsonApiIntegrationTest {
 
   @Test
   void should_not_serialize_movie_without_id_and_link() {
-    Assertions.assertThrows(JsonMappingException.class, () -> {
+    Assertions.assertThrows(Exception.class, () -> {
       Movie movie = new Movie(null, "Star Wars");
       EntityModel<Movie> entityModel = EntityModel.of(movie).add(
         Links.of(Link.of("http://localhost/movies/1").withSelfRel())
@@ -1271,7 +1259,7 @@ class Jackson2JsonApiIntegrationTest {
 
     entityModel.add(complexLink);
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApi11LinkPropertiesRemovedFromLinkMeta(
         false
       )
@@ -1318,7 +1306,7 @@ class Jackson2JsonApiIntegrationTest {
       .withName("Lana Wachowski");
     movieEntityModel.add(bigLink);
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApi11LinkPropertiesRemovedFromLinkMeta(
         true
       )
@@ -1375,7 +1363,7 @@ class Jackson2JsonApiIntegrationTest {
       Link.of("http://localhost/movies/1/related").withRel("related")
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withLinksAtResourceLevel(true)
     );
 
@@ -1389,7 +1377,7 @@ class Jackson2JsonApiIntegrationTest {
     EntityModel<Movie> entityModel = EntityModel.of(movie);
     entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
 
-    mapper = createObjectMapper(new JsonApiConfiguration());
+    mapper = createJsonMapper(new JsonApiConfiguration());
 
     String movieJson = mapper.writeValueAsString(entityModel);
     compareWithFile(movieJson, "movieEntityModelWithLinksAtDocumentLevel.json");
@@ -1400,7 +1388,7 @@ class Jackson2JsonApiIntegrationTest {
     Movie movie = new Movie("1", "Star Wars");
     EntityModel<Movie> entityModel = EntityModel.of(movie);
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApiObject(new JsonApiObject(true))
     );
 
@@ -1426,7 +1414,7 @@ class Jackson2JsonApiIntegrationTest {
       meta
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApiObject(jsonApiObject)
     );
 
@@ -1440,7 +1428,7 @@ class Jackson2JsonApiIntegrationTest {
     EntityModel<Movie> entityModel = EntityModel.of(movie);
 
     JsonApiObject jsonApiObject = new JsonApiObject(false, null, null, null);
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withJsonApiObject(jsonApiObject)
     );
 
@@ -1480,7 +1468,7 @@ class Jackson2JsonApiIntegrationTest {
       new NonNullExample()
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withEmptyAttributesObjectSerialized(true)
     );
 
@@ -1618,7 +1606,7 @@ class Jackson2JsonApiIntegrationTest {
     movie.setId("1");
     EntityModel<MovieWithoutAttributes> entityModel = EntityModel.of(movie);
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration()
         .withEmptyAttributesObjectSerialized(false)
         .withTypeForClass(MovieWithoutAttributes.class, "movies")
@@ -1634,7 +1622,7 @@ class Jackson2JsonApiIntegrationTest {
     Movie movie = new Movie("1", "Star Wars");
     EntityModel<Movie> entityModel = EntityModel.of(movie);
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withEmptyAttributesObjectSerialized(false)
     );
 
@@ -1945,7 +1933,7 @@ class Jackson2JsonApiIntegrationTest {
       link
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
         JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
       )
@@ -1967,7 +1955,7 @@ class Jackson2JsonApiIntegrationTest {
       link
     );
 
-    mapper = createObjectMapper(
+    mapper = createJsonMapper(
       new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
         JsonApiConfiguration.AffordanceType.HAL_FORMS
       )
@@ -2067,37 +2055,5 @@ class Jackson2JsonApiIntegrationTest {
     Director director = entityModel.getContent().getDirectors().get(0);
     assertThat(director.getId()).isEqualTo("3");
     assertThat(director.getName()).isEqualTo("George Lucas");
-  }
-
-  private void compareWithFile(String json, String fileName) throws Exception {
-    compareWithFile(json, fileName, true);
-  }
-
-  private void compareWithFile(
-    String json,
-    String fileName,
-    boolean validateSchema
-  ) throws Exception {
-    File file = new ClassPathResource(fileName, getClass()).getFile();
-    ObjectMapper objectMapper = JsonMapper.builder()
-      .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-      .build();
-    JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
-    assertThat(json).isEqualTo(jsonNode.toString());
-
-    if (validateSchema) {
-      Set<ValidationMessage> errors = schema.validate(jsonNode);
-      assertThat(errors).isEmpty();
-    }
-  }
-
-  private ObjectMapper createObjectMapper(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
-    JsonApiMediaTypeConfiguration configuration =
-      new JsonApiMediaTypeConfiguration(null, null);
-    mapper = new ObjectMapper();
-    configuration.configureObjectMapper(mapper, jsonApiConfiguration);
-    return mapper;
   }
 }

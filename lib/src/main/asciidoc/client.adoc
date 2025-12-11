@@ -42,17 +42,60 @@ of JSON:API specific things like relationships only works with Spring HATEOAS re
 
 More examples for deserialization of relationships you find in the section <<server-deserialization>>.
 
-[[resttemplate]]
-== RestTemplate
+[[rest-clients]]
+== REST Clients
 
 If you want to write a client that deserializes server responses into Java objects,
-you can use RestTemplate, but with a little extra configuration.
-The following example shows how such a configuration can look like:
+you can use Spring's HTTP client APIs with JSON:API support.
+
+[[restclient]]
+=== RestClient (Spring Boot 4+)
+
+For Spring Boot 4 and later, use `RestClient` (which replaces `RestTemplate`):
+
+[source,java, indent=0]
+----
+@Configuration
+public class JsonApiClientConfig {
+
+    @Bean
+    public RestClient jsonApiRestClient(JsonApiConfiguration jsonApiConfiguration) {
+        JsonMapper jsonMapper = jsonApiConfiguration.getJsonMapper();
+
+        // Register JSON:API module
+        Jackson2JsonApiModule jackson2JsonApiModule =
+            new Jackson2JsonApiModule(jsonApiConfiguration);
+        jsonMapper.registerModule(jackson2JsonApiModule);
+
+        return RestClient.builder()
+            .baseUrl("http://localhost:8080")
+            .defaultHeader("Accept", "application/vnd.api+json")
+            .messageConverters(converters -> {
+                MappingJackson2HttpMessageConverter converter =
+                    new MappingJackson2HttpMessageConverter();
+                converter.setObjectMapper(jsonMapper);
+                converter.setSupportedMediaTypes(
+                    List.of(MediaType.parseMediaType("application/vnd.api+json"))
+                );
+                converters.add(0, converter);
+            })
+            .build();
+    }
+}
+----
+
+[[resttemplate]]
+=== RestTemplate (Legacy)
+
+For older Spring Boot versions, you can use RestTemplate with JSON:API configuration:
 
 [source,java, indent=0]
 ----
 include::{test-dir}/RestTemplateIntegrationTest.java[tags=restTemplateConfig]
 ----
+
+NOTE: `RestTemplate` is in maintenance mode and will be removed in Spring Framework 7.
+For new applications using Spring Boot 4+, use `RestClient` instead.
 
 [[postWithNoId]]
 === Creating POST requests without serialized JSON:API id
@@ -64,12 +107,12 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 For example, if you specify a configuration like
 [source,java, indent=0]
 ----
-include::{test-dir}/Jackson2JsonApiIntegrationTest.java[tags=noIdMarker]
+include::{test-dir}/JacksonJsonApiIntegrationTest.java[tags=noIdMarker]
 ----
 and create a Movie DTO with this id, like
 [source,java, indent=0]
 ----
-include::{test-dir}/Jackson2JsonApiIntegrationTest.java[tags=noIdMovie]
+include::{test-dir}/JacksonJsonApiIntegrationTest.java[tags=noIdMovie]
 ----
 the resulting JSON would look like
 [source, json]

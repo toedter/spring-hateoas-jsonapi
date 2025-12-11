@@ -16,42 +16,41 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.mediatype.JacksonHelper;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.type.TypeFactory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 abstract class AbstractJsonApiModelDeserializer<T>
-  extends ContainerDeserializerBase<T>
-  implements ContextualDeserializer {
+  extends StdDeserializer<T> {
 
-  protected final ObjectMapper objectMapper;
+  protected final JsonMapper jsonMapper;
   protected final JavaType contentType;
   protected final transient JsonApiConfiguration jsonApiConfiguration;
 
-  private final ObjectMapper plainObjectMapper;
+  private final JsonMapper plainJsonMapper;
 
   AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     this(
-      TypeFactory.defaultInstance().constructSimpleType(
+      TypeFactory.createDefaultInstance().constructSimpleType(
         JsonApiDocument.class,
         new JavaType[0]
       ),
@@ -66,15 +65,15 @@ abstract class AbstractJsonApiModelDeserializer<T>
     super(contentType);
     this.contentType = contentType;
     this.jsonApiConfiguration = jsonApiConfiguration;
-    this.objectMapper = jsonApiConfiguration.getObjectMapper();
+    this.jsonMapper = jsonApiConfiguration.getJsonMapper();
 
-    plainObjectMapper = new ObjectMapper();
-    jsonApiConfiguration.customize(plainObjectMapper);
+    plainJsonMapper = JsonMapper.builder()
+            .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+            .build();
   }
 
   @Override
-  public T deserialize(JsonParser p, DeserializationContext ctxt)
-    throws IOException {
+  public T deserialize(JsonParser p, DeserializationContext ctxt) {
     boolean isEntityModelCollection = false;
     if (
       this instanceof JsonApiPagedModelDeserializer ||
@@ -85,7 +84,7 @@ abstract class AbstractJsonApiModelDeserializer<T>
         isEntityModelCollection = true;
       }
     }
-    JsonApiDocument doc = p.getCodec().readValue(p, JsonApiDocument.class);
+    JsonApiDocument doc = p.readValueAs(JsonApiDocument.class);
     if (doc.getData() instanceof Collection<?>) {
       final boolean isEntityModelCollectionFinal = isEntityModelCollection;
       List<HashMap<String, Object>> collection = (List<
@@ -121,19 +120,9 @@ abstract class AbstractJsonApiModelDeserializer<T>
     );
   }
 
-  @Override
-  public JavaType getContentType() {
-    return this.contentType;
-  }
 
   @Override
-  @Nullable
-  public JsonDeserializer<Object> getContentDeserializer() {
-    return null;
-  }
-
-  @Override
-  public JsonDeserializer<?> createContextual(
+  public ValueDeserializer<?> createContextual(
     DeserializationContext ctxt,
     @Nullable BeanProperty property
   ) {
@@ -176,22 +165,22 @@ abstract class AbstractJsonApiModelDeserializer<T>
           );
         }
         if (clazz != null) {
-          rootType = objectMapper.constructType(clazz);
+          rootType = jsonMapper.constructType(clazz);
         }
       }
     }
 
     if (attributes != null) {
-      // we have to use the plain object mapper to not get in conflict with links deserialization
-      objectFromProperties = plainObjectMapper.convertValue(
+      // we have to use the plain json mapper to not get in conflict with links deserialization
+      objectFromProperties = plainJsonMapper.convertValue(
         attributes,
         rootType
       );
     } else {
       try {
         if (useDataForCreation) {
-          // we have to use the "real" object mapper due to polymorphic deserialization using Jackson
-          objectFromProperties = objectMapper.convertValue(data, rootType);
+          // we have to use the "real" json mapper due to polymorphic deserialization using Jackson
+          objectFromProperties = jsonMapper.convertValue(data, rootType);
         } else {
           if (clazz == null) {
             clazz = rootType.getRawClass();
@@ -215,12 +204,12 @@ abstract class AbstractJsonApiModelDeserializer<T>
     );
 
     if (wrapInEntityModel) {
-      Links links = this.objectMapper.convertValue(
-        data.get("links"),
-        Links.class
-      );
-      if (links == null) {
-        links = Links.NONE;
+      Links links = Links.NONE;
+      Object linksData = data.get("links");
+      if (linksData != null && linksData instanceof Map) {
+        // Use JsonApiLinksDeserializer to properly deserialize links
+        JsonApiLinksDeserializer linksDeserializer = new JsonApiLinksDeserializer();
+        links = linksDeserializer.deserialize((Map<String, Object>) linksData);
       }
       JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =
         new JsonApiEntityModelDeserializer(jsonApiConfiguration);
@@ -246,5 +235,5 @@ abstract class AbstractJsonApiModelDeserializer<T>
     JsonApiDocument doc
   );
 
-  protected abstract JsonDeserializer<?> createJsonDeserializer(JavaType type);
+  protected abstract ValueDeserializer<?> createJsonDeserializer(JavaType type);
 }

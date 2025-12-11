@@ -16,26 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
@@ -48,6 +32,23 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
 
 @Getter(onMethod_ = { @JsonProperty })
 @With(AccessLevel.PACKAGE)
@@ -109,7 +110,7 @@ class JsonApiData {
 
   public static List<JsonApiData> extractCollectionContent(
     CollectionModel<?> collectionModel,
-    ObjectMapper objectMapper,
+    JsonMapper jsonMapper,
     JsonApiConfiguration jsonApiConfiguration,
     @Nullable Map<String, Collection<String>> sparseFieldsets,
     boolean eliminateDuplicates
@@ -120,7 +121,7 @@ class JsonApiData {
         Optional<JsonApiData> jsonApiData = extractContent(
           entity,
           false,
-          objectMapper,
+          jsonMapper,
           jsonApiConfiguration,
           sparseFieldsets
         );
@@ -135,7 +136,7 @@ class JsonApiData {
         Optional<JsonApiData> jsonApiData = extractContent(
           entity,
           false,
-          objectMapper,
+          jsonMapper,
           jsonApiConfiguration,
           sparseFieldsets
         );
@@ -148,7 +149,7 @@ class JsonApiData {
   public static Optional<JsonApiData> extractContent(
     @Nullable Object content,
     boolean isSingleEntity,
-    ObjectMapper objectMapper,
+    JsonMapper jsonMapper,
     JsonApiConfiguration jsonApiConfiguration,
     @Nullable Map<String, Collection<String>> sparseFieldsets
   ) {
@@ -236,10 +237,10 @@ class JsonApiData {
     JsonApiResourceIdentifier.ResourceField typeField =
       JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
-    JavaType mapType = objectMapper
+    JavaType mapType = jsonMapper
       .getTypeFactory()
       .constructParametricType(Map.class, String.class, Object.class);
-    Map<String, Object> attributeMap = objectMapper.convertValue(
+    Map<String, Object> attributeMap = jsonMapper.convertValue(
       content,
       mapType
     );

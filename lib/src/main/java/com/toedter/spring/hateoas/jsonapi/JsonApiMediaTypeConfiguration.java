@@ -16,11 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -28,6 +23,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Spring configuration for JSON:API support.
@@ -54,39 +54,20 @@ public class JsonApiMediaTypeConfiguration
 
   /*
    * (non-Javadoc)
-   * @see org.springframework.hateoas.config.HypermediaMappingInformation#getJacksonModule()
+   * @see org.springframework.hateoas.config.HypermediaMappingInformation#configureJsonMapper(tools.jackson.databind.json.JsonMapper.Builder)
    */
   @Override
-  public Module getJacksonModule() {
-    return new Jackson2JsonApiModule();
-  }
+  public JsonMapper.Builder configureJsonMapper(JsonMapper.Builder builder) {
 
-  /*
-   * (non-Javadoc)
-   * @see org.springframework.hateoas.config.HypermediaMappingInformation#configureObjectMapper(com.fasterxml.jackson.databind.
-   * ObjectMapper)
-   */
-  @Override
-  @NonNull
-  public ObjectMapper configureObjectMapper(@NonNull ObjectMapper mapper) {
-    return this.configureObjectMapper(
-      mapper,
-      configuration.getIfAvailable(JsonApiConfiguration::new)
-    );
-  }
+    JsonApiConfiguration jsonApiConfiguration = configuration != null
+      ? configuration.getIfAvailable(JsonApiConfiguration::new)
+      : new JsonApiConfiguration();
 
-  @NonNull
-  ObjectMapper configureObjectMapper(
-    @NonNull ObjectMapper mapper,
-    JsonApiConfiguration configuration
-  ) {
-    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    mapper.registerModule(new Jackson2JsonApiModule(configuration));
-    mapper.setHandlerInstantiator(
-      new JsonApiHandlerInstantiator(configuration, beanFactory)
-    );
-    configuration.customize(mapper);
-    configuration.setObjectMapper(mapper);
-    return mapper;
+    builder = builder
+      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+      .handlerInstantiator(new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory))
+      .addModule(new Jackson2JsonApiModule(jsonApiConfiguration));
+
+    return jsonApiConfiguration.customize(builder);
   }
 }

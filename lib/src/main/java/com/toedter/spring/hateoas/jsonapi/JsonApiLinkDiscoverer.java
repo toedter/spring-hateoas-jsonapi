@@ -16,17 +16,17 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.InputStream;
+import java.util.Optional;
+
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 /**
  * {@link LinkDiscoverer} implementation based on JSON:API link structure.
@@ -35,17 +35,17 @@ import org.springframework.http.MediaType;
  */
 public class JsonApiLinkDiscoverer implements LinkDiscoverer {
 
-  private final ObjectMapper mapper;
+  private final JsonMapper mapper;
 
   /**
    * Constructor for {@link MediaTypes#JSON_API}.
    */
   public JsonApiLinkDiscoverer() {
-    this.mapper = new ObjectMapper();
-    new JsonApiMediaTypeConfiguration(null, null).configureObjectMapper(
-      this.mapper,
-      new JsonApiConfiguration()
-    );
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(null, null);
+    JsonApiConfiguration jsonApiConfig = new JsonApiConfiguration();
+    JsonMapper.Builder builder = JsonMapper.builder();
+    builder = config.configureJsonMapper(builder);
+    this.mapper = jsonApiConfig.customize(builder).build();
   }
 
   /*
@@ -128,7 +128,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
         return links;
       }
       return Links.NONE;
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new IllegalArgumentException("Cannot get links from JSON", e);
     }
   }
@@ -150,7 +150,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
         return links;
       }
       return Links.NONE;
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new IllegalArgumentException(
         "Cannot get links from InputStream",
         e

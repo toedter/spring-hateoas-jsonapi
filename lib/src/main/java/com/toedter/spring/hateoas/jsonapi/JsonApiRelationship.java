@@ -21,14 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
@@ -38,6 +30,14 @@ import org.springframework.hateoas.Links;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * This class is used to build a JSON:API presentation model that uses relationships.
  *
@@ -45,7 +45,6 @@ import org.springframework.util.Assert;
  */
 
 @JsonPropertyOrder({ "data", "links", "meta" })
-@JsonSerialize(using = JsonApiRelationshipSerializer.class)
 @Getter
 class JsonApiRelationship {
 
@@ -70,11 +69,10 @@ class JsonApiRelationship {
   @JsonIgnore
   private final boolean dataExplicitlySet;
 
-  @JsonCreator
   JsonApiRelationship(
-    @JsonProperty("data") @Nullable Object data,
-    @JsonProperty("links") @Nullable Links links,
-    @JsonProperty("meta") @Nullable Map<String, Object> meta,
+    @Nullable Object data,
+    @Nullable Links links,
+    @Nullable Map<String, Object> meta,
     @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers
   ) {
     this(data, links, meta, metaForResourceIdentifiers, true);

@@ -16,17 +16,18 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.IanaLinkRelations;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")
@@ -36,7 +37,6 @@ class JsonApiConfigurationUnitTest {
   void should_initialize_defaults() {
     assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
     assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
-    assertThat(new JsonApiConfiguration().isJsonApiVersionRendered()).isFalse();
     assertThat(
       new JsonApiConfiguration().isPageMetaAutomaticallyCreated()
     ).isTrue();
@@ -109,21 +109,18 @@ class JsonApiConfigurationUnitTest {
 
   @Test
   void should_customize_object_mapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.disable(
-      DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-    );
-    new JsonApiConfiguration()
-      .withObjectMapperCustomizer(mapper ->
-        objectMapper.enable(
-          DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-        )
+    JsonMapper.Builder builder = JsonMapper.builder()
+      .disable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+
+    JsonMapper jsonMapper = new JsonApiConfiguration()
+      .withMapperCustomizer(b ->
+        b.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
       )
-      .customize(objectMapper);
+      .customize(builder)
+      .build();
+
     assertThat(
-      objectMapper.isEnabled(
-        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-      )
+      jsonMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
     ).isTrue();
   }
 

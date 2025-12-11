@@ -16,21 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Affordance;
@@ -43,10 +29,24 @@ import org.springframework.hateoas.QueryParameter;
 import org.springframework.hateoas.mediatype.hal.forms.HalFormsTemplateBuilderWrapper;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriUtils;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
-  private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static final JsonMapper jsonMapper = JsonMapper.builder().build();
   private JsonApiConfiguration.AffordanceType affordanceType;
   private boolean removeHateoasLinkPropertiesFromMeta;
   private transient Set<LinkRelation> linksNotUrlEncoded = new HashSet<>();
@@ -70,8 +70,8 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
   public void serialize(
     Links value,
     JsonGenerator gen,
-    SerializerProvider provider
-  ) throws IOException {
+    SerializationContext provider
+  ) {
     Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
     for (Link link : value) {
       linksMap
@@ -93,41 +93,46 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     gen.writeEndObject();
   }
 
-  private void serializeLinkWithRelation(JsonGenerator gen, Link link)
-    throws IOException {
+  private void serializeLinkWithRelation(JsonGenerator gen, Link link) {
     if (isSimpleLink(link)) {
-      gen.writeStringField(link.getRel().value(), uriEncodeLinkHref(link));
+      gen.writeName(link.getRel().value());
+      gen.writeString(uriEncodeLinkHref(link));
     } else {
-      gen.writeObjectFieldStart(link.getRel().value());
+      gen.writeName(link.getRel().value());
+      gen.writeStartObject();
       writeComplexLink(gen, link);
       gen.writeEndObject();
     }
   }
 
-  private void writeComplexLink(JsonGenerator gen, Link link)
-    throws IOException {
-    gen.writeStringField("href", uriEncodeLinkHref(link));
+  private void writeComplexLink(JsonGenerator gen, Link link) {
+    gen.writeName("href");
+    gen.writeString(uriEncodeLinkHref(link));
     Map<String, Object> attributes = getAttributes(link);
     if (link.getTitle() != null) {
-      gen.writeStringField("title", link.getTitle());
+      gen.writeName("title");
+      gen.writeString(link.getTitle());
       if (this.removeHateoasLinkPropertiesFromMeta) {
         attributes.remove("title");
       }
     }
     if (link.getType() != null) {
-      gen.writeStringField("type", link.getType());
+      gen.writeName("type");
+      gen.writeString(link.getType());
       if (this.removeHateoasLinkPropertiesFromMeta) {
         attributes.remove("type");
       }
     }
     if (link.getHreflang() != null) {
-      gen.writeStringField("hreflang", link.getHreflang());
+      gen.writeName("hreflang");
+      gen.writeString(link.getHreflang());
       if (this.removeHateoasLinkPropertiesFromMeta) {
         attributes.remove("hreflang");
       }
     }
 
-    gen.writeObjectField("meta", attributes);
+    gen.writeName("meta");
+    gen.writePOJO(attributes);
   }
 
   private boolean isSimpleLink(Link link) {
@@ -141,7 +146,7 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
   }
 
   private Map<String, Object> getAttributes(Link link) {
-    final Map<String, Object> attributeMap = objectMapper.convertValue(
+    final Map<String, Object> attributeMap = jsonMapper.convertValue(
       link,
       Map.class
     );

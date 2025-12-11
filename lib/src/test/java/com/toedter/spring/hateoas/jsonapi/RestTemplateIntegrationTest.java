@@ -31,18 +31,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.client.MockRestServiceServer.createServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithDirectors;
-import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -65,6 +55,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.File;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.MockRestServiceServer.createServer;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
  * Integration tests for {@link TypeReferences}.
@@ -179,12 +178,8 @@ class RestTemplateIntegrationTest {
 
   private String createJsonStringFromFile(String fileName) throws Exception {
     File file = new ClassPathResource(fileName, getClass()).getFile();
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonMapper.builder().configure(
-      MapperFeature.SORT_PROPERTIES_ALPHABETICALLY,
-      true
-    );
-    JsonNode jsonNode = objectMapper.readValue(file, JsonNode.class);
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    JsonNode jsonNode = jsonMapper.readValue(file, JsonNode.class);
     return jsonNode.toString();
   }
 }

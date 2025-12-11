@@ -11,7 +11,6 @@ Currently, you can configure
 [%autowidth]
 |===
 | *Configuration* | *Descriptions* | *Default*
-| JsonApiVersionRendered | the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead | false
 | JsonApiObject | Here you can set a JSON:API object do set all https://jsonapi.org/format/#document-jsonapi-object[allowed properties], like version, ext, profile and meta. | not set
 | PluralizedTypeRendered | JSON:API types should be rendered as pluralized or non pluralized class names. | pluralized
 | LowerCasedTypeRendered | JSON:API types should be rendered as lower case or original class names. | lower case
@@ -22,7 +21,7 @@ should get the JSON:API type of the superclass. | not set
 | TypeForClassUsedForDeserialization | if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases. | true
 | EmptyAttributesObjectSerialized | Empty attributes should be serialized as an empty JSON object, like `"attributes": {}`. If set to false, no "attributes" key is serialized if attributes are empty. | true
 | JsonApiIdNotSerializedForValue | A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>. | not set
-| ObjectMapperCustomizer | A lambda expression to add additional configuration to the Jackson `ObjectMapper` used for serialization. | not set
+| MapperCustomizer | A lambda expression (`UnaryOperator<JsonMapper.Builder>`) to add additional configuration to the Jackson 3 `JsonMapper.Builder` used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <<mapper-customization>>. | not set
 [[links-configuration]]
 | JsonApiCompliantLinks | The following links are JSON:API compliant: `self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`, for
 https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` for https://jsonapi.org/format/#document-resource-object-links[resource links].
@@ -51,7 +50,7 @@ Here is an example of how you would implement a JSON:API configuration:
 include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
 ----
 
-=== Link Placement Configuration Example
+== Link Placement Configuration Example
 
 To configure links to appear at the resource level instead of the document level:
 
@@ -72,4 +71,85 @@ public class JsonApiConfig {
 When this configuration is enabled, links from EntityModel will be placed inside the resource object
 in the "data" section instead of at the document top level. See <<link-placement>> for more details
 and examples.
+
+[[json-mapper-customization]]
+== JSON Mapper Customization
+
+Starting with version 2.2.0, this library uses *Jackson 3* (package `tools.jackson.*` instead of `com.fasterxml.jackson.*`).
+You can customize the Jackson `JsonMapper` used for JSON:API serialization and deserialization through the
+`mapperCustomizer` configuration option.
+
+The customizer is a `UnaryOperator<JsonMapper.Builder>` that receives the Jackson `JsonMapper.Builder` and
+returns a modified builder. This allows you to:
+
+* Enable or disable Jackson serialization/deserialization features
+* Register custom modules
+* Configure date/time formats
+* Add custom serializers or deserializers
+* Enable or disable pretty printing
+
+=== Example: Basic Mapper Customization
+
+[source, java, indent=0]
+----
+@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder ->
+                builder.enable(SerializationFeature.INDENT_OUTPUT)  // <1>
+            );
+    }
+}
+----
+<1> Enable pretty-printed JSON output
+
+=== Example: Multiple Customizations
+
+[source, java, indent=0]
+----
+@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder -> builder
+                .enable(SerializationFeature.INDENT_OUTPUT)  // <1>
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)  // <2>
+                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)  // <3>
+            );
+    }
+}
+----
+<1> Enable pretty-printed JSON output
+<2> Don't fail when encountering unknown properties during deserialization
+<3> Serialize dates as timestamps instead of ISO-8601 strings
+
+[NOTE]
+====
+*Jackson 3 Migration Notes:*
+
+* Use `tools.jackson.databind.*` packages instead of `com.fasterxml.jackson.databind.*`
+* `JsonMapper` replaces `ObjectMapper` as the preferred API
+* Serializers and deserializers must use Jackson 3 base classes from `tools.jackson.*`
+* Annotations remain in `com.fasterxml.jackson.annotation.*` (unchanged)
+====
+
+==== Accessing the Configured Mapper
+
+You can obtain a fully configured `JsonMapper` instance from the configuration:
+
+[source, java, indent=0]
+----
+JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder ->
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  // <1>
+----
+<1> Returns a `JsonMapper` with all customizations applied
 

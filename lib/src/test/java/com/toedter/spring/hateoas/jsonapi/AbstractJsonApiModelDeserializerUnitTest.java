@@ -16,13 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import java.util.HashMap;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +23,12 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.type.TypeFactory;
+
+import java.util.HashMap;
+import java.util.List;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiConfiguration Unit Test")
@@ -58,7 +57,7 @@ class AbstractJsonApiModelDeserializerUnitTest {
     }
 
     @Override
-    protected JsonDeserializer<?> createJsonDeserializer(JavaType type) {
+    protected ValueDeserializer<?> createJsonDeserializer(JavaType type) {
       return null;
     }
   }
@@ -72,18 +71,8 @@ class AbstractJsonApiModelDeserializerUnitTest {
     );
   }
 
-  @Test
-  void should_get_content_type() {
-    JavaType contentType = testJsonApiDeserializer.getContentType();
-    assertThat(contentType.getRawClass()).isEqualTo(JsonApiDocument.class);
-  }
-
-  @Test
-  void should_get_null_content_deserializer() {
-    JsonDeserializer<Object> contentDeserializer =
-      testJsonApiDeserializer.getContentDeserializer();
-    assertThat(contentDeserializer).isNull();
-  }
+  // Note: getContentType() and getContentDeserializer() no longer exist in Jackson 3
+  // These methods were removed when migrating from ContainerDeserializerBase to StdDeserializer
 
   @Test
   void should_not_convert_to_resource() {
@@ -92,7 +81,7 @@ class AbstractJsonApiModelDeserializerUnitTest {
 
     class TestWitNoConstructor {}
 
-    JavaType javaType = TypeFactory.defaultInstance().constructSimpleType(
+    JavaType javaType = TypeFactory.createDefaultInstance().constructSimpleType(
       TestWitNoConstructor.class,
       new JavaType[0]
     );

@@ -16,46 +16,49 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toedter.spring.hateoas.jsonapi.support.Director;
 import com.toedter.spring.hateoas.jsonapi.support.DirectorWithMovies;
 import com.toedter.spring.hateoas.jsonapi.support.Movie;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Integration Test")
 @SuppressWarnings({ "squid:S2699", "squid:S5778" })
 class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
-  private ObjectMapper mapper;
+  private JsonMapper mapper;
 
   @BeforeEach
   void setUpModule() {
     JsonApiMediaTypeConfiguration configuration =
       new JsonApiMediaTypeConfiguration(null, null);
-    mapper = new ObjectMapper();
-    configuration.configureObjectMapper(mapper, new JsonApiConfiguration());
+    JsonMapper.Builder builder = JsonMapper.builder();
+    builder = configuration.configureJsonMapper(builder);
+    mapper = new JsonApiConfiguration().customize(builder).build();
   }
 
   @Test
@@ -107,15 +110,11 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
       )
       .build();
 
-    var configuration = new JsonApiMediaTypeConfiguration(null, null);
-    var configuredMapper = new ObjectMapper();
-    configuration.configureObjectMapper(
-      configuredMapper,
-      new JsonApiConfiguration().withLinksNotUrlEncoded(
-        Set.of(IanaLinkRelations.SELF)
-      )
-    );
-    final String movieJson = configuredMapper.writeValueAsString(jsonApiModel);
+    var jsonApiConfiguration = new JsonApiConfiguration()
+      .withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF));
+    mapper = createJsonMapper(jsonApiConfiguration);
+
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "emptyModelWithEncodedSelfLink.json");
   }
 
@@ -788,15 +787,25 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   @Test
   void should_build_single_movie_model_with_relationship_included_type_config()
     throws Exception {
+
+    JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration()
+            .withPluralizedTypeRendered(false)
+            .withLowerCasedTypeRendered(false);
+
+    // Create ObjectProvider that supplies the given JsonApiConfiguration
+    ObjectProvider<JsonApiConfiguration> configProvider =
+            new ObjectProvider<>() {
+              @Override
+              public JsonApiConfiguration getObject() {
+                return jsonApiConfiguration;
+              }
+            };
+
     JsonApiMediaTypeConfiguration configuration =
-      new JsonApiMediaTypeConfiguration(null, null);
-    ObjectMapper objectMapper = new ObjectMapper();
-    configuration.configureObjectMapper(
-      objectMapper,
-      new JsonApiConfiguration()
-        .withPluralizedTypeRendered(false)
-        .withLowerCasedTypeRendered(false)
-    );
+            new JsonApiMediaTypeConfiguration(configProvider, null);
+    JsonMapper.Builder builder = JsonMapper.builder();
+    builder = configuration.configureJsonMapper(builder);
+    mapper = builder.build();
 
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
@@ -806,7 +815,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
       .included(director)
       .build();
 
-    final String movieJson = objectMapper.writeValueAsString(jsonApiModel);
+    final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(
       movieJson,
       "movieWidthDirectorRelationshipAndTypeConfiguration.json"

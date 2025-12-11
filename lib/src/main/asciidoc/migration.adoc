@@ -1,0 +1,297 @@
+[[migration]]
+= Migration Guide
+
+[[migration-3-0-0]]
+== Migrating to Version 3.0.0
+
+Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+This section helps you migrate from version 2.x to 3.0.0.
+
+WARNING: Version 3.0.0 **removes all deprecated APIs** from version 2.x.x. Code using deprecated APIs will **not compile**.
+See the <<_removed_deprecated_apis,Removed Deprecated APIs>> section for migration instructions.
+
+=== Breaking Changes
+
+==== Removed Deprecated APIs
+
+Version 3.0.0 **removes** all deprecated APIs from version 2.x.x and also changes the mapper customization. You **must** migrate to the new APIs:
+
+[%autowidth]
+|===
+| **Removed API** | **Replacement** | **Section**
+
+| `withJsonApiVersionRendered(boolean)` | `withJsonApiObject(JsonApiObject)` | <<jsonapi-version-rendering,JSON:API Version Rendering>>
+| `withObjectMapperCustomizer(Function<ObjectMapper, ObjectMapper>)` | `withMapperCustomizer(UnaryOperator<JsonMapper.Builder>)` | <<json-mapper-customization,JSON Mapper Customization>>
+|===
+
+**Action Required**: If your code uses any of the removed APIs listed above, it will **not compile** with version 3.0.0.
+You must update to use the new replacement APIs before upgrading.
+
+==== Spring Boot 4 and Spring Framework 7
+
+Version 3.0.0 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:
+
+* **Minimum Java version**: Java 17 (unchanged from 2.1.x)
+* **Jakarta EE namespace**: Uses `jakarta.*` packages instead of `javax.*`
+* **RestTemplate removed**: Use `RestClient` instead for HTTP client operations
+
+==== Jackson 3 Migration
+
+The most significant breaking change is the migration from Jackson 2 to Jackson 3.
+
+===== Package Changes
+
+Jackson 3 uses a new package namespace:
+
+[%autowidth]
+|===
+| Jackson 2 (Old) | Jackson 3 (New)
+
+| `com.fasterxml.jackson.databind.*` | `tools.jackson.databind.*`
+| `com.fasterxml.jackson.core.*` | `tools.jackson.core.*`
+| `com.fasterxml.jackson.annotation.*` | `com.fasterxml.jackson.annotation.*` _(unchanged)_
+|===
+
+===== API Changes
+
+* **ObjectMapper → JsonMapper**: The `JsonMapper` class is now preferred over `ObjectMapper`
+* **Custom Serializers/Deserializers**: Must extend Jackson 3 base classes from `tools.jackson.*` packages
+* **Module Registration**: Modules must be compatible with Jackson 3
+
+===== JSON:API Version Rendering
+
+**IMPORTANT**: The deprecated `withJsonApiVersionRendered()` API has been **removed** in version 3.0.0.
+You **must** use the new `withJsonApiObject()` API.
+
+If you were using `jsonApiVersionRendered` configuration:
+
+.Before (Version 2.x.x - Spring Boot 3)
+[source,java]
+----
+@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiVersionRendered(true);  // <1>
+}
+----
+<1> **REMOVED** in version 3.0.0 - this will no longer compile
+
+.After (Version 3.0.0 - Spring Boot 4) - **REQUIRED**
+[source,java]
+----
+@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiObject(new JsonApiObject(true, null, null, null));  // <1>
+}
+----
+<1> Use `withJsonApiObject(new JsonApiObject(true, ...))` instead of the removed `withJsonApiVersionRendered(true)`
+
+The `JsonApiObject` provides much more flexibility and allows you to configure:
+
+* **version**: The JSON:API version (e.g., "1.1")
+* **ext**: List of JSON:API extensions
+* **profile**: List of JSON:API profiles
+* **meta**: Metadata for the JSON:API object
+
+.Example with all options
+[source,java]
+----
+@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    JsonApiObject jsonApiObject = new JsonApiObject(
+        true,  // showVersion
+        List.of(URI.create("https://jsonapi.org/ext/atomic")),  // extensions
+        List.of(URI.create("http://example.com/profiles/flexible-pagination")),  // profiles
+        Map.of("copyright", "Copyright 2025")  // meta
+    );
+
+    return new JsonApiConfiguration()
+        .withJsonApiObject(jsonApiObject);
+}
+----
+
+===== Mapper Customization
+
+**IMPORTANT**: The deprecated `withObjectMapperCustomizer()` API has been **removed** in version 3.0.0.
+You **must** use the new `withMapperCustomizer()` API.
+
+If you were using `ObjectMapperCustomizer` configuration:
+
+.Before (Version 2.x.x - Spring Boot 3)
+[source,java]
+----
+@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withObjectMapperCustomizer(mapper -> {  // <1>
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            return mapper;
+        });
+}
+----
+<1> **REMOVED** in version 3.0.0 - this will no longer compile
+
+.After (Version 3.0.0 - Spring Boot 4) - **REQUIRED**
+[source,java]
+----
+@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withMapperCustomizer(builder ->  // <1>
+            builder.enable(SerializationFeature.INDENT_OUTPUT)  // <2>
+        );
+}
+----
+<1> Use `withMapperCustomizer` instead of the removed `withObjectMapperCustomizer`
+<2> Works with `JsonMapper.Builder` instead of `ObjectMapper`
+
+=== Custom Serializers and Deserializers
+
+If you have custom Jackson serializers or deserializers, you need to update them:
+
+.Before (Jackson 2)
+[source,java]
+----
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+public class CustomSerializer extends StdSerializer<MyType> {
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializerProvider provider) {
+        // serialization logic
+    }
+}
+----
+
+.After (Jackson 3)
+[source,java]
+----
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;  // <1>
+import tools.jackson.databind.ValueSerializer;  // <2>
+
+public class CustomSerializer extends ValueSerializer<MyType> {  // <3>
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializationContext ctxt) {  // <4>
+        // serialization logic (unchanged)
+    }
+}
+----
+<1> Use `SerializationContext` instead of `SerializerProvider`
+<2> Use `ValueSerializer` instead of `JsonSerializer`
+<3> Extend `ValueSerializer` instead of `StdSerializer`
+<4> Parameter type changed from `SerializerProvider` to `SerializationContext`
+
+=== Testing Changes
+
+==== MockMvc Configuration
+
+Spring Boot 4 removed `@AutoConfigureMockMvc`. You need to manually configure MockMvc:
+
+.Before (Spring Boot 3)
+[source,java]
+----
+@SpringBootTest
+@AutoConfigureMockMvc
+class MyTest {
+    @Autowired
+    private MockMvc mockMvc;
+}
+----
+
+.After (Spring Boot 4)
+[source,java]
+----
+@SpringBootTest
+class MyTest {
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    void setup() {
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .build();
+    }
+}
+----
+
+==== RestTemplate → RestClient
+
+For HTTP client testing, migrate from `RestTemplate` to `RestClient`:
+
+.Before (RestTemplate)
+[source,java]
+----
+@Autowired
+private TestRestTemplate restTemplate;
+
+ResponseEntity<String> response = restTemplate.exchange(
+    "/api/movies/1",
+    HttpMethod.GET,
+    entity,
+    String.class
+);
+----
+
+.After (RestClient)
+[source,java]
+----
+private RestClient restClient;
+
+@BeforeEach
+void setup() {
+    this.restClient = RestClient.builder()
+        .baseUrl("http://localhost:" + randomPort)
+        .build();
+}
+
+String response = restClient.get()
+    .uri("/api/movies/1")
+    .header("Accept", MediaTypes.JSON_API_VALUE)
+    .retrieve()
+    .body(String.class);
+----
+
+=== New Features in 3.0.0
+
+==== Improved Mapper Access
+
+Direct access to the configured JsonMapper:
+
+[source,java]
+----
+JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder ->
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  // <1>
+----
+<1> Obtain a fully configured `JsonMapper` instance
+
+=== Compatibility
+
+Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
+The main breaking changes are:
+
+* **Removed deprecated APIs**: All deprecated APIs from 2.x.x have been removed - you must use the new APIs:
+  ** `withJsonApiVersionRendered()` → `withJsonApiObject()`
+  ** `withObjectMapperCustomizer()` → `withMapperCustomizer()`
+* **Spring Boot 4** requirement (was Spring Boot 3 in version 2.x.x)
+* **Jackson 3** package namespace changes (if you use custom serializers/deserializers)
+* Spring Boot 4 testing API changes (`@AutoConfigureMockMvc`, `RestTemplate`)
+
+**Migration Required**: If you were using any of the deprecated APIs (`withJsonApiVersionRendered()` or
+`withObjectMapperCustomizer()`), your code will not compile with version 3.0.0. You must update to use the
+new APIs (`withJsonApiObject()` and `withMapperCustomizer()`) instead.
+
+If you don't use the removed deprecated APIs or custom Jackson code, and don't directly interact with Spring Boot
+testing internals, migration should be straightforward - mainly updating dependencies to Spring Boot 4 compatible versions.
+
