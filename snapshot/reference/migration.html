@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Migration Guide</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body id="migration" class="article"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<h1>Migration Guide</h1>
+<div class="details">
+<span id="revnumber">version 3.0.1-SNAPSHOT</span>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="migration-3-0-0"><a class="anchor" href="#migration-3-0-0"></a>Migrating to Version 3.0.0</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+This section helps you migrate from version 2.x to 3.0.0.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Version 3.0.0 <strong>removes all deprecated APIs</strong> from version 2.x.x. Code using deprecated APIs will <strong>not compile</strong>.
+See the <a href="#_removed_deprecated_apis">Removed Deprecated APIs</a> section for migration instructions.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_breaking_changes"><a class="anchor" href="#_breaking_changes"></a>Breaking Changes</h3>
+<div class="sect3">
+<h4 id="_removed_deprecated_apis"><a class="anchor" href="#_removed_deprecated_apis"></a>Removed Deprecated APIs</h4>
+<div class="paragraph">
+<p>Version 3.0.0 <strong>removes</strong> all deprecated APIs from version 2.x.x and also changes the mapper customization. You <strong>must</strong> migrate to the new APIs:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Removed API</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Replacement</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Section</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withJsonApiVersionRendered(boolean)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withJsonApiObject(JsonApiObject)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#jsonapi-version-rendering">JSON:API Version Rendering</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withObjectMapperCustomizer(Function&lt;ObjectMapper, ObjectMapper&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withMapperCustomizer(UnaryOperator&lt;JsonMapper.Builder&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#json-mapper-customization">JSON Mapper Customization</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Action Required</strong>: If your code uses any of the removed APIs listed above, it will <strong>not compile</strong> with version 3.0.0.
+You must update to use the new replacement APIs before upgrading.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spring_boot_4_and_spring_framework_7"><a class="anchor" href="#_spring_boot_4_and_spring_framework_7"></a>Spring Boot 4 and Spring Framework 7</h4>
+<div class="paragraph">
+<p>Version 3.0.0 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Minimum Java version</strong>: Java 17 (unchanged from 2.1.x)</p>
+</li>
+<li>
+<p><strong>Jakarta EE namespace</strong>: Uses <code>jakarta.<strong></code> packages instead of <code>javax.</strong></code></p>
+</li>
+<li>
+<p><strong>RestTemplate removed</strong>: Use <code>RestClient</code> instead for HTTP client operations</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jackson_3_migration"><a class="anchor" href="#_jackson_3_migration"></a>Jackson 3 Migration</h4>
+<div class="paragraph">
+<p>The most significant breaking change is the migration from Jackson 2 to Jackson 3.</p>
+</div>
+<div class="sect4">
+<h5 id="_package_changes"><a class="anchor" href="#_package_changes"></a>Package Changes</h5>
+<div class="paragraph">
+<p>Jackson 3 uses a new package namespace:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Jackson 2 (Old)</th>
+<th class="tableblock halign-left valign-top">Jackson 3 (New)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.databind.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tools.jackson.databind.*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.core.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tools.jackson.core.*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.annotation.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.annotation.*</code> <em>(unchanged)</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_api_changes"><a class="anchor" href="#_api_changes"></a>API Changes</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>ObjectMapper → JsonMapper</strong>: The <code>JsonMapper</code> class is now preferred over <code>ObjectMapper</code></p>
+</li>
+<li>
+<p><strong>Custom Serializers/Deserializers</strong>: Must extend Jackson 3 base classes from <code>tools.jackson.*</code> packages</p>
+</li>
+<li>
+<p><strong>Module Registration</strong>: Modules must be compatible with Jackson 3</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_jsonapi_version_rendering"><a class="anchor" href="#_jsonapi_version_rendering"></a>JSON:API Version Rendering</h5>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.0.0.
+You <strong>must</strong> use the new <code>withJsonApiObject()</code> API.</p>
+</div>
+<div class="paragraph">
+<p>If you were using <code>jsonApiVersionRendered</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiVersionRendered(true);  <i class="conum" data-value="1"></i><b>(1)</b>
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiObject(new JsonApiObject(true, null, null, null));  <i class="conum" data-value="1"></i><b>(1)</b>
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>withJsonApiObject(new JsonApiObject(true, &#8230;&#8203;))</code> instead of the removed <code>withJsonApiVersionRendered(true)</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>JsonApiObject</code> provides much more flexibility and allows you to configure:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>version</strong>: The JSON:API version (e.g., "1.1")</p>
+</li>
+<li>
+<p><strong>ext</strong>: List of JSON:API extensions</p>
+</li>
+<li>
+<p><strong>profile</strong>: List of JSON:API profiles</p>
+</li>
+<li>
+<p><strong>meta</strong>: Metadata for the JSON:API object</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Example with all options</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    JsonApiObject jsonApiObject = new JsonApiObject(
+        true,  // showVersion
+        List.of(URI.create("https://jsonapi.org/ext/atomic")),  // extensions
+        List.of(URI.create("http://example.com/profiles/flexible-pagination")),  // profiles
+        Map.of("copyright", "Copyright 2025")  // meta
+    );
+
+    return new JsonApiConfiguration()
+        .withJsonApiObject(jsonApiObject);
+}
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_mapper_customization"><a class="anchor" href="#_mapper_customization"></a>Mapper Customization</h5>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.0.0.
+You <strong>must</strong> use the new <code>withMapperCustomizer()</code> API.</p>
+</div>
+<div class="paragraph">
+<p>If you were using <code>ObjectMapperCustomizer</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withObjectMapperCustomizer(mapper -&gt; {  <i class="conum" data-value="1"></i><b>(1)</b>
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            return mapper;
+        });
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withMapperCustomizer(builder -&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
+            builder.enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="2"></i><b>(2)</b>
+        );
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>withMapperCustomizer</code> instead of the removed <code>withObjectMapperCustomizer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Works with <code>JsonMapper.Builder</code> instead of <code>ObjectMapper</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_serializers_and_deserializers"><a class="anchor" href="#_custom_serializers_and_deserializers"></a>Custom Serializers and Deserializers</h3>
+<div class="paragraph">
+<p>If you have custom Jackson serializers or deserializers, you need to update them:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Jackson 2)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+public class CustomSerializer extends StdSerializer&lt;MyType&gt; {
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializerProvider provider) {
+        // serialization logic
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (Jackson 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;  <i class="conum" data-value="1"></i><b>(1)</b>
+import tools.jackson.databind.ValueSerializer;  <i class="conum" data-value="2"></i><b>(2)</b>
+
+public class CustomSerializer extends ValueSerializer&lt;MyType&gt; {  <i class="conum" data-value="3"></i><b>(3)</b>
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializationContext ctxt) {  <i class="conum" data-value="4"></i><b>(4)</b>
+        // serialization logic (unchanged)
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>SerializationContext</code> instead of <code>SerializerProvider</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Use <code>ValueSerializer</code> instead of <code>JsonSerializer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Extend <code>ValueSerializer</code> instead of <code>StdSerializer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Parameter type changed from <code>SerializerProvider</code> to <code>SerializationContext</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testing_changes"><a class="anchor" href="#_testing_changes"></a>Testing Changes</h3>
+<div class="sect3">
+<h4 id="_mockmvc_configuration"><a class="anchor" href="#_mockmvc_configuration"></a>MockMvc Configuration</h4>
+<div class="paragraph">
+<p>Spring Boot 4 removed <code>@AutoConfigureMockMvc</code>. You need to manually configure MockMvc:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
+@AutoConfigureMockMvc
+class MyTest {
+    @Autowired
+    private MockMvc mockMvc;
+}
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (Spring Boot 4)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
+class MyTest {
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    void setup() {
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .build();
+    }
+}
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resttemplate_restclient"><a class="anchor" href="#_resttemplate_restclient"></a>RestTemplate → RestClient</h4>
+<div class="paragraph">
+<p>For HTTP client testing, migrate from <code>RestTemplate</code> to <code>RestClient</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (RestTemplate)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Autowired
+private TestRestTemplate restTemplate;
+
+ResponseEntity&lt;String&gt; response = restTemplate.exchange(
+    "/api/movies/1",
+    HttpMethod.GET,
+    entity,
+    String.class
+);
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (RestClient)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private RestClient restClient;
+
+@BeforeEach
+void setup() {
+    this.restClient = RestClient.builder()
+        .baseUrl("http://localhost:" + randomPort)
+        .build();
+}
+
+String response = restClient.get()
+    .uri("/api/movies/1")
+    .header("Accept", MediaTypes.JSON_API_VALUE)
+    .retrieve()
+    .body(String.class);
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_new_features_in_3_0_0"><a class="anchor" href="#_new_features_in_3_0_0"></a>New Features in 3.0.0</h3>
+<div class="sect3">
+<h4 id="_improved_mapper_access"><a class="anchor" href="#_improved_mapper_access"></a>Improved Mapper Access</h4>
+<div class="paragraph">
+<p>Direct access to the configured JsonMapper:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder -&gt;
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i><b>(1)</b>
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Obtain a fully configured <code>JsonMapper</code> instance</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compatibility"><a class="anchor" href="#_compatibility"></a>Compatibility</h3>
+<div class="paragraph">
+<p>Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
+The main breaking changes are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from 2.x.x have been removed - you must use the new APIs:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>withJsonApiVersionRendered()</code> → <code>withJsonApiObject()</code></p>
+</li>
+<li>
+<p><code>withObjectMapperCustomizer()</code> → <code>withMapperCustomizer()</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Spring Boot 4</strong> requirement (was Spring Boot 3 in version 2.x.x)</p>
+</li>
+<li>
+<p><strong>Jackson 3</strong> package namespace changes (if you use custom serializers/deserializers)</p>
+</li>
+<li>
+<p>Spring Boot 4 testing API changes (<code>@AutoConfigureMockMvc</code>, <code>RestTemplate</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Migration Required</strong>: If you were using any of the deprecated APIs (<code>withJsonApiVersionRendered()</code> or
+<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update to use the
+new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) instead.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t use the removed deprecated APIs or custom Jackson code, and don&#8217;t directly interact with Spring Boot
+testing internals, migration should be straightforward - mainly updating dependencies to Spring Boot 4 compatible versions.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.1-SNAPSHOT<br>
+Last updated 2025-12-11 13:48:25 UTC
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>

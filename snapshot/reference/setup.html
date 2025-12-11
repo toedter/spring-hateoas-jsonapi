@@ -29,17 +29,19 @@
 <div id="header">
 <h1>Setup</h1>
 <div class="details">
-<span id="revnumber">version 2.2.1-SNAPSHOT</span>
+<span id="revnumber">version 3.0.1-SNAPSHOT</span>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
 </div>
 <div class="listingblock primary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
 </code></pre>
 </div>
 </div>
@@ -49,18 +51,77 @@
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;2.2.0&lt;/version&gt;
+    &lt;version&gt;3.0.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>2.2.1-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
+<p>The latest published snapshot version is <code>3.0.1-SNAPSHOT</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_requirements"><a class="anchor" href="#_version_requirements"></a>Version Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This library requires:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Spring Boot 4.x</strong> (Spring Framework 7.x)</p>
+</li>
+<li>
+<p><strong>Jackson 3.x</strong> (tools.jackson.*)</p>
+</li>
+<li>
+<p><strong>Java 17 or later</strong></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.</p>
+</div>
+<div class="paragraph">
+<p>This is a breaking change if you:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Use deprecated APIs</strong>: All deprecated APIs have been <strong>removed</strong> (<code>withJsonApiVersionRendered()</code> and <code>withObjectMapperCustomizer()</code>)</p>
+</li>
+<li>
+<p>Use custom Jackson serializers/deserializers with the old <code>com.fasterxml.jackson.*</code> package</p>
+</li>
+<li>
+<p>Directly interact with the Jackson <code>ObjectMapper</code> API</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Jackson 3 API uses the <code>tools.jackson.<strong></code> package namespace instead of <code>com.fasterxml.jackson.</strong></code>.</p>
+</div>
+<div class="paragraph">
+<p>See the <a href="#migration-3-0-0">Migration Guide</a> for detailed migration instructions.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.2.1-SNAPSHOT<br>
-Last updated 2025-12-07 14:51:08 UTC
+Version 3.0.1-SNAPSHOT<br>
+Last updated 2025-12-11 13:48:25 UTC
 </div>
 </div>
 </div>

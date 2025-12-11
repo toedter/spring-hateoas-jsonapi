@@ -29,7 +29,7 @@
 <div id="header">
 <h1>Configuration</h1>
 <div class="details">
-<span id="revnumber">version 2.2.1-SNAPSHOT</span>
+<span id="revnumber">version 3.0.1-SNAPSHOT</span>
 </div>
 </div>
 <div id="content">
@@ -53,11 +53,6 @@ Currently, you can configure</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiVersionRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
@@ -102,8 +97,8 @@ should get the JSON:API type of the superclass.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ObjectMapperCustomizer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MapperCustomizer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#mapper-customization">[mapper-customization]</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set
 <a id="links-configuration"></a></p></td>
 </tr>
@@ -172,21 +167,16 @@ JsonApiConfiguration jsonApiConfiguration() {
     .withEmptyAttributesObjectSerialized(false)
     .withJsonApiIdNotSerializedForValue("-1")
     .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-    .withJsonApiCompliantLinks(false)
-    .withObjectMapperCustomizer(objectMapper -&gt;
-      objectMapper.configure(
-        SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-        true
-      )
-    );
+    .withJsonApiCompliantLinks(false);
 }
 </code></pre>
 </div>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_link_placement_configuration_example"><a class="anchor" href="#_link_placement_configuration_example"></a>Link Placement Configuration Example</h3>
+<div class="sect1">
+<h2 id="_link_placement_configuration_example"><a class="anchor" href="#_link_placement_configuration_example"></a>Link Placement Configuration Example</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>To configure links to appear at the resource level instead of the document level:</p>
 </div>
@@ -219,10 +209,163 @@ and examples.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="json-mapper-customization"><a class="anchor" href="#json-mapper-customization"></a>JSON Mapper Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 2.2.0, this library uses <strong>Jackson 3</strong> (package <code>tools.jackson.<strong></code> instead of <code>com.fasterxml.jackson.</strong></code>).
+You can customize the Jackson <code>JsonMapper</code> used for JSON:API serialization and deserialization through the
+<code>mapperCustomizer</code> configuration option.</p>
+</div>
+<div class="paragraph">
+<p>The customizer is a <code>UnaryOperator&lt;JsonMapper.Builder&gt;</code> that receives the Jackson <code>JsonMapper.Builder</code> and
+returns a modified builder. This allows you to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Enable or disable Jackson serialization/deserialization features</p>
+</li>
+<li>
+<p>Register custom modules</p>
+</li>
+<li>
+<p>Configure date/time formats</p>
+</li>
+<li>
+<p>Add custom serializers or deserializers</p>
+</li>
+<li>
+<p>Enable or disable pretty printing</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_example_basic_mapper_customization"><a class="anchor" href="#_example_basic_mapper_customization"></a>Example: Basic Mapper Customization</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder -&gt;
+                builder.enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="1"></i><b>(1)</b>
+            );
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable pretty-printed JSON output</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_multiple_customizations"><a class="anchor" href="#_example_multiple_customizations"></a>Example: Multiple Customizations</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder -&gt; builder
+                .enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="1"></i><b>(1)</b>
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)  <i class="conum" data-value="2"></i><b>(2)</b>
+                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)  <i class="conum" data-value="3"></i><b>(3)</b>
+            );
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable pretty-printed JSON output</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Don&#8217;t fail when encountering unknown properties during deserialization</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Serialize dates as timestamps instead of ISO-8601 strings</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Jackson 3 Migration Notes:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use <code>tools.jackson.databind.<strong></code> packages instead of <code>com.fasterxml.jackson.databind.</strong></code></p>
+</li>
+<li>
+<p><code>JsonMapper</code> replaces <code>ObjectMapper</code> as the preferred API</p>
+</li>
+<li>
+<p>Serializers and deserializers must use Jackson 3 base classes from <code>tools.jackson.*</code></p>
+</li>
+<li>
+<p>Annotations remain in <code>com.fasterxml.jackson.annotation.*</code> (unchanged)</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_accessing_the_configured_mapper"><a class="anchor" href="#_accessing_the_configured_mapper"></a>Accessing the Configured Mapper</h4>
+<div class="paragraph">
+<p>You can obtain a fully configured <code>JsonMapper</code> instance from the configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder -&gt;
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i><b>(1)</b>
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Returns a <code>JsonMapper</code> with all customizations applied</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Version 2.2.1-SNAPSHOT<br>
-Last updated 2025-12-07 14:51:08 UTC
+Version 3.0.1-SNAPSHOT<br>
+Last updated 2025-12-11 13:48:25 UTC
 </div>
 </div>
 </div>
