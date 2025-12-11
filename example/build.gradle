@@ -26,10 +26,10 @@ dependencies {
     implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
 
     // if you want to use the SNAPSHOT version from maven central
-    // implementation 'com.toedter:spring-hateoas-jsonapi:2.2.1-SNAPSHOT'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1-SNAPSHOT'
 
     // if you want to use the released version from maven central
-    // implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
 
     // if you want to use local version, use
     implementation project(':lib')

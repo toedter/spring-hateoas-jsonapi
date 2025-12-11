@@ -75,7 +75,7 @@ and examples.
 [[json-mapper-customization]]
 == JSON Mapper Customization
 
-Starting with version 2.2.0, this library uses *Jackson 3* (package `tools.jackson.*` instead of `com.fasterxml.jackson.*`).
+Starting with version 3.0.0, this library uses *Jackson 3* (package `tools.jackson.*` instead of `com.fasterxml.jackson.*`).
 You can customize the Jackson `JsonMapper` used for JSON:API serialization and deserialization through the
 `mapperCustomizer` configuration option.
 
