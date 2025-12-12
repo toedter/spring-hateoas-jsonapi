@@ -67,19 +67,17 @@
 </li>
 </ul>
 </li>
-<li><a href="#custom-serializers-and-deserializers">3.1.2. Custom Serializers and Deserializers</a></li>
-<li><a href="#testing-changes">3.1.3. Testing Changes</a>
+<li><a href="#custom-serializers-and-deserializers">3.1.2. Custom Serializers and Deserializers</a>
 <ul class="sectlevel4">
-<li><a href="#mockmvc-configuration">MockMvc Configuration</a></li>
 <li><a href="#resttemplate-restclient">RestTemplate → RestClient</a></li>
 </ul>
 </li>
-<li><a href="#new-features-in-3-0-0">3.1.4. New Features in 3.0.0</a>
+<li><a href="#new-features-in-3-0-0">3.1.3. New Features in 3.0.0</a>
 <ul class="sectlevel4">
 <li><a href="#improved-mapper-access">Improved Mapper Access</a></li>
 </ul>
 </li>
-<li><a href="#compatibility">3.1.5. Compatibility</a></li>
+<li><a href="#compatibility">3.1.4. Compatibility</a></li>
 </ul>
 </li>
 </ul>
@@ -727,54 +725,14 @@ public class CustomSerializer extends ValueSerializer&lt;MyType&gt; {  <i class=
 </tr>
 </table>
 </div>
-</div>
-<div class="sect3">
-<h4 id="testing-changes"><a class="anchor" href="#testing-changes"></a>3.1.3. Testing Changes</h4>
-<div class="sect4">
-<h5 id="mockmvc-configuration"><a class="anchor" href="#mockmvc-configuration"></a>MockMvc Configuration</h5>
-<div class="paragraph">
-<p>Spring Boot 4 removed <code>@AutoConfigureMockMvc</code>. You need to manually configure MockMvc:</p>
-</div>
-<div class="listingblock">
-<div class="title">Before (Spring Boot 3)</div>
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
-@AutoConfigureMockMvc
-class MyTest {
-    @Autowired
-    private MockMvc mockMvc;
-}
-</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">After (Spring Boot 4)</div>
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
-class MyTest {
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @BeforeEach
-    void setup() {
-        this.mockMvc = MockMvcBuilders
-            .webAppContextSetup(context)
-            .build();
-    }
-}
-</code></pre>
-</div>
-</div>
-</div>
 <div class="sect4">
 <h5 id="resttemplate-restclient"><a class="anchor" href="#resttemplate-restclient"></a>RestTemplate → RestClient</h5>
 <div class="paragraph">
-<p>For HTTP client testing, migrate from <code>RestTemplate</code> to <code>RestClient</code>:</p>
+<p>As of Spring Framework 7.0, RestTemplate is deprecated in favor of RestClient and will be removed in a future version.
+For HTTP client testing, migrate from <code>TestRestTemplate</code> to <code>RestTestClient</code>:</p>
 </div>
 <div class="listingblock">
-<div class="title">Before (RestTemplate)</div>
+<div class="title">Before (TestRestTemplate )</div>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@Autowired
 private TestRestTemplate restTemplate;
@@ -789,29 +747,24 @@ ResponseEntity&lt;String&gt; response = restTemplate.exchange(
 </div>
 </div>
 <div class="listingblock">
-<div class="title">After (RestClient)</div>
+<div class="title">After (RestTestClient)</div>
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">private RestClient restClient;
-
-@BeforeEach
-void setup() {
-    this.restClient = RestClient.builder()
-        .baseUrl("http://localhost:" + randomPort)
-        .build();
-}
+<pre class="highlight"><code class="language-java" data-lang="java">@Autowired
+private RestTestClient restClient;
 
 String response = restClient.get()
     .uri("/api/movies/1")
     .header("Accept", MediaTypes.JSON_API_VALUE)
-    .retrieve()
-    .body(String.class);
+    .exchange()
+    .returnResult(String.class)
+    .getResponseBody();
 </code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="new-features-in-3-0-0"><a class="anchor" href="#new-features-in-3-0-0"></a>3.1.4. New Features in 3.0.0</h4>
+<h4 id="new-features-in-3-0-0"><a class="anchor" href="#new-features-in-3-0-0"></a>3.1.3. New Features in 3.0.0</h4>
 <div class="sect4">
 <h5 id="improved-mapper-access"><a class="anchor" href="#improved-mapper-access"></a>Improved Mapper Access</h5>
 <div class="paragraph">
@@ -839,7 +792,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 </div>
 </div>
 <div class="sect3">
-<h4 id="compatibility"><a class="anchor" href="#compatibility"></a>3.1.5. Compatibility</h4>
+<h4 id="compatibility"><a class="anchor" href="#compatibility"></a>3.1.4. Compatibility</h4>
 <div class="paragraph">
 <p>Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
 The main breaking changes are:</p>
@@ -3623,7 +3576,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-12 16:24:01 UTC
+Last updated 2025-12-12 17:33:28 UTC
 </div>
 </div>
 </div>
