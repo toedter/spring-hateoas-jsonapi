@@ -22,8 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation 'com.io-informatics.oss:jackson-jsonld:0.1.1'
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
 
     // if you want to use the SNAPSHOT version from maven central
     // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1-SNAPSHOT'
@@ -34,9 +33,6 @@ dependencies {
     // if you want to use local version, use
     implementation project(':lib')
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 
     runtimeOnly 'org.hsqldb:hsqldb'

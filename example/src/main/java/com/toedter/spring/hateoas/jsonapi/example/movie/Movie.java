@@ -19,13 +19,18 @@ package com.toedter.spring.hateoas.jsonapi.example.movie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiRelationships;
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
-import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
