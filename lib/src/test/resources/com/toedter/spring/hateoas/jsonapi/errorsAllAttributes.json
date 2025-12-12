@@ -10,7 +10,7 @@
       "title": "error title",
       "detail": "error detail",
       "source": {
-        "pointer": "to infinity and beyond",
+        "pointer": "/data/attributes/title",
         "parameter": "...but always with towel."
       },
       "meta": {

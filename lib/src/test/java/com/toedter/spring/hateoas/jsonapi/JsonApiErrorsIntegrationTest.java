@@ -16,9 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,6 +23,10 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.HashMap;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiErrors Test")
@@ -86,7 +87,7 @@ class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
       .withCode("404")
       .withTitle("error title")
       .withDetail("error detail")
-      .withSourcePointer("to infinity and beyond")
+      .withSourcePointer("/data/attributes/title")
       .withSourceParameter("...but always with towel.")
       .withMeta(metaMap);
     JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
@@ -107,7 +108,7 @@ class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
       .withTitle("error title")
       .withDetail("error detail")
       .withSourceParameter("...but always with towel.")
-      .withSourcePointer("to infinity and beyond")
+      .withSourcePointer("/data/attributes/title")
       .withMeta(metaMap);
     JsonApiErrors jsonApiErrors = new JsonApiErrors(jsonApiError);
     String errorsJson = mapper.writeValueAsString(jsonApiErrors);
