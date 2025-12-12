@@ -32,6 +32,8 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTe
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.web.servlet.client.RestTestClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author Kai Toedter
@@ -65,7 +67,7 @@ class JsonApiSpringBootRestClientIntegrationTest {
     Movie movie = new Movie("12345", "Test Movie", 2020, 9.3, 17, null);
     final Movie savedMovie = movieRepository.save(movie);
 
-    String response = restClient
+    String responseBody = restClient
       .get()
       .uri(
         "/api/movies/" +
@@ -77,26 +79,52 @@ class JsonApiSpringBootRestClientIntegrationTest {
       .returnResult(String.class)
       .getResponseBody();
 
-    String expectedResult =
-      "{\"jsonapi\":{\"version\":\"1.1\"},\"data\":{\"id\":\"" +
-      savedMovie.getId() +
-      "\",\"type\":\"movies\",\"attributes\":{\"title\":\"Test Movie\",\"year\":2020,\"rating\":9.3}" +
-      ",\"relationships\":{\"directors\":{\"data\":[],\"links\":{\"self\":\"http://localhost:" +
-      this.randomPort +
-      "/api/movies/" +
-      savedMovie.getId() +
-      "/relationships/directors\",\"related\":\"http://localhost:" +
-      this.randomPort +
-      "/api/movies/" +
-      savedMovie.getId() +
-      "/directors\"}}}}" +
-      ",\"links\":{\"self\":\"http://localhost:" +
-      this.randomPort +
-      "/api/movies/" +
-      savedMovie.getId() +
-      "\"}}";
+    String expectedResult = """
+      {
+        "jsonapi": {
+          "version": "1.1"
+        },
+        "data": {
+          "id": "%s",
+          "type": "movies",
+          "attributes": {
+            "title": "Test Movie",
+            "year": 2020,
+            "rating": 9.3
+          },
+          "relationships": {
+            "directors": {
+              "data": [],
+              "links": {
+                "self": "http://localhost:%d/api/movies/%s/relationships/directors",
+                "related": "http://localhost:%d/api/movies/%s/directors"
+              }
+            }
+          }
+        },
+        "links": {
+          "self": "http://localhost:%d/api/movies/%s"
+        }
+      }""".formatted(
+        savedMovie.getId(),
+        this.randomPort,
+        savedMovie.getId(),
+        this.randomPort,
+        savedMovie.getId(),
+        this.randomPort,
+        savedMovie.getId()
+      );
 
-    assertThat(response).isEqualTo(expectedResult);
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    JsonNode expectedJsonNode = jsonMapper.readValue(
+      expectedResult,
+      JsonNode.class
+    );
+    JsonNode actualJsonNode = jsonMapper.readValue(
+      responseBody,
+      JsonNode.class
+    );
+    assertThat(actualJsonNode).isEqualTo(expectedJsonNode);
   }
 
   @Test
@@ -115,7 +143,7 @@ class JsonApiSpringBootRestClientIntegrationTest {
         }
       }""";
 
-    restClient
+    String responseBody = restClient
       .post()
       .uri("/api/movies")
       .header("Accept", MediaTypes.JSON_API_VALUE)
@@ -125,6 +153,25 @@ class JsonApiSpringBootRestClientIntegrationTest {
       .expectStatus()
       .isCreated()
       .expectHeader()
-      .exists("Location");
+      .exists("Location")
+      .returnResult(String.class)
+      .getResponseBody();
+
+    try {
+      JsonMapper jsonMapper = JsonMapper.builder().build();
+      JsonNode responseJsonNode = jsonMapper.readValue(
+        responseBody,
+        JsonNode.class
+      );
+      String title = responseJsonNode
+        .get("data")
+        .get("attributes")
+        .get("title")
+        .asText();
+
+      assertThat(title).isEqualTo("Test Movie");
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to parse response", e);
+    }
   }
 }

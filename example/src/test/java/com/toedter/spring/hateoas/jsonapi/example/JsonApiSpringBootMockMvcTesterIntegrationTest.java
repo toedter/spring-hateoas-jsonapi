@@ -16,16 +16,10 @@
 
 package com.toedter.spring.hateoas.jsonapi.example;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
 import com.toedter.spring.hateoas.jsonapi.example.movie.Movie;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieRepository;
-import java.util.Collections;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -37,6 +31,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Collections;
+import java.util.Optional;
+
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 /**
  * @author Kai Toedter
@@ -215,7 +216,11 @@ class JsonApiSpringBootMockMvcTesterIntegrationTest {
         .content(movieJson)
     )
       .hasStatus(201)
-      .hasHeader("Location", "http://localhost/api/movies/42");
+      .hasHeader("Location", "http://localhost/api/movies/42")
+      .bodyJson()
+      .extractingPath("$.data.attributes.title")
+      .asString()
+      .isEqualTo("Test Movie");
   }
 
   @Test
@@ -251,6 +256,10 @@ class JsonApiSpringBootMockMvcTesterIntegrationTest {
         .content(movieJson)
     )
       .hasStatus(201)
-      .hasHeader("Location", "http://localhost/api/movies/42");
+      .hasHeader("Location", "http://localhost/api/movies/42")
+      .bodyJson()
+      .extractingPath("$.data.attributes.title")
+      .asString()
+      .isEqualTo("Test Movie");
   }
 }
