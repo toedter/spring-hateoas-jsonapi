@@ -31,8 +31,8 @@
 <h1>JSON:API for Spring HATEOAS</h1>
 <div class="details">
 <span id="author" class="author">Kai Tödter</span><br>
-<span id="revnumber">version 2.2.0,</span>
-<span id="revdate">2025-12-07</span>
+<span id="revnumber">version 3.0.0,</span>
+<span id="revdate">2025-12-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -44,58 +44,109 @@
 <li><a href="#jsonapi">1.2. JSON:API</a></li>
 </ul>
 </li>
-<li><a href="#setup">2. Setup</a></li>
-<li><a href="#server-side-support">3. Server Side support</a>
+<li><a href="#setup">2. Setup</a>
 <ul class="sectlevel2">
-<li><a href="#representation-models">3.1. Representation Models</a></li>
-<li><a href="#links">3.2. Links</a></li>
-<li><a href="#link-placement">3.3. Link Placement</a>
-<ul class="sectlevel3">
-<li><a href="#document-level-links-default">3.3.1. Document Level Links (Default)</a></li>
-<li><a href="#resource-level-links">3.3.2. Resource Level Links</a></li>
+<li><a href="#version-requirements">2.1. Version Requirements</a></li>
 </ul>
 </li>
-<li><a href="#annotations">3.4. Annotations</a></li>
-<li><a href="#jsonapi-builder">3.5. JSON:API Builder</a>
-<ul class="sectlevel3">
-<li><a href="#explicit-configuration-of-empty-relationships">3.5.1. Explicit Configuration of empty Relationships</a></li>
-</ul>
-</li>
-<li><a href="#inclusion">3.6. Inclusion of related Resources</a></li>
-<li><a href="#Nesting">3.7. Nesting of JsonApiModels</a></li>
-<li><a href="#sparse-fielsets">3.8. Sparse Fieldsets</a></li>
-<li><a href="#affordances">3.9. Spring HATEOAS Affordances</a></li>
-<li><a href="#Creating">3.10. Creating Resources with HTTP POST</a></li>
-<li><a href="#server-deserialization">3.11. Deserialization of JSON:API types</a></li>
-<li><a href="#collection-model-deserialization">3.12. Deserialization of PagedModels</a></li>
-<li><a href="#uuid">3.13. UUID Deserialization</a></li>
-<li><a href="#polymorphy">3.14. Polymorphic Deserialization</a>
-<ul class="sectlevel3">
-<li><a href="#jackson-annotations">3.14.1. Jackson Annotations</a></li>
-</ul>
-</li>
-<li><a href="#error-handling">3.15. Error Handling</a>
-<ul class="sectlevel3">
-<li><a href="#more-generic-error-handling">3.15.1. More Generic Error Handling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#client-side-support">4. Client Side support</a>
+<li><a href="#migration">3. Migration Guide</a>
 <ul class="sectlevel2">
-<li><a href="#deserialization">4.1. Deserialization</a></li>
-<li><a href="#resttemplate">4.2. RestTemplate</a>
+<li><a href="#migration-3-0-0">3.1. Migrating to Version 3.0.0</a>
 <ul class="sectlevel3">
-<li><a href="#postWithNoId">4.2.1. Creating POST requests without serialized JSON:API id</a></li>
+<li><a href="#breaking-changes">3.1.1. Breaking Changes</a>
+<ul class="sectlevel4">
+<li><a href="#removed-deprecated-apis">Removed Deprecated APIs</a></li>
+<li><a href="#spring-boot-4-and-spring-framework-7">Spring Boot 4 and Spring Framework 7</a></li>
+<li><a href="#jackson-3-migration">Jackson 3 Migration</a>
+<ul class="sectlevel5">
+<li><a href="#package-changes">Package Changes</a></li>
+<li><a href="#api-changes">API Changes</a></li>
+<li><a href="#jsonapi-version-rendering">JSON:API Version Rendering</a></li>
+<li><a href="#mapper-customization">Mapper Customization</a></li>
 </ul>
 </li>
-<li><a href="#traverson">4.3. Traverson</a></li>
-<li><a href="#link-discovery">4.4. Link Discovery</a></li>
 </ul>
 </li>
-<li><a href="#configuration">5. Configuration</a>
+<li><a href="#custom-serializers-and-deserializers">3.1.2. Custom Serializers and Deserializers</a></li>
+<li><a href="#testing-changes">3.1.3. Testing Changes</a>
+<ul class="sectlevel4">
+<li><a href="#mockmvc-configuration">MockMvc Configuration</a></li>
+<li><a href="#resttemplate-restclient">RestTemplate → RestClient</a></li>
+</ul>
+</li>
+<li><a href="#new-features-in-3-0-0">3.1.4. New Features in 3.0.0</a>
+<ul class="sectlevel4">
+<li><a href="#improved-mapper-access">Improved Mapper Access</a></li>
+</ul>
+</li>
+<li><a href="#compatibility">3.1.5. Compatibility</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#server-side-support">4. Server Side support</a>
+<ul class="sectlevel2">
+<li><a href="#representation-models">4.1. Representation Models</a></li>
+<li><a href="#links">4.2. Links</a></li>
+<li><a href="#link-placement">4.3. Link Placement</a>
 <ul class="sectlevel3">
-<li><a href="#link-placement-configuration-example">5.1. Link Placement Configuration Example</a></li>
+<li><a href="#document-level-links-default">4.3.1. Document Level Links (Default)</a></li>
+<li><a href="#resource-level-links">4.3.2. Resource Level Links</a></li>
+</ul>
+</li>
+<li><a href="#annotations">4.4. Annotations</a></li>
+<li><a href="#jsonapi-builder">4.5. JSON:API Builder</a>
+<ul class="sectlevel3">
+<li><a href="#explicit-configuration-of-empty-relationships">4.5.1. Explicit Configuration of empty Relationships</a></li>
+</ul>
+</li>
+<li><a href="#inclusion">4.6. Inclusion of related Resources</a></li>
+<li><a href="#Nesting">4.7. Nesting of JsonApiModels</a></li>
+<li><a href="#sparse-fielsets">4.8. Sparse Fieldsets</a></li>
+<li><a href="#affordances">4.9. Spring HATEOAS Affordances</a></li>
+<li><a href="#Creating">4.10. Creating Resources with HTTP POST</a></li>
+<li><a href="#server-deserialization">4.11. Deserialization of JSON:API types</a></li>
+<li><a href="#collection-model-deserialization">4.12. Deserialization of PagedModels</a></li>
+<li><a href="#uuid">4.13. UUID Deserialization</a></li>
+<li><a href="#polymorphy">4.14. Polymorphic Deserialization</a>
+<ul class="sectlevel3">
+<li><a href="#jackson-annotations">4.14.1. Jackson Annotations</a></li>
+</ul>
+</li>
+<li><a href="#error-handling">4.15. Error Handling</a>
+<ul class="sectlevel3">
+<li><a href="#more-generic-error-handling">4.15.1. More Generic Error Handling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#client-side-support">5. Client Side support</a>
+<ul class="sectlevel2">
+<li><a href="#deserialization">5.1. Deserialization</a></li>
+<li><a href="#rest-clients">5.2. REST Clients</a>
+<ul class="sectlevel3">
+<li><a href="#restclient">5.2.1. RestClient (Spring Boot 4+)</a></li>
+<li><a href="#resttemplate">5.2.2. RestTemplate (Legacy)</a></li>
+<li><a href="#postWithNoId">5.2.3. Creating POST requests without serialized JSON:API id</a></li>
+</ul>
+</li>
+<li><a href="#traverson">5.3. Traverson</a></li>
+<li><a href="#link-discovery">5.4. Link Discovery</a></li>
+</ul>
+</li>
+<li><a href="#configuration">6. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#link-placement-configuration-example">6.1. Link Placement Configuration Example</a></li>
+<li><a href="#json-mapper-customization">6.2. JSON Mapper Customization</a>
+<ul class="sectlevel3">
+<li><a href="#example-basic-mapper-customization">6.2.1. Example: Basic Mapper Customization</a></li>
+<li><a href="#example-multiple-customizations">6.2.2. Example: Multiple Customizations</a>
+<ul class="sectlevel4">
+<li><a href="#accessing-the-configured-mapper">Accessing the Configured Mapper</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -153,13 +204,13 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <div class="sect2">
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
-<p>JSON:API for Spring HATEOAS is based on version 2.5.1 of Spring HATEOAS.
+<p>JSON:API for Spring HATEOAS is based on version 3.0.0 of Spring HATEOAS.
 For further understanding of this document, please be aware of both</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -267,7 +318,7 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <div class="listingblock primary">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:2.2.0'
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
 </code></pre>
 </div>
 </div>
@@ -277,20 +328,566 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;com.toedter&lt;/groupId&gt;
     &lt;artifactId&gt;spring-hateoas-jsonapi&lt;/artifactId&gt;
-    &lt;version&gt;2.2.0&lt;/version&gt;
+    &lt;version&gt;3.0.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The latest published snapshot version is <code>2.2.1-SNAPSHOT</code>. The 2.x.x stream is based on Spring Boot 3.x.x.</p>
+<p>The latest published snapshot version is <code>3.0.1-SNAPSHOT</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="version-requirements"><a class="anchor" href="#version-requirements"></a>2.1. Version Requirements</h3>
+<div class="paragraph">
+<p>This library requires:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Spring Boot 4.x</strong> (Spring Framework 7.x)</p>
+</li>
+<li>
+<p><strong>Jackson 3.x</strong> (tools.jackson.*)</p>
+</li>
+<li>
+<p><strong>Java 17 or later</strong></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.</p>
+</div>
+<div class="paragraph">
+<p>This is a breaking change if you:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Use deprecated APIs</strong>: All deprecated APIs have been <strong>removed</strong> (<code>withJsonApiVersionRendered()</code> and <code>withObjectMapperCustomizer()</code>)</p>
+</li>
+<li>
+<p>Use custom Jackson serializers/deserializers with the old <code>com.fasterxml.jackson.*</code> package</p>
+</li>
+<li>
+<p>Directly interact with the Jackson <code>ObjectMapper</code> API</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Jackson 3 API uses the <code>tools.jackson.<strong></code> package namespace instead of <code>com.fasterxml.jackson.</strong></code>.</p>
+</div>
+<div class="paragraph">
+<p>See the <a href="#migration-3-0-0">Migration Guide</a> for detailed migration instructions.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a>3. Server Side support</h2>
+<h2 id="migration"><a class="anchor" href="#migration"></a>3. Migration Guide</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="representation-models"><a class="anchor" href="#representation-models"></a>3.1. Representation Models</h3>
+<h3 id="migration-3-0-0"><a class="anchor" href="#migration-3-0-0"></a>3.1. Migrating to Version 3.0.0</h3>
+<div class="paragraph">
+<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+This section helps you migrate from version 2.x to 3.0.0.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Version 3.0.0 <strong>removes all deprecated APIs</strong> from version 2.x.x. Code using deprecated APIs will <strong>not compile</strong>.
+See the <a href="#_removed_deprecated_apis">Removed Deprecated APIs</a> section for migration instructions.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="breaking-changes"><a class="anchor" href="#breaking-changes"></a>3.1.1. Breaking Changes</h4>
+<div class="sect4">
+<h5 id="removed-deprecated-apis"><a class="anchor" href="#removed-deprecated-apis"></a>Removed Deprecated APIs</h5>
+<div class="paragraph">
+<p>Version 3.0.0 <strong>removes</strong> all deprecated APIs from version 2.x.x and also changes the mapper customization. You <strong>must</strong> migrate to the new APIs:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Removed API</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Replacement</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Section</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withJsonApiVersionRendered(boolean)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withJsonApiObject(JsonApiObject)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#jsonapi-version-rendering">JSON:API Version Rendering</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withObjectMapperCustomizer(Function&lt;ObjectMapper, ObjectMapper&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>withMapperCustomizer(UnaryOperator&lt;JsonMapper.Builder&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#json-mapper-customization">JSON Mapper Customization</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Action Required</strong>: If your code uses any of the removed APIs listed above, it will <strong>not compile</strong> with version 3.0.0.
+You must update to use the new replacement APIs before upgrading.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-boot-4-and-spring-framework-7"><a class="anchor" href="#spring-boot-4-and-spring-framework-7"></a>Spring Boot 4 and Spring Framework 7</h5>
+<div class="paragraph">
+<p>Version 3.0.0 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Minimum Java version</strong>: Java 17 (unchanged from 2.1.x)</p>
+</li>
+<li>
+<p><strong>Jakarta EE namespace</strong>: Uses <code>jakarta.<strong></code> packages instead of <code>javax.</strong></code></p>
+</li>
+<li>
+<p><strong>RestTemplate removed</strong>: Use <code>RestClient</code> instead for HTTP client operations</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="jackson-3-migration"><a class="anchor" href="#jackson-3-migration"></a>Jackson 3 Migration</h5>
+<div class="paragraph">
+<p>The most significant breaking change is the migration from Jackson 2 to Jackson 3.</p>
+</div>
+<div class="sect5">
+<h6 id="package-changes"><a class="anchor" href="#package-changes"></a>Package Changes</h6>
+<div class="paragraph">
+<p>Jackson 3 uses a new package namespace:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Jackson 2 (Old)</th>
+<th class="tableblock halign-left valign-top">Jackson 3 (New)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.databind.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tools.jackson.databind.*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.core.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tools.jackson.core.*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.annotation.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.fasterxml.jackson.annotation.*</code> <em>(unchanged)</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="api-changes"><a class="anchor" href="#api-changes"></a>API Changes</h6>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>ObjectMapper → JsonMapper</strong>: The <code>JsonMapper</code> class is now preferred over <code>ObjectMapper</code></p>
+</li>
+<li>
+<p><strong>Custom Serializers/Deserializers</strong>: Must extend Jackson 3 base classes from <code>tools.jackson.*</code> packages</p>
+</li>
+<li>
+<p><strong>Module Registration</strong>: Modules must be compatible with Jackson 3</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jsonapi-version-rendering"><a class="anchor" href="#jsonapi-version-rendering"></a>JSON:API Version Rendering</h6>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.0.0.
+You <strong>must</strong> use the new <code>withJsonApiObject()</code> API.</p>
+</div>
+<div class="paragraph">
+<p>If you were using <code>jsonApiVersionRendered</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiVersionRendered(true);  <i class="conum" data-value="1"></i><b>(1)</b>
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withJsonApiObject(new JsonApiObject(true, null, null, null));  <i class="conum" data-value="1"></i><b>(1)</b>
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>withJsonApiObject(new JsonApiObject(true, &#8230;&#8203;))</code> instead of the removed <code>withJsonApiVersionRendered(true)</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>JsonApiObject</code> provides much more flexibility and allows you to configure:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>version</strong>: The JSON:API version (e.g., "1.1")</p>
+</li>
+<li>
+<p><strong>ext</strong>: List of JSON:API extensions</p>
+</li>
+<li>
+<p><strong>profile</strong>: List of JSON:API profiles</p>
+</li>
+<li>
+<p><strong>meta</strong>: Metadata for the JSON:API object</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Example with all options</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    JsonApiObject jsonApiObject = new JsonApiObject(
+        true,  // showVersion
+        List.of(URI.create("https://jsonapi.org/ext/atomic")),  // extensions
+        List.of(URI.create("http://example.com/profiles/flexible-pagination")),  // profiles
+        Map.of("copyright", "Copyright 2025")  // meta
+    );
+
+    return new JsonApiConfiguration()
+        .withJsonApiObject(jsonApiObject);
+}
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="mapper-customization"><a class="anchor" href="#mapper-customization"></a>Mapper Customization</h6>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.0.0.
+You <strong>must</strong> use the new <code>withMapperCustomizer()</code> API.</p>
+</div>
+<div class="paragraph">
+<p>If you were using <code>ObjectMapperCustomizer</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withObjectMapperCustomizer(mapper -&gt; {  <i class="conum" data-value="1"></i><b>(1)</b>
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            return mapper;
+        });
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Bean
+public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+        .withMapperCustomizer(builder -&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
+            builder.enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="2"></i><b>(2)</b>
+        );
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>withMapperCustomizer</code> instead of the removed <code>withObjectMapperCustomizer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Works with <code>JsonMapper.Builder</code> instead of <code>ObjectMapper</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="custom-serializers-and-deserializers"><a class="anchor" href="#custom-serializers-and-deserializers"></a>3.1.2. Custom Serializers and Deserializers</h4>
+<div class="paragraph">
+<p>If you have custom Jackson serializers or deserializers, you need to update them:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Jackson 2)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+public class CustomSerializer extends StdSerializer&lt;MyType&gt; {
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializerProvider provider) {
+        // serialization logic
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (Jackson 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;  <i class="conum" data-value="1"></i><b>(1)</b>
+import tools.jackson.databind.ValueSerializer;  <i class="conum" data-value="2"></i><b>(2)</b>
+
+public class CustomSerializer extends ValueSerializer&lt;MyType&gt; {  <i class="conum" data-value="3"></i><b>(3)</b>
+    @Override
+    public void serialize(MyType value, JsonGenerator gen,
+                         SerializationContext ctxt) {  <i class="conum" data-value="4"></i><b>(4)</b>
+        // serialization logic (unchanged)
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>SerializationContext</code> instead of <code>SerializerProvider</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Use <code>ValueSerializer</code> instead of <code>JsonSerializer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Extend <code>ValueSerializer</code> instead of <code>StdSerializer</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Parameter type changed from <code>SerializerProvider</code> to <code>SerializationContext</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="testing-changes"><a class="anchor" href="#testing-changes"></a>3.1.3. Testing Changes</h4>
+<div class="sect4">
+<h5 id="mockmvc-configuration"><a class="anchor" href="#mockmvc-configuration"></a>MockMvc Configuration</h5>
+<div class="paragraph">
+<p>Spring Boot 4 removed <code>@AutoConfigureMockMvc</code>. You need to manually configure MockMvc:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (Spring Boot 3)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
+@AutoConfigureMockMvc
+class MyTest {
+    @Autowired
+    private MockMvc mockMvc;
+}
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (Spring Boot 4)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@SpringBootTest
+class MyTest {
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    void setup() {
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .build();
+    }
+}
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="resttemplate-restclient"><a class="anchor" href="#resttemplate-restclient"></a>RestTemplate → RestClient</h5>
+<div class="paragraph">
+<p>For HTTP client testing, migrate from <code>RestTemplate</code> to <code>RestClient</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Before (RestTemplate)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Autowired
+private TestRestTemplate restTemplate;
+
+ResponseEntity&lt;String&gt; response = restTemplate.exchange(
+    "/api/movies/1",
+    HttpMethod.GET,
+    entity,
+    String.class
+);
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After (RestClient)</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private RestClient restClient;
+
+@BeforeEach
+void setup() {
+    this.restClient = RestClient.builder()
+        .baseUrl("http://localhost:" + randomPort)
+        .build();
+}
+
+String response = restClient.get()
+    .uri("/api/movies/1")
+    .header("Accept", MediaTypes.JSON_API_VALUE)
+    .retrieve()
+    .body(String.class);
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="new-features-in-3-0-0"><a class="anchor" href="#new-features-in-3-0-0"></a>3.1.4. New Features in 3.0.0</h4>
+<div class="sect4">
+<h5 id="improved-mapper-access"><a class="anchor" href="#improved-mapper-access"></a>Improved Mapper Access</h5>
+<div class="paragraph">
+<p>Direct access to the configured JsonMapper:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder -&gt;
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i><b>(1)</b>
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Obtain a fully configured <code>JsonMapper</code> instance</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="compatibility"><a class="anchor" href="#compatibility"></a>3.1.5. Compatibility</h4>
+<div class="paragraph">
+<p>Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
+The main breaking changes are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from 2.x.x have been removed - you must use the new APIs:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>withJsonApiVersionRendered()</code> → <code>withJsonApiObject()</code></p>
+</li>
+<li>
+<p><code>withObjectMapperCustomizer()</code> → <code>withMapperCustomizer()</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Spring Boot 4</strong> requirement (was Spring Boot 3 in version 2.x.x)</p>
+</li>
+<li>
+<p><strong>Jackson 3</strong> package namespace changes (if you use custom serializers/deserializers)</p>
+</li>
+<li>
+<p>Spring Boot 4 testing API changes (<code>@AutoConfigureMockMvc</code>, <code>RestTemplate</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Migration Required</strong>: If you were using any of the deprecated APIs (<code>withJsonApiVersionRendered()</code> or
+<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update to use the
+new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) instead.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t use the removed deprecated APIs or custom Jackson code, and don&#8217;t directly interact with Spring Boot
+testing internals, migration should be straightforward - mainly updating dependencies to Spring Boot 4 compatible versions.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a>4. Server Side support</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="representation-models"><a class="anchor" href="#representation-models"></a>4.1. Representation Models</h3>
 <div class="paragraph">
 <p>All Spring HATEOAS representation models are rendered as JSON:API.
 Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
@@ -349,7 +946,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="links"><a class="anchor" href="#links"></a>3.2. Links</h3>
+<h3 id="links"><a class="anchor" href="#links"></a>4.2. Links</h3>
 <div class="paragraph">
 <p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
 Here is an example of a simple self link:</p>
@@ -478,7 +1075,7 @@ with JSON:API, you can use a specific configuration, (see <a href="#links-config
 </div>
 </div>
 <div class="sect2">
-<h3 id="link-placement"><a class="anchor" href="#link-placement"></a>3.3. Link Placement</h3>
+<h3 id="link-placement"><a class="anchor" href="#link-placement"></a>4.3. Link Placement</h3>
 <div class="paragraph">
 <p>The JSON:API specification allows links to be placed at two different levels in the document:</p>
 </div>
@@ -498,7 +1095,7 @@ However, you can configure this behavior using the <code>LinksAtResourceLevel</c
 (see <a href="#links-placement-configuration">[links-placement-configuration]</a>).</p>
 </div>
 <div class="sect3">
-<h4 id="document-level-links-default"><a class="anchor" href="#document-level-links-default"></a>3.3.1. Document Level Links (Default)</h4>
+<h4 id="document-level-links-default"><a class="anchor" href="#document-level-links-default"></a>4.3.1. Document Level Links (Default)</h4>
 <div class="paragraph">
 <p>When using the default configuration, links from an EntityModel are placed at the document level:</p>
 </div>
@@ -531,7 +1128,7 @@ entityModel.add(Link.of("http://localhost/movies/1").withSelfRel());
 </div>
 </div>
 <div class="sect3">
-<h4 id="resource-level-links"><a class="anchor" href="#resource-level-links"></a>3.3.2. Resource Level Links</h4>
+<h4 id="resource-level-links"><a class="anchor" href="#resource-level-links"></a>4.3.2. Resource Level Links</h4>
 <div class="paragraph">
 <p>To place links at the resource level instead, configure <code>LinksAtResourceLevel</code> to <code>true</code> (See <a href="#link-placement-configuration-example">Link Placement Configuration Example</a>):</p>
 </div>
@@ -591,7 +1188,7 @@ and paged models (PagedModel) are not affected by this setting.
 </div>
 </div>
 <div class="sect2">
-<h3 id="annotations"><a class="anchor" href="#annotations"></a>3.4. Annotations</h3>
+<h3 id="annotations"><a class="anchor" href="#annotations"></a>4.4. Annotations</h3>
 <div class="paragraph">
 <p>The goal of this implementation is to automate the mapping from/to JSON:API
 as convenient as possible.</p>
@@ -742,7 +1339,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 </div>
 </div>
 <div class="sect2">
-<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>3.5. JSON:API Builder</h3>
+<h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>4.5. JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
 <code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
@@ -1105,7 +1702,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="sect3">
-<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>3.5.1. Explicit Configuration of empty Relationships</h4>
+<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>4.5.1. Explicit Configuration of empty Relationships</h4>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
@@ -1153,7 +1750,7 @@ The methods also preserve any existing links and meta information in the relatio
 </div>
 </div>
 <div class="sect2">
-<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>3.6. Inclusion of related Resources</h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>4.6. Inclusion of related Resources</h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
 but a REST controller could provide an optional request parameter like</p>
@@ -1185,7 +1782,7 @@ and the builder could be used for the inclusion, like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>3.7. Nesting of JsonApiModels</h3>
+<h3 id="Nesting"><a class="anchor" href="#Nesting"></a>4.7. Nesting of JsonApiModels</h3>
 <div class="paragraph">
 <p>When using the model builder, <code>JsonApiModel</code> instances can be used as the model and included
 resources. Here is an example that also illustrates the different levels of meta.</p>
@@ -1273,7 +1870,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="sect2">
-<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>3.8. Sparse Fieldsets</h3>
+<h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>4.8. Sparse Fieldsets</h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
 by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
@@ -1369,10 +1966,10 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 </div>
 </div>
 <div class="sect2">
-<h3 id="affordances"><a class="anchor" href="#affordances"></a>3.9. Spring HATEOAS Affordances</h3>
+<h3 id="affordances"><a class="anchor" href="#affordances"></a>4.9. Spring HATEOAS Affordances</h3>
 <div class="paragraph">
 <p>Spring HATEOAS provides a generic, media type independent API for
-2.5.1/reference/html/#server.affordances[affordances].
+3.0.0/reference/html/#server.affordances[affordances].
 Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
 information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
@@ -1484,7 +2081,7 @@ If you want to get property information like required, you have to include a dep
 </div>
 </div>
 <div class="sect2">
-<h3 id="Creating"><a class="anchor" href="#Creating"></a>3.10. Creating Resources with HTTP POST</h3>
+<h3 id="Creating"><a class="anchor" href="#Creating"></a>4.10. Creating Resources with HTTP POST</h3>
 <div class="paragraph">
 <p>To create new REST resources using HTTP POST, you can provide <code>JSON:API</code> formatted JSON as input.
 For example, a <code>POST</code> with the body:</p>
@@ -1617,7 +2214,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>3.11. Deserialization of JSON:API types</h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>4.11. Deserialization of JSON:API types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -1716,7 +2313,7 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 </div>
 </div>
 <div class="sect2">
-<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>3.12. Deserialization of PagedModels</h3>
+<h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>4.12. Deserialization of PagedModels</h3>
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
 it is sometimes handy to be able to deserialize collection models and paged models. This is
@@ -1770,7 +2367,7 @@ The same mechanism would work also for <code>CollectionModel&lt;EntityModel&lt;M
 </div>
 </div>
 <div class="sect2">
-<h3 id="uuid"><a class="anchor" href="#uuid"></a>3.13. UUID Deserialization</h3>
+<h3 id="uuid"><a class="anchor" href="#uuid"></a>4.13. UUID Deserialization</h3>
 <div class="paragraph">
 <p>UUIDs (<code>java.util.UUID</code>) are supported natively for deserialization.
 So a JSON like</p>
@@ -1809,7 +2406,7 @@ So a JSON like</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>3.14. Polymorphic Deserialization</h3>
+<h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>4.14. Polymorphic Deserialization</h3>
 <div class="paragraph">
 <p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
 assigning a JSON:API type to a Java class and then also switching on, that the mappings should
@@ -1932,7 +2529,7 @@ But the first director would be an instance of class <code>Director</code>,
 while the second director would be an instance of class <code>DirectorWithEmail</code>.</p>
 </div>
 <div class="sect3">
-<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>3.14.1. Jackson Annotations</h4>
+<h4 id="jackson-annotations"><a class="anchor" href="#jackson-annotations"></a>4.14.1. Jackson Annotations</h4>
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
@@ -2158,7 +2755,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect2">
-<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>3.15. Error Handling</h3>
+<h3 id="error-handling"><a class="anchor" href="#error-handling"></a>4.15. Error Handling</h3>
 <div class="paragraph">
 <p>To create <code>JSON:API</code> compliant error messages, you can use <code>JsonApiErrors</code> and <code>JsonApiError</code></p>
 </div>
@@ -2199,7 +2796,7 @@ Right now there is the restriction, that the type attribute of both
 </div>
 </div>
 <div class="sect3">
-<h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>3.15.1. More Generic Error Handling</h4>
+<h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>4.15.1. More Generic Error Handling</h4>
 <div class="paragraph">
 <p>If you want to implement a more generic error handling that converts exceptions
 to JSON:API error responses, you could implement a <code>@ControllerAdvice</code> like:</p>
@@ -2360,10 +2957,10 @@ public class JsonApiErrorsException extends RuntimeException {
 </div>
 </div>
 <div class="sect1">
-<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a>4. Client Side support</h2>
+<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a>5. Client Side support</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="deserialization"><a class="anchor" href="#deserialization"></a>4.1. Deserialization</h3>
+<h3 id="deserialization"><a class="anchor" href="#deserialization"></a>5.1. Deserialization</h3>
 <div class="paragraph">
 <p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
 models are supported.</p>
@@ -2533,11 +3130,53 @@ of JSON:API specific things like relationships only works with Spring HATEOAS re
 </div>
 </div>
 <div class="sect2">
-<h3 id="resttemplate"><a class="anchor" href="#resttemplate"></a>4.2. RestTemplate</h3>
+<h3 id="rest-clients"><a class="anchor" href="#rest-clients"></a>5.2. REST Clients</h3>
 <div class="paragraph">
 <p>If you want to write a client that deserializes server responses into Java objects,
-you can use RestTemplate, but with a little extra configuration.
-The following example shows how such a configuration can look like:</p>
+you can use Spring&#8217;s HTTP client APIs with JSON:API support.</p>
+</div>
+<div class="sect3">
+<h4 id="restclient"><a class="anchor" href="#restclient"></a>5.2.1. RestClient (Spring Boot 4+)</h4>
+<div class="paragraph">
+<p>For Spring Boot 4 and later, use <code>RestClient</code> (which replaces <code>RestTemplate</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiClientConfig {
+
+    @Bean
+    public RestClient jsonApiRestClient(JsonApiConfiguration jsonApiConfiguration) {
+        JsonMapper jsonMapper = jsonApiConfiguration.getJsonMapper();
+
+        // Register JSON:API module
+        Jackson2JsonApiModule jackson2JsonApiModule =
+            new Jackson2JsonApiModule(jsonApiConfiguration);
+        jsonMapper.registerModule(jackson2JsonApiModule);
+
+        return RestClient.builder()
+            .baseUrl("http://localhost:8080")
+            .defaultHeader("Accept", "application/vnd.api+json")
+            .messageConverters(converters -&gt; {
+                MappingJackson2HttpMessageConverter converter =
+                    new MappingJackson2HttpMessageConverter();
+                converter.setObjectMapper(jsonMapper);
+                converter.setSupportedMediaTypes(
+                    List.of(MediaType.parseMediaType("application/vnd.api+json"))
+                );
+                converters.add(0, converter);
+            })
+            .build();
+    }
+}
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resttemplate"><a class="anchor" href="#resttemplate"></a>5.2.2. RestTemplate (Legacy)</h4>
+<div class="paragraph">
+<p>For older Spring Boot versions, you can use RestTemplate with JSON:API configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2560,8 +3199,22 @@ static class Config {
 </code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>RestTemplate</code> is in maintenance mode and will be removed in Spring Framework 7.
+For new applications using Spring Boot 4+, use <code>RestClient</code> instead.
+</td>
+</tr>
+</table>
+</div>
+</div>
 <div class="sect3">
-<h4 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>4.2.1. Creating POST requests without serialized JSON:API id</h4>
+<h4 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>5.2.3. Creating POST requests without serialized JSON:API id</h4>
 <div class="paragraph">
 <p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
 and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
@@ -2606,18 +3259,18 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 </div>
 </div>
 <div class="sect2">
-<h3 id="traverson"><a class="anchor" href="#traverson"></a>4.3. Traverson</h3>
+<h3 id="traverson"><a class="anchor" href="#traverson"></a>5.3. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS</a>.</p>
+implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="link-discovery"><a class="anchor" href="#link-discovery"></a>4.4. Link Discovery</h3>
+<h3 id="link-discovery"><a class="anchor" href="#link-discovery"></a>5.4. Link Discovery</h3>
 <div class="paragraph">
 <p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
-<a href="https://docs.spring.io/spring-hateoas/docs/2.5.1/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+<a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
 When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
 is exposed as a Spring bean.</p>
@@ -2642,7 +3295,7 @@ assertThat(links)
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration"><a class="anchor" href="#configuration"></a>5. Configuration</h2>
+<h2 id="configuration"><a class="anchor" href="#configuration"></a>6. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There are several options for how to change the output of the JSON:API rendering.</p>
@@ -2662,11 +3315,6 @@ Currently, you can configure</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiVersionRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the JSON:API version should be rendered automatically. This configuration is deprecated, please use the JsonApiObject configuration instead</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
@@ -2711,8 +3359,8 @@ should get the JSON:API type of the superclass.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ObjectMapperCustomizer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression to add additional configuration to the Jackson <code>ObjectMapper</code> used for serialization.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MapperCustomizer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#mapper-customization">Mapper Customization</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set
 <a id="links-configuration"></a></p></td>
 </tr>
@@ -2781,19 +3429,13 @@ JsonApiConfiguration jsonApiConfiguration() {
     .withEmptyAttributesObjectSerialized(false)
     .withJsonApiIdNotSerializedForValue("-1")
     .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-    .withJsonApiCompliantLinks(false)
-    .withObjectMapperCustomizer(objectMapper -&gt;
-      objectMapper.configure(
-        SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-        true
-      )
-    );
+    .withJsonApiCompliantLinks(false);
 }
 </code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="link-placement-configuration-example"><a class="anchor" href="#link-placement-configuration-example"></a>5.1. Link Placement Configuration Example</h4>
+<div class="sect2">
+<h3 id="link-placement-configuration-example"><a class="anchor" href="#link-placement-configuration-example"></a>6.1. Link Placement Configuration Example</h3>
 <div class="paragraph">
 <p>To configure links to appear at the resource level instead of the document level:</p>
 </div>
@@ -2825,13 +3467,163 @@ in the "data" section instead of at the document top level. See <a href="#link-p
 and examples.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="json-mapper-customization"><a class="anchor" href="#json-mapper-customization"></a>6.2. JSON Mapper Customization</h3>
+<div class="paragraph">
+<p>Starting with version 3.0.0, this library uses <strong>Jackson 3</strong> (package <code>tools.jackson.<strong></code> instead of <code>com.fasterxml.jackson.</strong></code>).
+You can customize the Jackson <code>JsonMapper</code> used for JSON:API serialization and deserialization through the
+<code>mapperCustomizer</code> configuration option.</p>
+</div>
+<div class="paragraph">
+<p>The customizer is a <code>UnaryOperator&lt;JsonMapper.Builder&gt;</code> that receives the Jackson <code>JsonMapper.Builder</code> and
+returns a modified builder. This allows you to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Enable or disable Jackson serialization/deserialization features</p>
+</li>
+<li>
+<p>Register custom modules</p>
+</li>
+<li>
+<p>Configure date/time formats</p>
+</li>
+<li>
+<p>Add custom serializers or deserializers</p>
+</li>
+<li>
+<p>Enable or disable pretty printing</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="example-basic-mapper-customization"><a class="anchor" href="#example-basic-mapper-customization"></a>6.2.1. Example: Basic Mapper Customization</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder -&gt;
+                builder.enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="1"></i><b>(1)</b>
+            );
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable pretty-printed JSON output</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="example-multiple-customizations"><a class="anchor" href="#example-multiple-customizations"></a>6.2.2. Example: Multiple Customizations</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Configuration
+public class JsonApiConfig {
+
+    @Bean
+    public JsonApiConfiguration jsonApiConfiguration() {
+        return new JsonApiConfiguration()
+            .withMapperCustomizer(builder -&gt; builder
+                .enable(SerializationFeature.INDENT_OUTPUT)  <i class="conum" data-value="1"></i><b>(1)</b>
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)  <i class="conum" data-value="2"></i><b>(2)</b>
+                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)  <i class="conum" data-value="3"></i><b>(3)</b>
+            );
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable pretty-printed JSON output</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Don&#8217;t fail when encountering unknown properties during deserialization</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Serialize dates as timestamps instead of ISO-8601 strings</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Jackson 3 Migration Notes:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use <code>tools.jackson.databind.<strong></code> packages instead of <code>com.fasterxml.jackson.databind.</strong></code></p>
+</li>
+<li>
+<p><code>JsonMapper</code> replaces <code>ObjectMapper</code> as the preferred API</p>
+</li>
+<li>
+<p>Serializers and deserializers must use Jackson 3 base classes from <code>tools.jackson.*</code></p>
+</li>
+<li>
+<p>Annotations remain in <code>com.fasterxml.jackson.annotation.*</code> (unchanged)</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="accessing-the-configured-mapper"><a class="anchor" href="#accessing-the-configured-mapper"></a>Accessing the Configured Mapper</h5>
+<div class="paragraph">
+<p>You can obtain a fully configured <code>JsonMapper</code> instance from the configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">JsonApiConfiguration config = new JsonApiConfiguration()
+    .withMapperCustomizer(builder -&gt;
+        builder.enable(SerializationFeature.INDENT_OUTPUT)
+    );
+
+JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i><b>(1)</b>
+</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Returns a <code>JsonMapper</code> with all customizations applied</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.2.0<br>
-Last updated 2025-12-07 14:14:32 UTC
+Version 3.0.0<br>
+Last updated 2025-12-12 13:08:12 UTC
 </div>
 </div>
 </div>
