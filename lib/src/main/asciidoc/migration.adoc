@@ -186,47 +186,12 @@ public class CustomSerializer extends ValueSerializer<MyType> {  // <3>
 <3> Extend `ValueSerializer` instead of `StdSerializer`
 <4> Parameter type changed from `SerializerProvider` to `SerializationContext`
 
-=== Testing Changes
-
-==== MockMvc Configuration
-
-Spring Boot 4 removed `@AutoConfigureMockMvc`. You need to manually configure MockMvc:
-
-.Before (Spring Boot 3)
-[source,java]
-----
-@SpringBootTest
-@AutoConfigureMockMvc
-class MyTest {
-    @Autowired
-    private MockMvc mockMvc;
-}
-----
-
-.After (Spring Boot 4)
-[source,java]
-----
-@SpringBootTest
-class MyTest {
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @BeforeEach
-    void setup() {
-        this.mockMvc = MockMvcBuilders
-            .webAppContextSetup(context)
-            .build();
-    }
-}
-----
-
 ==== RestTemplate → RestClient
 
-For HTTP client testing, migrate from `RestTemplate` to `RestClient`:
+As of Spring Framework 7.0, RestTemplate is deprecated in favor of RestClient and will be removed in a future version.
+For HTTP client testing, migrate from `TestRestTemplate` to `RestTestClient`:
 
-.Before (RestTemplate)
+.Before (TestRestTemplate )
 [source,java]
 ----
 @Autowired
@@ -240,23 +205,18 @@ ResponseEntity<String> response = restTemplate.exchange(
 );
 ----
 
-.After (RestClient)
+.After (RestTestClient)
 [source,java]
 ----
-private RestClient restClient;
-
-@BeforeEach
-void setup() {
-    this.restClient = RestClient.builder()
-        .baseUrl("http://localhost:" + randomPort)
-        .build();
-}
+@Autowired
+private RestTestClient restClient;
 
 String response = restClient.get()
     .uri("/api/movies/1")
     .header("Accept", MediaTypes.JSON_API_VALUE)
-    .retrieve()
-    .body(String.class);
+    .exchange()
+    .returnResult(String.class)
+    .getResponseBody();
 ----
 
 === New Features in 3.0.0
