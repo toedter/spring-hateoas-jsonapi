@@ -16,22 +16,21 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import dev.harrel.json.providers.jackson3.Jackson3Node;
 import dev.harrel.jsonschema.Error;
 import dev.harrel.jsonschema.JsonNodeFactory;
 import dev.harrel.jsonschema.Validator;
 import dev.harrel.jsonschema.ValidatorFactory;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.core.io.ClassPathResource;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.io.ClassPathResource;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author Kai Toedter
@@ -52,19 +51,26 @@ public abstract class JsonApiTestBase {
 
     if (validateSchema) {
       // Load the JSON schema from resources
-      InputStream schemaStream = new ClassPathResource("jsonapi-schema.json", getClass()).getInputStream();
+      InputStream schemaStream = new ClassPathResource(
+        "jsonapi-schema.json",
+        getClass()
+      ).getInputStream();
       String schemaString = new String(schemaStream.readAllBytes());
 
       JsonNodeFactory factory = new Jackson3Node.Factory();
       Validator validator = new ValidatorFactory()
-              .withJsonNodeFactory(factory)
-              .createValidator();
+        .withJsonNodeFactory(factory)
+        .createValidator();
 
-      tools.jackson.databind.JsonNode providerSchemaNode = new JsonMapper().readTree(schemaString);
+      tools.jackson.databind.JsonNode providerSchemaNode =
+        new JsonMapper().readTree(schemaString);
       URI schemaUri = validator.registerSchema(providerSchemaNode);
 
-      Validator.Result validatenResult = validator.validate(schemaUri, actualJsonNode);
-      if(!validatenResult.isValid()) {
+      Validator.Result validatenResult = validator.validate(
+        schemaUri,
+        actualJsonNode
+      );
+      if (!validatenResult.isValid()) {
         for (Error error : validatenResult.getErrors()) {
           System.out.println("Validation error: " + error.getError());
         }
