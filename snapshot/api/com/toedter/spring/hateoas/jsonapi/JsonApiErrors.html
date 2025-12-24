@@ -91,7 +91,33 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">JsonApiErrors</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Class to build JSON:API compliant error messages.</div>
+<div class="block">Collection of JSON:API error objects for building compliant error responses.
+
+ <p>This class represents the top-level <code>errors</code> member of a JSON:API document, containing
+ one or more <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects. According to the JSON:API specification, a document
+ must contain either <code>data</code>, <code>errors</code>, or <code>meta</code> at the top level, and <code>
+ errors</code> must not coexist with <code>data</code>.
+
+ <p><b>Usage example:</b>
+
+ <pre><code>
+ JsonApiErrors errors = JsonApiErrors.create()
+   .withError(JsonApiError.create()
+     .withStatus("404")
+     .withTitle("Resource not found"))
+   .withError(JsonApiError.create()
+     .withStatus("403")
+     .withTitle("Forbidden"));
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a></li>
+<li><a href="https://jsonapi.org/format/#errors">JSON:API Error Objects</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,11 +131,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">JsonApiErrors</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Creates an empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection.</div>
 </div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.toedter.spring.hateoas.jsonapi.JsonApiError)" class="member-name-link">JsonApiErrors</a><wbr>(<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;jsonApiError)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Creates JsonApiErrors with initial <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a>.</div>
+<div class="block">Creates a <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection with an initial error.</div>
 </div>
 </div>
 </section>
@@ -128,12 +154,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiErrors</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Creates a new empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getErrors()" class="member-name-link">getErrors</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets list of <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects.</div>
+<div class="block">Gets the list of <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects contained in this errors collection.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -141,7 +167,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiErrors</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withError(com.toedter.spring.hateoas.jsonapi.JsonApiError)" class="member-name-link">withError</a><wbr>(<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;jsonApiError)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds an <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> to the list.</div>
+<div class="block">Adds an error to this collection.</div>
 </div>
 </div>
 </div>
@@ -164,17 +190,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>JsonApiErrors</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JsonApiErrors</span>()</div>
-<div class="block">Creates empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Creates an empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection.
+
+ <p>Use <a href="#withError(com.toedter.spring.hateoas.jsonapi.JsonApiError)"><code>withError(JsonApiError)</code></a> to add errors to the collection.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(com.toedter.spring.hateoas.jsonapi.JsonApiError)">
 <h3>JsonApiErrors</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JsonApiErrors</span><wbr><span class="parameters">(<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;jsonApiError)</span></div>
-<div class="block">Creates JsonApiErrors with initial <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a>.</div>
+<div class="block">Creates a <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection with an initial error.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonApiError</code> - the initial <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a></dd>
+<dd><code>jsonApiError</code> - the initial error to add; must not be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if <code>jsonApiError</code> is null</dd>
 </dl>
 </section>
 </li>
@@ -190,12 +220,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withError(com.toedter.spring.hateoas.jsonapi.JsonApiError)">
 <h3>withError</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiErrors</a></span>&nbsp;<span class="element-name">withError</span><wbr><span class="parameters">(<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&nbsp;jsonApiError)</span></div>
-<div class="block">Adds an <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> to the list.</div>
+<div class="block">Adds an error to this collection.
+
+ <p>This method returns <code>this</code> to support fluent method chaining.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonApiError</code> - the <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> to be added.</dd>
+<dd><code>jsonApiError</code> - the error to add; must not be null</dd>
 <dt>Returns:</dt>
-<dd>this <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> object.</dd>
+<dd>this <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> instance for method chaining</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if <code>jsonApiError</code> is null</dd>
 </dl>
 </section>
 </li>
@@ -203,10 +237,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create()">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiErrors</a></span>&nbsp;<span class="element-name">create</span>()</div>
-<div class="block">Creates empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Creates a new empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collection.
+
+ <p>This factory method is provided for consistency with other builder patterns in the JSON:API for Spring HATEOASrary.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>A new <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> object.</dd>
+<dd>a new empty <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> instance</dd>
 </dl>
 </section>
 </li>
@@ -224,10 +260,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getErrors()">
 <h3>getErrors</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a>&gt;</span>&nbsp;<span class="element-name">getErrors</span>()</div>
-<div class="block">Gets list of <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects.</div>
+<div class="block">Gets the list of <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects contained in this errors collection.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>list of <a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiError</code></a> objects.</dd>
+<dd>an unmodifiable view of the error list; will never be null</dd>
 </dl>
 </section>
 </li>

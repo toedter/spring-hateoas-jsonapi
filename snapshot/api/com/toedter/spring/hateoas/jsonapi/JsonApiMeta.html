@@ -85,7 +85,52 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">JsonApiMeta</span></div>
-<div class="block">Specifies if this field/method should be serialized to and deserialized from JSON:API meta.</div>
+<div class="block">Marks a field or method for inclusion in the JSON:API <code>meta</code> object.
+
+ <p>Fields or setter/getter methods annotated with <code>@JsonApiMeta</code> will be serialized to and
+ deserialized from the <code>meta</code> member of a JSON:API resource object. The <code>meta</code> object
+ can contain any non-standard information about a resource.
+
+ <p>During serialization, the annotated field value becomes a property in the <code>meta</code> object.
+ During deserialization, values from the <code>meta</code> object are mapped back to the annotated
+ fields.
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ public class Movie {
+   private String title;
+
+   @JsonApiMeta
+   private String copyright;
+
+   @JsonApiMeta
+   private int viewCount;
+ }
+
+ // Results in JSON:API:
+ {
+   "data": {
+     "type": "movies",
+     "id": "1",
+     "attributes": {
+       "title": "The Matrix"
+     },
+     "meta": {
+       "copyright": "Warner Bros",
+       "viewCount": 1000000
+     }
+   }
+ }
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="https://jsonapi.org/format/#document-meta">JSON:API Meta Information</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="details" id="annotation-interface-element-detail"></section>
 <!-- ========= END OF CLASS DATA ========= -->

@@ -91,8 +91,42 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">JsonApiModelBuilder</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API. It
- includes building JSON:API relationships and included.</div>
+<div class="block">Fluent builder API for creating complex JSON:API representations with relationships and included
+ resources.
+
+ <p>This builder provides a type-safe, idiomatic way to construct JSON:API documents including:
+
+ <ul>
+   <li>Primary data (single resources or collections)
+   <li>Relationships between resources
+   <li>Included resources for compound documents
+   <li>Links at document and resource levels
+   <li>Meta information
+   <li>Sparse fieldsets for attribute filtering
+   <li>Pagination metadata
+ </ul>
+
+ <p>The builder ensures compliance with the JSON:API specification and integrates seamlessly with
+ Spring HATEOAS representation models.
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ JsonApiModel jsonApiModel = JsonApiModelBuilder.jsonApiModel()
+   .model(EntityModel.of(movie))
+   .relationship("directors", directors)
+   .included(directors)
+   .build();
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><code>JsonApiModel</code></li>
+<li><a href="#jsonApiModel()"><code>jsonApiModel()</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -142,17 +176,18 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#link(java.lang.String,org.springframework.hateoas.LinkRelation)" class="member-name-link">link</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;href,
  org.springframework.hateoas.LinkRelation&nbsp;relation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds a <code>Link</code> with the given href and <code>LinkRelation</code> to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds a <code>Link</code> with the given href and <code>LinkRelation</code> to the top level of the
+ JSON:API document.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#link(org.springframework.hateoas.Link)" class="member-name-link">link</a><wbr>(org.springframework.hateoas.Link&nbsp;link)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds a <code>Link</code> to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds a <code>Link</code> to the top level of the JSON:API document.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#links(java.lang.Iterable)" class="member-name-link">links</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;org.springframework.hateoas.Link&gt;&nbsp;links)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the given <code>Link</code>s to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds multiple <code>Link</code>s to the top level of the JSON:API document.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#meta(java.lang.String,java.lang.Object)" class="member-name-link">meta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
@@ -163,14 +198,13 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#model(java.lang.Object)" class="member-name-link">model</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates an <code>EntityModel</code> from the object as the base for the 
- RepresentationModel to be built.</div>
+<div class="block">Creates an <code>EntityModel</code> from the given object as the primary data for the JSON:API
+ document.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#model(org.springframework.hateoas.RepresentationModel)" class="member-name-link">model</a><wbr>(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;model)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the <code>RepresentationModel</code> as the base for the RepresentationModel to be
- built.</div>
+<div class="block">Sets the <code>RepresentationModel</code> as the primary data for the JSON:API document to be built.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pageLinks(java.lang.String)" class="member-name-link">pageLinks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkBase)</code></div>
@@ -275,15 +309,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="model(org.springframework.hateoas.RepresentationModel)">
 <h3>model</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></span>&nbsp;<span class="element-name">model</span><wbr><span class="parameters">(org.springframework.hateoas.RepresentationModel&lt;?&gt;&nbsp;model)</span></div>
-<div class="block">Sets the <code>RepresentationModel</code> as the base for the RepresentationModel to be
- built.
+<div class="block">Sets the <code>RepresentationModel</code> as the primary data for the JSON:API document to be built.
 
- <p>NOTE: If the model is already set, an IllegalStateException will be thrown.</div>
+ <p>The model can be an <code>EntityModel</code>, <code>CollectionModel</code>, or <code>PagedModel</code>. This forms the main content of the JSON:API <code>
+ data</code> field.
+
+ <p><b>Note:</b> If a model is already set, an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> will be thrown to
+ prevent accidental overwriting.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>model</code> - must not be null.</dd>
+<dd><code>model</code> - the representation model to use as primary data; must not be null</dd>
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>this builder instance for method chaining; will never be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>model</code> is null</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - if a model has already been set on this builder</dd>
 </dl>
 </section>
 </li>
@@ -291,15 +331,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="model(java.lang.Object)">
 <h3>model</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></span>&nbsp;<span class="element-name">model</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span></div>
-<div class="block">Creates an <code>EntityModel</code> from the object as the base for the 
- RepresentationModel to be built.
+<div class="block">Creates an <code>EntityModel</code> from the given object as the primary data for the JSON:API
+ document.
 
- <p>NOTE: If the model is already set, an IllegalStateException will be thrown.</div>
+ <p>This is a convenience method that automatically wraps the object in an <code>EntityModel</code>
+ before setting it as the model. Equivalent to calling <code>model(EntityModel.of(object))</code>.
+
+ <p><b>Note:</b> If a model is already set, an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> will be thrown.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>object</code> - must not be null.</dd>
+<dd><code>object</code> - the object to wrap in an <code>EntityModel</code>; must not be null</dd>
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>this builder instance for method chaining; will never be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>object</code> is null</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - if a model has already been set on this builder</dd>
 </dl>
 </section>
 </li>
@@ -307,15 +353,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="link(org.springframework.hateoas.Link)">
 <h3>link</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></span>&nbsp;<span class="element-name">link</span><wbr><span class="parameters">(org.springframework.hateoas.Link&nbsp;link)</span></div>
-<div class="block">Adds a <code>Link</code> to the <code>RepresentationModel</code> to be built.
+<div class="block">Adds a <code>Link</code> to the top level of the JSON:API document.
 
- <p>NOTE: This adds it to the top level. If you need a link inside the model you added with
- <a href="#model(org.springframework.hateoas.RepresentationModel)"><code>model(RepresentationModel)</code></a> method, add it directly to the model.</div>
+ <p>This link will be rendered in the document-level <code>links</code> object, not inside the
+ resource object itself. If you need to add a link to the resource, add it directly to the model
+ passed to <a href="#model(org.springframework.hateoas.RepresentationModel)"><code>model(RepresentationModel)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>link</code> - must not be null.</dd>
+<dd><code>link</code> - the link to add; must not be null</dd>
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>this builder instance for method chaining; will never be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>link</code> is null</dd>
 </dl>
 </section>
 </li>
@@ -324,13 +373,18 @@ loadScripts(document, 'script');</script>
 <h3>link</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></span>&nbsp;<span class="element-name">link</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;href,
  org.springframework.hateoas.LinkRelation&nbsp;relation)</span></div>
-<div class="block">Adds a <code>Link</code> with the given href and <code>LinkRelation</code> to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds a <code>Link</code> with the given href and <code>LinkRelation</code> to the top level of the
+ JSON:API document.
+
+ <p>This is a convenience method equivalent to <code>link(Link.of(href, relation))</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>href</code> - must not be null.</dd>
-<dd><code>relation</code> - must not be null.</dd>
+<dd><code>href</code> - the link href; must not be null</dd>
+<dd><code>relation</code> - the link relation; must not be null</dd>
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>this builder instance for method chaining; will never be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>href</code> or <code>relation</code> is null</dd>
 </dl>
 </section>
 </li>
@@ -338,12 +392,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="links(java.lang.Iterable)">
 <h3>links</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiModelBuilder.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiModelBuilder</a></span>&nbsp;<span class="element-name">links</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;org.springframework.hateoas.Link&gt;&nbsp;links)</span></div>
-<div class="block">Adds the given <code>Link</code>s to the <code>RepresentationModel</code> to be built.</div>
+<div class="block">Adds multiple <code>Link</code>s to the top level of the JSON:API document.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>links</code> - must not be null.</dd>
+<dd><code>links</code> - the links to add; must not be null</dd>
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>this builder instance for method chaining; will never be null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>links</code> is null</dd>
 </dl>
 </section>
 </li>

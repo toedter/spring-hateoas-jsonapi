@@ -85,7 +85,43 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">JsonApiType</span></div>
-<div class="block">Specifies the JSON:API type of a resource object.</div>
+<div class="block">Marks a field or method as the source of the JSON:API resource type.
+
+ <p>This annotation can be applied to fields or getter methods to explicitly specify which
+ property should be used as the <code>type</code> member of a JSON:API resource object. The value of
+ the annotated field or method return value will be serialized as the resource's <code>type</code>.
+
+ <p>If this annotation is not present, the JSON:API for Spring HATEOASrary will derive the type from:
+
+ <ol>
+   <li>The <a href="JsonApiTypeForClass.html" title="annotation interface in com.toedter.spring.hateoas.jsonapi"><code>JsonApiTypeForClass</code></a> annotation on the class
+   <li>The class name (optionally pluralized and/or lowercased based on <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>)
+ </ol>
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ public class Movie {
+   @JsonApiType
+   private String resourceType = "films";
+   // or on getter:
+   @JsonApiType
+   public String getResourceType() {
+     return "films";
+   }
+ }
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list-long">
+<li><a href="JsonApiId.html" title="annotation interface in com.toedter.spring.hateoas.jsonapi"><code>JsonApiId</code></a></li>
+<li><a href="JsonApiTypeForClass.html" title="annotation interface in com.toedter.spring.hateoas.jsonapi"><code>JsonApiTypeForClass</code></a></li>
+<li><a href="https://jsonapi.org/format/#document-resource-object-identification">JSON:API
+     Resource Identification</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="details" id="annotation-interface-element-detail"></section>
 <!-- ========= END OF CLASS DATA ========= -->

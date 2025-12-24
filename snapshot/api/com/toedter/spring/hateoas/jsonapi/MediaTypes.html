@@ -91,7 +91,33 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">MediaTypes</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Provides the JSON:API media type <code>application/vnd.api+json</code>.</div>
+<div class="block">Provides constants for the JSON:API media type.
+
+ <p>This utility class defines the official JSON:API media type <code>application/vnd.api+json</code>
+ as specified in the JSON:API specification. These constants can be used for content negotiation,
+ request/response type declarations, and Spring MVC mapping annotations.
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ @GetMapping(produces = MediaTypes.JSON_API_VALUE)
+ public EntityModel&lt;Movie&gt; getMovie() {
+   // ...
+ }
+
+ @RequestMapping(consumes = MediaTypes.JSON_API_VALUE)
+ public void createMovie(@RequestBody Movie movie) {
+   // ...
+ }
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="https://jsonapi.org/format/#content-negotiation">JSON:API Content Negotiation</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,12 +133,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final org.springframework.http.MediaType</code></div>
 <div class="col-second even-row-color"><code><a href="#JSON_API" class="member-name-link">JSON_API</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Public constant media type for <code>application/vnd.api+json</code>.</div>
+<div class="block"><code>MediaType</code> constant for JSON:API: <code>application/vnd.api+json</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#JSON_API_VALUE" class="member-name-link">JSON_API_VALUE</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">A String equivalent of the JSON:API media type</div>
+<div class="block">String representation of the JSON:API media type: "application/vnd.api+json".</div>
 </div>
 </div>
 </section>
@@ -139,7 +165,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="JSON_API_VALUE">
 <h3>JSON_API_VALUE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">JSON_API_VALUE</span></div>
-<div class="block">A String equivalent of the JSON:API media type</div>
+<div class="block">String representation of the JSON:API media type: "application/vnd.api+json".
+
+ <p>Use this constant with annotations like <code>@RequestMapping</code>, <code>@GetMapping</code>, etc.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -154,7 +182,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="JSON_API">
 <h3>JSON_API</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">org.springframework.http.MediaType</span>&nbsp;<span class="element-name">JSON_API</span></div>
-<div class="block">Public constant media type for <code>application/vnd.api+json</code>.</div>
+<div class="block"><code>MediaType</code> constant for JSON:API: <code>application/vnd.api+json</code>.
+
+ <p>Use this constant for programmatic media type handling and content negotiation with Spring's
+ <code>MediaType</code> API.</div>
 </section>
 </li>
 </ul>

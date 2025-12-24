@@ -85,7 +85,42 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">JsonApiId</span></div>
-<div class="block">Specifies the JSON:API id of a resource object.</div>
+<div class="block">Marks a field or method as the source of the JSON:API resource identifier.
+
+ <p>This annotation can be applied to fields or getter methods to explicitly specify which
+ property should be used as the <code>id</code> member of a JSON:API resource object. The annotated
+ field or method return value will be serialized as the resource's <code>id</code>.
+
+ <p>If this annotation is not present, the JSON:API for Spring HATEOASrary will fall back to:
+
+ <ol>
+   <li>JPA <code>@Id</code> annotation (if present)
+   <li>A field named "id"
+ </ol>
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ public class Movie {
+   @JsonApiId
+   private String movieIdentifier;
+   // or on getter:
+   @JsonApiId
+   public String getMovieIdentifier() {
+     return movieIdentifier;
+   }
+ }
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list-long">
+<li><a href="JsonApiType.html" title="annotation interface in com.toedter.spring.hateoas.jsonapi"><code>JsonApiType</code></a></li>
+<li><a href="https://jsonapi.org/format/#document-resource-object-identification">JSON:API
+     Resource Identification</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="details" id="annotation-interface-element-detail"></section>
 <!-- ========= END OF CLASS DATA ========= -->

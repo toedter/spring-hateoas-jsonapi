@@ -91,7 +91,38 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">JsonApiError</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Class to build a single JSON:API compliant error. This error can be added to <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Represents a single JSON:API error object compliant with the JSON:API specification.
+
+ <p>This class provides an immutable representation of an error that can be included in <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a> collections. Each error object can contain:
+
+ <ul>
+   <li>A unique identifier for this specific error occurrence
+   <li>Links to additional information (e.g., <code>about</code> link)
+   <li>HTTP status code applicable to the error
+   <li>Application-specific error code
+   <li>Human-readable summary (title)
+   <li>Detailed explanation of the error
+   <li>Source information (pointer or parameter causing the error)
+   <li>Additional meta information
+ </ul>
+
+ <p>The class uses Lombok's <code>@With</code> annotation for convenient error building:
+
+ <pre><code>
+ JsonApiError error = JsonApiError.create()
+   .withStatus("404")
+   .withTitle("Resource not found")
+   .withDetail("The requested movie does not exist");
+ </code></pre></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a></li>
+<li><a href="https://jsonapi.org/format/#errors">JSON:API Error Objects</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">

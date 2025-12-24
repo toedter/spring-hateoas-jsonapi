@@ -91,7 +91,34 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">JsonApiConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">JSON:API specific configuration.</div>
+<div class="block">Configuration class for customizing JSON:API serialization and deserialization behavior.
+
+ <p>This class provides a fluent API for configuring various aspects of JSON:API processing,
+ including:
+
+ <ul>
+   <li>Type naming conventions (pluralization, case conversion)
+   <li>JSON:API object rendering (version, extensions, profiles)
+   <li>Page metadata handling for paged models
+   <li>Custom type mappings for Java classes
+   <li>Link rendering options and affordances
+   <li>Jackson mapper customization
+ </ul>
+
+ <p>All configuration methods return a new instance with the updated setting, following an
+ immutable builder pattern.
+
+ <p><b>Example usage:</b>
+
+ <pre><code>
+ @Bean
+ public JsonApiConfiguration jsonApiConfiguration() {
+   return JsonApiConfiguration.create()
+     .withPluralizedTypeRendered(true)
+     .withLowerCasedTypeRendered(true)
+     .withJsonApiObject(new JsonApiObject(true));
+ }
+ </code></pre></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
