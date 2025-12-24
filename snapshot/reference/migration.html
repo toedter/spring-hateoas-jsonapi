@@ -37,8 +37,8 @@
 <h2 id="migration-3-0-0"><a class="anchor" href="#migration-3-0-0"></a>Migrating to Version 3.0.0</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
-This section helps you migrate from version 2.x to 3.0.0.</p>
+<p>Version 3.0.0 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+This section provides guidance for migrating from version 2.x to 3.0.0.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -167,10 +167,10 @@ You must update to use the new replacement APIs before upgrading.</p>
 <h5 id="_jsonapi_version_rendering"><a class="anchor" href="#_jsonapi_version_rendering"></a>JSON:API Version Rendering</h5>
 <div class="paragraph">
 <p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.0.0.
-You <strong>must</strong> use the new <code>withJsonApiObject()</code> API.</p>
+You <strong>must</strong> migrate to the new <code>withJsonApiObject()</code> API.</p>
 </div>
 <div class="paragraph">
-<p>If you were using <code>jsonApiVersionRendered</code> configuration:</p>
+<p>If you were using the <code>jsonApiVersionRendered</code> configuration:</p>
 </div>
 <div class="listingblock">
 <div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
@@ -252,10 +252,10 @@ public JsonApiConfiguration jsonApiConfiguration() {
 <h5 id="_mapper_customization"><a class="anchor" href="#_mapper_customization"></a>Mapper Customization</h5>
 <div class="paragraph">
 <p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.0.0.
-You <strong>must</strong> use the new <code>withMapperCustomizer()</code> API.</p>
+You <strong>must</strong> migrate to the new <code>withMapperCustomizer()</code> API.</p>
 </div>
 <div class="paragraph">
-<p>If you were using <code>ObjectMapperCustomizer</code> configuration:</p>
+<p>If you were using the <code>ObjectMapperCustomizer</code> configuration:</p>
 </div>
 <div class="listingblock">
 <div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
@@ -435,13 +435,13 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div class="sect2">
 <h3 id="_compatibility"><a class="anchor" href="#_compatibility"></a>Compatibility</h3>
 <div class="paragraph">
-<p>Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
+<p>Version 3.0.0 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
 The main breaking changes are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from 2.x.x have been removed - you must use the new APIs:</p>
+<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from version 2.x.x have been removed - you must migrate to the new APIs:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -454,10 +454,10 @@ The main breaking changes are:</p>
 </div>
 </li>
 <li>
-<p><strong>Spring Boot 4</strong> requirement (was Spring Boot 3 in version 2.x.x)</p>
+<p><strong>Spring Boot 4</strong> requirement (upgraded from Spring Boot 3 in version 2.x.x)</p>
 </li>
 <li>
-<p><strong>Jackson 3</strong> package namespace changes (if you use custom serializers/deserializers)</p>
+<p><strong>Jackson 3</strong> package namespace changes (affects custom serializers/deserializers)</p>
 </li>
 <li>
 <p>Spring Boot 4 testing API changes (<code>@AutoConfigureMockMvc</code>, <code>RestTemplate</code>)</p>
@@ -466,12 +466,12 @@ The main breaking changes are:</p>
 </div>
 <div class="paragraph">
 <p><strong>Migration Required</strong>: If you were using any of the deprecated APIs (<code>withJsonApiVersionRendered()</code> or
-<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update to use the
-new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) instead.</p>
+<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update your code to use the
+new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) before upgrading.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t use the removed deprecated APIs or custom Jackson code, and don&#8217;t directly interact with Spring Boot
-testing internals, migration should be straightforward - mainly updating dependencies to Spring Boot 4 compatible versions.</p>
+testing internals, migration should be straightforward - mainly requiring updates to Spring Boot 4 compatible dependency versions.</p>
 </div>
 </div>
 </div>
@@ -480,7 +480,7 @@ testing internals, migration should be straightforward - mainly updating depende
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 11:06:37 UTC
+Last updated 2025-12-24 11:22:34 UTC
 </div>
 </div>
 </div>

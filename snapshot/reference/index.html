@@ -82,7 +82,7 @@
 </li>
 </ul>
 </li>
-<li><a href="#server-side-support">4. Server Side support</a>
+<li><a href="#server-side-support">4. Server-Side Support</a>
 <ul class="sectlevel2">
 <li><a href="#representation-models">4.1. Representation Models</a></li>
 <li><a href="#links">4.2. Links</a></li>
@@ -95,15 +95,15 @@
 <li><a href="#annotations">4.4. Annotations</a></li>
 <li><a href="#jsonapi-builder">4.5. JSON:API Builder</a>
 <ul class="sectlevel3">
-<li><a href="#explicit-configuration-of-empty-relationships">4.5.1. Explicit Configuration of empty Relationships</a></li>
+<li><a href="#explicit-configuration-of-empty-relationships">4.5.1. Explicit Configuration of Empty Relationships</a></li>
 </ul>
 </li>
-<li><a href="#inclusion">4.6. Inclusion of related Resources</a></li>
+<li><a href="#inclusion">4.6. Inclusion of Related Resources</a></li>
 <li><a href="#Nesting">4.7. Nesting of JsonApiModels</a></li>
 <li><a href="#sparse-fielsets">4.8. Sparse Fieldsets</a></li>
 <li><a href="#affordances">4.9. Spring HATEOAS Affordances</a></li>
 <li><a href="#Creating">4.10. Creating Resources with HTTP POST</a></li>
-<li><a href="#server-deserialization">4.11. Deserialization of JSON:API types</a></li>
+<li><a href="#server-deserialization">4.11. Deserialization of JSON:API Types</a></li>
 <li><a href="#collection-model-deserialization">4.12. Deserialization of PagedModels</a></li>
 <li><a href="#uuid">4.13. UUID Deserialization</a></li>
 <li><a href="#polymorphy">4.14. Polymorphic Deserialization</a>
@@ -118,7 +118,7 @@
 </li>
 </ul>
 </li>
-<li><a href="#client-side-support">5. Client Side support</a>
+<li><a href="#client-side-support">5. Client-Side Support</a>
 <ul class="sectlevel2">
 <li><a href="#deserialization">5.1. Deserialization</a></li>
 <li><a href="#rest-clients">5.2. REST Clients</a>
@@ -203,7 +203,7 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
 <p>JSON:API for Spring HATEOAS is based on version 3.0.0 of Spring HATEOAS.
-For further understanding of this document, please be aware of both</p>
+For better understanding of this document, please familiarize yourself with both:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -216,17 +216,17 @@ For further understanding of this document, please be aware of both</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following documentation assumes that the reader knows the above documents.
-Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
-to expand the unfolded source code.</p>
+<p>This documentation assumes that readers are familiar with the above documents.
+Some parts of the Java code examples are folded; click on the icon in the bottom-right corner
+to expand and view the full source code.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="jsonapi"><a class="anchor" href="#jsonapi"></a>1.2. JSON:API</h3>
 <div class="paragraph">
-<p><a href="https://jsonapi.org/">JSON:API</a> is a widely adapted hypermedia format.
+<p><a href="https://jsonapi.org/">JSON:API</a> is a widely adopted hypermedia format.
 You can find a list of implementations and tools <a href="https://jsonapi.org/implementations/">here</a>.
-Answers to a few questions, e.g. related to HAL, you can find
+For answers to frequently asked questions (e.g., related to HAL), see
 <a href="https://jsonapi.org/faq/#why-not-use-the-hal-specification">here</a>.</p>
 </div>
 <div class="paragraph">
@@ -311,7 +311,7 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <h2 id="setup"><a class="anchor" href="#setup"></a>2. Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To enable the JSON:API media type you just need to add this module as a dependency to your project.</p>
+<p>To enable the JSON:API media type, simply add this module as a dependency to your project.</p>
 </div>
 <div class="listingblock primary">
 <div class="title">Gradle</div>
@@ -396,8 +396,8 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 <div class="sect2">
 <h3 id="migration-3-0-0"><a class="anchor" href="#migration-3-0-0"></a>3.1. Migrating to Version 3.0.0</h3>
 <div class="paragraph">
-<p>Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
-This section helps you migrate from version 2.x to 3.0.0.</p>
+<p>Version 3.0.0 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+This section provides guidance for migrating from version 2.x to 3.0.0.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -526,10 +526,10 @@ You must update to use the new replacement APIs before upgrading.</p>
 <h6 id="jsonapi-version-rendering"><a class="anchor" href="#jsonapi-version-rendering"></a>JSON:API Version Rendering</h6>
 <div class="paragraph">
 <p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.0.0.
-You <strong>must</strong> use the new <code>withJsonApiObject()</code> API.</p>
+You <strong>must</strong> migrate to the new <code>withJsonApiObject()</code> API.</p>
 </div>
 <div class="paragraph">
-<p>If you were using <code>jsonApiVersionRendered</code> configuration:</p>
+<p>If you were using the <code>jsonApiVersionRendered</code> configuration:</p>
 </div>
 <div class="listingblock">
 <div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
@@ -611,10 +611,10 @@ public JsonApiConfiguration jsonApiConfiguration() {
 <h6 id="mapper-customization"><a class="anchor" href="#mapper-customization"></a>Mapper Customization</h6>
 <div class="paragraph">
 <p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.0.0.
-You <strong>must</strong> use the new <code>withMapperCustomizer()</code> API.</p>
+You <strong>must</strong> migrate to the new <code>withMapperCustomizer()</code> API.</p>
 </div>
 <div class="paragraph">
-<p>If you were using <code>ObjectMapperCustomizer</code> configuration:</p>
+<p>If you were using the <code>ObjectMapperCustomizer</code> configuration:</p>
 </div>
 <div class="listingblock">
 <div class="title">Before (Version 2.x.x - Spring Boot 3)</div>
@@ -794,13 +794,13 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div class="sect3">
 <h4 id="compatibility"><a class="anchor" href="#compatibility"></a>3.1.4. Compatibility</h4>
 <div class="paragraph">
-<p>Version 3.0.0 is a major version bump due to the Spring Boot 4 and Jackson 3 migration.
+<p>Version 3.0.0 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
 The main breaking changes are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from 2.x.x have been removed - you must use the new APIs:</p>
+<p><strong>Removed deprecated APIs</strong>: All deprecated APIs from version 2.x.x have been removed - you must migrate to the new APIs:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -813,10 +813,10 @@ The main breaking changes are:</p>
 </div>
 </li>
 <li>
-<p><strong>Spring Boot 4</strong> requirement (was Spring Boot 3 in version 2.x.x)</p>
+<p><strong>Spring Boot 4</strong> requirement (upgraded from Spring Boot 3 in version 2.x.x)</p>
 </li>
 <li>
-<p><strong>Jackson 3</strong> package namespace changes (if you use custom serializers/deserializers)</p>
+<p><strong>Jackson 3</strong> package namespace changes (affects custom serializers/deserializers)</p>
 </li>
 <li>
 <p>Spring Boot 4 testing API changes (<code>@AutoConfigureMockMvc</code>, <code>RestTemplate</code>)</p>
@@ -825,19 +825,19 @@ The main breaking changes are:</p>
 </div>
 <div class="paragraph">
 <p><strong>Migration Required</strong>: If you were using any of the deprecated APIs (<code>withJsonApiVersionRendered()</code> or
-<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update to use the
-new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) instead.</p>
+<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update your code to use the
+new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) before upgrading.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t use the removed deprecated APIs or custom Jackson code, and don&#8217;t directly interact with Spring Boot
-testing internals, migration should be straightforward - mainly updating dependencies to Spring Boot 4 compatible versions.</p>
+testing internals, migration should be straightforward - mainly requiring updates to Spring Boot 4 compatible dependency versions.</p>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a>4. Server Side support</h2>
+<h2 id="server-side-support"><a class="anchor" href="#server-side-support"></a>4. Server-Side Support</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="representation-models"><a class="anchor" href="#representation-models"></a>4.1. Representation Models</h3>
@@ -878,11 +878,11 @@ Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="paragraph">
 <p>In JSON:API, the <code>id</code> field must be of type <code>String</code>.
-But in your model you can use any Class and <code>toString()</code> is used for conversion.
-So, if the <code>id</code> attribute of <code>Movie</code> would be of type <code>long</code>,
-the rendered JSON:API would be the same.
-The JSON:API <code>type</code> is automatically generated of the pluralized, lower case, simple class name.
-This is best practice, since then most likely the type matches the URL (end)
+However, in your model you can use any class, and <code>toString()</code> is used for conversion.
+So, if the <code>id</code> attribute of <code>Movie</code> were of type <code>long</code>,
+the rendered JSON:API output would be the same.
+The JSON:API <code>type</code> is automatically generated from the pluralized, lowercase, simple class name.
+This is a best practice, as the type will most likely match the URL (endpoint)
 of the corresponding REST collection resource.</p>
 </div>
 <div class="admonitionblock note">
@@ -901,7 +901,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 <div class="sect2">
 <h3 id="links"><a class="anchor" href="#links"></a>4.2. Links</h3>
 <div class="paragraph">
-<p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+<p>If Spring HATEOAS links contain only an href, the simple JSON:API link format is used for rendering.
 Here is an example of a simple self link:</p>
 </div>
 <div class="listingblock">
@@ -921,8 +921,8 @@ Here is an example of a simple self link:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
-In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.</p>
+<p>A complex Link object in Spring HATEOAS can have optional properties like name, type, hreflang, title, and others.
+In previous versions of this library, those properties were serialized as JSON:API link metadata, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -950,7 +950,7 @@ In previous versions of this library, those properties were serialized as JSON:A
 </div>
 </div>
 <div class="paragraph">
-<p>JSON:API 1.1 now defines the optional link properties type, title and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
+<p>JSON:API 1.1 now defines the optional link properties type, title, and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
 The default rendering of a complex link is now</p>
 </div>
 <div class="listingblock">
@@ -979,13 +979,13 @@ The default rendering of a complex link is now</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
-So the new format reflects the new JSON:API 1.1 link structure,
-but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
+<p>As you can see, the properties title, type, and hreflang now appear only as top-level link properties.
+The new format reflects the JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible with version 1.x.x of this library.</p>
 </div>
 <div class="paragraph">
-<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
-both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+<p>If you want to maintain backward compatibility and render the link properties type, title, and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behavior
 (see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
 </div>
 <div class="listingblock">
@@ -1143,11 +1143,11 @@ and paged models (PagedModel) are not affected by this setting.
 <div class="sect2">
 <h3 id="annotations"><a class="anchor" href="#annotations"></a>4.4. Annotations</h3>
 <div class="paragraph">
-<p>The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible.</p>
+<p>The goal of this implementation is to automate the mapping to/from JSON:API
+as conveniently as possible.</p>
 </div>
 <div class="paragraph">
-<p>There are four new annotations provided by this project:</p>
+<p>This project provides four annotations:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1295,7 +1295,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 <h3 id="jsonapi-builder"><a class="anchor" href="#jsonapi-builder"></a>4.5. JSON:API Builder</h3>
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
-<code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
+<code>JsonApiModelBuilder</code>. The following example shows how to create a JSON:API representation model using the <code>JsonApiModelBuilder</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1371,7 +1371,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="paragraph">
-<p>If you want the <code>directors</code> relationship always being rendered as an array,
+<p>If you want the <code>directors</code> relationship to always be rendered as an array,
 even if it is empty or contains only a single data element,
 you can build it like:</p>
 </div>
@@ -1413,7 +1413,7 @@ you can build it like:</p>
 </div>
 <div class="paragraph">
 <p>You can also pass a Java <code>Collection</code> as data for a relationship.
-A collection will always be rendered as JSON array,
+A collection will always be rendered as a JSON array,
 even when it is empty or contains a single element.
 So,</p>
 </div>
@@ -1655,7 +1655,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="sect3">
-<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>4.5.1. Explicit Configuration of empty Relationships</h4>
+<h4 id="explicit-configuration-of-empty-relationships"><a class="anchor" href="#explicit-configuration-of-empty-relationships"></a>4.5.1. Explicit Configuration of Empty Relationships</h4>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
@@ -1666,7 +1666,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
 </div>
 <div class="paragraph">
-<p>An explicit empty to-one relationship can be added like</p>
+<p>An explicit empty to-one relationship can be added like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1681,7 +1681,7 @@ or <code>relationshipWithEmptyData()</code> to create an empty to-many relations
 <p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
 </div>
 <div class="paragraph">
-<p>An explicit empty to-many relationship can be added like</p>
+<p>An explicit empty to-many relationship can be added like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1696,17 +1696,17 @@ or <code>relationshipWithEmptyData()</code> to create an empty to-many relations
 <p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
 </div>
 <div class="paragraph">
-<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
-or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
-The methods also preserve any existing links and meta information in the relationship.</p>
+<p>These methods are particularly useful when you want to replace existing relationship data with null or an empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs. to-many) for your JSON:API consumers.
+These methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>4.6. Inclusion of related Resources</h3>
+<h3 id="inclusion"><a class="anchor" href="#inclusion"></a>4.6. Inclusion of Related Resources</h3>
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
-but a REST controller could provide an optional request parameter like</p>
+but a REST controller can provide an optional request parameter like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1715,8 +1715,8 @@ but a REST controller could provide an optional request parameter like</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Then, within the controller implementation, this parameter could be interpreted,
-and the builder could be used for the inclusion, like</p>
+<p>Then, within the controller implementation, this parameter can be interpreted,
+and the builder can be used for the inclusion, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1826,8 +1826,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 <h3 id="sparse-fielsets"><a class="anchor" href="#sparse-fielsets"></a>4.8. Sparse Fieldsets</h3>
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
-by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
-the attributes <code>name</code> and <code>born</code>, and a movie would have the attributes <code>title</code> and <code>rating</code>.</p>
+using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director has
+the attributes <code>name</code> and <code>born</code>, and a movie has the attributes <code>title</code> and <code>rating</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1884,7 +1884,7 @@ of a movie would be serialized:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
+<p>In a REST controller, a method with HTTP-mapping can provide an optional request parameter for each sparse fieldset
 that should be applied to a specific JSON:API type, like:</p>
 </div>
 <div class="listingblock">
@@ -1921,16 +1921,16 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 <div class="sect2">
 <h3 id="affordances"><a class="anchor" href="#affordances"></a>4.9. Spring HATEOAS Affordances</h3>
 <div class="paragraph">
-<p>Spring HATEOAS provides a generic, media type independent API for
+<p>Spring HATEOAS provides a generic, media type-independent API for
 3.0.0/reference/html/#server.affordances[affordances].
-Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
-information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
+In the JSON:API specification, there is no equivalent concept, but JSON:API allows links to have additional meta
+information. This library provides a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
-that can be serialized by Spring HATEOAS out of the box.</p>
+which can be serialized by Spring HATEOAS out of the box.</p>
 </div>
 <div class="paragraph">
 <p>The following example shows the usage of Spring HATEOAS affordances.
-First you have to enable this experimental feature in the configuration, like</p>
+First, you need to enable this experimental feature in the configuration, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1939,7 +1939,7 @@ First you have to enable this experimental feature in the configuration, like</p
 </div>
 </div>
 <div class="paragraph">
-<p>Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like</p>
+<p>Then you can add an affordance (for creating a movie) to a Spring HATEOAS link like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2027,7 +2027,7 @@ This feature is experimental. The JSON structure of the provided affordances mig
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you want to get property information like required, you have to include a dependency to <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>
+To obtain property information such as required fields, you must include a dependency on <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>.
 </td>
 </tr>
 </table>
@@ -2054,7 +2054,7 @@ For example, a <code>POST</code> with the body:</p>
 <div class="paragraph">
 <p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> automatically.
 You can also create REST resources that contain <code>JSON:API relationships</code>.
-You just have to annotate the underlying domain model class, with <code>JsonApiRelationships(&lt;relationship name&gt;)</code></p>
+You simply need to annotate the underlying domain model class with <code>JsonApiRelationships(&lt;relationship name&gt;)</code>.</p>
 </div>
 <div class="paragraph">
 <p>For example, a <code>POST</code> with the body:</p>
@@ -2087,8 +2087,8 @@ You just have to annotate the underlying domain model class, with <code>JsonApiR
 </div>
 <div class="paragraph">
 <p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> with a filled list of directors,
-where ONLY the id attribute of each director is set.
-The REST controller then has to interpret those relationships and bind the
+where only the id attribute of each director is set.
+The REST controller must then interpret those relationships and bind the
 real director objects to the movie.</p>
 </div>
 <div class="paragraph">
@@ -2167,7 +2167,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect2">
-<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>4.11. Deserialization of JSON:API types</h3>
+<h3 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>4.11. Deserialization of JSON:API Types</h3>
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
 those fields are also filled during deserialization.
@@ -2269,8 +2269,8 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 <h3 id="collection-model-deserialization"><a class="anchor" href="#collection-model-deserialization"></a>4.12. Deserialization of PagedModels</h3>
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
-it is sometimes handy to be able to deserialize collection models and paged models. This is
-useful if a service consumes results of other services that produce JSON:API responses.</p>
+it is sometimes useful to be able to deserialize collection models and paged models. This is
+helpful when a service consumes results from other services that produce JSON:API responses.</p>
 </div>
 <div class="paragraph">
 <p>Here is an example of a serialized <code>PagedModel</code>.</p>
@@ -2361,9 +2361,9 @@ So a JSON like</p>
 <div class="sect2">
 <h3 id="polymorphy"><a class="anchor" href="#polymorphy"></a>4.14. Polymorphic Deserialization</h3>
 <div class="paragraph">
-<p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
-assigning a JSON:API type to a Java class and then also switching on, that the mappings should
-also be used for deserialization, e.g.</p>
+<p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration to
+assign a JSON:API type to a Java class and then also enable the mappings to be
+used for deserialization, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2402,10 +2402,10 @@ public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; mo
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Be aware that this mechanism overrides
+<p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Note that this mechanism overrides
 the default deserialization to an object of the class given by the REST controller method&#8217;s signature.
-The deserializer checks if the mapped Java type is assignable to the originally required Java type,
-otherwise an <code>IllegalArgumentException</code> is thrown.</p>
+The deserializer checks if the mapped Java type is assignable to the originally required Java type;
+otherwise, an <code>IllegalArgumentException</code> is thrown.</p>
 </div>
 <div class="paragraph">
 <p>The same mechanism can also be used to deserialize polymorphic relationships.</p>
@@ -2486,7 +2486,7 @@ while the second director would be an instance of class <code>DirectorWithEmail<
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
-on a 'per class' base, using some Jackson annotations. The following example illustrates this:</p>
+on a per-class basis using Jackson annotations. The following example illustrates this:</p>
 </div>
 <div class="paragraph">
 <p>Imagine a controller method like</p>
@@ -2560,10 +2560,10 @@ From the JSON:API 1.1 spec:
 </table>
 </div>
 <div class="paragraph">
-<p>Important: The above mechanism is also used for serialization, so you could set
-the JSON:API <code>type</code> attribute (within data) to a more generic type, but still serialize the
+<p>Important: The above mechanism is also used for serialization, so you can set
+the JSON:API <code>type</code> attribute (within data) to a more generic type while still serializing the
 <code>@type</code> attribute to indicate the specialized type.
-So the JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
+The JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2699,8 +2699,8 @@ the first one of Class <code>SuperEChild</code>, the second one of class <code>S
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Right now there is the restriction, that the type attribute of both
-<code>SuperEChild</code> and <code>SuperEChild2</code> has to be <code>type</code>. E.g. <code>_type</code> would not work.
+Currently, there is a restriction that the type attribute of both
+<code>SuperEChild</code> and <code>SuperEChild2</code> must be <code>type</code>. For example, <code>_type</code> would not work.
 </td>
 </tr>
 </table>
@@ -2751,8 +2751,8 @@ Right now there is the restriction, that the type attribute of both
 <div class="sect3">
 <h4 id="more-generic-error-handling"><a class="anchor" href="#more-generic-error-handling"></a>4.15.1. More Generic Error Handling</h4>
 <div class="paragraph">
-<p>If you want to implement a more generic error handling that converts exceptions
-to JSON:API error responses, you could implement a <code>@ControllerAdvice</code> like:</p>
+<p>If you want to implement more generic error handling that converts exceptions
+to JSON:API error responses, you can implement a <code>@ControllerAdvice</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2809,7 +2809,7 @@ public class ExceptionControllerAdvice {
 </div>
 </div>
 <div class="paragraph">
-<p>Furthermore, you could implement a <code>JsonApiErrorsException</code> like:</p>
+<p>Furthermore, you can implement a <code>JsonApiErrorsException</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2887,7 +2887,7 @@ public class JsonApiErrorsException extends RuntimeException {
 </div>
 </div>
 <div class="paragraph">
-<p>Now you could throw a <code>JsonApiErrorsException</code> like:</p>
+<p>Now you can throw a <code>JsonApiErrorsException</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2903,19 +2903,19 @@ public class JsonApiErrorsException extends RuntimeException {
 <p>which would then be converted to a JSON:API error response.</p>
 </div>
 <div class="paragraph">
-<p>You find implementations of the <code>ExceptionControllerAdvice</code>, <code>JsonApiErrorsException</code> and <code>CommonErrors</code> in the example code.</p>
+<p>You can find implementations of the <code>ExceptionControllerAdvice</code>, <code>JsonApiErrorsException</code>, and <code>CommonErrors</code> in the example code.</p>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a>5. Client Side support</h2>
+<h2 id="client-side-support"><a class="anchor" href="#client-side-support"></a>5. Client-Side Support</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="deserialization"><a class="anchor" href="#deserialization"></a>5.1. Deserialization</h3>
 <div class="paragraph">
-<p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+<p>Simple JSON:API-based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
 models are supported.</p>
 </div>
 <div class="paragraph">
@@ -2957,13 +2957,13 @@ where the <code>Movie</code> class looks like</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be built with JSON:API model builder, but a few things can already be done:</p>
+<p>Note that the deserialization mechanism is currently unable to deserialize all types of
+complex JSON:API structures that can be built with the JSON:API model builder, but several features are already supported:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Deserialized meta</p>
+<p>Deserializing meta</p>
 </li>
 <li>
 <p>Deserializing included resources into the relationship DTOs</p>
@@ -3062,7 +3062,7 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized in a <code>CollectionModel&lt;EntityModel&lt;MovieWithDirectors&gt;&gt;</code>, so that all the names
+<p>would be deserialized into a <code>CollectionModel&lt;EntityModel&lt;MovieWithDirectors&gt;&gt;</code>, so that all the names
 of the directors are set on the Java side.</p>
 </div>
 <div class="admonitionblock note">
@@ -3073,13 +3073,13 @@ of the directors are set on the Java side.</p>
 </td>
 <td class="content">
 <code>CollectionModel&lt;MovieWithDirectors&gt;</code> would NOT resolve the director names, because deserialization
-of JSON:API specific things like relationships only works with Spring HATEOAS representation models.
+of JSON:API-specific features like relationships only works with Spring HATEOAS representation models.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>More examples for deserialization of relationships you find in the section <a href="#server-deserialization">Deserialization of JSON:API types</a>.</p>
+<p>For more examples of relationship deserialization, see the section <a href="#server-deserialization">Deserialization of JSON:API Types</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3159,7 +3159,7 @@ static class Config {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>RestTemplate</code> is in maintenance mode and will be removed in Spring Framework 7.
+<code>RestTemplate</code> is in maintenance mode and will be removed in a future Spring Framework release.
 For new applications using Spring Boot 4+, use <code>RestClient</code> instead.
 </td>
 </tr>
@@ -3169,9 +3169,9 @@ For new applications using Spring Boot 4+, use <code>RestClient</code> instead.
 <div class="sect3">
 <h4 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>5.2.3. Creating POST requests without serialized JSON:API id</h4>
 <div class="paragraph">
-<p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
-that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+<p>If you want to use RestTemplate to make a POST request, the JSON:API id is often created by the server
+and is not included in the JSON body. The easiest way to achieve this is to configure a marker value to indicate
+that DTOs with this id value should not include the JSON:API id in the resulting JSON.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you specify a configuration like</p>
@@ -3214,8 +3214,8 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 <div class="sect2">
 <h3 id="traverson"><a class="anchor" href="#traverson"></a>5.3. Traverson</h3>
 <div class="paragraph">
-<p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a>.</p>
+<p>The hypermedia type <code>application/vnd.api+json</code> is currently not compatible with the <code>Traverson</code>
+implementation provided by <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3230,7 +3230,7 @@ is exposed as a Spring bean.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, you can set up and use an instance as follows
-(<code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
+(where <code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3251,11 +3251,11 @@ assertThat(links)
 <h2 id="configuration"><a class="anchor" href="#configuration"></a>6. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are several options for how to change the output of the JSON:API rendering.</p>
+<p>There are several options for customizing the JSON:API rendering output.</p>
 </div>
 <div class="paragraph">
 <p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
-Currently, you can configure</p>
+Currently, you can configure:</p>
 </div>
 <table class="tableblock frame-all grid-all fit-content">
 <colgroup>
@@ -3266,77 +3266,75 @@ Currently, you can configure</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Here you can set a JSON:API object do set all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, like version, ext, profile and meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set a JSON:API object with all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, such as version, ext, profile, and meta.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PluralizedTypeRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as pluralized or non pluralized class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether JSON:API types should be rendered as pluralized or non-pluralized class names.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pluralized</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LowerCasedTypeRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as lower case or original class names.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">lower case</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether JSON:API types should be rendered as lowercase or original class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lowercase</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PageMetaAutomaticallyCreated</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClass</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If a specific Java class should be rendered with a specific JSON:API type. This is useful when
-representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify if a specific Java class should be rendered with a specific JSON:API type. This is useful when representation model classes should use the JSON:API type of the domain model or when derived classes should use the JSON:API type of the superclass.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClassUsedForDeserialization</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EmptyAttributesObjectSerialized</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized if attributes are empty.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized when attributes are empty.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiIdNotSerializedForValue</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates the JSON:API id should not be serialized. This is useful when creating JSON for a POST request. See also <a href="#postWithNoId">Creating POST requests without serialized JSON:API id</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">MapperCustomizer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#mapper-customization">Mapper Customization</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#json-mapper-customization">JSON Mapper Customization</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set
 <a id="links-configuration"></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiCompliantLinks</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
-<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
+<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code>, and <code>last</code> for
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> is compliant for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
 To allow any link, set this configuration to false.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApi11LinkPropertiesRemovedFromLinkMeta</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
-properties, those link properties were introduced in JSON:API 1.1,
-see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">Links</a>.
-Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
-(related to version 1.x.x of this library that only supports JSON:API 1.0),
-since client might expect properties like title in the meta section.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether Spring HATEOAS complex links should be serialized/deserialized in a backward-compatible (with version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type, and hreflang will be serialized only as top-level link
+properties. These link properties were introduced in JSON:API 1.1,
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to <code>false</code>. See also <a href="#links">Links</a>.
+Note that using the default setting, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(relative to version 1.x.x of this library which only supports JSON:API 1.0),
+as clients might expect properties like title in the meta section.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LinksNotUrlEncoded</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing. Empty by default.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">empty set
 <a id="links-placement-configuration"></a></p></td>
 </tr>
@@ -3354,10 +3352,10 @@ since client might expect properties like title in the meta section.</p></td>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Since the JSON:API recommendation contains square brackets in the request parameter names,
-those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw <code>[</code> and <code>]</code>
-characters in the URL, make sure you provide the following configuration in your Spring <code>application.properties</code>
-when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this library automatically creates pagination links,
+Since the JSON:API recommendation uses square brackets in request parameter names,
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also accept raw <code>[</code> and <code>]</code>
+characters in the URL, add the following configuration to your Spring <code>application.properties</code>
+when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. When this library automatically creates pagination links,
 <code>[</code> and <code>]</code> characters are always URL-encoded.
 </td>
 </tr>
@@ -3415,7 +3413,7 @@ public class JsonApiConfig {
 </table>
 </div>
 <div class="paragraph">
-<p>When this configuration is enabled, links from EntityModel will be placed inside the resource object
+<p>When this configuration is enabled, links from EntityModel are placed inside the resource object
 in the "data" section instead of at the document top level. See <a href="#link-placement">Link Placement</a> for more details
 and examples.</p>
 </div>
@@ -3576,7 +3574,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 11:06:37 UTC
+Last updated 2025-12-24 11:22:34 UTC
 </div>
 </div>
 </div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>Client Side support</title>
+<title>Client-Side Support</title>
 <link rel="stylesheet" href="css/site.css">
 <script src="js/setup.js"></script><script defer src="js/site.js"></script>
 
@@ -27,7 +27,7 @@
   <div id="main" class="contained">
     <div id="doc" class="doc">
 <div id="header">
-<h1>Client Side support</h1>
+<h1>Client-Side Support</h1>
 <div class="details">
 <span id="revnumber">version 3.0.1-SNAPSHOT</span>
 </div>
@@ -37,7 +37,7 @@
 <h2 id="deserialization"><a class="anchor" href="#deserialization"></a>Deserialization</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+<p>Simple JSON:API-based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
 models are supported.</p>
 </div>
 <div class="paragraph">
@@ -79,13 +79,13 @@ where the <code>Movie</code> class looks like</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be built with JSON:API model builder, but a few things can already be done:</p>
+<p>Note that the deserialization mechanism is currently unable to deserialize all types of
+complex JSON:API structures that can be built with the JSON:API model builder, but several features are already supported:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Deserialized meta</p>
+<p>Deserializing meta</p>
 </li>
 <li>
 <p>Deserializing included resources into the relationship DTOs</p>
@@ -184,7 +184,7 @@ complex JSON:API structures that can be built with JSON:API model builder, but a
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized in a <code>CollectionModel&lt;EntityModel&lt;MovieWithDirectors&gt;&gt;</code>, so that all the names
+<p>would be deserialized into a <code>CollectionModel&lt;EntityModel&lt;MovieWithDirectors&gt;&gt;</code>, so that all the names
 of the directors are set on the Java side.</p>
 </div>
 <div class="admonitionblock note">
@@ -195,13 +195,13 @@ of the directors are set on the Java side.</p>
 </td>
 <td class="content">
 <code>CollectionModel&lt;MovieWithDirectors&gt;</code> would NOT resolve the director names, because deserialization
-of JSON:API specific things like relationships only works with Spring HATEOAS representation models.
+of JSON:API-specific features like relationships only works with Spring HATEOAS representation models.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>More examples for deserialization of relationships you find in the section <a href="#server-deserialization">[server-deserialization]</a>.</p>
+<p>For more examples of relationship deserialization, see the section <a href="#server-deserialization">[server-deserialization]</a>.</p>
 </div>
 </div>
 </div>
@@ -283,7 +283,7 @@ static class Config {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>RestTemplate</code> is in maintenance mode and will be removed in Spring Framework 7.
+<code>RestTemplate</code> is in maintenance mode and will be removed in a future Spring Framework release.
 For new applications using Spring Boot 4+, use <code>RestClient</code> instead.
 </td>
 </tr>
@@ -293,9 +293,9 @@ For new applications using Spring Boot 4+, use <code>RestClient</code> instead.
 <div class="sect2">
 <h3 id="postWithNoId"><a class="anchor" href="#postWithNoId"></a>Creating POST requests without serialized JSON:API id</h3>
 <div class="paragraph">
-<p>If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
-that DTOs with this id value should not contain the JSON:API id in the resulting JSON.</p>
+<p>If you want to use RestTemplate to make a POST request, the JSON:API id is often created by the server
+and is not included in the JSON body. The easiest way to achieve this is to configure a marker value to indicate
+that DTOs with this id value should not include the JSON:API id in the resulting JSON.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you specify a configuration like</p>
@@ -340,8 +340,8 @@ that DTOs with this id value should not contain the JSON:API id in the resulting
 <h2 id="traverson"><a class="anchor" href="#traverson"></a>Traverson</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The hypermedia type <code>application/vnd.api+json</code> is currently not usable with the <code>Traverson</code>
-implementation provided through {spring-hateoas-url}[Spring HATEOAS].</p>
+<p>The hypermedia type <code>application/vnd.api+json</code> is currently not compatible with the <code>Traverson</code>
+implementation provided by {spring-hateoas-url}[Spring HATEOAS].</p>
 </div>
 </div>
 </div>
@@ -358,7 +358,7 @@ is exposed as a Spring bean.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, you can set up and use an instance as follows
-(<code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
+(where <code>source</code> is the exact JSON you saw in the <a href="#deserialization">Deserialization</a> section):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -378,7 +378,7 @@ assertThat(links)
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 11:06:37 UTC
+Last updated 2025-12-24 11:22:34 UTC
 </div>
 </div>
 </div>

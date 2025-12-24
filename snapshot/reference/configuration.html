@@ -36,11 +36,11 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are several options for how to change the output of the JSON:API rendering.</p>
+<p>There are several options for customizing the JSON:API rendering output.</p>
 </div>
 <div class="paragraph">
 <p>For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
-Currently, you can configure</p>
+Currently, you can configure:</p>
 </div>
 <table class="tableblock frame-all grid-all fit-content">
 <colgroup>
@@ -51,77 +51,75 @@ Currently, you can configure</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Configuration</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Descriptions</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Default</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiObject</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Here you can set a JSON:API object do set all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, like version, ext, profile and meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set a JSON:API object with all <a href="https://jsonapi.org/format/#document-jsonapi-object">allowed properties</a>, such as version, ext, profile, and meta.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PluralizedTypeRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as pluralized or non pluralized class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether JSON:API types should be rendered as pluralized or non-pluralized class names.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pluralized</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LowerCasedTypeRendered</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON:API types should be rendered as lower case or original class names.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">lower case</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether JSON:API types should be rendered as lowercase or original class names.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lowercase</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PageMetaAutomaticallyCreated</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether page information of a PagedModel should be rendered automatically as JSON:API meta.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClass</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If a specific Java class should be rendered with a specific JSON:API type. This is useful when
-representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify if a specific Java class should be rendered with a specific JSON:API type. This is useful when representation model classes should use the JSON:API type of the domain model or when derived classes should use the JSON:API type of the superclass.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TypeForClassUsedForDeserialization</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EmptyAttributesObjectSerialized</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized if attributes are empty.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether empty attributes should be serialized as an empty JSON object, like <code>"attributes": {}</code>. If set to false, no "attributes" key is serialized when attributes are empty.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiIdNotSerializedForValue</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <a href="#postWithNoId">[postWithNoId]</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A marker value that indicates the JSON:API id should not be serialized. This is useful when creating JSON for a POST request. See also <a href="#postWithNoId">[postWithNoId]</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">MapperCustomizer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#mapper-customization">[mapper-customization]</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A lambda expression (<code>UnaryOperator&lt;JsonMapper.Builder&gt;</code>) to add additional configuration to the Jackson 3 <code>JsonMapper.Builder</code> used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <a href="#json-mapper-customization">JSON Mapper Customization</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">not set
 <a id="links-configuration"></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApiCompliantLinks</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code> and <code>last</code>, for
-<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
+<td class="tableblock halign-left valign-top"><p class="tableblock">The following links are JSON:API compliant: <code>self</code>, <code>related</code>, <code>describedBy</code>, <code>next</code>, <code>prev</code>, <code>first</code>, and <code>last</code> for
+<a href="https://jsonapi.org/format/#document-top-level">top-level links</a>. Only <code>self</code> is compliant for <a href="https://jsonapi.org/format/#document-resource-object-links">resource links</a>.
 To allow any link, set this configuration to false.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApi11LinkPropertiesRemovedFromLinkMeta</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
-properties, those link properties were introduced in JSON:API 1.1,
-see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to <code>false</code>, see also <a href="#links">[links]</a>.
-Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
-(related to version 1.x.x of this library that only supports JSON:API 1.0),
-since client might expect properties like title in the meta section.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether Spring HATEOAS complex links should be serialized/deserialized in a backward-compatible (with version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type, and hreflang will be serialized only as top-level link
+properties. These link properties were introduced in JSON:API 1.1,
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to <code>false</code>. See also <a href="#links">[links]</a>.
+Note that using the default setting, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(relative to version 1.x.x of this library which only supports JSON:API 1.0),
+as clients might expect properties like title in the meta section.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LinksNotUrlEncoded</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing. Empty by default.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set of link relations which are not URL encoded when serializing.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">empty set
 <a id="links-placement-configuration"></a></p></td>
 </tr>
@@ -139,10 +137,10 @@ since client might expect properties like title in the meta section.</p></td>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Since the JSON:API recommendation contains square brackets in the request parameter names,
-those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw <code>[</code> and <code>]</code>
-characters in the URL, make sure you provide the following configuration in your Spring <code>application.properties</code>
-when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. If this library automatically creates pagination links,
+Since the JSON:API recommendation uses square brackets in request parameter names,
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also accept raw <code>[</code> and <code>]</code>
+characters in the URL, add the following configuration to your Spring <code>application.properties</code>
+when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. When this library automatically creates pagination links,
 <code>[</code> and <code>]</code> characters are always URL-encoded.
 </td>
 </tr>
@@ -203,7 +201,7 @@ public class JsonApiConfig {
 </table>
 </div>
 <div class="paragraph">
-<p>When this configuration is enabled, links from EntityModel will be placed inside the resource object
+<p>When this configuration is enabled, links from EntityModel are placed inside the resource object
 in the "data" section instead of at the document top level. See <a href="#link-placement">[link-placement]</a> for more details
 and examples.</p>
 </div>
@@ -365,7 +363,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 11:06:37 UTC
+Last updated 2025-12-24 11:22:34 UTC
 </div>
 </div>
 </div>

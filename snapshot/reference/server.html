@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>Server Side support</title>
+<title>Server-Side Support</title>
 <link rel="stylesheet" href="css/site.css">
 <script src="js/setup.js"></script><script defer src="js/site.js"></script>
 
@@ -27,7 +27,7 @@
   <div id="main" class="contained">
     <div id="doc" class="doc">
 <div id="header">
-<h1>Server Side support</h1>
+<h1>Server-Side Support</h1>
 <div class="details">
 <span id="revnumber">version 3.0.1-SNAPSHOT</span>
 </div>
@@ -73,11 +73,11 @@ Consider a simple Movie class as the base for a Spring HATEOAS entity model:</p>
 </div>
 <div class="paragraph">
 <p>In JSON:API, the <code>id</code> field must be of type <code>String</code>.
-But in your model you can use any Class and <code>toString()</code> is used for conversion.
-So, if the <code>id</code> attribute of <code>Movie</code> would be of type <code>long</code>,
-the rendered JSON:API would be the same.
-The JSON:API <code>type</code> is automatically generated of the pluralized, lower case, simple class name.
-This is best practice, since then most likely the type matches the URL (end)
+However, in your model you can use any class, and <code>toString()</code> is used for conversion.
+So, if the <code>id</code> attribute of <code>Movie</code> were of type <code>long</code>,
+the rendered JSON:API output would be the same.
+The JSON:API <code>type</code> is automatically generated from the pluralized, lowercase, simple class name.
+This is a best practice, as the type will most likely match the URL (endpoint)
 of the corresponding REST collection resource.</p>
 </div>
 <div class="admonitionblock note">
@@ -98,7 +98,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 <h2 id="links"><a class="anchor" href="#links"></a>Links</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+<p>If Spring HATEOAS links contain only an href, the simple JSON:API link format is used for rendering.
 Here is an example of a simple self link:</p>
 </div>
 <div class="listingblock">
@@ -118,8 +118,8 @@ Here is an example of a simple self link:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
-In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.</p>
+<p>A complex Link object in Spring HATEOAS can have optional properties like name, type, hreflang, title, and others.
+In previous versions of this library, those properties were serialized as JSON:API link metadata, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -147,7 +147,7 @@ In previous versions of this library, those properties were serialized as JSON:A
 </div>
 </div>
 <div class="paragraph">
-<p>JSON:API 1.1 now defines the optional link properties type, title and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
+<p>JSON:API 1.1 now defines the optional link properties type, title, and hreflang, see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API Link Objects</a>.
 The default rendering of a complex link is now</p>
 </div>
 <div class="listingblock">
@@ -176,13 +176,13 @@ The default rendering of a complex link is now</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you see, the properties title, type, and hreflang appear now only as top-level link properties.
-So the new format reflects the new JSON:API 1.1 link structure,
-but is <em>not</em> backward compatible to version 1.x.x of this library.</p>
+<p>As you can see, the properties title, type, and hreflang now appear only as top-level link properties.
+The new format reflects the JSON:API 1.1 link structure,
+but is <em>not</em> backward compatible with version 1.x.x of this library.</p>
 </div>
 <div class="paragraph">
-<p>If you want to stay backward-compatible and render the link properties type, title and hreflang
-both as top-level link properties <em>and</em> in the meta section, you can configure this behaviour,
+<p>If you want to maintain backward compatibility and render the link properties type, title, and hreflang
+both as top-level link properties <em>and</em> in the meta section, you can configure this behavior
 (see <a href="#links-configuration">[links-configuration]</a>). The rendered result would then look like:</p>
 </div>
 <div class="listingblock">
@@ -344,11 +344,11 @@ and paged models (PagedModel) are not affected by this setting.
 <h2 id="annotations"><a class="anchor" href="#annotations"></a>Annotations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible.</p>
+<p>The goal of this implementation is to automate the mapping to/from JSON:API
+as conveniently as possible.</p>
 </div>
 <div class="paragraph">
-<p>There are four new annotations provided by this project:</p>
+<p>This project provides four annotations:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -498,7 +498,7 @@ You can configure if you want to use non-pluralized class names, see <a href="#c
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you want to use JSON:API <code>relationships</code> or <code>included</code> data, you can use the
-<code>JsonApiModelBuilder</code>. The following example shows how to create a JSON::API representation model using the <code>JsonApiModelBuilder</code></p>
+<code>JsonApiModelBuilder</code>. The following example shows how to create a JSON:API representation model using the <code>JsonApiModelBuilder</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -574,7 +574,7 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="paragraph">
-<p>If you want the <code>directors</code> relationship always being rendered as an array,
+<p>If you want the <code>directors</code> relationship to always be rendered as an array,
 even if it is empty or contains only a single data element,
 you can build it like:</p>
 </div>
@@ -616,7 +616,7 @@ you can build it like:</p>
 </div>
 <div class="paragraph">
 <p>You can also pass a Java <code>Collection</code> as data for a relationship.
-A collection will always be rendered as JSON array,
+A collection will always be rendered as a JSON array,
 even when it is empty or contains a single element.
 So,</p>
 </div>
@@ -858,7 +858,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 </div>
 </div>
 <div class="sect2">
-<h3 id="_explicit_configuration_of_empty_relationships"><a class="anchor" href="#_explicit_configuration_of_empty_relationships"></a>Explicit Configuration of empty Relationships</h3>
+<h3 id="_explicit_configuration_of_empty_relationships"><a class="anchor" href="#_explicit_configuration_of_empty_relationships"></a>Explicit Configuration of Empty Relationships</h3>
 <div class="paragraph">
 <p>The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see <a href="https://jsonapi.org/format/#document-resource-object-linkage">JSON:API specification</a>).</p>
@@ -869,7 +869,7 @@ RepresentationModel&lt;?&gt; pagedJasonApiModel = jsonApiModel()
 or <code>relationshipWithEmptyData()</code> to create an empty to-many relationship (serialized as <code>"data": []</code>).</p>
 </div>
 <div class="paragraph">
-<p>An explicit empty to-one relationship can be added like</p>
+<p>An explicit empty to-one relationship can be added like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -884,7 +884,7 @@ or <code>relationshipWithEmptyData()</code> to create an empty to-many relations
 <p>This will produce <code>"data": null</code> in the relationship object, representing an empty to-one relationship.</p>
 </div>
 <div class="paragraph">
-<p>An explicit empty to-many relationship can be added like</p>
+<p>An explicit empty to-many relationship can be added like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -899,19 +899,19 @@ or <code>relationshipWithEmptyData()</code> to create an empty to-many relations
 <p>This will produce <code>"data": []</code> in the relationship object, representing an empty to-many relationship.</p>
 </div>
 <div class="paragraph">
-<p>These methods are particularly useful when you want to replace existing relationship data with null or empty array,
-or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
-The methods also preserve any existing links and meta information in the relationship.</p>
+<p>These methods are particularly useful when you want to replace existing relationship data with null or an empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs. to-many) for your JSON:API consumers.
+These methods also preserve any existing links and meta information in the relationship.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="inclusion"><a class="anchor" href="#inclusion"></a>Inclusion of related Resources</h2>
+<h2 id="inclusion"><a class="anchor" href="#inclusion"></a>Inclusion of Related Resources</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There is no direct support for automatically including related resources,
-but a REST controller could provide an optional request parameter like</p>
+but a REST controller can provide an optional request parameter like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -920,8 +920,8 @@ but a REST controller could provide an optional request parameter like</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Then, within the controller implementation, this parameter could be interpreted,
-and the builder could be used for the inclusion, like</p>
+<p>Then, within the controller implementation, this parameter can be interpreted,
+and the builder can be used for the inclusion, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1035,8 +1035,8 @@ final RepresentationModel&lt;?&gt; jsonApiModel = jsonApiModel()
 <div class="sectionbody">
 <div class="paragraph">
 <p>Sparse fieldsets are supported for attributes within <code>data</code> and <code>included</code>. You can add sparse fieldsets
-by using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director would have
-the attributes <code>name</code> and <code>born</code>, and a movie would have the attributes <code>title</code> and <code>rating</code>.</p>
+using the <code>JsonApiBuilder</code>. The following example illustrates the build, assuming a director has
+the attributes <code>name</code> and <code>born</code>, and a movie has the attributes <code>title</code> and <code>rating</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1093,7 +1093,7 @@ of a movie would be serialized:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
+<p>In a REST controller, a method with HTTP-mapping can provide an optional request parameter for each sparse fieldset
 that should be applied to a specific JSON:API type, like:</p>
 </div>
 <div class="listingblock">
@@ -1132,16 +1132,16 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 <h2 id="affordances"><a class="anchor" href="#affordances"></a>Spring HATEOAS Affordances</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Spring HATEOAS provides a generic, media type independent API for
+<p>Spring HATEOAS provides a generic, media type-independent API for
 {spring-hateoas-version}/reference/html/#server.affordances[affordances].
-Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
-information. This library provide a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
+In the JSON:API specification, there is no equivalent concept, but JSON:API allows links to have additional meta
+information. This library provides a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
-that can be serialized by Spring HATEOAS out of the box.</p>
+which can be serialized by Spring HATEOAS out of the box.</p>
 </div>
 <div class="paragraph">
 <p>The following example shows the usage of Spring HATEOAS affordances.
-First you have to enable this experimental feature in the configuration, like</p>
+First, you need to enable this experimental feature in the configuration, like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1150,7 +1150,7 @@ First you have to enable this experimental feature in the configuration, like</p
 </div>
 </div>
 <div class="paragraph">
-<p>Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like</p>
+<p>Then you can add an affordance (for creating a movie) to a Spring HATEOAS link like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1238,7 +1238,7 @@ This feature is experimental. The JSON structure of the provided affordances mig
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you want to get property information like required, you have to include a dependency to <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>
+To obtain property information such as required fields, you must include a dependency on <code>javax.validation:validation-api</code> and annotate the required fields with <code>@NotNull</code>.
 </td>
 </tr>
 </table>
@@ -1267,7 +1267,7 @@ For example, a <code>POST</code> with the body:</p>
 <div class="paragraph">
 <p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> automatically.
 You can also create REST resources that contain <code>JSON:API relationships</code>.
-You just have to annotate the underlying domain model class, with <code>JsonApiRelationships(&lt;relationship name&gt;)</code></p>
+You simply need to annotate the underlying domain model class with <code>JsonApiRelationships(&lt;relationship name&gt;)</code>.</p>
 </div>
 <div class="paragraph">
 <p>For example, a <code>POST</code> with the body:</p>
@@ -1300,8 +1300,8 @@ You just have to annotate the underlying domain model class, with <code>JsonApiR
 </div>
 <div class="paragraph">
 <p>will be deserialized to an <code>EntityModel&lt;Movie&gt;</code> with a filled list of directors,
-where ONLY the id attribute of each director is set.
-The REST controller then has to interpret those relationships and bind the
+where only the id attribute of each director is set.
+The REST controller must then interpret those relationships and bind the
 real director objects to the movie.</p>
 </div>
 <div class="paragraph">
@@ -1381,7 +1381,7 @@ please use the <code>JsonApiModelBuilder</code> to decide, which relationships a
 </div>
 </div>
 <div class="sect1">
-<h2 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>Deserialization of JSON:API types</h2>
+<h2 id="server-deserialization"><a class="anchor" href="#server-deserialization"></a>Deserialization of JSON:API Types</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If entities contain an explicit <code>@JsonApiType</code> field annotation,
@@ -1486,8 +1486,8 @@ Currently, only <code>List</code> and <code>Set</code> are supported collection 
 <div class="sectionbody">
 <div class="paragraph">
 <p>While a server implementation of HTTP POST and PATCH takes single resources as input,
-it is sometimes handy to be able to deserialize collection models and paged models. This is
-useful if a service consumes results of other services that produce JSON:API responses.</p>
+it is sometimes useful to be able to deserialize collection models and paged models. This is
+helpful when a service consumes results from other services that produce JSON:API responses.</p>
 </div>
 <div class="paragraph">
 <p>Here is an example of a serialized <code>PagedModel</code>.</p>
@@ -1582,9 +1582,9 @@ So a JSON like</p>
 <h2 id="polymorphy"><a class="anchor" href="#polymorphy"></a>Polymorphic Deserialization</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
-assigning a JSON:API type to a Java class and then also switching on, that the mappings should
-also be used for deserialization, e.g.</p>
+<p>The easiest way for polymorphic deserialization is to use the JsonApiConfiguration to
+assign a JSON:API type to a Java class and then also enable the mappings to be
+used for deserialization, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1623,10 +1623,10 @@ public ResponseEntity&lt;?&gt; newMovie(@RequestBody EntityModel&lt;Movie&gt; mo
 </div>
 </div>
 <div class="paragraph">
-<p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Be aware that this mechanism overrides
+<p>would be deserialized to a Java class of type <code>MovieSubclass</code>. Note that this mechanism overrides
 the default deserialization to an object of the class given by the REST controller method&#8217;s signature.
-The deserializer checks if the mapped Java type is assignable to the originally required Java type,
-otherwise an <code>IllegalArgumentException</code> is thrown.</p>
+The deserializer checks if the mapped Java type is assignable to the originally required Java type;
+otherwise, an <code>IllegalArgumentException</code> is thrown.</p>
 </div>
 <div class="paragraph">
 <p>The same mechanism can also be used to deserialize polymorphic relationships.</p>
@@ -1707,7 +1707,7 @@ while the second director would be an instance of class <code>DirectorWithEmail<
 <div class="paragraph">
 <p>If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
-on a 'per class' base, using some Jackson annotations. The following example illustrates this:</p>
+on a per-class basis using Jackson annotations. The following example illustrates this:</p>
 </div>
 <div class="paragraph">
 <p>Imagine a controller method like</p>
@@ -1781,10 +1781,10 @@ From the JSON:API 1.1 spec:
 </table>
 </div>
 <div class="paragraph">
-<p>Important: The above mechanism is also used for serialization, so you could set
-the JSON:API <code>type</code> attribute (within data) to a more generic type, but still serialize the
+<p>Important: The above mechanism is also used for serialization, so you can set
+the JSON:API <code>type</code> attribute (within data) to a more generic type while still serializing the
 <code>@type</code> attribute to indicate the specialized type.
-So the JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
+The JSON of the serialized Java object (of class <code>MovieWithRating</code>) would then look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1920,8 +1920,8 @@ the first one of Class <code>SuperEChild</code>, the second one of class <code>S
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Right now there is the restriction, that the type attribute of both
-<code>SuperEChild</code> and <code>SuperEChild2</code> has to be <code>type</code>. E.g. <code>_type</code> would not work.
+Currently, there is a restriction that the type attribute of both
+<code>SuperEChild</code> and <code>SuperEChild2</code> must be <code>type</code>. For example, <code>_type</code> would not work.
 </td>
 </tr>
 </table>
@@ -1974,8 +1974,8 @@ Right now there is the restriction, that the type attribute of both
 <div class="sect2">
 <h3 id="_more_generic_error_handling"><a class="anchor" href="#_more_generic_error_handling"></a>More Generic Error Handling</h3>
 <div class="paragraph">
-<p>If you want to implement a more generic error handling that converts exceptions
-to JSON:API error responses, you could implement a <code>@ControllerAdvice</code> like:</p>
+<p>If you want to implement more generic error handling that converts exceptions
+to JSON:API error responses, you can implement a <code>@ControllerAdvice</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2032,7 +2032,7 @@ public class ExceptionControllerAdvice {
 </div>
 </div>
 <div class="paragraph">
-<p>Furthermore, you could implement a <code>JsonApiErrorsException</code> like:</p>
+<p>Furthermore, you can implement a <code>JsonApiErrorsException</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2110,7 +2110,7 @@ public class JsonApiErrorsException extends RuntimeException {
 </div>
 </div>
 <div class="paragraph">
-<p>Now you could throw a <code>JsonApiErrorsException</code> like:</p>
+<p>Now you can throw a <code>JsonApiErrorsException</code> like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2126,7 +2126,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <p>which would then be converted to a JSON:API error response.</p>
 </div>
 <div class="paragraph">
-<p>You find implementations of the <code>ExceptionControllerAdvice</code>, <code>JsonApiErrorsException</code> and <code>CommonErrors</code> in the example code.</p>
+<p>You can find implementations of the <code>ExceptionControllerAdvice</code>, <code>JsonApiErrorsException</code>, and <code>CommonErrors</code> in the example code.</p>
 </div>
 </div>
 </div>
@@ -2135,7 +2135,7 @@ public class JsonApiErrorsException extends RuntimeException {
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 11:06:37 UTC
+Last updated 2025-12-24 11:22:34 UTC
 </div>
 </div>
 </div>
