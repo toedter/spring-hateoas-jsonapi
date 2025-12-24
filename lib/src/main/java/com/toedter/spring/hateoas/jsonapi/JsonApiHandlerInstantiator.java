@@ -36,97 +36,68 @@ class JsonApiHandlerInstantiator extends HandlerInstantiator {
 
   private final Map<Class<?>, Object> serializers = new HashMap<>();
 
-  @Nullable
-  private final AutowireCapableBeanFactory beanFactory;
+  @Nullable private final AutowireCapableBeanFactory beanFactory;
 
   public JsonApiHandlerInstantiator(
-    JsonApiConfiguration jsonApiConfiguration,
-    @Nullable AutowireCapableBeanFactory beanFactory
-  ) {
+      JsonApiConfiguration jsonApiConfiguration, @Nullable AutowireCapableBeanFactory beanFactory) {
     this.beanFactory = beanFactory;
 
     this.serializers.put(
-      JsonApiRepresentationModelSerializer.class,
-      new JsonApiRepresentationModelSerializer(jsonApiConfiguration)
-    );
+        JsonApiRepresentationModelSerializer.class,
+        new JsonApiRepresentationModelSerializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiEntityModelSerializer.class,
-      new JsonApiEntityModelSerializer(jsonApiConfiguration)
-    );
+        JsonApiEntityModelSerializer.class, new JsonApiEntityModelSerializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiCollectionModelSerializer.class,
-      new JsonApiCollectionModelSerializer(jsonApiConfiguration)
-    );
+        JsonApiCollectionModelSerializer.class,
+        new JsonApiCollectionModelSerializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiPagedModelSerializer.class,
-      new JsonApiPagedModelSerializer(jsonApiConfiguration)
-    );
+        JsonApiPagedModelSerializer.class, new JsonApiPagedModelSerializer(jsonApiConfiguration));
 
     this.serializers.put(
-      JsonApiRelationshipSerializer.class,
-      new JsonApiRelationshipSerializer(jsonApiConfiguration)
-    );
+        JsonApiRelationshipSerializer.class,
+        new JsonApiRelationshipSerializer(jsonApiConfiguration));
 
     this.serializers.put(
-      JsonApiRepresentationModelDeserializer.class,
-      new JsonApiRepresentationModelDeserializer(jsonApiConfiguration)
-    );
+        JsonApiRepresentationModelDeserializer.class,
+        new JsonApiRepresentationModelDeserializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiEntityModelDeserializer.class,
-      new JsonApiEntityModelDeserializer(jsonApiConfiguration)
-    );
+        JsonApiEntityModelDeserializer.class,
+        new JsonApiEntityModelDeserializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiCollectionModelDeserializer.class,
-      new JsonApiCollectionModelDeserializer(jsonApiConfiguration)
-    );
+        JsonApiCollectionModelDeserializer.class,
+        new JsonApiCollectionModelDeserializer(jsonApiConfiguration));
     this.serializers.put(
-      JsonApiPagedModelDeserializer.class,
-      new JsonApiPagedModelDeserializer(jsonApiConfiguration)
-    );
+        JsonApiPagedModelDeserializer.class,
+        new JsonApiPagedModelDeserializer(jsonApiConfiguration));
   }
 
   @Override
   public ValueDeserializer<?> deserializerInstance(
-    DeserializationConfig config,
-    Annotated annotated,
-    Class<?> deserClass
-  ) {
+      DeserializationConfig config, Annotated annotated, Class<?> deserClass) {
     return (ValueDeserializer<?>) findInstance(deserClass);
   }
 
   @Override
   public KeyDeserializer keyDeserializerInstance(
-    DeserializationConfig config,
-    Annotated annotated,
-    Class<?> keyDeserClass
-  ) {
+      DeserializationConfig config, Annotated annotated, Class<?> keyDeserClass) {
     return (KeyDeserializer) findInstance(keyDeserClass);
   }
 
   @Override
   public ValueSerializer<?> serializerInstance(
-    SerializationConfig config,
-    Annotated annotated,
-    Class<?> serClass
-  ) {
+      SerializationConfig config, Annotated annotated, Class<?> serClass) {
     return (ValueSerializer<?>) findInstance(serClass);
   }
 
   @Override
   public TypeResolverBuilder<?> typeResolverBuilderInstance(
-    MapperConfig<?> config,
-    Annotated annotated,
-    Class<?> builderClass
-  ) {
+      MapperConfig<?> config, Annotated annotated, Class<?> builderClass) {
     return (TypeResolverBuilder<?>) findInstance(builderClass);
   }
 
   @Override
   public TypeIdResolver typeIdResolverInstance(
-    MapperConfig<?> config,
-    Annotated annotated,
-    Class<?> resolverClass
-  ) {
+      MapperConfig<?> config, Annotated annotated, Class<?> resolverClass) {
     return (TypeIdResolver) findInstance(resolverClass);
   }
 

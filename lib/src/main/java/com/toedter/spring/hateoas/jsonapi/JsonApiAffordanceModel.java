@@ -42,13 +42,9 @@ class JsonApiAffordanceModel extends AffordanceModel {
   @AllArgsConstructor
   static class PropertyData {
 
-    @With
-    @Nullable
-    String name;
+    @With @Nullable String name;
 
-    @With
-    @Nullable
-    String type;
+    @With @Nullable String type;
 
     @With
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -61,24 +57,20 @@ class JsonApiAffordanceModel extends AffordanceModel {
     }
   }
 
-  private static final Set<HttpMethod> ENTITY_ALTERING_METHODS = Set.of(
-    HttpMethod.POST,
-    HttpMethod.PUT,
-    HttpMethod.PATCH
-  );
+  private static final Set<HttpMethod> ENTITY_ALTERING_METHODS =
+      Set.of(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
 
   private final List<PropertyData> inputProperties;
   private final List<PropertyData> queryProperties;
 
   JsonApiAffordanceModel(ConfiguredAffordance configured) {
     super(
-      configured.getNameOrDefault(),
-      configured.getTarget(),
-      configured.getMethod(),
-      configured.getInputMetadata(),
-      configured.getQueryParameters(),
-      configured.getOutputMetadata()
-    );
+        configured.getNameOrDefault(),
+        configured.getTarget(),
+        configured.getMethod(),
+        configured.getInputMetadata(),
+        configured.getQueryParameters(),
+        configured.getOutputMetadata());
     this.inputProperties = determineAffordanceInputs();
     this.queryProperties = determineQueryProperties();
   }
@@ -88,19 +80,19 @@ class JsonApiAffordanceModel extends AffordanceModel {
       return Collections.emptyList();
     }
 
-    return getInput()
-      .stream()
-      .map(propertyMetadata ->
-        new PropertyData()
-          .withName(propertyMetadata.getName())
-          .withType(propertyMetadata.getInputType())
-          .withRequired(propertyMetadata.isRequired())
-      )
-      .collect(Collectors.toList());
+    return getInput().stream()
+        .map(
+            propertyMetadata ->
+                new PropertyData()
+                    .withName(propertyMetadata.getName())
+                    .withType(propertyMetadata.getInputType())
+                    .withRequired(propertyMetadata.isRequired()))
+        .collect(Collectors.toList());
   }
 
   /**
-   * Transform GET-based query parameters (e.g. {@literal &query}) into a list of {@link PropertyData} objects.
+   * Transform GET-based query parameters (e.g. {@literal &query}) into a list of {@link
+   * PropertyData} objects.
    */
   private List<PropertyData> determineQueryProperties() {
     if (!getHttpMethod().equals(HttpMethod.GET)) {
@@ -108,12 +100,9 @@ class JsonApiAffordanceModel extends AffordanceModel {
     }
 
     if (getHttpMethod().equals(HttpMethod.GET)) {
-      return getQueryMethodParameters()
-        .stream()
-        .map(queryParameter ->
-          new PropertyData().withName(queryParameter.getName()).withType("")
-        )
-        .collect(Collectors.toList());
+      return getQueryMethodParameters().stream()
+          .map(queryParameter -> new PropertyData().withName(queryParameter.getName()).withType(""))
+          .collect(Collectors.toList());
     } else {
       return Collections.emptyList();
     }

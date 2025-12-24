@@ -25,7 +25,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 @Setter
 public class MovieRepresentationModelWithoutJsonApiType
-  extends RepresentationModel<MovieRepresentationModelWithoutJsonApiType> {
+    extends RepresentationModel<MovieRepresentationModelWithoutJsonApiType> {
 
   private String id;
   private String name;

@@ -52,8 +52,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @DisplayName("JsonApi WebMvc with Configuration Integration Test")
 class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
 
-  @Autowired
-  WebApplicationContext context;
+  @Autowired WebApplicationContext context;
 
   MockMvc mockMvc;
 
@@ -65,32 +64,28 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie_with_version() throws Exception {
-    String movieJson = this.mockMvc.perform(get("/movies/1").accept(JSON_API))
-      .andExpect(status().isOk())
-      .andReturn()
-      .getResponse()
-      .getContentAsString();
+    String movieJson =
+        this.mockMvc
+            .perform(get("/movies/1").accept(JSON_API))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    compareWithFile(
-      movieJson,
-      "movieEntityModelWithJsonApiVersionAndSingleType.json"
-    );
+    compareWithFile(movieJson, "movieEntityModelWithJsonApiVersionAndSingleType.json");
   }
 
   @Test
   void should_get_single_movie_with_configured_type() throws Exception {
-    String movieJson = this.mockMvc.perform(
-        get("/movieWithClassType").accept(JSON_API)
-      )
-      .andExpect(status().isOk())
-      .andReturn()
-      .getResponse()
-      .getContentAsString();
+    String movieJson =
+        this.mockMvc
+            .perform(get("/movieWithClassType").accept(JSON_API))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    compareWithFile(
-      movieJson,
-      "movieRepresentationModelWithConfiguredClassType.json"
-    );
+    compareWithFile(movieJson, "movieRepresentationModelWithConfiguredClassType.json");
   }
 
   @Configuration
@@ -106,9 +101,8 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
 
     @Bean
     JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-      ObjectProvider<JsonApiConfiguration> configuration,
-      AutowireCapableBeanFactory beanFactory
-    ) {
+        ObjectProvider<JsonApiConfiguration> configuration,
+        AutowireCapableBeanFactory beanFactory) {
       return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
     }
 
@@ -116,18 +110,15 @@ class JsonApiWebMvcWithConfigIntegrationTest extends JsonApiTestBase {
     @Bean
     JsonApiConfiguration jsonApiConfiguration() {
       return new JsonApiConfiguration()
-        .withJsonApiObject(new JsonApiObject(true))
-        .withPluralizedTypeRendered(false)
-        .withLowerCasedTypeRendered(false)
-        .withTypeForClass(
-          MovieRepresentationModelWithoutJsonApiType.class,
-          "my-movies"
-        )
-        .withTypeForClassUsedForDeserialization(true)
-        .withEmptyAttributesObjectSerialized(false)
-        .withJsonApiIdNotSerializedForValue("-1")
-        .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-        .withJsonApiCompliantLinks(false);
+          .withJsonApiObject(new JsonApiObject(true))
+          .withPluralizedTypeRendered(false)
+          .withLowerCasedTypeRendered(false)
+          .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+          .withTypeForClassUsedForDeserialization(true)
+          .withEmptyAttributesObjectSerialized(false)
+          .withJsonApiIdNotSerializedForValue("-1")
+          .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+          .withJsonApiCompliantLinks(false);
     }
     // end::jsonApiConfig[]
   }

@@ -39,24 +39,15 @@ public class Jackson2JsonApiModule extends SimpleModule {
    *
    * @param jsonApiConfiguration the {@link JsonApiConfiguration}
    */
-  public Jackson2JsonApiModule(
-    @Nullable JsonApiConfiguration jsonApiConfiguration
-  ) {
-    super(
-      "json-api-module",
-      new Version(2, 0, 0, null, "com.toedter", "spring-hateoas-jsonapi")
-    );
+  public Jackson2JsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
+    super("json-api-module", new Version(2, 0, 0, null, "com.toedter", "spring-hateoas-jsonapi"));
     setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
-    setMixInAnnotation(
-      RepresentationModel.class,
-      RepresentationModelMixin.class
-    );
+    setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
     setMixInAnnotation(CollectionModel.class, CollectionModelMixin.class);
     setMixInAnnotation(PagedModel.class, PagedModelMixin.class);
 
     // Links class has no default constructor, so we cannot use a Mixin
-    JsonApiLinksSerializer jsonApiLinksSerializer =
-      new JsonApiLinksSerializer();
+    JsonApiLinksSerializer jsonApiLinksSerializer = new JsonApiLinksSerializer();
     if (jsonApiConfiguration != null) {
       jsonApiLinksSerializer.setJsonApiConfiguration(jsonApiConfiguration);
     }
@@ -67,14 +58,12 @@ public class Jackson2JsonApiModule extends SimpleModule {
     // Register JsonApiRelationshipSerializer to convert relationship data to resource identifiers
     if (jsonApiConfiguration != null) {
       JsonApiRelationshipSerializer jsonApiRelationshipSerializer =
-        new JsonApiRelationshipSerializer(jsonApiConfiguration);
+          new JsonApiRelationshipSerializer(jsonApiConfiguration);
       addSerializer(JsonApiRelationship.class, jsonApiRelationshipSerializer);
     }
   }
 
-  /**
-   * Creates a new {@literal Jackson2JsonApiModule} without {@link JsonApiConfiguration}.
-   */
+  /** Creates a new {@literal Jackson2JsonApiModule} without {@link JsonApiConfiguration}. */
   public Jackson2JsonApiModule() {
     this(null);
   }
@@ -87,7 +76,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
   @JsonSerialize(using = JsonApiRepresentationModelSerializer.class)
   @JsonDeserialize(using = JsonApiRepresentationModelDeserializer.class)
   abstract static class RepresentationModelMixin
-    extends RepresentationModel<RepresentationModelMixin> {}
+      extends RepresentationModel<RepresentationModelMixin> {}
 
   @JsonSerialize(using = JsonApiCollectionModelSerializer.class)
   @JsonDeserialize(using = JsonApiCollectionModelDeserializer.class)

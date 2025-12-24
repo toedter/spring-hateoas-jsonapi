@@ -37,26 +37,24 @@ class JsonApiEntityModelDeserializerUnitTest {
 
   @BeforeEach
   void setUpModule() {
-    deserializer = new JsonApiEntityModelDeserializer(
-      new JsonApiConfiguration()
-    );
+    deserializer = new JsonApiEntityModelDeserializer(new JsonApiConfiguration());
   }
 
   @Test
   void should_throw_exception_with_null_arguments() {
     List<Object> list = new ArrayList<>();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, null)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, null));
   }
 
   @Test
   void should_throw_exception_with_wrong_list_size() {
     List<Object> list = new ArrayList<>();
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, jsonApiDocument)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, jsonApiDocument));
   }
 
   @Test
@@ -64,9 +62,9 @@ class JsonApiEntityModelDeserializerUnitTest {
     List<Object> list = new ArrayList<>();
     list.add(null);
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, jsonApiDocument)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, jsonApiDocument));
   }
 
   @Test
@@ -77,11 +75,9 @@ class JsonApiEntityModelDeserializerUnitTest {
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
 
     RepresentationModel<?> representationModel =
-      deserializer.convertToRepresentationModel(list, jsonApiDocument);
+        deserializer.convertToRepresentationModel(list, jsonApiDocument);
 
     assertThat(representationModel).isInstanceOf(EntityModel.class);
-    assertThat(((EntityModel<?>) representationModel).getContent()).isEqualTo(
-      object
-    );
+    assertThat(((EntityModel<?>) representationModel).getContent()).isEqualTo(object);
   }
 }

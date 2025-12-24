@@ -34,12 +34,9 @@ public class JsonApiErrors {
    *
    * @return list of {@link JsonApiError} objects.
    */
-  @Getter
-  private final List<JsonApiError> errors = new ArrayList<>();
+  @Getter private final List<JsonApiError> errors = new ArrayList<>();
 
-  /**
-   * Creates empty {@link JsonApiErrors}.
-   */
+  /** Creates empty {@link JsonApiErrors}. */
   public JsonApiErrors() {}
 
   /**

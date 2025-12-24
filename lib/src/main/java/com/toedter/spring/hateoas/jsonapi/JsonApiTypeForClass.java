@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  *
  * @author Kai Toedter
  */
-@Target({ TYPE })
+@Target({TYPE})
 @Retention(RUNTIME)
 public @interface JsonApiTypeForClass {
   /**

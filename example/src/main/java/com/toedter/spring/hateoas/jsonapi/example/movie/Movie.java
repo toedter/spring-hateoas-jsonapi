@@ -37,35 +37,24 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "movies")
 public class Movie {
 
-  @Id
-  @GeneratedValue
-  @JsonIgnore
-  private Long id;
+  @Id @GeneratedValue @JsonIgnore private Long id;
 
-  @NotNull
-  private String title;
+  @NotNull private String title;
 
   private long year;
   private String imdbId;
   private double rating;
   private int rank;
 
-  @JsonIgnore
-  private String thumb;
+  @JsonIgnore private String thumb;
 
   @ManyToMany(mappedBy = "movies", fetch = FetchType.EAGER)
   @JsonIgnore
-  @JsonApiRelationships("directors") // Only used for deserialization, e.g. useful when doing a HTTP POST
+  @JsonApiRelationships(
+      "directors") // Only used for deserialization, e.g. useful when doing a HTTP POST
   private List<Director> directors = new ArrayList<>();
 
-  public Movie(
-    String imdbId,
-    String title,
-    long year,
-    double rating,
-    int rank,
-    String thumb
-  ) {
+  public Movie(String imdbId, String title, long year, double rating, int rank, String thumb) {
     this.imdbId = imdbId;
     this.title = title;
     this.year = year;

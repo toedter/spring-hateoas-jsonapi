@@ -46,14 +46,11 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 @DisplayName("Spring Boot Integration Test with MockMvcTester")
 class JsonApiSpringBootMockMvcTesterIntegrationTest {
 
-  @Autowired
-  private MockMvcTester mockMvcTester;
+  @Autowired private MockMvcTester mockMvcTester;
 
-  @MockitoBean
-  private MovieRepository movieRepository;
+  @MockitoBean private MovieRepository movieRepository;
 
-  @MockitoBean
-  private DirectorRepository directorRepository;
+  @MockitoBean private DirectorRepository directorRepository;
 
   @Test
   void should_get_single_movie() {
@@ -62,128 +59,83 @@ class JsonApiSpringBootMockMvcTesterIntegrationTest {
 
     Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.of(movie));
 
-    var result = mockMvcTester
-      .get()
-      .uri("/api/movies/1?include=directors")
-      .accept(JSON_API);
+    var result = mockMvcTester.get().uri("/api/movies/1?include=directors").accept(JSON_API);
 
     assertThat(result).hasStatusOk();
+    assertThat(result).bodyJson().extractingPath("$.jsonapi").asMap().isNotEmpty();
+    assertThat(result).bodyJson().extractingPath("$.jsonapi.version").asString().isEqualTo("1.1");
+    assertThat(result).bodyJson().extractingPath("$.data.id").asString().isEqualTo("1");
+    assertThat(result).bodyJson().extractingPath("$.data.type").asString().isEqualTo("movies");
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.jsonapi")
-      .asMap()
-      .isNotEmpty();
+        .bodyJson()
+        .extractingPath("$.data.attributes.title")
+        .asString()
+        .isEqualTo("Test Movie");
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.jsonapi.version")
-      .asString()
-      .isEqualTo("1.1");
+        .bodyJson()
+        .extractingPath("$.data.attributes.year")
+        .asNumber()
+        .isEqualTo(2020);
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.id")
-      .asString()
-      .isEqualTo("1");
+        .bodyJson()
+        .extractingPath("$.data.attributes.rating")
+        .asNumber()
+        .isEqualTo(9.3);
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.type")
-      .asString()
-      .isEqualTo("movies");
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.title")
-      .asString()
-      .isEqualTo("Test Movie");
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.year")
-      .asNumber()
-      .isEqualTo(2020);
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.rating")
-      .asNumber()
-      .isEqualTo(9.3);
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.links.self")
-      .asString()
-      .isEqualTo("http://localhost/api/movies/1");
+        .bodyJson()
+        .extractingPath("$.links.self")
+        .asString()
+        .isEqualTo("http://localhost/api/movies/1");
   }
 
   @Test
   void should_get_single_movie_with_include() {
     Movie movie = new Movie("12345", "Test Movie", 2020, 9.3, 17, null);
     movie.setId(1L);
-    Director director = new Director(
-      2L,
-      "Good Director",
-      Collections.singletonList(movie)
-    );
+    Director director = new Director(2L, "Good Director", Collections.singletonList(movie));
     movie.addDirector(director);
 
     Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.of(movie));
 
-    var result = mockMvcTester
-      .get()
-      .uri("/api/movies/1?include=directors")
-      .accept(JSON_API);
+    var result = mockMvcTester.get().uri("/api/movies/1?include=directors").accept(JSON_API);
 
     assertThat(result).hasStatusOk();
+    assertThat(result).bodyJson().extractingPath("$.jsonapi").asMap().isNotEmpty();
+    assertThat(result).bodyJson().extractingPath("$.jsonapi.version").asString().isEqualTo("1.1");
+    assertThat(result).bodyJson().extractingPath("$.data.id").asString().isEqualTo("1");
+    assertThat(result).bodyJson().extractingPath("$.data.type").asString().isEqualTo("movies");
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.jsonapi")
-      .asMap()
-      .isNotEmpty();
+        .bodyJson()
+        .extractingPath("$.data.attributes.title")
+        .asString()
+        .isEqualTo("Test Movie");
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.jsonapi.version")
-      .asString()
-      .isEqualTo("1.1");
+        .bodyJson()
+        .extractingPath("$.data.attributes.year")
+        .asNumber()
+        .isEqualTo(2020);
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.id")
-      .asString()
-      .isEqualTo("1");
+        .bodyJson()
+        .extractingPath("$.data.attributes.rating")
+        .asNumber()
+        .isEqualTo(9.3);
+    assertThat(result).bodyJson().extractingPath("$.included").asArray().hasSize(1);
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.type")
-      .asString()
-      .isEqualTo("movies");
+        .bodyJson()
+        .extractingPath("$.included[0].attributes.name")
+        .asString()
+        .isEqualTo("Good Director");
     assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.title")
-      .asString()
-      .isEqualTo("Test Movie");
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.year")
-      .asNumber()
-      .isEqualTo(2020);
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.data.attributes.rating")
-      .asNumber()
-      .isEqualTo(9.3);
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.included")
-      .asArray()
-      .hasSize(1);
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.included[0].attributes.name")
-      .asString()
-      .isEqualTo("Good Director");
-    assertThat(result)
-      .bodyJson()
-      .extractingPath("$.links.self")
-      .asString()
-      .isEqualTo("http://localhost/api/movies/1");
+        .bodyJson()
+        .extractingPath("$.links.self")
+        .asString()
+        .isEqualTo("http://localhost/api/movies/1");
   }
 
   @Test
   void should_post_movie() {
-    String movieJson = """
+    String movieJson =
+        """
       {
         "data": {
           "type": "movies",
@@ -197,30 +149,27 @@ class JsonApiSpringBootMockMvcTesterIntegrationTest {
         }
       }""";
 
-    Mockito.when(movieRepository.save(any())).thenAnswer(i -> {
-      Movie movie = (Movie) i.getArguments()[0];
-      movie.setId(42L);
-      return movie;
-    });
+    Mockito.when(movieRepository.save(any()))
+        .thenAnswer(
+            i -> {
+              Movie movie = (Movie) i.getArguments()[0];
+              movie.setId(42L);
+              return movie;
+            });
 
-    assertThat(
-      mockMvcTester
-        .post()
-        .uri("/api/movies")
-        .contentType(JSON_API)
-        .content(movieJson)
-    )
-      .hasStatus(201)
-      .hasHeader("Location", "http://localhost/api/movies/42")
-      .bodyJson()
-      .extractingPath("$.data.attributes.title")
-      .asString()
-      .isEqualTo("Test Movie");
+    assertThat(mockMvcTester.post().uri("/api/movies").contentType(JSON_API).content(movieJson))
+        .hasStatus(201)
+        .hasHeader("Location", "http://localhost/api/movies/42")
+        .bodyJson()
+        .extractingPath("$.data.attributes.title")
+        .asString()
+        .isEqualTo("Test Movie");
   }
 
   @Test
   void should_post_movie_with_jsonapi_version() {
-    String movieJson = """
+    String movieJson =
+        """
       {
         "jsonapi": {
           "version": "1.1"
@@ -237,24 +186,20 @@ class JsonApiSpringBootMockMvcTesterIntegrationTest {
         }
       }""";
 
-    Mockito.when(movieRepository.save(any())).thenAnswer(i -> {
-      Movie movie = (Movie) i.getArguments()[0];
-      movie.setId(42L);
-      return movie;
-    });
+    Mockito.when(movieRepository.save(any()))
+        .thenAnswer(
+            i -> {
+              Movie movie = (Movie) i.getArguments()[0];
+              movie.setId(42L);
+              return movie;
+            });
 
-    assertThat(
-      mockMvcTester
-        .post()
-        .uri("/api/movies")
-        .contentType(JSON_API)
-        .content(movieJson)
-    )
-      .hasStatus(201)
-      .hasHeader("Location", "http://localhost/api/movies/42")
-      .bodyJson()
-      .extractingPath("$.data.attributes.title")
-      .asString()
-      .isEqualTo("Test Movie");
+    assertThat(mockMvcTester.post().uri("/api/movies").contentType(JSON_API).content(movieJson))
+        .hasStatus(201)
+        .hasHeader("Location", "http://localhost/api/movies/42")
+        .bodyJson()
+        .extractingPath("$.data.attributes.title")
+        .asString()
+        .isEqualTo("Test Movie");
   }
 }

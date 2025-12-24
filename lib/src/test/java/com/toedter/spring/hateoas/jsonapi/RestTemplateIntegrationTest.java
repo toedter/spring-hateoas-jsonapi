@@ -13,21 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * Copyright 2025 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.toedter.spring.hateoas.jsonapi;
 
@@ -75,8 +60,7 @@ import tools.jackson.databind.json.JsonMapper;
 @DisplayName("JsonApi RestTemplate Integration Test")
 class RestTemplateIntegrationTest {
 
-  @Autowired
-  RestTemplate template;
+  @Autowired RestTemplate template;
 
   MockRestServiceServer server;
 
@@ -91,9 +75,8 @@ class RestTemplateIntegrationTest {
 
     @Bean
     public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-      ObjectProvider<JsonApiConfiguration> configuration,
-      AutowireCapableBeanFactory beanFactory
-    ) {
+        ObjectProvider<JsonApiConfiguration> configuration,
+        AutowireCapableBeanFactory beanFactory) {
       return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
     }
   }
@@ -107,19 +90,11 @@ class RestTemplateIntegrationTest {
 
   @Test
   void should_deserialize_entity_model_with_link() throws Exception {
-    String jsonResult = createJsonStringFromFile(
-      "movieEntityModelWithLinks.json"
-    );
-    server
-      .expect(requestTo("/movie"))
-      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+    String jsonResult = createJsonStringFromFile("movieEntityModelWithLinks.json");
+    server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
-    ResponseEntity<EntityModel<Movie>> response = template.exchange(
-      "/movie",
-      HttpMethod.GET,
-      null,
-      new EntityModelType<Movie>() {}
-    );
+    ResponseEntity<EntityModel<Movie>> response =
+        template.exchange("/movie", HttpMethod.GET, null, new EntityModelType<Movie>() {});
 
     EntityModel<Movie> entityModel = response.getBody();
     assertThat(entityModel.getLink("self")).isPresent();
@@ -131,20 +106,12 @@ class RestTemplateIntegrationTest {
 
   @Test
   void should_deserialize_entity_model_with_relationship() throws Exception {
-    String jsonResult = createJsonStringFromFile(
-      "movieCreatedWithSingleDirector.json"
-    );
-    server
-      .expect(requestTo("/movie"))
-      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+    String jsonResult = createJsonStringFromFile("movieCreatedWithSingleDirector.json");
+    server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
     ResponseEntity<EntityModel<MovieWithDirectors>> response =
-      template.exchange(
-        "/movie",
-        HttpMethod.GET,
-        null,
-        new EntityModelType<MovieWithDirectors>() {}
-      );
+        template.exchange(
+            "/movie", HttpMethod.GET, null, new EntityModelType<MovieWithDirectors>() {});
 
     EntityModel<MovieWithDirectors> entityModel = response.getBody();
     MovieWithDirectors movie = entityModel.getContent();
@@ -152,22 +119,13 @@ class RestTemplateIntegrationTest {
   }
 
   @Test
-  void should_deserialize_entity_model_with_relationships_and_included()
-    throws Exception {
-    String jsonResult = createJsonStringFromFile(
-      "movieWithIncludedRelationships.json"
-    );
-    server
-      .expect(requestTo("/movie"))
-      .andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
+  void should_deserialize_entity_model_with_relationships_and_included() throws Exception {
+    String jsonResult = createJsonStringFromFile("movieWithIncludedRelationships.json");
+    server.expect(requestTo("/movie")).andRespond(withSuccess(jsonResult, MediaTypes.JSON_API));
 
     ResponseEntity<EntityModel<MovieWithDirectors>> response =
-      template.exchange(
-        "/movie",
-        HttpMethod.GET,
-        null,
-        new EntityModelType<MovieWithDirectors>() {}
-      );
+        template.exchange(
+            "/movie", HttpMethod.GET, null, new EntityModelType<MovieWithDirectors>() {});
 
     EntityModel<MovieWithDirectors> entityModel = response.getBody();
     MovieWithDirectors movie = entityModel.getContent();

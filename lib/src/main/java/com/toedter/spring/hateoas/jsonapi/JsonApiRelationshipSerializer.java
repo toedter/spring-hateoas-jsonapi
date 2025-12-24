@@ -22,31 +22,22 @@ import org.springframework.hateoas.Links;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 
-class JsonApiRelationshipSerializer
-  extends AbstractJsonApiSerializer<JsonApiRelationship> {
+class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
 
   private final transient JsonApiConfiguration jsonApiConfiguration;
 
-  public JsonApiRelationshipSerializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  public JsonApiRelationshipSerializer(JsonApiConfiguration jsonApiConfiguration) {
     super(JsonApiRelationship.class, false);
     this.jsonApiConfiguration = jsonApiConfiguration;
   }
 
   @Override
   public void serialize(
-    JsonApiRelationship value,
-    JsonGenerator gen,
-    SerializationContext provider
-  ) {
+      JsonApiRelationship value, JsonGenerator gen, SerializationContext provider) {
     Object data = value.getData();
     if (data != null) {
       if (data instanceof Collection) {
-        data = value.toJsonApiResourceCollection(
-          (Collection<?>) data,
-          jsonApiConfiguration
-        );
+        data = value.toJsonApiResourceCollection((Collection<?>) data, jsonApiConfiguration);
       } else {
         data = value.toJsonApiResource(data, jsonApiConfiguration);
       }

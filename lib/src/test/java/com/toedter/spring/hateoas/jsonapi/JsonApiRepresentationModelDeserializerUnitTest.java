@@ -34,26 +34,24 @@ class JsonApiRepresentationModelDeserializerUnitTest {
 
   @BeforeEach
   void setUpModule() {
-    deserializer = new JsonApiRepresentationModelDeserializer(
-      new JsonApiConfiguration()
-    );
+    deserializer = new JsonApiRepresentationModelDeserializer(new JsonApiConfiguration());
   }
 
   @Test
   void should_throw_exception_with_null_arguments() {
     List<Object> list = new ArrayList<>();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, null)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, null));
   }
 
   @Test
   void should_throw_exception_with_wrong_list_size() {
     List<Object> list = new ArrayList<>();
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, jsonApiDocument)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, jsonApiDocument));
   }
 
   @Test
@@ -61,8 +59,8 @@ class JsonApiRepresentationModelDeserializerUnitTest {
     List<Object> list = new ArrayList<>();
     list.add(new Object());
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
-    assertThrows(IllegalArgumentException.class, () ->
-      deserializer.convertToRepresentationModel(list, jsonApiDocument)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> deserializer.convertToRepresentationModel(list, jsonApiDocument));
   }
 }

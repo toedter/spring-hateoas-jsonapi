@@ -56,20 +56,11 @@ class JsonApiObjectUnitTest {
 
   @Test
   void should_create_full_object_with_all_args_constructor() {
-    List<URI> extensions = List.of(
-      URI.create("https://jsonapi.org/ext/atomic")
-    );
-    List<URI> profiles = List.of(
-      URI.create("http://example.com/profiles/flexible-pagination")
-    );
+    List<URI> extensions = List.of(URI.create("https://jsonapi.org/ext/atomic"));
+    List<URI> profiles = List.of(URI.create("http://example.com/profiles/flexible-pagination"));
     Map<String, Object> meta = Map.of("copyright", "Copyright 2025");
 
-    JsonApiObject jsonApiObject = new JsonApiObject(
-      true,
-      extensions,
-      profiles,
-      meta
-    );
+    JsonApiObject jsonApiObject = new JsonApiObject(true, extensions, profiles, meta);
 
     assertThat(jsonApiObject.getVersion()).isEqualTo("1.1");
     assertThat(jsonApiObject.getExt()).isEqualTo(extensions);
@@ -88,15 +79,8 @@ class JsonApiObjectUnitTest {
 
   @Test
   void should_create_object_without_version() {
-    List<URI> extensions = List.of(
-      URI.create("https://jsonapi.org/ext/atomic")
-    );
-    JsonApiObject jsonApiObject = new JsonApiObject(
-      false,
-      extensions,
-      null,
-      null
-    );
+    List<URI> extensions = List.of(URI.create("https://jsonapi.org/ext/atomic"));
+    JsonApiObject jsonApiObject = new JsonApiObject(false, extensions, null, null);
     assertThat(jsonApiObject.getVersion()).isNull();
     assertThat(jsonApiObject.getExt()).isEqualTo(extensions);
     assertThat(jsonApiObject.getProfile()).isNull();

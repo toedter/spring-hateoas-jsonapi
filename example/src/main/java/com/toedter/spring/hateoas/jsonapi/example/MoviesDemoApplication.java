@@ -36,13 +36,13 @@ public class MoviesDemoApplication implements WebMvcConfigurer {
   @Bean
   public JsonApiConfiguration jsonApiConfiguration() {
     return new JsonApiConfiguration()
-      .withJsonApiObject(new JsonApiObject(true))
-      .withEmptyAttributesObjectSerialized(false)
-      .withMapperCustomizer(builder ->
-        // put your additional Jackson mapper builder config here
-        // To enable pretty printing: builder.enable(SerializationFeature.INDENT_OUTPUT)
-        builder
-      );
+        .withJsonApiObject(new JsonApiObject(true))
+        .withEmptyAttributesObjectSerialized(false)
+        .withMapperCustomizer(
+            builder ->
+                // put your additional Jackson mapper builder config here
+                // To enable pretty printing: builder.enable(SerializationFeature.INDENT_OUTPUT)
+                builder);
     // Experimental feature:
     // .withAffordancesRenderedAsLinkMeta(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
   }

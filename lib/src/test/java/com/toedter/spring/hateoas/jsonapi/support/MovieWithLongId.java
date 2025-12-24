@@ -31,6 +31,5 @@ public class MovieWithLongId {
   private long id;
   private String title;
 
-  @JsonApiType
-  private String type;
+  @JsonApiType private String type;
 }

@@ -49,7 +49,7 @@ import org.springframework.util.StringUtils;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
 
-@Getter(onMethod_ = { @JsonProperty })
+@Getter(onMethod_ = {@JsonProperty})
 @With(AccessLevel.PACKAGE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -71,13 +71,12 @@ class JsonApiData {
 
   @JsonCreator
   public JsonApiData(
-    @JsonProperty("id") @Nullable String id,
-    @JsonProperty("type") @Nullable String type,
-    @JsonProperty("attributes") @Nullable Map<String, Object> attributes,
-    @JsonProperty("relationships") @Nullable Object relationships,
-    @JsonProperty("links") @Nullable Links links,
-    @JsonProperty("meta") @Nullable Map<String, Object> meta
-  ) {
+      @JsonProperty("id") @Nullable String id,
+      @JsonProperty("type") @Nullable String type,
+      @JsonProperty("attributes") @Nullable Map<String, Object> attributes,
+      @JsonProperty("relationships") @Nullable Object relationships,
+      @JsonProperty("links") @Nullable Links links,
+      @JsonProperty("meta") @Nullable Map<String, Object> meta) {
     this.id = id;
     this.type = type;
     this.attributes = attributes;
@@ -86,18 +85,16 @@ class JsonApiData {
     this.meta = meta;
   }
 
-  private static class JsonApiDataWithoutSerializedAttributes
-    extends JsonApiData {
+  private static class JsonApiDataWithoutSerializedAttributes extends JsonApiData {
 
     JsonApiDataWithoutSerializedAttributes(JsonApiData jsonApiData) {
       super(
-        jsonApiData.id,
-        jsonApiData.type,
-        null,
-        jsonApiData.relationships,
-        jsonApiData.links,
-        jsonApiData.meta
-      );
+          jsonApiData.id,
+          jsonApiData.type,
+          null,
+          jsonApiData.relationships,
+          jsonApiData.links,
+          jsonApiData.meta);
     }
 
     @Override
@@ -108,37 +105,25 @@ class JsonApiData {
   }
 
   public static List<JsonApiData> extractCollectionContent(
-    CollectionModel<?> collectionModel,
-    JsonMapper jsonMapper,
-    JsonApiConfiguration jsonApiConfiguration,
-    @Nullable Map<String, Collection<String>> sparseFieldsets,
-    boolean eliminateDuplicates
-  ) {
+      CollectionModel<?> collectionModel,
+      JsonMapper jsonMapper,
+      JsonApiConfiguration jsonApiConfiguration,
+      @Nullable Map<String, Collection<String>> sparseFieldsets,
+      boolean eliminateDuplicates) {
     if (eliminateDuplicates) {
       HashMap<String, JsonApiData> values = new HashMap<>();
       for (Object entity : collectionModel.getContent()) {
-        Optional<JsonApiData> jsonApiData = extractContent(
-          entity,
-          false,
-          jsonMapper,
-          jsonApiConfiguration,
-          sparseFieldsets
-        );
-        jsonApiData.ifPresent(apiData ->
-          values.put(apiData.getId() + "." + apiData.getType(), apiData)
-        );
+        Optional<JsonApiData> jsonApiData =
+            extractContent(entity, false, jsonMapper, jsonApiConfiguration, sparseFieldsets);
+        jsonApiData.ifPresent(
+            apiData -> values.put(apiData.getId() + "." + apiData.getType(), apiData));
       }
       return new ArrayList<>(values.values());
     } else {
       List<JsonApiData> dataList = new ArrayList<>();
       for (Object entity : collectionModel.getContent()) {
-        Optional<JsonApiData> jsonApiData = extractContent(
-          entity,
-          false,
-          jsonMapper,
-          jsonApiConfiguration,
-          sparseFieldsets
-        );
+        Optional<JsonApiData> jsonApiData =
+            extractContent(entity, false, jsonMapper, jsonApiConfiguration, sparseFieldsets);
         jsonApiData.ifPresent(dataList::add);
       }
       return dataList;
@@ -146,12 +131,11 @@ class JsonApiData {
   }
 
   public static Optional<JsonApiData> extractContent(
-    @Nullable Object content,
-    boolean isSingleEntity,
-    JsonMapper jsonMapper,
-    JsonApiConfiguration jsonApiConfiguration,
-    @Nullable Map<String, Collection<String>> sparseFieldsets
-  ) {
+      @Nullable Object content,
+      boolean isSingleEntity,
+      JsonMapper jsonMapper,
+      JsonApiConfiguration jsonApiConfiguration,
+      @Nullable Map<String, Collection<String>> sparseFieldsets) {
     Links links = null;
     Map<String, JsonApiRelationship> relationships = null;
     Map<String, Object> metaData = null;
@@ -182,12 +166,9 @@ class JsonApiData {
     final Field[] fields = getAllDeclaredFields(content.getClass());
     boolean validFieldFound = false;
     for (Field field : fields) {
-      if (
-        !"$jacocoData".equals(field.getName()) &&
-        !"__$lineHits$__".equals(field.getName()) &&
-        (!(content instanceof RepresentationModel &&
-            "links".equals(field.getName())))
-      ) {
+      if (!"$jacocoData".equals(field.getName())
+          && !"__$lineHits$__".equals(field.getName())
+          && (!(content instanceof RepresentationModel && "links".equals(field.getName())))) {
         validFieldFound = true;
         break;
       }
@@ -200,19 +181,13 @@ class JsonApiData {
     idField = JsonApiResourceIdentifier.getId(content, jsonApiConfiguration);
 
     // Only clear links if not configured to be at resource level
-    if (
-      !jsonApiConfiguration.isLinksAtResourceLevel() &&
-      (isSingleEntity || (links != null && links.isEmpty()))
-    ) {
+    if (!jsonApiConfiguration.isLinksAtResourceLevel()
+        && (isSingleEntity || (links != null && links.isEmpty()))) {
       links = null;
     }
 
     // If configured for resource level links but links are empty, set to null
-    if (
-      jsonApiConfiguration.isLinksAtResourceLevel() &&
-      links != null &&
-      links.isEmpty()
-    ) {
+    if (jsonApiConfiguration.isLinksAtResourceLevel() && links != null && links.isEmpty()) {
       links = null;
     }
 
@@ -225,35 +200,25 @@ class JsonApiData {
         if (link.hasRel("self")) {
           validJsonApiLinks = validJsonApiLinks.and(link);
         } else {
-          log.warning(
-            "removed invalid JSON:API resource-level link: " + link.getRel()
-          );
+          log.warning("removed invalid JSON:API resource-level link: " + link.getRel());
         }
       }
       links = validJsonApiLinks;
     }
 
     JsonApiResourceIdentifier.ResourceField typeField =
-      JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
+        JsonApiResourceIdentifier.getType(content, jsonApiConfiguration);
 
-    JavaType mapType = jsonMapper
-      .getTypeFactory()
-      .constructParametricType(Map.class, String.class, Object.class);
-    Map<String, Object> attributeMap = jsonMapper.convertValue(
-      content,
-      mapType
-    );
+    JavaType mapType =
+        jsonMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);
+    Map<String, Object> attributeMap = jsonMapper.convertValue(content, mapType);
 
     attributeMap.remove("links");
     attributeMap.remove(idField.name);
 
     // fix #60
-    if (
-      jsonApiConfiguration.getJsonApiIdNotSerializedForValue() != null &&
-      jsonApiConfiguration
-        .getJsonApiIdNotSerializedForValue()
-        .equals(idField.value)
-    ) {
+    if (jsonApiConfiguration.getJsonApiIdNotSerializedForValue() != null
+        && jsonApiConfiguration.getJsonApiIdNotSerializedForValue().equals(idField.value)) {
       idField = new JsonApiResourceIdentifier.ResourceField(idField.name, null);
     }
 
@@ -281,13 +246,9 @@ class JsonApiData {
     }
 
     // extract annotated meta data
-    for (Field field : ReflectionUtils.getAllDeclaredFields(
-      content.getClass()
-    )) {
-      if (
-        field.getAnnotation(JsonApiMeta.class) != null &&
-        attributeMap.containsKey(field.getName())
-      ) {
+    for (Field field : ReflectionUtils.getAllDeclaredFields(content.getClass())) {
+      if (field.getAnnotation(JsonApiMeta.class) != null
+          && attributeMap.containsKey(field.getName())) {
         attributeMap.remove(field.getName());
         try {
           field.setAccessible(true);
@@ -297,10 +258,7 @@ class JsonApiData {
           metaData.put(field.getName(), field.get(content));
         } catch (IllegalAccessException e) {
           throw new IllegalArgumentException(
-            "Cannot get JSON:API meta data from annotated property: " +
-              field.getName(),
-            e
-          );
+              "Cannot get JSON:API meta data from annotated property: " + field.getName(), e);
         }
       }
     }
@@ -324,45 +282,33 @@ class JsonApiData {
           }
         } catch (Exception e) {
           throw new IllegalArgumentException(
-            "Cannot get JSON:API meta data from annotated method: " +
-              method.getName(),
-            e
-          );
+              "Cannot get JSON:API meta data from annotated method: " + method.getName(), e);
         }
       }
     }
 
     Map<String, Object> finalMetaData = metaData;
 
-    JsonApiData jsonApiData = new JsonApiData(
-      finalId,
-      finalType,
-      attributeMap,
-      finalRelationships,
-      finalLinks,
-      finalMetaData
-    );
+    JsonApiData jsonApiData =
+        new JsonApiData(
+            finalId, finalType, attributeMap, finalRelationships, finalLinks, finalMetaData);
 
-    if (
-      !attributeMap.isEmpty() ||
-      jsonApiConfiguration.isEmptyAttributesObjectSerialized()
-    ) {
+    if (!attributeMap.isEmpty() || jsonApiConfiguration.isEmptyAttributesObjectSerialized()) {
       return Optional.of(content)
-        .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
-        .map(it -> jsonApiData);
+          .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
+          .map(it -> jsonApiData);
     } else {
       return Optional.of(content)
-        .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
-        .map(it -> new JsonApiDataWithoutSerializedAttributes(jsonApiData));
+          .filter(it -> !RESOURCE_TYPES.contains(it.getClass()))
+          .map(it -> new JsonApiDataWithoutSerializedAttributes(jsonApiData));
     }
   }
 
-  static final HashSet<Class<?>> RESOURCE_TYPES = new HashSet<>(
-    Arrays.asList(
-      RepresentationModel.class,
-      EntityModel.class,
-      CollectionModel.class,
-      PagedModel.class
-    )
-  );
+  static final HashSet<Class<?>> RESOURCE_TYPES =
+      new HashSet<>(
+          Arrays.asList(
+              RepresentationModel.class,
+              EntityModel.class,
+              CollectionModel.class,
+              PagedModel.class));
 }

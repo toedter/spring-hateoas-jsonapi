@@ -53,19 +53,13 @@ class JsonApiHandlerInitiatorUnitTest {
   static class TestTypeIdResolver extends TypeIdResolverBase {
 
     @Override
-    public String idFromValue(
-      tools.jackson.databind.DatabindContext context,
-      Object value
-    ) {
+    public String idFromValue(tools.jackson.databind.DatabindContext context, Object value) {
       return null;
     }
 
     @Override
     public String idFromValueAndType(
-      tools.jackson.databind.DatabindContext context,
-      Object value,
-      Class<?> suggestedType
-    ) {
+        tools.jackson.databind.DatabindContext context, Object value, Class<?> suggestedType) {
       return null;
     }
 
@@ -86,83 +80,54 @@ class JsonApiHandlerInitiatorUnitTest {
 
   @BeforeEach
   void beforeEach() {
-    jsonApiHandlerInstantiator = new JsonApiHandlerInstantiator(
-      new JsonApiConfiguration(),
-      null
-    );
+    jsonApiHandlerInstantiator = new JsonApiHandlerInstantiator(new JsonApiConfiguration(), null);
   }
 
   @Test
   void should_get_deserialzer_instance() {
     ValueDeserializer<?> valueDeserializer =
-      jsonApiHandlerInstantiator.deserializerInstance(
-        null,
-        null,
-        JsonApiEntityModelDeserializer.class
-      );
-    assertThat(valueDeserializer).isInstanceOf(
-      JsonApiEntityModelDeserializer.class
-    );
+        jsonApiHandlerInstantiator.deserializerInstance(
+            null, null, JsonApiEntityModelDeserializer.class);
+    assertThat(valueDeserializer).isInstanceOf(JsonApiEntityModelDeserializer.class);
   }
 
   @Test
   void should_get_serialzer_instance() {
     ValueSerializer<?> valueSerializer =
-      jsonApiHandlerInstantiator.serializerInstance(
-        null,
-        null,
-        JsonApiEntityModelSerializer.class
-      );
-    assertThat(valueSerializer).isInstanceOf(
-      JsonApiEntityModelSerializer.class
-    );
+        jsonApiHandlerInstantiator.serializerInstance(
+            null, null, JsonApiEntityModelSerializer.class);
+    assertThat(valueSerializer).isInstanceOf(JsonApiEntityModelSerializer.class);
   }
 
   @Test
   void should_get_key_deserialzer_instance() {
     KeyDeserializer keyDeserializer =
-      jsonApiHandlerInstantiator.keyDeserializerInstance(
-        null,
-        null,
-        TestKeyDeserializer.class
-      );
+        jsonApiHandlerInstantiator.keyDeserializerInstance(null, null, TestKeyDeserializer.class);
     assertThat(keyDeserializer).isInstanceOf(TestKeyDeserializer.class);
   }
 
   @Test
   void should_get_type_resolver_instance() {
     TypeIdResolver typeIdResolver =
-      jsonApiHandlerInstantiator.typeIdResolverInstance(
-        null,
-        null,
-        TestTypeIdResolver.class
-      );
+        jsonApiHandlerInstantiator.typeIdResolverInstance(null, null, TestTypeIdResolver.class);
     assertThat(typeIdResolver).isInstanceOf(TestTypeIdResolver.class);
   }
 
   @Test
   void should_get_type_resolver_instance_with_bean_factory() {
-    jsonApiHandlerInstantiator = new JsonApiHandlerInstantiator(
-      new JsonApiConfiguration(),
-      new DefaultListableBeanFactory()
-    );
+    jsonApiHandlerInstantiator =
+        new JsonApiHandlerInstantiator(
+            new JsonApiConfiguration(), new DefaultListableBeanFactory());
     TypeIdResolver typeIdResolver =
-      jsonApiHandlerInstantiator.typeIdResolverInstance(
-        null,
-        null,
-        TestTypeIdResolver.class
-      );
+        jsonApiHandlerInstantiator.typeIdResolverInstance(null, null, TestTypeIdResolver.class);
     assertThat(typeIdResolver).isInstanceOf(TestTypeIdResolver.class);
   }
 
   @Test
   void should_get_type_resolver_builder_instance() {
     TypeResolverBuilder<?> typeResolverBuilder =
-      jsonApiHandlerInstantiator.typeResolverBuilderInstance(
-        null,
-        null,
-        TestTypeResolverBuilder.class
-      );
+        jsonApiHandlerInstantiator.typeResolverBuilderInstance(
+            null, null, TestTypeResolverBuilder.class);
     assertThat(typeResolverBuilder).isInstanceOf(TestTypeResolverBuilder.class);
   }
 }

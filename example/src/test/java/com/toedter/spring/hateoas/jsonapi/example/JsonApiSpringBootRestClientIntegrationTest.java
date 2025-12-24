@@ -44,17 +44,13 @@ import tools.jackson.databind.json.JsonMapper;
 @DisplayName("Spring Boot Integration Test with RestTestClient")
 class JsonApiSpringBootRestClientIntegrationTest {
 
-  @LocalServerPort
-  private int randomPort;
+  @LocalServerPort private int randomPort;
 
-  @Autowired
-  private RestTestClient restClient;
+  @Autowired private RestTestClient restClient;
 
-  @Autowired
-  private MovieRepository movieRepository;
+  @Autowired private MovieRepository movieRepository;
 
-  @Autowired
-  private DirectorRepository directorRepository;
+  @Autowired private DirectorRepository directorRepository;
 
   @BeforeEach
   void beforeEach() {
@@ -67,19 +63,18 @@ class JsonApiSpringBootRestClientIntegrationTest {
     Movie movie = new Movie("12345", "Test Movie", 2020, 9.3, 17, null);
     final Movie savedMovie = movieRepository.save(movie);
 
-    String responseBody = restClient
-      .get()
-      .uri(
-        "/api/movies/" +
-          savedMovie.getId() +
-          "?fields[movies]=title,year,rating,directors"
-      )
-      .header("Accept", MediaTypes.JSON_API_VALUE)
-      .exchange()
-      .returnResult(String.class)
-      .getResponseBody();
+    String responseBody =
+        restClient
+            .get()
+            .uri(
+                "/api/movies/" + savedMovie.getId() + "?fields[movies]=title,year,rating,directors")
+            .header("Accept", MediaTypes.JSON_API_VALUE)
+            .exchange()
+            .returnResult(String.class)
+            .getResponseBody();
 
-    String expectedResult = """
+    String expectedResult =
+        """
       {
         "jsonapi": {
           "version": "1.1"
@@ -105,31 +100,26 @@ class JsonApiSpringBootRestClientIntegrationTest {
         "links": {
           "self": "http://localhost:%d/api/movies/%s"
         }
-      }""".formatted(
-        savedMovie.getId(),
-        this.randomPort,
-        savedMovie.getId(),
-        this.randomPort,
-        savedMovie.getId(),
-        this.randomPort,
-        savedMovie.getId()
-      );
+      }"""
+            .formatted(
+                savedMovie.getId(),
+                this.randomPort,
+                savedMovie.getId(),
+                this.randomPort,
+                savedMovie.getId(),
+                this.randomPort,
+                savedMovie.getId());
 
     JsonMapper jsonMapper = JsonMapper.builder().build();
-    JsonNode expectedJsonNode = jsonMapper.readValue(
-      expectedResult,
-      JsonNode.class
-    );
-    JsonNode actualJsonNode = jsonMapper.readValue(
-      responseBody,
-      JsonNode.class
-    );
+    JsonNode expectedJsonNode = jsonMapper.readValue(expectedResult, JsonNode.class);
+    JsonNode actualJsonNode = jsonMapper.readValue(responseBody, JsonNode.class);
     assertThat(actualJsonNode).isEqualTo(expectedJsonNode);
   }
 
   @Test
   void should_post_movie() {
-    String movieJson = """
+    String movieJson =
+        """
       {
         "data": {
           "type": "movies",
@@ -143,31 +133,25 @@ class JsonApiSpringBootRestClientIntegrationTest {
         }
       }""";
 
-    String responseBody = restClient
-      .post()
-      .uri("/api/movies")
-      .header("Accept", MediaTypes.JSON_API_VALUE)
-      .header("Content-Type", MediaTypes.JSON_API_VALUE)
-      .body(movieJson)
-      .exchange()
-      .expectStatus()
-      .isCreated()
-      .expectHeader()
-      .exists("Location")
-      .returnResult(String.class)
-      .getResponseBody();
+    String responseBody =
+        restClient
+            .post()
+            .uri("/api/movies")
+            .header("Accept", MediaTypes.JSON_API_VALUE)
+            .header("Content-Type", MediaTypes.JSON_API_VALUE)
+            .body(movieJson)
+            .exchange()
+            .expectStatus()
+            .isCreated()
+            .expectHeader()
+            .exists("Location")
+            .returnResult(String.class)
+            .getResponseBody();
 
     try {
       JsonMapper jsonMapper = JsonMapper.builder().build();
-      JsonNode responseJsonNode = jsonMapper.readValue(
-        responseBody,
-        JsonNode.class
-      );
-      String title = responseJsonNode
-        .get("data")
-        .get("attributes")
-        .get("title")
-        .asText();
+      JsonNode responseJsonNode = jsonMapper.readValue(responseBody, JsonNode.class);
+      String title = responseJsonNode.get("data").get("attributes").get("title").asText();
 
       assertThat(title).isEqualTo("Test Movie");
     } catch (Exception e) {

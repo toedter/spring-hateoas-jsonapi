@@ -18,12 +18,9 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import org.springframework.hateoas.CollectionModel;
 
-class JsonApiCollectionModelSerializer
-  extends AbstractJsonApiModelSerializer<CollectionModel<?>> {
+class JsonApiCollectionModelSerializer extends AbstractJsonApiModelSerializer<CollectionModel<?>> {
 
-  public JsonApiCollectionModelSerializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  public JsonApiCollectionModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
     super(CollectionModel.class, jsonApiConfiguration);
   }
 }

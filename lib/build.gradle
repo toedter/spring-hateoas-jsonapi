@@ -12,6 +12,7 @@ plugins {
     id 'org.springframework.boot' version '4.0.1' apply false
     id 'org.sonarqube' version '7.2.2.6593'
     id "com.vanniktech.maven.publish" version "0.35.0"
+    id 'com.diffplug.spotless' version '7.0.3'
 }
 
 group = 'com.toedter'
@@ -188,4 +189,112 @@ sonarqube {
 
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add("-parameters")
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+
+        // Use Google Java Format
+        googleJavaFormat('1.25.2')
+
+        // Or use Eclipse formatter (uncomment if preferred)
+        // eclipse()
+
+        // Remove unused imports
+        removeUnusedImports()
+
+        // Ensure files end with newline
+        endWithNewline()
+
+        // Trim trailing whitespace
+        trimTrailingWhitespace()
+
+        // Format license header
+        licenseHeaderFile rootProject.file('license-header.txt'), 'package '
+    }
+
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+
+        trimTrailingWhitespace()
+        leadingTabsToSpaces(2)
+        endWithNewline()
+    }
+}
+
+// Run spotless check before build
+tasks.named('check') {
+    dependsOn 'spotlessCheck'
+}
+
+// Task to install git hooks
+tasks.register('installGitHooks') {
+    description = 'Install Git hooks for pre-commit formatting'
+    group = 'git hooks'
+
+    doLast {
+        def hooksDir = file("${rootProject.rootDir}/.git/hooks")
+        if (!hooksDir.exists()) {
+            hooksDir.mkdirs()
+        }
+
+        // Pre-commit hook
+        def preCommitHook = file("${hooksDir}/pre-commit")
+        preCommitHook.text = """#!/bin/sh
+# Auto-format code before commit
+echo "Running Spotless code formatter..."
+./gradlew spotlessApply --quiet
+
+# Add formatted files back to staging
+git diff --name-only --cached | grep '\\.java\$' | xargs git add
+
+echo "Code formatting complete!"
+"""
+        preCommitHook.setExecutable(true)
+
+        // Commit-msg hook for commit message validation
+        def commitMsgHook = file("${hooksDir}/commit-msg")
+        commitMsgHook.text = '''#!/bin/sh
+# Validate commit message format
+# Expected format: type(scope): subject
+# Example: feat(api): add new endpoint
+
+commit_msg=$(cat "$1")
+
+# Regex for conventional commits
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\(.+\\))?: .{1,}$"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+    echo "ERROR: Invalid commit message format!"
+    echo ""
+    echo "Commit message must follow Conventional Commits format:"
+    echo "  type(scope): subject"
+    echo ""
+    echo "Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo ""
+    echo "Example: feat(api): add new JSON:API endpoint"
+    echo "Example: fix(serializer): resolve null pointer exception"
+    exit 1
+fi
+'''
+        commitMsgHook.setExecutable(true)
+
+        println "Git hooks installed successfully!"
+        println "  - pre-commit: Auto-format code with Spotless"
+        println "  - commit-msg: Validate conventional commit messages"
+    }
+}
+
+// Run installGitHooks after project evaluation
+afterEvaluate {
+    def hooksDir = file("${rootProject.rootDir}/.git/hooks")
+    def preCommitHook = file("${hooksDir}/pre-commit")
+
+    if (!preCommitHook.exists()) {
+        println ""
+        println "⚠️  Git hooks not installed!"
+        println "   Run './gradlew installGitHooks' to set up automatic code formatting"
+        println ""
+    }
 }

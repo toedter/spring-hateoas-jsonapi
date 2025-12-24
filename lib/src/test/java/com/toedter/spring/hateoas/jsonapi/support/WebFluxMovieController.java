@@ -61,32 +61,28 @@ public class WebFluxMovieController {
     WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
 
     return Flux.fromIterable(movies.keySet())
-      .flatMap(this::findOne)
-      .collectList()
-      .flatMap(resources ->
-        WebFluxLinkBuilder.linkTo(controller.all())
-          .withSelfRel()
-          .toMono()
-          .map(selfLink -> CollectionModel.of(resources, selfLink))
-      );
+        .flatMap(this::findOne)
+        .collectList()
+        .flatMap(
+            resources ->
+                WebFluxLinkBuilder.linkTo(controller.all())
+                    .withSelfRel()
+                    .toMono()
+                    .map(selfLink -> CollectionModel.of(resources, selfLink)));
   }
 
   @GetMapping("/movies/{id}")
   public Mono<EntityModel<Movie>> findOne(@PathVariable Integer id) {
     WebFluxMovieController controller = methodOn(WebFluxMovieController.class);
 
-    Mono<Link> selfLink = WebFluxLinkBuilder.linkTo(controller.findOne(id))
-      .withSelfRel()
-      .toMono();
+    Mono<Link> selfLink = WebFluxLinkBuilder.linkTo(controller.findOne(id)).withSelfRel().toMono();
 
     Movie movie = movies.get(id);
     return selfLink.map(links -> EntityModel.of(movie, links));
   }
 
   @GetMapping("/moviesWithDirectors/{id}")
-  public Mono<RepresentationModel<?>> findOneWidthDirectors(
-    @PathVariable Integer id
-  ) {
+  public Mono<RepresentationModel<?>> findOneWidthDirectors(@PathVariable Integer id) {
     Movie movie = movies.get(id);
     List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
     JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
@@ -104,76 +100,73 @@ public class WebFluxMovieController {
   }
 
   @PostMapping("/movies")
-  public Mono<ResponseEntity<?>> newMovie(
-    @RequestBody Mono<EntityModel<Movie>> movie
-  ) {
+  public Mono<ResponseEntity<?>> newMovie(@RequestBody Mono<EntityModel<Movie>> movie) {
     return movie
-      .flatMap(resource -> {
-        int newMovieId = movies.size() + 1;
-        assert resource.getContent() != null;
-        resource.getContent().setId("" + newMovieId);
-        movies.put(newMovieId, resource.getContent());
-        return findOne(newMovieId);
-      })
-      .map(findOne ->
-        ResponseEntity.created(
-          findOne.getRequiredLink(IanaLinkRelations.SELF).toUri()
-        ).build()
-      );
+        .flatMap(
+            resource -> {
+              int newMovieId = movies.size() + 1;
+              assert resource.getContent() != null;
+              resource.getContent().setId("" + newMovieId);
+              movies.put(newMovieId, resource.getContent());
+              return findOne(newMovieId);
+            })
+        .map(
+            findOne ->
+                ResponseEntity.created(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                    .build());
   }
 
   @PostMapping("/moviesWithDirectors")
   public Mono<ResponseEntity<?>> newMovieWithDirectors(
-    @RequestBody Mono<EntityModel<MovieWithDirectors>> movie
-  ) {
+      @RequestBody Mono<EntityModel<MovieWithDirectors>> movie) {
     return movie
-      .flatMap(resource -> {
-        int newMovieId = movies.size() + 1;
-        assert resource.getContent() != null;
-        resource.getContent().setId("" + newMovieId);
-        movies.put(newMovieId, resource.getContent());
-        return findOne(newMovieId);
-      })
-      .map(findOne ->
-        ResponseEntity.created(
-          findOne.getRequiredLink(IanaLinkRelations.SELF).toUri()
-        ).build()
-      );
+        .flatMap(
+            resource -> {
+              int newMovieId = movies.size() + 1;
+              assert resource.getContent() != null;
+              resource.getContent().setId("" + newMovieId);
+              movies.put(newMovieId, resource.getContent());
+              return findOne(newMovieId);
+            })
+        .map(
+            findOne ->
+                ResponseEntity.created(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                    .build());
   }
 
   @PatchMapping("/movies/{id}")
   public Mono<ResponseEntity<?>> partiallyUpdateMovie(
-    @RequestBody Mono<EntityModel<Movie>> movie,
-    @PathVariable Integer id
-  ) {
+      @RequestBody Mono<EntityModel<Movie>> movie, @PathVariable Integer id) {
     return movie
-      .flatMap(resource -> {
-        Movie newMovie = movies.get(id);
-        assert resource.getContent() != null;
-        if (resource.getContent().getTitle() != null) {
-          newMovie = newMovie.withTitle(resource.getContent().getTitle());
-        }
+        .flatMap(
+            resource -> {
+              Movie newMovie = movies.get(id);
+              assert resource.getContent() != null;
+              if (resource.getContent().getTitle() != null) {
+                newMovie = newMovie.withTitle(resource.getContent().getTitle());
+              }
 
-        movies.put(id, newMovie);
+              movies.put(id, newMovie);
 
-        return findOne(id);
-      })
-      .map(findOne ->
-        ResponseEntity.noContent()
-          .location(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
-          .build()
-      );
+              return findOne(id);
+            })
+        .map(
+            findOne ->
+                ResponseEntity.noContent()
+                    .location(findOne.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                    .build());
   }
 
   @GetMapping("/error")
   public ResponseEntity<?> error() {
-    JsonApiErrors body = JsonApiErrors.create().withError(
-      JsonApiError.create()
-        .withAboutLink("http://movie-db.com/problem")
-        .withTitle("Movie-based problem")
-        .withStatus(HttpStatus.BAD_REQUEST.toString())
-        .withDetail("This is a test case")
-    );
+    JsonApiErrors body =
+        JsonApiErrors.create()
+            .withError(
+                JsonApiError.create()
+                    .withAboutLink("http://movie-db.com/problem")
+                    .withTitle("Movie-based problem")
+                    .withStatus(HttpStatus.BAD_REQUEST.toString())
+                    .withDetail("This is a test case"));
     return ResponseEntity.badRequest().body(body);
   }
 }

@@ -24,11 +24,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Specifies if this field/method should be
- * serialized to and deserialized from JSON:API meta.
+ * Specifies if this field/method should be serialized to and deserialized from JSON:API meta.
  *
  * @author Kai Toedter
  */
-@Target({ METHOD, FIELD })
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface JsonApiMeta {}

@@ -28,11 +28,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PolymorphicRelationEntity {
 
-  @JsonApiId
-  private String id;
+  @JsonApiId private String id;
 
-  @JsonApiType
-  private final String type = null;
+  @JsonApiType private final String type = null;
 
   @JsonApiRelationships("superEntities")
   @JsonIgnore

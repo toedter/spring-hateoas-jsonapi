@@ -23,26 +23,20 @@ import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 
 class JsonApiCollectionModelDeserializer
-  extends AbstractJsonApiModelDeserializer<CollectionModel<?>> {
+    extends AbstractJsonApiModelDeserializer<CollectionModel<?>> {
 
-  JsonApiCollectionModelDeserializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  JsonApiCollectionModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     super(jsonApiConfiguration);
   }
 
   protected JsonApiCollectionModelDeserializer(
-    JavaType contentType,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
     super(contentType, jsonApiConfiguration);
   }
 
   @Override
   protected CollectionModel<?> convertToRepresentationModel(
-    List<Object> resources,
-    JsonApiDocument doc
-  ) {
+      List<Object> resources, JsonApiDocument doc) {
     Links links = doc.getLinks();
     if (links == null) {
       return CollectionModel.of(resources);

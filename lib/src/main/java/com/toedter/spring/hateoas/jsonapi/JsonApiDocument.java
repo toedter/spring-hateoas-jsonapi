@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.Links;
 
 @With
-@JsonPropertyOrder({ "jsonapi", "data", "included", "links", "meta" })
+@JsonPropertyOrder({"jsonapi", "data", "included", "links", "meta"})
 class JsonApiDocument {
 
   @Getter
@@ -71,13 +71,12 @@ class JsonApiDocument {
 
   @JsonCreator
   JsonApiDocument(
-    @JsonProperty("jsonapi") @Nullable JsonApiObject jsonapi,
-    @JsonProperty("data") @Nullable Object data,
-    @JsonProperty("meta") @Nullable Map<String, Object> meta,
-    @JsonProperty("errors") @Nullable JsonApiErrors errors,
-    @JsonProperty("links") @Nullable Links links,
-    @JsonProperty("included") @Nullable List<JsonApiData> included
-  ) {
+      @JsonProperty("jsonapi") @Nullable JsonApiObject jsonapi,
+      @JsonProperty("data") @Nullable Object data,
+      @JsonProperty("meta") @Nullable Map<String, Object> meta,
+      @JsonProperty("errors") @Nullable JsonApiErrors errors,
+      @JsonProperty("links") @Nullable Links links,
+      @JsonProperty("included") @Nullable List<JsonApiData> included) {
     this.jsonapi = jsonapi;
     this.data = data;
     this.meta = meta;

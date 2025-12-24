@@ -26,10 +26,10 @@ import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 
 /**
- * This class represents a JSON:API object compliant to the
- * see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 specification</a>.
+ * This class represents a JSON:API object compliant to the see <a
+ * href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 specification</a>.
  */
-@Getter(onMethod_ = { @JsonProperty })
+@Getter(onMethod_ = {@JsonProperty})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonApiObject {
@@ -39,36 +39,30 @@ public class JsonApiObject {
    *
    * @return the supported JSON:API version ("1.1") or null
    */
-  @Nullable
-  private final String version;
+  @Nullable private final String version;
 
   /**
    * Gets the list of JSON:API extensions.
    *
    * @return list of JSON:API extensions or null
    */
-  @Nullable
-  private final List<URI> ext;
+  @Nullable private final List<URI> ext;
 
   /**
    * Gets the list of JSON:API profiles.
    *
    * @return list of JSON:API profiles or null
    */
-  @Nullable
-  private final List<URI> profile;
+  @Nullable private final List<URI> profile;
 
   /**
    * Gets the JSON:API object meta.
    *
    * @return the JSON:API object meta or null
    */
-  @Nullable
-  private final Map<String, Object> meta;
+  @Nullable private final Map<String, Object> meta;
 
-  /**
-   * Creates an empty JSON:API object for deserialization.
-   */
+  /** Creates an empty JSON:API object for deserialization. */
   public JsonApiObject() {
     this.version = null;
     this.ext = null;
@@ -77,20 +71,19 @@ public class JsonApiObject {
   }
 
   /**
-   * Creates a JSON:API object compliant to the
-   * see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
+   * Creates a JSON:API object compliant to the see <a
+   * href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
    *
    * @param showVersion true, if JSON:API version should be rendered
-   * @param ext         list of JSON:API extensions
-   * @param profile     list of JSON:API profiles
-   * @param meta        the JSON:API object meta
+   * @param ext list of JSON:API extensions
+   * @param profile list of JSON:API profiles
+   * @param meta the JSON:API object meta
    */
   public JsonApiObject(
-    boolean showVersion,
-    @Nullable List<URI> ext,
-    @Nullable List<URI> profile,
-    @Nullable Map<String, Object> meta
-  ) {
+      boolean showVersion,
+      @Nullable List<URI> ext,
+      @Nullable List<URI> profile,
+      @Nullable Map<String, Object> meta) {
     if (showVersion) {
       this.version = "1.1";
     } else {
@@ -103,8 +96,8 @@ public class JsonApiObject {
   }
 
   /**
-   * Creates a JSON:API object compliant to the
-   * see <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
+   * Creates a JSON:API object compliant to the see <a
+   * href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API 1.1 spec</a>.
    *
    * @param showVersion true, if JSON:API version should be rendered
    */

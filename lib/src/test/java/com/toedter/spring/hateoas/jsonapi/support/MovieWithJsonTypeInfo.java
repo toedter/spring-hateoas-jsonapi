@@ -20,12 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
-@JsonSubTypes(
-  {
-    @JsonSubTypes.Type(
-      value = DerivedMovieWithRating.class,
-      name = "movieWithRating"
-    ),
-  }
-)
+@JsonSubTypes({
+  @JsonSubTypes.Type(value = DerivedMovieWithRating.class, name = "movieWithRating"),
+})
 public class MovieWithJsonTypeInfo extends Movie {}

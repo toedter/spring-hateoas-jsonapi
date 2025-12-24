@@ -46,15 +46,14 @@ import tools.jackson.databind.json.JsonMapper;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiModelBuilder Integration Test")
-@SuppressWarnings({ "squid:S2699", "squid:S5778" })
+@SuppressWarnings({"squid:S2699", "squid:S5778"})
 class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   private JsonMapper mapper;
 
   @BeforeEach
   void setUpModule() {
-    JsonApiMediaTypeConfiguration configuration =
-      new JsonApiMediaTypeConfiguration(null, null);
+    JsonApiMediaTypeConfiguration configuration = new JsonApiMediaTypeConfiguration(null, null);
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
     mapper = new JsonApiConfiguration().customize(builder).build();
@@ -69,19 +68,18 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_build_empty_entity_model() throws Exception {
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(new Object())
-      .build();
+    final RepresentationModel<?> jsonApiModel = jsonApiModel().model(new Object()).build();
     final String emptyDoc = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(emptyDoc, "emptyDoc.json");
   }
 
   @Test
   void should_build_empty_model_with_link_object() throws Exception {
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(new Object())
-      .link(Link.of("http://localhost/items").withSelfRel())
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(new Object())
+            .link(Link.of("http://localhost/items").withSelfRel())
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "emptyModelWithSelfLink.json");
@@ -89,30 +87,28 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_build_empty_model_with_link() throws Exception {
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(new Object())
-      .link("http://localhost/items", IanaLinkRelations.SELF)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(new Object())
+            .link("http://localhost/items", IanaLinkRelations.SELF)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "emptyModelWithSelfLink.json");
   }
 
   @Test
-  void should_build_empty_model_with_link_already_url_encoded()
-    throws Exception {
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(new Object())
-      .link(
-        "http://localhost/items?filter=item.id%3Dcontains%3D%27%26%27",
-        IanaLinkRelations.SELF
-      )
-      .build();
+  void should_build_empty_model_with_link_already_url_encoded() throws Exception {
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(new Object())
+            .link(
+                "http://localhost/items?filter=item.id%3Dcontains%3D%27%26%27",
+                IanaLinkRelations.SELF)
+            .build();
 
     var jsonApiConfiguration =
-      new JsonApiConfiguration().withLinksNotUrlEncoded(
-        Set.of(IanaLinkRelations.SELF)
-      );
+        new JsonApiConfiguration().withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF));
     mapper = createJsonMapper(jsonApiConfiguration);
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -123,9 +119,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   void should_build_single_movie_model() throws Exception {
     // tag::build-movie-model[]
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .build();
+    final RepresentationModel<?> jsonApiModel = jsonApiModel().model(movie).build();
     // end::build-movie-model[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -135,9 +129,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   @Test
   void should_build_single_movie_entity_model() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .build();
+    final RepresentationModel<?> jsonApiModel = jsonApiModel().model(EntityModel.of(movie)).build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieEntityModel.json");
@@ -149,10 +141,8 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(movie).relationship("directors", director).build();
     // end::build-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -160,223 +150,194 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_model_with_relationship_and_links()
-    throws Exception {
+  void should_build_single_movie_model_with_relationship_and_links() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship(
-        "directors",
-        EntityModel.of(director),
-        "http://movies/1/relationships/1",
-        "http://movies/1/directors/1"
-      )
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship(
+                "directors",
+                EntityModel.of(director),
+                "http://movies/1/relationships/1",
+                "http://movies/1/directors/1")
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithLinks.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinks.json");
   }
 
   @Test
-  void should_build_single_movie_model_with_relationship_links_and_meta()
-    throws Exception {
+  void should_build_single_movie_model_with_relationship_links_and_meta() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
     HashMap<String, Object> meta = new HashMap<>();
     meta.put("key", "value");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director)
-      .relationship(
-        "directors",
-        "http://movies/1/relationships/1",
-        "http://movies/1/directors/1",
-        Links.NONE
-      )
-      .relationship("directors", meta)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director)
+            .relationship(
+                "directors",
+                "http://movies/1/relationships/1",
+                "http://movies/1/directors/1",
+                Links.NONE)
+            .relationship("directors", meta)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithLinksAndMeta.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
   }
 
   @Test
   void should_build_single_movie_model_with_relationship_links_and_meta_and_different_order()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
     HashMap<String, Object> meta = new HashMap<>();
     meta.put("key", "value");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship(
-        "directors",
-        "http://movies/1/relationships/1",
-        "http://movies/1/directors/1",
-        Links.NONE
-      )
-      .relationship("directors", meta)
-      .relationship("directors", director)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship(
+                "directors",
+                "http://movies/1/relationships/1",
+                "http://movies/1/directors/1",
+                Links.NONE)
+            .relationship("directors", meta)
+            .relationship("directors", director)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithLinksAndMeta.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
   }
 
   @Test
   void should_build_single_movie_model_with_relationship_links_and_meta_as_first_element()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
     HashMap<String, Object> meta = new HashMap<>();
     meta.put("key", "value");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", meta)
-      .relationship(
-        "directors",
-        "http://movies/1/relationships/1",
-        "http://movies/1/directors/1",
-        Links.NONE
-      )
-      .relationship("directors", director)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", meta)
+            .relationship(
+                "directors",
+                "http://movies/1/relationships/1",
+                "http://movies/1/directors/1",
+                Links.NONE)
+            .relationship("directors", director)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithLinksAndMeta.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithLinksAndMeta.json");
   }
 
   @Test
-  void should_build_single_movie_model_with_many_relationships()
-    throws Exception {
+  void should_build_single_movie_model_with_many_relationships() throws Exception {
     Movie movie = new Movie("4", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
     Director director2 = new Director("2", "Lilly Wachowski");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", EntityModel.of(director2))
-      .relationship("relatedMovies", EntityModel.of(relatedMovie))
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", EntityModel.of(director2))
+            .relationship("relatedMovies", EntityModel.of(relatedMovie))
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieJsonApiModelWithManyRelationships.json");
   }
 
   @Test
-  void should_build_single_movie_model_with_three_director_relationships()
-    throws Exception {
+  void should_build_single_movie_model_with_three_director_relationships() throws Exception {
     Movie movie = new Movie("4", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
     Director director2 = new Director("2", "Lilly Wachowski");
     Director director3 = new Director("3", "A Secret Director");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", EntityModel.of(director2))
-      .relationship("directors", EntityModel.of(director3))
-      .relationship("relatedMovies", EntityModel.of(relatedMovie))
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", EntityModel.of(director2))
+            .relationship("directors", EntityModel.of(director3))
+            .relationship("relatedMovies", EntityModel.of(relatedMovie))
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieEntityModelWithThreeDirectorRelationships.json"
-    );
+    compareWithFile(movieJson, "movieEntityModelWithThreeDirectorRelationships.json");
   }
 
   @Test
-  void should_build_single_movie_model_with_many_relationships_and_included()
-    throws Exception {
+  void should_build_single_movie_model_with_many_relationships_and_included() throws Exception {
     // tag::build-included[]
     Movie movie = new Movie("1", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
     Director director2 = new Director("2", "Lilly Wachowski");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", director2)
-      .relationship("relatedMovies", relatedMovie)
-      .included(director1)
-      .included(director2)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", director2)
+            .relationship("relatedMovies", relatedMovie)
+            .included(director1)
+            .included(director2)
+            .build();
     // end::build-included[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithManyRelationshipsAndIncluded.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
   }
 
   @Test
-  void should_build_paged_movie_model_with_many_relationships_and_included()
-    throws Exception {
+  void should_build_paged_movie_model_with_many_relationships_and_included() throws Exception {
     // tag::complex-paged-model[]
     Movie movie = new Movie("1", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
     Director director2 = new Director("2", "Lilly Wachowski");
 
-    final RepresentationModel<?> jsonApiModel1 = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", director2)
-      .relationship("relatedMovies", EntityModel.of(relatedMovie))
-      .build();
+    final RepresentationModel<?> jsonApiModel1 =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", director2)
+            .relationship("relatedMovies", EntityModel.of(relatedMovie))
+            .build();
 
     Movie movie2 = new Movie("3", "Star Wars");
     Director director3 = new Director("3", "George Lucas");
 
-    final RepresentationModel<?> jsonApiModel2 = jsonApiModel()
-      .model(movie2)
-      .relationship("directors", director3)
-      .build();
+    final RepresentationModel<?> jsonApiModel2 =
+        jsonApiModel().model(movie2).relationship("directors", director3).build();
 
     List<RepresentationModel<?>> movies = new ArrayList<>();
     movies.add(jsonApiModel1);
     movies.add(jsonApiModel2);
 
-    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-      10,
-      1,
-      100,
-      10
-    );
+    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
     Link selfLink = Link.of("http://localhost/movies").withSelfRel();
-    final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(
-      movies,
-      pageMetadata,
-      selfLink
-    );
+    final PagedModel<RepresentationModel<?>> pagedModel =
+        PagedModel.of(movies, pageMetadata, selfLink);
 
-    RepresentationModel<?> pagedJasonApiModel = jsonApiModel()
-      .model(pagedModel)
-      .included(director1)
-      .included(director2)
-      .included(director3)
-      .pageMeta()
-      .pageLinks("http://localhost/movies")
-      .build();
+    RepresentationModel<?> pagedJasonApiModel =
+        jsonApiModel()
+            .model(pagedModel)
+            .included(director1)
+            .included(director2)
+            .included(director3)
+            .pageMeta()
+            .pageLinks("http://localhost/movies")
+            .build();
     // end::complex-paged-model[]
 
     final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
@@ -384,78 +345,56 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_model_with_relationship_with_only_meta()
-    throws Exception {
+  void should_build_single_movie_model_with_relationship_with_only_meta() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Map<String, Object> meta = new HashMap<>();
     meta.put("meta-key", "meta-value");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", meta)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(movie).relationship("directors", meta).build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithOnlyMeta.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithOnlyMeta.json");
   }
 
   @Test
-  void should_build_single_movie_model_with_relationship_with_only_link()
-    throws Exception {
+  void should_build_single_movie_model_with_relationship_with_only_link() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", "http://movies.com/1", null, null)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", "http://movies.com/1", null, null)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithRelationshipWithOnlyLink.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithRelationshipWithOnlyLink.json");
   }
 
   @Test
-  void should_build_paged_movie_with_parametrized_page_links()
-    throws Exception {
-    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-      10,
-      1,
-      100,
-      10
-    );
+  void should_build_paged_movie_with_parametrized_page_links() throws Exception {
+    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(10, 1, 100, 10);
     Link selfLink = Link.of("http://localhost/movies").withSelfRel();
-    final PagedModel<RepresentationModel<?>> pagedModel = PagedModel.of(
-      new ArrayList<>(),
-      pageMetadata,
-      selfLink
-    );
+    final PagedModel<RepresentationModel<?>> pagedModel =
+        PagedModel.of(new ArrayList<>(), pageMetadata, selfLink);
 
-    RepresentationModel<?> pagedJasonApiModel = jsonApiModel()
-      .model(pagedModel)
-      .pageMeta()
-      .pageLinks("http://localhost/movies?director=lucas")
-      .build();
+    RepresentationModel<?> pagedJasonApiModel =
+        jsonApiModel()
+            .model(pagedModel)
+            .pageMeta()
+            .pageLinks("http://localhost/movies?director=lucas")
+            .build();
 
     final String pagedModelJson = mapper.writeValueAsString(pagedJasonApiModel);
 
-    compareWithFile(
-      pagedModelJson,
-      "pagedJsonApiModelWithPageLinksParameters.json"
-    );
+    compareWithFile(pagedModelJson, "pagedJsonApiModelWithPageLinksParameters.json");
   }
 
   @Test
   void should_build_single_movie_entity_model_with_meta() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .meta("metaProperty", "metaValue")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(EntityModel.of(movie)).meta("metaProperty", "metaValue").build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieEntityModelWithMeta.json");
@@ -464,9 +403,7 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   @Test
   // issue: #13
   void should_build_with_meta_only() throws Exception {
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .meta("x", "y")
-      .build();
+    final RepresentationModel<?> jsonApiModel = jsonApiModel().meta("x", "y").build();
 
     final String json = mapper.writeValueAsString(jsonApiModel);
     assertThat(json).isEqualTo("{\"meta\":{\"x\":\"y\"}}");
@@ -474,16 +411,17 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_build_single_movie_with_single_collection_relationship_before_data_is_added()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
 
     // tag::single-collection-relationship[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithDataArray("directors")
-      .relationship("directors", director)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationshipWithDataArray("directors")
+            .relationship("directors", director)
+            .build();
     // end::single-collection-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -492,14 +430,15 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_build_single_movie_with_single_collection_relationship_after_data_is_added()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", director)
-      .relationshipWithDataArray("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", director)
+            .relationshipWithDataArray("directors")
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
@@ -507,15 +446,16 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_build_single_movie_with_single_one_element_collection_relationship()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
 
     // tag::single-collection-relationship2[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", Collections.singletonList(director))
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", Collections.singletonList(director))
+            .build();
     // end::single-collection-relationship2[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -523,55 +463,49 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_with_two_one_element_collection_relationship()
-    throws Exception {
+  void should_build_single_movie_with_two_one_element_collection_relationship() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", Collections.singletonList(director))
-      .relationship("directors", Collections.singletonList(director))
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", Collections.singletonList(director))
+            .relationship("directors", Collections.singletonList(director))
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithSingleCollectionRelationship.json");
   }
 
   @Test
-  void should_build_single_movie_with_empty_collection_relationship()
-    throws Exception {
+  void should_build_single_movie_with_empty_collection_relationship() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithDataArray("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(EntityModel.of(movie)).relationshipWithDataArray("directors").build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
   }
 
   @Test
-  void should_build_single_movie_with_empty_collection_data_relationship()
-    throws Exception {
+  void should_build_single_movie_with_empty_collection_data_relationship() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", Collections.EMPTY_LIST)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", Collections.EMPTY_LIST)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
   }
 
   @Test
-  void should_build_single_movie_with_null_relationship_data()
-    throws Exception {
+  void should_build_single_movie_with_null_relationship_data() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     // tag::explicit-null-relationship[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithNullData("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(EntityModel.of(movie)).relationshipWithNullData("directors").build();
     // end::explicit-null-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -579,14 +513,11 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_with_explicit_empty_relationship_data()
-    throws Exception {
+  void should_build_single_movie_with_explicit_empty_relationship_data() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     // tag::explicit-empty-relationship[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithEmptyData("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(EntityModel.of(movie)).relationshipWithEmptyData("directors").build();
     // end::explicit-empty-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -594,38 +525,36 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_with_null_relationship_data_and_links()
-    throws Exception {
+  void should_build_single_movie_with_null_relationship_data_and_links() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithNullData("directors")
-      .relationship(
-        "directors",
-        "http://localhost/movies/1/relationships/directors",
-        "http://localhost/movies/1/directors",
-        null
-      )
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationshipWithNullData("directors")
+            .relationship(
+                "directors",
+                "http://localhost/movies/1/relationships/directors",
+                "http://localhost/movies/1/directors",
+                null)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithNullRelationshipAndLinks.json");
   }
 
   @Test
-  void should_build_single_movie_with_empty_relationship_data_and_links()
-    throws Exception {
+  void should_build_single_movie_with_empty_relationship_data_and_links() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationshipWithEmptyData("directors")
-      .relationship(
-        "directors",
-        "http://localhost/movies/1/relationships/directors",
-        "http://localhost/movies/1/directors",
-        null
-      )
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationshipWithEmptyData("directors")
+            .relationship(
+                "directors",
+                "http://localhost/movies/1/relationships/directors",
+                "http://localhost/movies/1/directors",
+                null)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithEmptyRelationshipAndLinks.json");
@@ -635,26 +564,27 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   void should_replace_existing_relationship_data_with_null() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", director)
-      .relationshipWithNullData("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", director)
+            .relationshipWithNullData("directors")
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithNullRelationship.json");
   }
 
   @Test
-  void should_replace_existing_relationship_data_with_empty_array()
-    throws Exception {
+  void should_replace_existing_relationship_data_with_empty_array() throws Exception {
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("3", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .relationship("directors", director)
-      .relationshipWithEmptyData("directors")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(movie))
+            .relationship("directors", director)
+            .relationshipWithEmptyData("directors")
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithEmptyCollectionRelationship.json");
@@ -664,98 +594,78 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   void should_not_build_with_second_entity() {
     Movie movie = new Movie("1", "Star Wars");
 
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().model(movie).model(movie).build()
-    );
+    assertThrows(
+        IllegalStateException.class, () -> jsonApiModel().model(movie).model(movie).build());
   }
 
   @Test
   void should_not_build_pagination_meta_with_entity_model_set() {
     Movie movie = new Movie("1", "Star Wars");
 
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().model(movie).pageMeta().build()
-    );
+    assertThrows(IllegalStateException.class, () -> jsonApiModel().model(movie).pageMeta().build());
   }
 
   @Test
   void should_not_build_pagination_meta_with_no_paged_model_set() {
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().pageMeta().build()
-    );
+    assertThrows(IllegalStateException.class, () -> jsonApiModel().pageMeta().build());
   }
 
   @Test
   void should_not_build_pagination_meta_with_no_page_meta_data_set() {
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().model(PagedModel.empty()).pageMeta().build()
-    );
+    assertThrows(
+        IllegalStateException.class,
+        () -> jsonApiModel().model(PagedModel.empty()).pageMeta().build());
   }
 
   @Test
   void should_not_build_pagination_links_with_invalid_link_base() {
-    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-      2,
-      1,
-      100,
-      50
-    );
-    assertThrows(IllegalArgumentException.class, () ->
-      jsonApiModel()
-        .model(PagedModel.of(Collections.emptyList(), pageMetadata))
-        .pageMeta()
-        .pageLinks("httpx://test::8080")
-        .build()
-    );
+    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(2, 1, 100, 50);
+    assertThrows(
+        IllegalArgumentException.class,
+        () ->
+            jsonApiModel()
+                .model(PagedModel.of(Collections.emptyList(), pageMetadata))
+                .pageMeta()
+                .pageLinks("httpx://test::8080")
+                .build());
   }
 
   @Test
   void should_not_build_with_invalid_null_value_relationship() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null,
-      null
-    );
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().relationship("directors", jsonApiRelationship).build()
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null, null);
+    assertThrows(
+        IllegalStateException.class,
+        () -> jsonApiModel().relationship("directors", jsonApiRelationship).build());
   }
 
   @Test
   void should_not_build_with_invalid_relationship_data_object() {
     Object object = new Object();
-    assertThrows(IllegalStateException.class, () ->
-      jsonApiModel().relationship("directors", object).build()
-    );
+    assertThrows(
+        IllegalStateException.class,
+        () -> jsonApiModel().relationship("directors", object).build());
   }
 
   @Test
   void should_not_add_invalid_relationship_data_object() {
-    assertThrows(IllegalArgumentException.class, () ->
-      jsonApiModel()
-        .relationship("directors", (EntityModel<?>) null, null, null)
-        .build()
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> jsonApiModel().relationship("directors", (EntityModel<?>) null, null, null).build());
   }
 
   @Test
   void should_not_add_invalid_relationship_links() {
-    assertThrows(IllegalArgumentException.class, () ->
-      jsonApiModel()
-        .relationship("directors", (String) null, null, null)
-        .build()
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> jsonApiModel().relationship("directors", (String) null, null, null).build());
   }
 
   @Test
   void should_apply_sparse_fieldsets_on_entity_model() throws Exception {
     MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(movie))
-      .fields("movies", "rating")
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(EntityModel.of(movie)).fields("movies", "rating").build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
     compareWithFile(movieJson, "movieWithRating.json");
@@ -765,20 +675,17 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   void should_apply_sparse_fieldsets_on_included_resources() throws Exception {
     // tag::sparse-fieldset[]
     MovieWithRating movie = new MovieWithRating("1", "Star Wars", 8.6);
-    DirectorWithMovies director = new DirectorWithMovies(
-      "3",
-      "George Lucas",
-      1944
-    );
+    DirectorWithMovies director = new DirectorWithMovies("3", "George Lucas", 1944);
     director.setMovies(Collections.singletonList(movie));
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(EntityModel.of(director))
-      .fields("directors", "name")
-      .fields("movies", "title")
-      .relationship("movies", movie)
-      .included(movie)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(EntityModel.of(director))
+            .fields("directors", "name")
+            .fields("movies", "title")
+            .relationship("movies", movie)
+            .included(movie)
+            .build();
     // end::sparse-fieldset[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -786,74 +693,67 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
-  void should_build_single_movie_model_with_relationship_included_type_config()
-    throws Exception {
-    JsonApiConfiguration jsonApiConfiguration = new JsonApiConfiguration()
-      .withPluralizedTypeRendered(false)
-      .withLowerCasedTypeRendered(false);
+  void should_build_single_movie_model_with_relationship_included_type_config() throws Exception {
+    JsonApiConfiguration jsonApiConfiguration =
+        new JsonApiConfiguration()
+            .withPluralizedTypeRendered(false)
+            .withLowerCasedTypeRendered(false);
 
     // Create ObjectProvider that supplies the given JsonApiConfiguration
     ObjectProvider<JsonApiConfiguration> configProvider =
-      new ObjectProvider<>() {
-        @Override
-        public JsonApiConfiguration getObject() {
-          return jsonApiConfiguration;
-        }
-      };
+        new ObjectProvider<>() {
+          @Override
+          public JsonApiConfiguration getObject() {
+            return jsonApiConfiguration;
+          }
+        };
 
     JsonApiMediaTypeConfiguration configuration =
-      new JsonApiMediaTypeConfiguration(configProvider, null);
+        new JsonApiMediaTypeConfiguration(configProvider, null);
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
     mapper = builder.build();
 
     Movie movie = new Movie("1", "Star Wars");
     Director director = new Director("1", "George Lucas");
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director)
-      .included(director)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(movie).relationship("directors", director).included(director).build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieWidthDirectorRelationshipAndTypeConfiguration.json"
-    );
+    compareWithFile(movieJson, "movieWidthDirectorRelationshipAndTypeConfiguration.json");
   }
 
   @Test
-  void should_build_single_movie_with_different_meta_in_relationship_resources()
-    throws Exception {
+  void should_build_single_movie_with_different_meta_in_relationship_resources() throws Exception {
     // tag::nesting[]
     Director director = new Director("3", "George Lucas");
-    final RepresentationModel<?> directorModel = jsonApiModel()
-      .model(EntityModel.of(director))
-      .meta("director-meta", "director-meta-value")
-      .build();
+    final RepresentationModel<?> directorModel =
+        jsonApiModel()
+            .model(EntityModel.of(director))
+            .meta("director-meta", "director-meta-value")
+            .build();
 
     Map<String, Object> relationshipMeta = new HashMap<>();
     relationshipMeta.put("relationship-meta", "relationship-meta-value");
 
     Map<String, Object> directorRelationshipMeta = new HashMap<>();
-    directorRelationshipMeta.put(
-      "director-relationship-meta",
-      "director-relationship-meta-value"
-    );
+    directorRelationshipMeta.put("director-relationship-meta", "director-relationship-meta-value");
 
     Movie movie = new Movie("1", "Star Wars");
-    final RepresentationModel<?> movieModel = jsonApiModel()
-      .model(movie)
-      .meta("movie-meta", "movie-meta-value")
-      .relationship("directors", director, directorRelationshipMeta)
-      .relationship("directors", relationshipMeta)
-      .build();
+    final RepresentationModel<?> movieModel =
+        jsonApiModel()
+            .model(movie)
+            .meta("movie-meta", "movie-meta-value")
+            .relationship("directors", director, directorRelationshipMeta)
+            .relationship("directors", relationshipMeta)
+            .build();
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movieModel)
-      .meta("top-level-meta", "top-level-meta-value")
-      .included(directorModel)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movieModel)
+            .meta("top-level-meta", "top-level-meta-value")
+            .included(directorModel)
+            .build();
     // end::nesting[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
@@ -867,27 +767,24 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     Director director1 = new Director("1", "Lana Wachowski");
     Director director2 = new Director("2", "Lilly Wachowski");
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", director2)
-      .relationship("relatedMovies", relatedMovie)
-      .included(director1)
-      .included(director2)
-      .included(director2)
-      .included(director1)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", director2)
+            .relationship("relatedMovies", relatedMovie)
+            .included(director1)
+            .included(director2)
+            .included(director2)
+            .included(director1)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithManyRelationshipsAndIncluded.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
   }
 
   @Test
-  void should_not_include_same_entity_twice_when_added_as_collection()
-    throws Exception {
+  void should_not_include_same_entity_twice_when_added_as_collection() throws Exception {
     Movie movie = new Movie("1", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
@@ -898,24 +795,22 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     directors.add(director2);
     directors.add(director2);
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", director2)
-      .relationship("relatedMovies", relatedMovie)
-      .included(directors)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", director2)
+            .relationship("relatedMovies", relatedMovie)
+            .included(directors)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithManyRelationshipsAndIncluded.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
   }
 
   @Test
   void should_not_include_same_entity_twice_when_added_as_collection_of_entity_models()
-    throws Exception {
+      throws Exception {
     Movie movie = new Movie("1", "The Matrix");
     Movie relatedMovie = new Movie("2", "The Matrix 2");
     Director director1 = new Director("1", "Lana Wachowski");
@@ -926,19 +821,17 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     directors.add(EntityModel.of(director2));
     directors.add(EntityModel.of(director2));
 
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", director1)
-      .relationship("directors", director2)
-      .relationship("relatedMovies", relatedMovie)
-      .included(directors)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel()
+            .model(movie)
+            .relationship("directors", director1)
+            .relationship("directors", director2)
+            .relationship("relatedMovies", relatedMovie)
+            .included(directors)
+            .build();
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithManyRelationshipsAndIncluded.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithManyRelationshipsAndIncluded.json");
   }
 
   @Test
@@ -946,17 +839,12 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     Movie movie = new Movie("1", "The Matrix");
 
     // tag::empty-to-one-relationship[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("director", (Object) null)
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(movie).relationship("director", (Object) null).build();
     // end::empty-to-one-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithEmptyToOneRelationship.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithEmptyToOneRelationship.json");
   }
 
   @Test
@@ -964,16 +852,11 @@ class JsonApiModelBuilderIntegrationTest extends JsonApiTestBase {
     Movie movie = new Movie("1", "The Matrix");
 
     // tag::empty-to-many-relationship[]
-    final RepresentationModel<?> jsonApiModel = jsonApiModel()
-      .model(movie)
-      .relationship("directors", Collections.emptyList())
-      .build();
+    final RepresentationModel<?> jsonApiModel =
+        jsonApiModel().model(movie).relationship("directors", Collections.emptyList()).build();
     // end::empty-to-many-relationship[]
 
     final String movieJson = mapper.writeValueAsString(jsonApiModel);
-    compareWithFile(
-      movieJson,
-      "movieJsonApiModelWithEmptyToManyRelationship.json"
-    );
+    compareWithFile(movieJson, "movieJsonApiModelWithEmptyToManyRelationship.json");
   }
 }

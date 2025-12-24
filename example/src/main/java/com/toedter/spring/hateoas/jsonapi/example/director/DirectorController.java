@@ -51,72 +51,49 @@ public class DirectorController {
   private final DirectorRepository repository;
   private final DirectorModelAssembler directorModelAssembler;
 
-  DirectorController(
-    DirectorRepository repository,
-    DirectorModelAssembler directorModelAssembler
-  ) {
+  DirectorController(DirectorRepository repository, DirectorModelAssembler directorModelAssembler) {
     this.repository = repository;
     this.directorModelAssembler = directorModelAssembler;
   }
 
   @GetMapping("/directors")
   public ResponseEntity<RepresentationModel<?>> findAll(
-    @RequestParam(
-      value = "page[number]",
-      defaultValue = "0",
-      required = false
-    ) int pageNumber,
-    @RequestParam(
-      value = "page[size]",
-      defaultValue = "10",
-      required = false
-    ) int pageSize,
-    @RequestParam(value = "include", required = false) String[] include,
-    @RequestParam(
-      value = "fields[" + MOVIES + "]",
-      required = false
-    ) String[] fieldsMovies,
-    @RequestParam(
-      value = "fields[" + DIRECTORS + "]",
-      required = false
-    ) String[] fieldsDirectors
-  ) {
+      @RequestParam(value = "page[number]", defaultValue = "0", required = false) int pageNumber,
+      @RequestParam(value = "page[size]", defaultValue = "10", required = false) int pageSize,
+      @RequestParam(value = "include", required = false) String[] include,
+      @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] fieldsMovies,
+      @RequestParam(value = "fields[" + DIRECTORS + "]", required = false)
+          String[] fieldsDirectors) {
     final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
     final Page<Director> pagedResult = repository.findAll(pageRequest);
 
     List<? extends RepresentationModel<?>> movieResources =
-      StreamSupport.stream(pagedResult.spliterator(), false)
-        .map(director ->
-          directorModelAssembler.toJsonApiModel(director, fieldsDirectors)
-        )
-        .toList();
+        StreamSupport.stream(pagedResult.spliterator(), false)
+            .map(director -> directorModelAssembler.toJsonApiModel(director, fieldsDirectors))
+            .toList();
 
-    Link selfLink = linkTo(DirectorController.class)
-      .slash(
-        "directors?page[number]=" +
-          pagedResult.getNumber() +
-          "&page[size]=" +
-          pagedResult.getSize()
-      )
-      .withSelfRel();
+    Link selfLink =
+        linkTo(DirectorController.class)
+            .slash(
+                "directors?page[number]="
+                    + pagedResult.getNumber()
+                    + "&page[size]="
+                    + pagedResult.getSize())
+            .withSelfRel();
 
-    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-      pagedResult.getSize(),
-      pagedResult.getNumber(),
-      pagedResult.getTotalElements(),
-      pagedResult.getTotalPages()
-    );
+    PagedModel.PageMetadata pageMetadata =
+        new PagedModel.PageMetadata(
+            pagedResult.getSize(),
+            pagedResult.getNumber(),
+            pagedResult.getTotalElements(),
+            pagedResult.getTotalPages());
     final PagedModel<? extends RepresentationModel<?>> pagedModel =
-      PagedModel.of(movieResources, pageMetadata, selfLink);
+        PagedModel.of(movieResources, pageMetadata, selfLink);
 
-    String pageLinksBase = linkTo(MovieController.class)
-      .slash(DIRECTORS)
-      .withSelfRel()
-      .getHref();
-    JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel()
-      .model(pagedModel)
-      .pageLinks(pageLinksBase);
+    String pageLinksBase = linkTo(MovieController.class).slash(DIRECTORS).withSelfRel().getHref();
+    JsonApiModelBuilder jsonApiModelBuilder =
+        jsonApiModel().model(pagedModel).pageLinks(pageLinksBase);
 
     if (fieldsMovies != null) {
       jsonApiModelBuilder = jsonApiModelBuilder.fields(MOVIES, fieldsMovies);
@@ -130,52 +107,35 @@ public class DirectorController {
           movies.put(movie.getId(), movie);
         }
       }
-      movies
-        .values()
-        .forEach(entry ->
-          finalJsonApiModelBuilder.included(EntityModel.of(entry))
-        );
+      movies.values().forEach(entry -> finalJsonApiModelBuilder.included(EntityModel.of(entry)));
     }
 
-    final RepresentationModel<?> pagedJsonApiModel =
-      jsonApiModelBuilder.build();
+    final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
     return ResponseEntity.ok(pagedJsonApiModel);
   }
 
   @GetMapping("/directors/{id}")
   public ResponseEntity<? extends RepresentationModel<?>> findOne(
-    @PathVariable Long id,
-    @RequestParam(value = "include", required = false) String[] include,
-    @RequestParam(
-      value = "fields[" + DIRECTORS + "]",
-      required = false
-    ) String[] fieldsDirectors
-  ) {
+      @PathVariable Long id,
+      @RequestParam(value = "include", required = false) String[] include,
+      @RequestParam(value = "fields[" + DIRECTORS + "]", required = false)
+          String[] fieldsDirectors) {
     return repository
-      .findById(id)
-      .map(director -> setInclude(director, include, fieldsDirectors))
-      .map(ResponseEntity::ok)
-      .orElseThrow(() ->
-        new JsonApiErrorsException(
-          CommonErrors.newResourceNotFound("directors", id.toString())
-        )
-      );
+        .findById(id)
+        .map(director -> setInclude(director, include, fieldsDirectors))
+        .map(ResponseEntity::ok)
+        .orElseThrow(
+            () ->
+                new JsonApiErrorsException(
+                    CommonErrors.newResourceNotFound("directors", id.toString())));
   }
 
   private RepresentationModel<?> setInclude(
-    Director director,
-    String[] include,
-    String[] fieldsDirectors
-  ) {
-    RepresentationModel<?> model = directorModelAssembler.toJsonApiModel(
-      director,
-      fieldsDirectors
-    );
+      Director director, String[] include, String[] fieldsDirectors) {
+    RepresentationModel<?> model = directorModelAssembler.toJsonApiModel(director, fieldsDirectors);
     JsonApiModelBuilder builder = jsonApiModel().model(model);
     if (include != null && include.length == 1 && include[0].equals(MOVIES)) {
-      director
-        .getMovies()
-        .forEach(entry -> builder.included(EntityModel.of(entry)));
+      director.getMovies().forEach(entry -> builder.included(EntityModel.of(entry)));
     }
     return builder.build();
   }

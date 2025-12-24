@@ -24,11 +24,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SuperEChild2 implements SuperEntity<String> {
 
-  @JsonApiId
-  private String id;
+  @JsonApiId private String id;
 
-  @JsonApiType
-  private final String type = null;
+  @JsonApiType private final String type = null;
 
   private final String extraAttribute = "";
 

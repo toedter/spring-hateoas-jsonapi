@@ -66,10 +66,9 @@ public class MovieController {
   private final MovieModelAssembler movieModelAssembler;
 
   MovieController(
-    MovieRepository movieRepository,
-    DirectorRepository directorRepository,
-    MovieModelAssembler movieModelAssembler
-  ) {
+      MovieRepository movieRepository,
+      DirectorRepository directorRepository,
+      MovieModelAssembler movieModelAssembler) {
     this.movieRepository = movieRepository;
     this.directorRepository = directorRepository;
     this.movieModelAssembler = movieModelAssembler;
@@ -77,39 +76,25 @@ public class MovieController {
 
   @GetMapping("/movies")
   public ResponseEntity<RepresentationModel<?>> findAll(
-    @RequestParam(
-      value = "page[number]",
-      defaultValue = "0",
-      required = false
-    ) int page,
-    @RequestParam(
-      value = "page[size]",
-      defaultValue = "10",
-      required = false
-    ) int size,
-    @RequestParam(value = "include", required = false) String[] include,
-    @RequestParam(
-      value = "fields[" + MOVIES + "]",
-      required = false
-    ) String[] fieldsMovies
-  ) {
+      @RequestParam(value = "page[number]", defaultValue = "0", required = false) int page,
+      @RequestParam(value = "page[size]", defaultValue = "10", required = false) int size,
+      @RequestParam(value = "include", required = false) String[] include,
+      @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] fieldsMovies) {
     final PageRequest pageRequest = PageRequest.of(page, size);
 
     final Page<Movie> pagedResult = movieRepository.findAll(pageRequest);
 
     List<? extends RepresentationModel<?>> movieResources =
-      StreamSupport.stream(pagedResult.spliterator(), false)
-        .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
-        .toList();
+        StreamSupport.stream(pagedResult.spliterator(), false)
+            .map(movie -> movieModelAssembler.toJsonApiModel(movie, fieldsMovies))
+            .toList();
 
     String uriParams = "?";
     if (fieldsMovies != null) {
       String movieFieldParams = Arrays.toString(fieldsMovies);
       uriParams =
-        "?fields%5Bmovies%5D=" +
-        movieFieldParams
-          .substring(1, movieFieldParams.length() - 1)
-          .replace(" ", "");
+          "?fields%5Bmovies%5D="
+              + movieFieldParams.substring(1, movieFieldParams.length() - 1).replace(" ", "");
     }
 
     if (include != null) {
@@ -118,72 +103,61 @@ public class MovieController {
         uriParams += "&";
       }
       uriParams +=
-        "include=" +
-        includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
+          "include=" + includeParams.substring(1, includeParams.length() - 1).replace(" ", "");
     }
 
     // tag::affordance[]
-    final Affordance newMovieAffordance = afford(
-      methodOn(MovieController.class).newMovie(null)
-    );
+    final Affordance newMovieAffordance = afford(methodOn(MovieController.class).newMovie(null));
 
-    Link selfLink = linkTo(MovieController.class)
-      .slash(
-        "movies" +
-          uriParams +
-          "&page[number]=" +
-          pagedResult.getNumber() +
-          "&page[size]=" +
-          pagedResult.getSize()
-      )
-      .withSelfRel()
-      .andAffordance(newMovieAffordance);
+    Link selfLink =
+        linkTo(MovieController.class)
+            .slash(
+                "movies"
+                    + uriParams
+                    + "&page[number]="
+                    + pagedResult.getNumber()
+                    + "&page[size]="
+                    + pagedResult.getSize())
+            .withSelfRel()
+            .andAffordance(newMovieAffordance);
     // end::affordance[]
 
-    PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-      pagedResult.getSize(),
-      pagedResult.getNumber(),
-      pagedResult.getTotalElements(),
-      pagedResult.getTotalPages()
-    );
+    PagedModel.PageMetadata pageMetadata =
+        new PagedModel.PageMetadata(
+            pagedResult.getSize(),
+            pagedResult.getNumber(),
+            pagedResult.getTotalElements(),
+            pagedResult.getTotalPages());
 
     final PagedModel<? extends RepresentationModel<?>> pagedModel =
-      PagedModel.of(movieResources, pageMetadata);
+        PagedModel.of(movieResources, pageMetadata);
 
     if (uriParams.equals("?")) {
       uriParams = "";
     }
 
     String pageLinksBase =
-      linkTo(MovieController.class).slash(MOVIES).withSelfRel().getHref() +
-      uriParams;
+        linkTo(MovieController.class).slash(MOVIES).withSelfRel().getHref() + uriParams;
 
-    final JsonApiModelBuilder jsonApiModelBuilder = jsonApiModel()
-      .model(pagedModel)
-      .link(selfLink)
-      .pageLinks(pageLinksBase);
+    final JsonApiModelBuilder jsonApiModelBuilder =
+        jsonApiModel().model(pagedModel).link(selfLink).pageLinks(pageLinksBase);
 
     // tag::relationship-inclusion[]
-    if (
-      include != null && include.length == 1 && include[0].equals(DIRECTORS)
-    ) {
+    if (include != null && include.length == 1 && include[0].equals(DIRECTORS)) {
       for (Movie movie : pagedResult.getContent()) {
         jsonApiModelBuilder.included(movie.getDirectors());
       }
     }
     // end::relationship-inclusion[]
 
-    final RepresentationModel<?> pagedJsonApiModel =
-      jsonApiModelBuilder.build();
+    final RepresentationModel<?> pagedJsonApiModel = jsonApiModelBuilder.build();
 
     return ResponseEntity.ok(pagedJsonApiModel);
   }
 
   // tag::new-movie[]
   @PostMapping("/movies")
-  public ResponseEntity<?> newMovie(
-    @RequestBody EntityModel<Movie> movieModel
-  ) {
+  public ResponseEntity<?> newMovie(@RequestBody EntityModel<Movie> movieModel) {
     // end::new-movie[]
     Movie movie = movieModel.getContent();
     assert movie != null;
@@ -195,142 +169,118 @@ public class MovieController {
 
     for (Director directorWithId : directorsWithIds) {
       directorRepository
-        .findById(directorWithId.getId())
-        .map(director -> {
-          director.addMovie(movie);
-          directorRepository.save(director);
-          movie.addDirector(director);
-          return director;
-        });
+          .findById(directorWithId.getId())
+          .map(
+              director -> {
+                director.addMovie(movie);
+                directorRepository.save(director);
+                movie.addDirector(director);
+                return director;
+              });
     }
     movieRepository.save(movie);
 
     final RepresentationModel<?> movieRepresentationModel =
-      movieModelAssembler.toJsonApiModel(movie, null);
+        movieModelAssembler.toJsonApiModel(movie, null);
 
     return movieRepresentationModel
-      .getLink(IanaLinkRelations.SELF)
-      .map(Link::getHref)
-      .map(href -> {
-        try {
-          return new URI(href);
-        } catch (URISyntaxException e) {
-          throw new RuntimeException(e);
-        }
-      })
-      .map(uri -> ResponseEntity.created(uri).body(movieRepresentationModel))
-      .orElseThrow(() ->
-        new JsonApiErrorsException(
-          CommonErrors.newBadRequestError("Unable to create " + movie)
-        )
-      );
+        .getLink(IanaLinkRelations.SELF)
+        .map(Link::getHref)
+        .map(
+            href -> {
+              try {
+                return new URI(href);
+              } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+              }
+            })
+        .map(uri -> ResponseEntity.created(uri).body(movieRepresentationModel))
+        .orElseThrow(
+            () ->
+                new JsonApiErrorsException(
+                    CommonErrors.newBadRequestError("Unable to create " + movie)));
   }
 
   @GetMapping("/movies/{id}")
   public ResponseEntity<? extends RepresentationModel<?>> findOne(
-    @PathVariable Long id,
-    @RequestParam(value = "include", required = false) String[] include,
-    @RequestParam(
-      value = "fields[" + MOVIES + "]",
-      required = false
-    ) String[] filterMovies
-  ) {
+      @PathVariable Long id,
+      @RequestParam(value = "include", required = false) String[] include,
+      @RequestParam(value = "fields[" + MOVIES + "]", required = false) String[] filterMovies) {
     return movieRepository
-      .findById(id)
-      .map(movie -> setInclude(movie, include, filterMovies))
-      .map(ResponseEntity::ok)
-      // tag::throw-common-error-exception[]
-      .orElseThrow(() ->
-        new JsonApiErrorsException(
-          CommonErrors.newResourceNotFound("movies", id.toString())
-        )
-      );
+        .findById(id)
+        .map(movie -> setInclude(movie, include, filterMovies))
+        .map(ResponseEntity::ok)
+        // tag::throw-common-error-exception[]
+        .orElseThrow(
+            () ->
+                new JsonApiErrorsException(
+                    CommonErrors.newResourceNotFound("movies", id.toString())));
     // end::throw-common-error-exception[]
   }
 
-  private RepresentationModel<?> setInclude(
-    Movie movie,
-    String[] include,
-    String[] filterMovies
-  ) {
-    RepresentationModel<?> model = movieModelAssembler.toJsonApiModel(
-      movie,
-      filterMovies
-    );
+  private RepresentationModel<?> setInclude(Movie movie, String[] include, String[] filterMovies) {
+    RepresentationModel<?> model = movieModelAssembler.toJsonApiModel(movie, filterMovies);
     JsonApiModelBuilder builder = jsonApiModel().model(model);
-    if (
-      include != null && include.length == 1 && include[0].equals(DIRECTORS)
-    ) {
-      movie
-        .getDirectors()
-        .forEach(entry -> builder.included(EntityModel.of(entry)));
+    if (include != null && include.length == 1 && include[0].equals(DIRECTORS)) {
+      movie.getDirectors().forEach(entry -> builder.included(EntityModel.of(entry)));
     }
     return builder.build();
   }
 
   @GetMapping("/movies/{id}/directors")
-  public ResponseEntity<? extends RepresentationModel<?>> findDirectors(
-    @PathVariable Long id
-  ) {
+  public ResponseEntity<? extends RepresentationModel<?>> findDirectors(@PathVariable Long id) {
     return movieRepository
-      .findById(id)
-      .map(movieModelAssembler::directorsToJsonApiModel)
-      .map(ResponseEntity::ok)
-      .orElseThrow(() ->
-        new JsonApiErrorsException(
-          CommonErrors.newResourceNotFound("movies", id.toString())
-        )
-      );
+        .findById(id)
+        .map(movieModelAssembler::directorsToJsonApiModel)
+        .map(ResponseEntity::ok)
+        .orElseThrow(
+            () ->
+                new JsonApiErrorsException(
+                    CommonErrors.newResourceNotFound("movies", id.toString())));
   }
 
   @GetMapping("/movies/{id}/relationships/directors")
-  public ResponseEntity<
-    ? extends RepresentationModel<?>
-  > findDirectorsRelationship(@PathVariable Long id) {
+  public ResponseEntity<? extends RepresentationModel<?>> findDirectorsRelationship(
+      @PathVariable Long id) {
     return movieRepository
-      .findById(id)
-      .map(movieModelAssembler::directorsRelationshipToJsonApiModel)
-      .map(ResponseEntity::ok)
-      .orElseThrow(() ->
-        new JsonApiErrorsException(
-          CommonErrors.newResourceNotFound("movies", id.toString())
-        )
-      );
+        .findById(id)
+        .map(movieModelAssembler::directorsRelationshipToJsonApiModel)
+        .map(ResponseEntity::ok)
+        .orElseThrow(
+            () ->
+                new JsonApiErrorsException(
+                    CommonErrors.newResourceNotFound("movies", id.toString())));
   }
 
   @PatchMapping("/movies/{id}")
   public ResponseEntity<?> updateMoviePartially(
-    @RequestBody EntityModel<Movie> movieModel,
-    @PathVariable Long id
-  ) {
-    Movie existingMovie = movieRepository
-      .findById(id)
-      .orElseThrow(() -> new EntityNotFoundException(id.toString()));
+      @RequestBody EntityModel<Movie> movieModel, @PathVariable Long id) {
+    Movie existingMovie =
+        movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
     Movie movie = movieModel.getContent();
     existingMovie.update(movie);
 
     movieRepository.save(existingMovie);
     final RepresentationModel<?> movieRepresentationModel =
-      movieModelAssembler.toJsonApiModel(existingMovie, null);
+        movieModelAssembler.toJsonApiModel(existingMovie, null);
 
     return movieRepresentationModel
-      .getLink(IanaLinkRelations.SELF)
-      .map(Link::getHref)
-      .map(href -> {
-        try {
-          return new URI(href);
-        } catch (URISyntaxException e) {
-          throw new RuntimeException(e);
-        }
-      }) //
-      .map(uri -> ResponseEntity.noContent().location(uri).build())
-      .orElse(
-        ResponseEntity.badRequest().body(
-          CommonErrors.newBadRequestError(
-            "Unable to update " + existingMovie + " partially"
-          )
-        )
-      );
+        .getLink(IanaLinkRelations.SELF)
+        .map(Link::getHref)
+        .map(
+            href -> {
+              try {
+                return new URI(href);
+              } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+              }
+            }) //
+        .map(uri -> ResponseEntity.noContent().location(uri).build())
+        .orElse(
+            ResponseEntity.badRequest()
+                .body(
+                    CommonErrors.newBadRequestError(
+                        "Unable to update " + existingMovie + " partially")));
   }
 
   @DeleteMapping("/movies/{id}")

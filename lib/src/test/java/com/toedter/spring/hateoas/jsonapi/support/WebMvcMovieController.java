@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.toedter.spring.hateoas.jsonapi.support;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -63,12 +64,10 @@ public class WebMvcMovieController {
     Link selfLink = linkTo(controller.all()).withSelfRel();
 
     return IntStream.range(1, MOVIES.size() + 1)
-      .mapToObj(this::findOne)
-      .collect(
-        Collectors.collectingAndThen(Collectors.toList(), it ->
-          CollectionModel.of(it, selfLink)
-        )
-      );
+        .mapToObj(this::findOne)
+        .collect(
+            Collectors.collectingAndThen(
+                Collectors.toList(), it -> CollectionModel.of(it, selfLink)));
   }
 
   @GetMapping("/movies/{id}")
@@ -82,9 +81,7 @@ public class WebMvcMovieController {
   }
 
   @GetMapping("/moviesWithDirectors/{id}")
-  public RepresentationModel<?> findOneWidthDirectors(
-    @PathVariable Integer id
-  ) {
+  public RepresentationModel<?> findOneWidthDirectors(@PathVariable Integer id) {
     WebMvcMovieController controller = methodOn(WebMvcMovieController.class);
 
     Link selfLink = linkTo(controller.findOne(id)).withSelfRel();
@@ -92,18 +89,14 @@ public class WebMvcMovieController {
     Movie movie = MOVIES.get(id);
     if (movie instanceof MovieWithDirectors) {
       List<Director> directors = ((MovieWithDirectors) movie).getDirectors();
-      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(
-        movie
-      );
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
       for (Director director : directors) {
         model = model.relationship("directors", director);
       }
       return model.build();
     } else if (movie instanceof MovieWithSingleDirector) {
       Director director = ((MovieWithSingleDirector) movie).getDirector();
-      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(
-        movie
-      );
+      JsonApiModelBuilder model = JsonApiModelBuilder.jsonApiModel().model(movie);
       model = model.relationship("directors", director);
       return model.build();
     }
@@ -118,11 +111,8 @@ public class WebMvcMovieController {
 
   @GetMapping("/movieWithLastSeen")
   public RepresentationModel<?> movieWithLastSeen() {
-    MovieWithLastSeen movie = new MovieWithLastSeen(
-      "1",
-      "Star Wars",
-      Instant.ofEpochSecond(1603465191)
-    );
+    MovieWithLastSeen movie =
+        new MovieWithLastSeen("1", "Star Wars", Instant.ofEpochSecond(1603465191));
     return EntityModel.of(movie);
   }
 
@@ -135,17 +125,14 @@ public class WebMvcMovieController {
     movieContent.setId(newMovieIdString);
     MOVIES.put(newMovieId, movieContent);
 
-    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
-      .withSelfRel()
-      .expand();
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
 
     return ResponseEntity.created(link.toUri()).build();
   }
 
   @PostMapping("/moviesWithJsonApiTypePolymorphism")
   public ResponseEntity<?> newMovieWithJsonApiTypePolymorphism(
-    @RequestBody EntityModel<Movie> movie
-  ) {
+      @RequestBody EntityModel<Movie> movie) {
     int newMovieId = MOVIES.size() + 1;
     String newMovieIdString = "" + newMovieId;
     Movie movieContent = movie.getContent();
@@ -153,17 +140,14 @@ public class WebMvcMovieController {
     movieContent.setId(newMovieIdString);
     MOVIES.put(newMovieId, movieContent);
 
-    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
-      .withSelfRel()
-      .expand();
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
 
     return ResponseEntity.created(link.toUri()).build();
   }
 
   @PostMapping("/moviesWithPolymorphism")
   public ResponseEntity<?> newMovieWithPolymorphism(
-    @RequestBody EntityModel<MovieWithJsonTypeInfo> movie
-  ) {
+      @RequestBody EntityModel<MovieWithJsonTypeInfo> movie) {
     int newMovieId = MOVIES.size() + 1;
     String newMovieIdString = "" + newMovieId;
     MovieWithJsonTypeInfo movieContent = movie.getContent();
@@ -171,17 +155,14 @@ public class WebMvcMovieController {
     movieContent.setId(newMovieIdString);
     MOVIES.put(newMovieId, movieContent);
 
-    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
-      .withSelfRel()
-      .expand();
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
 
     return ResponseEntity.created(link.toUri()).build();
   }
 
   @PostMapping("/moviesWithDirectors")
   public ResponseEntity<?> newMovieWithDirectors(
-    @RequestBody EntityModel<MovieWithDirectors> movie
-  ) {
+      @RequestBody EntityModel<MovieWithDirectors> movie) {
     int newMovieId = MOVIES.size() + 1;
     String newMovieIdString = "" + newMovieId;
     MovieWithDirectors movieContent = movie.getContent();
@@ -189,17 +170,14 @@ public class WebMvcMovieController {
     movieContent.setId(newMovieIdString);
     MOVIES.put(newMovieId, movieContent);
 
-    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
-      .withSelfRel()
-      .expand();
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
 
     return ResponseEntity.created(link.toUri()).build();
   }
 
   @PostMapping("/moviesWithSingleDirector")
   public ResponseEntity<?> newMovieWithSingleDirector(
-    @RequestBody EntityModel<MovieWithSingleDirector> movie
-  ) {
+      @RequestBody EntityModel<MovieWithSingleDirector> movie) {
     int newMovieId = MOVIES.size() + 1;
     String newMovieIdString = "" + newMovieId;
     MovieWithSingleDirector movieContent = movie.getContent();
@@ -207,27 +185,19 @@ public class WebMvcMovieController {
     movieContent.setId(newMovieIdString);
     MOVIES.put(newMovieId, movieContent);
 
-    Link link = linkTo(methodOn(getClass()).findOne(newMovieId))
-      .withSelfRel()
-      .expand();
+    Link link = linkTo(methodOn(getClass()).findOne(newMovieId)).withSelfRel().expand();
 
     return ResponseEntity.created(link.toUri()).build();
   }
 
   @PostMapping("/movieWithLastSeen")
-  public ResponseEntity<?> newLastSeenMovie(
-    @RequestBody EntityModel<MovieWithLastSeen> movie
-  ) {
-    return ResponseEntity.created(
-      linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()
-    ).build();
+  public ResponseEntity<?> newLastSeenMovie(@RequestBody EntityModel<MovieWithLastSeen> movie) {
+    return ResponseEntity.created(linkTo(methodOn(getClass()).movieWithLastSeen()).toUri()).build();
   }
 
   @PatchMapping("/movies/{id}")
   public ResponseEntity<?> partiallyUpdateMovie(
-    @RequestBody EntityModel<Movie> movie,
-    @PathVariable Integer id
-  ) {
+      @RequestBody EntityModel<Movie> movie, @PathVariable Integer id) {
     Movie newMovie = MOVIES.get(id);
 
     assert movie.getContent() != null;
@@ -239,22 +209,22 @@ public class WebMvcMovieController {
     MOVIES.put(id, newMovie);
 
     return ResponseEntity.noContent()
-      .location(findOne(id).getRequiredLink(IanaLinkRelations.SELF).toUri())
-      .build();
+        .location(findOne(id).getRequiredLink(IanaLinkRelations.SELF).toUri())
+        .build();
   }
 
   @GetMapping("/error")
   public ResponseEntity<?> error() {
     // tag::errors-builder[]
-    return ResponseEntity.badRequest().body(
-      JsonApiErrors.create().withError(
-        JsonApiError.create()
-          .withAboutLink("http://movie-db.com/problem")
-          .withTitle("Movie-based problem")
-          .withStatus(HttpStatus.BAD_REQUEST.toString())
-          .withDetail("This is a test case")
-      )
-    );
+    return ResponseEntity.badRequest()
+        .body(
+            JsonApiErrors.create()
+                .withError(
+                    JsonApiError.create()
+                        .withAboutLink("http://movie-db.com/problem")
+                        .withTitle("Movie-based problem")
+                        .withStatus(HttpStatus.BAD_REQUEST.toString())
+                        .withDetail("This is a test case")));
     // end::errors-builder[]
   }
 }

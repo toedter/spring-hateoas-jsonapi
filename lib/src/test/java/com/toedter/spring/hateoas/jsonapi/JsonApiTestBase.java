@@ -41,8 +41,7 @@ public abstract class JsonApiTestBase {
     compareWithFile(json, fileName, true);
   }
 
-  void compareWithFile(String json, String fileName, boolean validateSchema)
-    throws Exception {
+  void compareWithFile(String json, String fileName, boolean validateSchema) throws Exception {
     File file = new ClassPathResource(fileName, getClass()).getFile();
     JsonMapper jsonMapper = JsonMapper.builder().build();
     JsonNode expectedJsonNode = jsonMapper.readValue(file, JsonNode.class);
@@ -51,25 +50,17 @@ public abstract class JsonApiTestBase {
 
     if (validateSchema) {
       // Load the JSON schema from resources
-      InputStream schemaStream = new ClassPathResource(
-        "jsonapi-schema.json",
-        getClass()
-      ).getInputStream();
+      InputStream schemaStream =
+          new ClassPathResource("jsonapi-schema.json", getClass()).getInputStream();
       String schemaString = new String(schemaStream.readAllBytes());
 
       JsonNodeFactory factory = new Jackson3Node.Factory();
-      Validator validator = new ValidatorFactory()
-        .withJsonNodeFactory(factory)
-        .createValidator();
+      Validator validator = new ValidatorFactory().withJsonNodeFactory(factory).createValidator();
 
-      tools.jackson.databind.JsonNode providerSchemaNode =
-        new JsonMapper().readTree(schemaString);
+      tools.jackson.databind.JsonNode providerSchemaNode = new JsonMapper().readTree(schemaString);
       URI schemaUri = validator.registerSchema(providerSchemaNode);
 
-      Validator.Result validatenResult = validator.validate(
-        schemaUri,
-        actualJsonNode
-      );
+      Validator.Result validatenResult = validator.validate(schemaUri, actualJsonNode);
       if (!validatenResult.isValid()) {
         for (Error error : validatenResult.getErrors()) {
           System.out.println("Validation error: " + error.getError());
@@ -98,15 +89,15 @@ public abstract class JsonApiTestBase {
   JsonMapper createJsonMapper(JsonApiConfiguration jsonApiConfiguration) {
     // Create ObjectProvider that supplies the given JsonApiConfiguration
     ObjectProvider<JsonApiConfiguration> configProvider =
-      new ObjectProvider<>() {
-        @Override
-        public JsonApiConfiguration getObject() {
-          return jsonApiConfiguration;
-        }
-      };
+        new ObjectProvider<>() {
+          @Override
+          public JsonApiConfiguration getObject() {
+            return jsonApiConfiguration;
+          }
+        };
 
     JsonApiMediaTypeConfiguration configuration =
-      new JsonApiMediaTypeConfiguration(configProvider, null);
+        new JsonApiMediaTypeConfiguration(configProvider, null);
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
     return builder.build();

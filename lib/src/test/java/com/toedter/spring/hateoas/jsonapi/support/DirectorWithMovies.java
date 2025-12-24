@@ -35,8 +35,7 @@ public class DirectorWithMovies {
   private String name;
   private int born;
 
-  @JsonIgnore
-  private List<MovieWithRating> movies;
+  @JsonIgnore private List<MovieWithRating> movies;
 
   public DirectorWithMovies(String id, String name, int born) {
     this.id = id;

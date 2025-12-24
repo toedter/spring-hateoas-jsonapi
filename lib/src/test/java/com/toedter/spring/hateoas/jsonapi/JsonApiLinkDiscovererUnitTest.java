@@ -56,9 +56,7 @@ class JsonApiLinkDiscovererUnitTest extends JsonApiTestBase {
   @Test
   void should_throw_exception_for_misformatted_json() {
     String source = "murks";
-    assertThrows(IllegalArgumentException.class, () ->
-      discoverer.findLinksWithRel(SELF, source)
-    );
+    assertThrows(IllegalArgumentException.class, () -> discoverer.findLinksWithRel(SELF, source));
   }
 
   @Nested
@@ -94,9 +92,7 @@ class JsonApiLinkDiscovererUnitTest extends JsonApiTestBase {
       Links links = linkDiscoverer.findLinksWithRel(SELF, source);
 
       assertThat(links.hasLink("self")).isTrue();
-      assertThat(links)
-        .map(Link::getHref)
-        .contains("http://localhost/movies/1");
+      assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
       // end::link-discoverer[]
     }
 
@@ -128,8 +124,7 @@ class JsonApiLinkDiscovererUnitTest extends JsonApiTestBase {
     }
 
     @Test
-    void should_return_empty_optional_if_not_available_from_stream()
-      throws IOException {
+    void should_return_empty_optional_if_not_available_from_stream() throws IOException {
       InputStream source = getStream("movieEntityModelWithLinksObject.json");
       assertThat(discoverer.findLinkWithRel(APPENDIX, source)).isEmpty();
     }
@@ -140,9 +135,7 @@ class JsonApiLinkDiscovererUnitTest extends JsonApiTestBase {
       Links links = discoverer.findLinksWithRel(SELF, source);
 
       assertThat(links.hasLink("self")).isTrue();
-      assertThat(links)
-        .map(Link::getHref)
-        .contains("http://localhost/movies/1");
+      assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
     }
 
     @Test

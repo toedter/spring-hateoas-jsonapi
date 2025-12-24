@@ -36,127 +36,106 @@ class JsonApiConfigurationUnitTest {
   void should_initialize_defaults() {
     assertThat(new JsonApiConfiguration().isPluralizedTypeRendered()).isTrue();
     assertThat(new JsonApiConfiguration().isLowerCasedTypeRendered()).isTrue();
-    assertThat(
-      new JsonApiConfiguration().isPageMetaAutomaticallyCreated()
-    ).isTrue();
-    assertThat(
-      new JsonApiConfiguration().isTypeForClassUsedForDeserialization()
-    ).isFalse();
-    assertThat(
-      new JsonApiConfiguration().isJsonApi11LinkPropertiesRemovedFromLinkMeta()
-    ).isTrue();
-    assertThat(
-      new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta()
-    ).isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
+    assertThat(new JsonApiConfiguration().isPageMetaAutomaticallyCreated()).isTrue();
+    assertThat(new JsonApiConfiguration().isTypeForClassUsedForDeserialization()).isFalse();
+    assertThat(new JsonApiConfiguration().isJsonApi11LinkPropertiesRemovedFromLinkMeta()).isTrue();
+    assertThat(new JsonApiConfiguration().getAffordancesRenderedAsLinkMeta())
+        .isEqualTo(JsonApiConfiguration.AffordanceType.NONE);
     assertThat(new JsonApiConfiguration().getLinksNotUrlEncoded()).isEmpty();
   }
 
   @Test
   void should_set_pluralized_type() {
     assertThat(
-      new JsonApiConfiguration()
-        .withPluralizedTypeRendered(false)
-        .isPluralizedTypeRendered()
-    ).isFalse();
+            new JsonApiConfiguration().withPluralizedTypeRendered(false).isPluralizedTypeRendered())
+        .isFalse();
   }
 
   @Test
   void should_set_lower_cased_type() {
     assertThat(
-      new JsonApiConfiguration()
-        .withLowerCasedTypeRendered(false)
-        .isLowerCasedTypeRendered()
-    ).isFalse();
+            new JsonApiConfiguration().withLowerCasedTypeRendered(false).isLowerCasedTypeRendered())
+        .isFalse();
   }
 
   @Test
   void should_set_render_version() {
     assertThat(
-      new JsonApiConfiguration()
-        .withJsonApiObject(new JsonApiObject(true))
-        .getJsonApiObject()
-        .getVersion()
-    ).isEqualTo("1.1");
+            new JsonApiConfiguration()
+                .withJsonApiObject(new JsonApiObject(true))
+                .getJsonApiObject()
+                .getVersion())
+        .isEqualTo("1.1");
   }
 
   @Test
   void should_set_page_meta_automatically_created() {
     assertThat(
-      new JsonApiConfiguration()
-        .withPageMetaAutomaticallyCreated(false)
-        .isPageMetaAutomaticallyCreated()
-    ).isFalse();
+            new JsonApiConfiguration()
+                .withPageMetaAutomaticallyCreated(false)
+                .isPageMetaAutomaticallyCreated())
+        .isFalse();
   }
 
   @Test
   void should_set_type_for_class_used_for_deserialization() {
     assertThat(
-      new JsonApiConfiguration()
-        .withTypeForClassUsedForDeserialization(true)
-        .isTypeForClassUsedForDeserialization()
-    ).isTrue();
+            new JsonApiConfiguration()
+                .withTypeForClassUsedForDeserialization(true)
+                .isTypeForClassUsedForDeserialization())
+        .isTrue();
   }
 
   @Test
   void should_set_type_for_class() {
     assertThat(
-      new JsonApiConfiguration()
-        .withTypeForClass(Movie.class, "mymovies")
-        .getTypeForClass(Movie.class)
-    ).isEqualTo("mymovies");
+            new JsonApiConfiguration()
+                .withTypeForClass(Movie.class, "mymovies")
+                .getTypeForClass(Movie.class))
+        .isEqualTo("mymovies");
   }
 
   @Test
   void should_customize_object_mapper() {
-    JsonMapper.Builder builder = JsonMapper.builder().disable(
-      DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-    );
+    JsonMapper.Builder builder =
+        JsonMapper.builder().disable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
 
-    JsonMapper jsonMapper = new JsonApiConfiguration()
-      .withMapperCustomizer(b ->
-        b.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
-      )
-      .customize(builder)
-      .build();
+    JsonMapper jsonMapper =
+        new JsonApiConfiguration()
+            .withMapperCustomizer(
+                b -> b.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT))
+            .customize(builder)
+            .build();
 
-    assertThat(
-      jsonMapper.isEnabled(
-        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
-      )
-    ).isTrue();
+    assertThat(jsonMapper.isEnabled(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT))
+        .isTrue();
   }
 
   @Test
   void should_set_affordance_type() {
     assertThat(
-      new JsonApiConfiguration()
-        .withAffordancesRenderedAsLinkMeta(
-          JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
-        )
-        .getAffordancesRenderedAsLinkMeta()
-    ).isEqualTo(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
+            new JsonApiConfiguration()
+                .withAffordancesRenderedAsLinkMeta(
+                    JsonApiConfiguration.AffordanceType.SPRING_HATEOAS)
+                .getAffordancesRenderedAsLinkMeta())
+        .isEqualTo(JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
   }
 
   @Test
   void should_set_link_property_rendering() {
     assertThat(
-      new JsonApiConfiguration()
-        .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-        .isJsonApi11LinkPropertiesRemovedFromLinkMeta()
-    ).isFalse();
+            new JsonApiConfiguration()
+                .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+                .isJsonApi11LinkPropertiesRemovedFromLinkMeta())
+        .isFalse();
   }
 
   @Test
   void should_set_links_not_url_encoded() {
     assertThat(
-      new JsonApiConfiguration()
-        .withLinksNotUrlEncoded(
-          Set.of(IanaLinkRelations.SELF, IanaLinkRelations.RELATED)
-        )
-        .getLinksNotUrlEncoded()
-    ).containsExactlyInAnyOrder(
-      IanaLinkRelations.SELF,
-      IanaLinkRelations.RELATED
-    );
+            new JsonApiConfiguration()
+                .withLinksNotUrlEncoded(Set.of(IanaLinkRelations.SELF, IanaLinkRelations.RELATED))
+                .getLinksNotUrlEncoded())
+        .containsExactlyInAnyOrder(IanaLinkRelations.SELF, IanaLinkRelations.RELATED);
   }
 }

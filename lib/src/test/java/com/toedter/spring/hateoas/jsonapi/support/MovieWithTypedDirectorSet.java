@@ -34,8 +34,7 @@ public class MovieWithTypedDirectorSet {
   private String id;
   private String title;
 
-  @JsonApiType
-  String myType;
+  @JsonApiType String myType;
 
   @JsonIgnore
   @JsonApiRelationships("directors")

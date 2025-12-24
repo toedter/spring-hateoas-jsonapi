@@ -55,27 +55,18 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     this.affordanceType = JsonApiConfiguration.AffordanceType.NONE;
   }
 
-  public void setJsonApiConfiguration(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
-    this.affordanceType =
-      jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
+  public void setJsonApiConfiguration(JsonApiConfiguration jsonApiConfiguration) {
+    this.affordanceType = jsonApiConfiguration.getAffordancesRenderedAsLinkMeta();
     this.removeHateoasLinkPropertiesFromMeta =
-      jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
+        jsonApiConfiguration.isJsonApi11LinkPropertiesRemovedFromLinkMeta();
     this.linksNotUrlEncoded = jsonApiConfiguration.getLinksNotUrlEncoded();
   }
 
   @Override
-  public void serialize(
-    Links value,
-    JsonGenerator gen,
-    SerializationContext provider
-  ) {
+  public void serialize(Links value, JsonGenerator gen, SerializationContext provider) {
     Map<LinkRelation, List<Link>> linksMap = new LinkedHashMap<>();
     for (Link link : value) {
-      linksMap
-        .computeIfAbsent(link.getRel(), key -> new ArrayList<>())
-        .add(link);
+      linksMap.computeIfAbsent(link.getRel(), key -> new ArrayList<>()).add(link);
     }
 
     gen.writeStartObject();
@@ -140,15 +131,12 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
 
   private String uriEncodeLinkHref(Link link) {
     return linksNotUrlEncoded.contains(link.getRel())
-      ? link.getHref()
-      : UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8);
+        ? link.getHref()
+        : UriUtils.encodeQuery(link.getHref(), StandardCharsets.UTF_8);
   }
 
   private Map<String, Object> getAttributes(Link link) {
-    final Map<String, Object> attributeMap = jsonMapper.convertValue(
-      link,
-      Map.class
-    );
+    final Map<String, Object> attributeMap = jsonMapper.convertValue(link, Map.class);
     attributeMap.remove("rel");
     attributeMap.remove("href");
     attributeMap.remove("template");
@@ -157,46 +145,31 @@ class JsonApiLinksSerializer extends AbstractJsonApiSerializer<Links> {
     if (!link.getAffordances().isEmpty()) {
       List<Object> affordanceList = new ArrayList<>();
       for (Affordance affordance : link.getAffordances()) {
-        if (
-          this.affordanceType ==
-          JsonApiConfiguration.AffordanceType.SPRING_HATEOAS
-        ) {
-          JsonApiAffordanceModel affordanceModel =
-            affordance.getAffordanceModel(JSON_API);
-          if (
-            affordanceModel != null &&
-            affordanceModel.getHttpMethod() != HttpMethod.GET
-          ) {
+        if (this.affordanceType == JsonApiConfiguration.AffordanceType.SPRING_HATEOAS) {
+          JsonApiAffordanceModel affordanceModel = affordance.getAffordanceModel(JSON_API);
+          if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
             String httpMethod = null;
             if (affordanceModel.getHttpMethod() != null) {
               httpMethod = affordanceModel.getHttpMethod().name();
             }
             SpringHateoasAffordance springHateoasAffordance =
-              new SpringHateoasAffordance(
-                affordanceModel.getName(),
-                affordanceModel.getLink(),
-                httpMethod,
-                affordanceModel.getQueryMethodParameters(),
-                affordanceModel.getInputProperties(),
-                affordanceModel.getQueryProperties()
-              );
+                new SpringHateoasAffordance(
+                    affordanceModel.getName(),
+                    affordanceModel.getLink(),
+                    httpMethod,
+                    affordanceModel.getQueryMethodParameters(),
+                    affordanceModel.getInputProperties(),
+                    affordanceModel.getQueryProperties());
             affordanceList.add(springHateoasAffordance);
           }
         }
 
-        if (
-          this.affordanceType == JsonApiConfiguration.AffordanceType.HAL_FORMS
-        ) {
-          AffordanceModel affordanceModel = affordance.getAffordanceModel(
-            org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON
-          );
-          if (
-            affordanceModel != null &&
-            affordanceModel.getHttpMethod() != HttpMethod.GET
-          ) {
-            Object halFormsTemplate = HalFormsTemplateBuilderWrapper.write(
-              EntityModel.of(new Object()).add(link)
-            );
+        if (this.affordanceType == JsonApiConfiguration.AffordanceType.HAL_FORMS) {
+          AffordanceModel affordanceModel =
+              affordance.getAffordanceModel(org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON);
+          if (affordanceModel != null && affordanceModel.getHttpMethod() != HttpMethod.GET) {
+            Object halFormsTemplate =
+                HalFormsTemplateBuilderWrapper.write(EntityModel.of(new Object()).add(link));
             if (halFormsTemplate != null) {
               attributeMap.put("hal-forms-templates", halFormsTemplate);
             }

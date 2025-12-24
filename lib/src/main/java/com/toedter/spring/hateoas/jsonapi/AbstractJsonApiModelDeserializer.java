@@ -48,35 +48,27 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
 
   AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     this(
-      TypeFactory.createDefaultInstance().constructSimpleType(
-        JsonApiDocument.class,
-        new JavaType[0]
-      ),
-      jsonApiConfiguration
-    );
+        TypeFactory.createDefaultInstance()
+            .constructSimpleType(JsonApiDocument.class, new JavaType[0]),
+        jsonApiConfiguration);
   }
 
   protected AbstractJsonApiModelDeserializer(
-    JavaType contentType,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
     super(contentType);
     this.contentType = contentType;
     this.jsonApiConfiguration = jsonApiConfiguration;
     this.jsonMapper = jsonApiConfiguration.getJsonMapper();
 
-    plainJsonMapper = JsonMapper.builder()
-      .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-      .build();
+    plainJsonMapper =
+        JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES).build();
   }
 
   @Override
   public T deserialize(JsonParser p, DeserializationContext ctxt) {
     boolean isEntityModelCollection = false;
-    if (
-      this instanceof JsonApiPagedModelDeserializer ||
-      this instanceof JsonApiCollectionModelDeserializer
-    ) {
+    if (this instanceof JsonApiPagedModelDeserializer
+        || this instanceof JsonApiCollectionModelDeserializer) {
       JavaType javaType = contentType.containedType(0);
       if (javaType.getRawClass() == EntityModel.class) {
         isEntityModelCollection = true;
@@ -85,65 +77,42 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
     JsonApiDocument doc = p.readValueAs(JsonApiDocument.class);
     if (doc.getData() instanceof Collection<?>) {
       final boolean isEntityModelCollectionFinal = isEntityModelCollection;
-      List<HashMap<String, Object>> collection = (List<
-        HashMap<String, Object>
-      >) doc.getData();
+      List<HashMap<String, Object>> collection = (List<HashMap<String, Object>>) doc.getData();
       Assert.notNull(collection, "JsonApiDocument data must not be null!");
-      List<Object> resources = collection
-        .stream()
-        .map(data ->
-          this.convertToResource(
-            data,
-            isEntityModelCollectionFinal,
-            doc,
-            null,
-            false
-          )
-        )
-        .toList();
+      List<Object> resources =
+          collection.stream()
+              .map(
+                  data ->
+                      this.convertToResource(data, isEntityModelCollectionFinal, doc, null, false))
+              .toList();
       return convertToRepresentationModel(resources, doc);
     }
     HashMap<String, Object> data = (HashMap<String, Object>) doc.getData();
-    final Object objectFromProperties = convertToResource(
-      data,
-      false,
-      doc,
-      null,
-      false
-    );
+    final Object objectFromProperties = convertToResource(data, false, doc, null, false);
 
-    return convertToRepresentationModel(
-      Collections.singletonList(objectFromProperties),
-      doc
-    );
+    return convertToRepresentationModel(Collections.singletonList(objectFromProperties), doc);
   }
 
   @Override
   public ValueDeserializer<?> createContextual(
-    DeserializationContext ctxt,
-    @Nullable BeanProperty property
-  ) {
-    JavaType type = property == null
-      ? ctxt.getContextualType()
-      : property.getType().getContentType();
+      DeserializationContext ctxt, @Nullable BeanProperty property) {
+    JavaType type =
+        property == null ? ctxt.getContextualType() : property.getType().getContentType();
     return createJsonDeserializer(type);
   }
 
   @Nullable
   protected Object convertToResource(
-    @Nullable HashMap<String, Object> data,
-    boolean wrapInEntityModel,
-    @Nullable JsonApiDocument doc,
-    @Nullable JavaType javaType,
-    boolean useDataForCreation
-  ) {
+      @Nullable HashMap<String, Object> data,
+      boolean wrapInEntityModel,
+      @Nullable JsonApiDocument doc,
+      @Nullable JavaType javaType,
+      boolean useDataForCreation) {
     if (data == null) {
       return null;
     }
 
-    Map<String, Object> attributes = (Map<String, Object>) data.get(
-      "attributes"
-    );
+    Map<String, Object> attributes = (Map<String, Object>) data.get("attributes");
 
     Object objectFromProperties;
     JavaType rootType = javaType;
@@ -158,8 +127,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
         clazz = jsonApiConfiguration.getClassForType(jsonApiType);
         if (clazz != null && !rootType.getRawClass().isAssignableFrom(clazz)) {
           throw new IllegalArgumentException(
-            clazz + " is not assignable to " + rootType.getRawClass()
-          );
+              clazz + " is not assignable to " + rootType.getRawClass());
         }
         if (clazz != null) {
           rootType = jsonMapper.constructType(clazz);
@@ -187,48 +155,35 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
     }
 
     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-      objectFromProperties,
-      JsonApiResourceIdentifier.JsonApiResourceField.ID,
-      (String) data.get("id")
-    );
+        objectFromProperties,
+        JsonApiResourceIdentifier.JsonApiResourceField.ID,
+        (String) data.get("id"));
     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
-      objectFromProperties,
-      JsonApiResourceIdentifier.JsonApiResourceField.TYPE,
-      (String) data.get("type")
-    );
+        objectFromProperties,
+        JsonApiResourceIdentifier.JsonApiResourceField.TYPE,
+        (String) data.get("type"));
 
     if (wrapInEntityModel) {
       Links links = Links.NONE;
       Object linksData = data.get("links");
       if (linksData != null && linksData instanceof Map) {
         // Use JsonApiLinksDeserializer to properly deserialize links
-        JsonApiLinksDeserializer linksDeserializer =
-          new JsonApiLinksDeserializer();
+        JsonApiLinksDeserializer linksDeserializer = new JsonApiLinksDeserializer();
         links = linksDeserializer.deserialize((Map<String, Object>) linksData);
       }
       JsonApiEntityModelDeserializer jsonApiEntityModelDeserializer =
-        new JsonApiEntityModelDeserializer(jsonApiConfiguration);
-      JsonApiDocument jsonApiDocument = new JsonApiDocument(
-        null,
-        data,
-        null,
-        null,
-        links,
-        doc != null ? doc.getIncluded() : null
-      );
+          new JsonApiEntityModelDeserializer(jsonApiConfiguration);
+      JsonApiDocument jsonApiDocument =
+          new JsonApiDocument(
+              null, data, null, null, links, doc != null ? doc.getIncluded() : null);
       return jsonApiEntityModelDeserializer.convertToRepresentationModel(
-        Collections.singletonList(objectFromProperties),
-        jsonApiDocument
-      );
+          Collections.singletonList(objectFromProperties), jsonApiDocument);
     }
 
     return objectFromProperties;
   }
 
-  protected abstract T convertToRepresentationModel(
-    List<Object> resources,
-    JsonApiDocument doc
-  );
+  protected abstract T convertToRepresentationModel(List<Object> resources, JsonApiDocument doc);
 
   protected abstract ValueDeserializer<?> createJsonDeserializer(JavaType type);
 }

@@ -38,17 +38,12 @@ import tools.jackson.databind.json.JsonMapper;
 class MovieLoader {
 
   @Bean
-  CommandLineRunner init(
-    MovieRepository movieRepository,
-    DirectorRepository directorRepository
-  ) {
+  CommandLineRunner init(MovieRepository movieRepository, DirectorRepository directorRepository) {
     return args -> {
       String moviesJson;
       JsonMapper mapper = JsonMapper.builder().build();
 
-      File file = ResourceUtils.getFile(
-        "classpath:static/movie-data/movies-250.json"
-      );
+      File file = ResourceUtils.getFile("classpath:static/movie-data/movies-250.json");
 
       moviesJson = readFile(file.getPath());
       JsonNode rootNode = mapper.readValue(moviesJson, JsonNode.class);
@@ -63,19 +58,16 @@ class MovieLoader {
         String[] directorList = directors.split(",");
 
         for (String directorName : directorList) {
-          Director director = directorRepository.findByName(
-            directorName.trim()
-          );
+          Director director = directorRepository.findByName(directorName.trim());
           if (director == null) {
             director = new Director(directorName.trim());
           }
           log.info(
-            "adding movie \"" +
-              movie.getTitle() +
-              "\" to director \"" +
-              directorName.trim() +
-              "\"."
-          );
+              "adding movie \""
+                  + movie.getTitle()
+                  + "\" to director \""
+                  + directorName.trim()
+                  + "\".");
           director.addMovie(movie);
           directorRepository.save(director);
           movie.addDirector(director);

@@ -51,8 +51,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @DisplayName("JsonApi Web Flux Integration Test")
 class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
 
-  @Autowired
-  WebTestClient testClient;
+  @Autowired WebTestClient testClient;
 
   @BeforeEach
   void setUp() {
@@ -61,32 +60,36 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
 
   @Test
   void should_get_single_movie() throws Exception {
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/movies/1")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/movies/1")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieEntityModelWithLinks.json");
   }
 
   @Test
   void should_get_collection_of_movies() throws Exception {
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/movies")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/movies")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "moviesCollectionModel.json");
   }
@@ -95,26 +98,29 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
   void should_create_new_movie() throws Exception {
     String input = readFile("postMovie.json");
 
-    this.testClient.post()
-      .uri("http://localhost/movies")
-      .contentType(JSON_API)
-      .bodyValue(input)
-      .exchange()
-      .expectStatus()
-      .isCreated()
-      .expectHeader()
-      .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
+    this.testClient
+        .post()
+        .uri("http://localhost/movies")
+        .contentType(JSON_API)
+        .bodyValue(input)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectHeader()
+        .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
 
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/movies/3")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/movies/3")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieCreated.json");
   }
@@ -123,26 +129,29 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
   void should_create_new_movie_with_relationships() throws Exception {
     String input = readFile("postMovieWithTwoRelationships.json");
 
-    this.testClient.post()
-      .uri("http://localhost/moviesWithDirectors")
-      .contentType(JSON_API)
-      .bodyValue(input)
-      .exchange()
-      .expectStatus()
-      .isCreated()
-      .expectHeader()
-      .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
+    this.testClient
+        .post()
+        .uri("http://localhost/moviesWithDirectors")
+        .contentType(JSON_API)
+        .bodyValue(input)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectHeader()
+        .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/3");
 
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/moviesWithDirectors/3")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/moviesWithDirectors/3")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "movieCreatedWithDirectors.json");
   }
@@ -151,42 +160,47 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
   void should_patch_movie() throws Exception {
     String input = readFile("patchMovie.json");
 
-    this.testClient.patch()
-      .uri("http://localhost/movies/1")
-      .contentType(JSON_API)
-      .bodyValue(input)
-      .exchange()
-      .expectStatus()
-      .isNoContent()
-      .expectHeader()
-      .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/1");
+    this.testClient
+        .patch()
+        .uri("http://localhost/movies/1")
+        .contentType(JSON_API)
+        .bodyValue(input)
+        .exchange()
+        .expectStatus()
+        .isNoContent()
+        .expectHeader()
+        .valueEquals(HttpHeaders.LOCATION, "http://localhost/movies/1");
 
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/movies/1")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/movies/1")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "patchedMovie.json");
   }
 
   @Test
   void should_return_error() throws Exception {
-    EntityExchangeResult<String> result = this.testClient.get()
-      .uri("http://localhost/error")
-      .accept(JSON_API)
-      .exchange()
-      .expectStatus()
-      .isBadRequest()
-      .expectHeader()
-      .contentType(JSON_API)
-      .expectBody(String.class)
-      .returnResult();
+    EntityExchangeResult<String> result =
+        this.testClient
+            .get()
+            .uri("http://localhost/error")
+            .accept(JSON_API)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(JSON_API)
+            .expectBody(String.class)
+            .returnResult();
 
     compareWithFile(result.getResponseBody(), "errorsMvcExample.json");
   }
@@ -204,21 +218,16 @@ class JsonApiWebFluxIntegrationTest extends JsonApiTestBase {
 
     @Bean
     JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-      ObjectProvider<JsonApiConfiguration> configuration,
-      AutowireCapableBeanFactory beanFactory
-    ) {
+        ObjectProvider<JsonApiConfiguration> configuration,
+        AutowireCapableBeanFactory beanFactory) {
       return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     WebTestClient webTestClient(
-      HypermediaWebTestClientConfigurer configurer,
-      ApplicationContext ctx
-    ) {
-      return WebTestClient.bindToApplicationContext(ctx)
-        .build()
-        .mutateWith(configurer);
+        HypermediaWebTestClientConfigurer configurer, ApplicationContext ctx) {
+      return WebTestClient.bindToApplicationContext(ctx).build().mutateWith(configurer);
     }
   }
 }

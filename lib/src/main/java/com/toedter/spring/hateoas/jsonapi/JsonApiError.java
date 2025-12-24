@@ -27,16 +27,14 @@ import lombok.Value;
 import lombok.With;
 
 /**
- * Class to build a single {@literal JSON:API} compliant error.
- * This error can be added to {@link JsonApiErrors}.
+ * Class to build a single {@literal JSON:API} compliant error. This error can be added to {@link
+ * JsonApiErrors}.
  *
  * @author Kai Toedter
  */
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-@JsonPropertyOrder(
-  { "id", "links", "status", "code", "title", "detail", "source", "meta" }
-)
+@JsonPropertyOrder({"id", "links", "status", "code", "title", "detail", "source", "meta"})
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class JsonApiError {
 
@@ -47,106 +45,84 @@ public class JsonApiError {
   /**
    * Gets a unique identifier for this particular occurrence of the problem.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Sets a unique identifier for this particular occurrence of the problem.
+   * @return will never be {@literal null}. -- WITHER -- Sets a unique identifier for this
+   *     particular occurrence of the problem.
    * @param id the unique identifier of the error.
    */
-  @Getter
-  @With
-  private String id;
+  @Getter @With private String id;
 
   /**
-   * Gets a links object containing the following members:
-   * {@literal about}: a link that leads to further details about this particular occurrence of the problem.
+   * Gets a links object containing the following members: {@literal about}: a link that leads to
+   * further details about this particular occurrence of the problem.
    *
    * @return will never be {@literal null}.
    */
-  @Getter
-  private Map<String, String> links;
+  @Getter private Map<String, String> links;
 
   /**
    * Gets the HTTP status code applicable to this problem, expressed as a string value.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Adds the HTTP status code applicable to this problem, expressed as a string value.
+   * @return will never be {@literal null}. -- WITHER -- Adds the HTTP status code applicable to
+   *     this problem, expressed as a string value.
    * @param status the HTTP status code.
    */
-  @Getter
-  @With
-  private String status;
+  @Getter @With private String status;
 
   /**
    * Gets an application-specific error code, expressed as a string value.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Sets an application-specific error code, expressed as a string value.
+   * @return will never be {@literal null}. -- WITHER -- Sets an application-specific error code,
+   *     expressed as a string value.
    * @param code code of the error.
    */
-  @Getter
-  @With
-  private String code;
+  @Getter @With private String code;
 
   /**
-   * Gets a short, human-readable summary of the problem that SHOULD NOT change
-   * from occurrence to occurrence of the problem, except for purposes of localization.
+   * Gets a short, human-readable summary of the problem that SHOULD NOT change from occurrence to
+   * occurrence of the problem, except for purposes of localization.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Sets a short, human-readable summary of the problem that SHOULD NOT change
-   * from occurrence to occurrence of the problem, except for purposes of localization.
+   * @return will never be {@literal null}. -- WITHER -- Sets a short, human-readable summary of the
+   *     problem that SHOULD NOT change from occurrence to occurrence of the problem, except for
+   *     purposes of localization.
    * @param title title of the error.
    */
-  @Getter
-  @With
-  private String title;
+  @Getter @With private String title;
 
   /**
-   * Gets a human-readable explanation specific to this occurrence of the problem.
-   * Like title, the value can be localized.
+   * Gets a human-readable explanation specific to this occurrence of the problem. Like title, the
+   * value can be localized.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Sets a human-readable explanation specific to this occurrence of the problem.
-   * Like title, the value can be localized.
+   * @return will never be {@literal null}. -- WITHER -- Sets a human-readable explanation specific
+   *     to this occurrence of the problem. Like title, the value can be localized.
    * @param detail error detail.
    */
-  @Getter
-  @With
-  private String detail;
+  @Getter @With private String detail;
 
   /**
-   * Gets an object containing references to the source of the error, optionally including
-   * any of the following members:
-   * pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
-   * [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
-   * parameter: a string indicating which URI query parameter caused the error.
+   * Gets an object containing references to the source of the error, optionally including any of
+   * the following members: pointer: a JSON Pointer [RFC6901] to the associated entity in the
+   * request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a
+   * specific attribute]. parameter: a string indicating which URI query parameter caused the error.
    *
    * @return can be {@literal null}.
    */
-  @Getter
-  private Map<String, String> source;
+  @Getter private Map<String, String> source;
 
   /**
    * Gets a meta object containing non-standard meta-information about the error.
    *
-   * @return will never be {@literal null}.
-   * -- WITHER --
-   * Sets a meta object containing non-standard meta-information about the error.
+   * @return will never be {@literal null}. -- WITHER -- Sets a meta object containing non-standard
+   *     meta-information about the error.
    * @param meta meta object added to the error.
    */
-  @Getter
-  @With
-  private Map<String, Object> meta;
+  @Getter @With private Map<String, Object> meta;
 
   /**
    * Adds a source pointer to the error.
    *
    * @param sourcePointer a JSON Pointer [RFC6901] to the associated entity in the request document
-   *                      [e.g. "/data" for a primary data object, or "/data/attributes/title"
-   *                      for a specific attribute].
+   *     [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific
+   *     attribute].
    * @return will never be {@literal null}.
    */
   public JsonApiError withSourcePointer(final String sourcePointer) {
@@ -156,15 +132,14 @@ public class JsonApiError {
     }
     localSource.put(POINTER, sourcePointer);
     return new JsonApiError(
-      this.id,
-      this.links,
-      this.status,
-      this.code,
-      this.title,
-      this.detail,
-      localSource,
-      this.meta
-    );
+        this.id,
+        this.links,
+        this.status,
+        this.code,
+        this.title,
+        this.detail,
+        localSource,
+        this.meta);
   }
 
   /**
@@ -180,15 +155,14 @@ public class JsonApiError {
     }
     localSource.put(PARAMETER, sourceParameter);
     return new JsonApiError(
-      this.id,
-      this.links,
-      this.status,
-      this.code,
-      this.title,
-      this.detail,
-      localSource,
-      this.meta
-    );
+        this.id,
+        this.links,
+        this.status,
+        this.code,
+        this.title,
+        this.detail,
+        localSource,
+        this.meta);
   }
 
   /**
@@ -201,20 +175,17 @@ public class JsonApiError {
     Map<String, String> localLinks = new HashMap<>();
     localLinks.put("about", aboutLink);
     return new JsonApiError(
-      this.id,
-      localLinks,
-      this.status,
-      this.code,
-      this.title,
-      this.detail,
-      this.source,
-      this.meta
-    );
+        this.id,
+        localLinks,
+        this.status,
+        this.code,
+        this.title,
+        this.detail,
+        this.source,
+        this.meta);
   }
 
-  /**
-   * Creates an empty {@link JsonApiError}.
-   */
+  /** Creates an empty {@link JsonApiError}. */
   public JsonApiError() {
     this(null, null, null, null, null, null, null, null);
   }

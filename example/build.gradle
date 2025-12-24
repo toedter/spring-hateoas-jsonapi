@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'io.freefair.lombok' version '9.1.0'
+    id 'com.diffplug.spotless' version '7.0.3'
 }
 
 group = 'com.toedter'
@@ -47,6 +48,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat('1.25.2')
+        removeUnusedImports()
+        endWithNewline()
+        trimTrailingWhitespace()
+        licenseHeaderFile rootProject.file('license-header.txt'), 'package '
     }
 }
 

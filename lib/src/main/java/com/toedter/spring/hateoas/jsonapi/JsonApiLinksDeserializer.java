@@ -44,28 +44,24 @@ class JsonApiLinksDeserializer extends StdDeserializer<Links> {
 
   @Override
   public Links deserialize(JsonParser jp, DeserializationContext ctxt) {
-    JavaType type = ctxt
-      .getTypeFactory()
-      .constructMapType(HashMap.class, String.class, Object.class);
+    JavaType type =
+        ctxt.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
     List<Link> links = new ArrayList<>();
     Map<String, Object> jsonApiLinks = jp.readValueAs(type);
-    jsonApiLinks.forEach((rel, object) -> {
-      if (object instanceof List) {
-        for (Object linkObject : (List<?>) object) {
-          deserializeLink(links, rel, linkObject);
-        }
-      } else {
-        deserializeLink(links, rel, object);
-      }
-    });
+    jsonApiLinks.forEach(
+        (rel, object) -> {
+          if (object instanceof List) {
+            for (Object linkObject : (List<?>) object) {
+              deserializeLink(links, rel, linkObject);
+            }
+          } else {
+            deserializeLink(links, rel, object);
+          }
+        });
     return Links.of(links);
   }
 
-  private void deserializeLink(
-    List<Link> links,
-    String rel,
-    Object linkObject
-  ) {
+  private void deserializeLink(List<Link> links, String rel, Object linkObject) {
     if (linkObject instanceof String) {
       links.add(Link.of(linkObject.toString(), rel));
     } else if (linkObject instanceof LinkedHashMap linkedHashMap) {
@@ -117,20 +113,21 @@ class JsonApiLinksDeserializer extends StdDeserializer<Links> {
   }
 
   /**
-   * Helper method to deserialize links from a Map object.
-   * This is useful when links data is already parsed as a Map.
+   * Helper method to deserialize links from a Map object. This is useful when links data is already
+   * parsed as a Map.
    */
   Links deserialize(Map<String, Object> jsonApiLinks) {
     List<Link> links = new ArrayList<>();
-    jsonApiLinks.forEach((rel, object) -> {
-      if (object instanceof List) {
-        for (Object linkObject : (List<?>) object) {
-          deserializeLink(links, rel, linkObject);
-        }
-      } else {
-        deserializeLink(links, rel, object);
-      }
-    });
+    jsonApiLinks.forEach(
+        (rel, object) -> {
+          if (object instanceof List) {
+            for (Object linkObject : (List<?>) object) {
+              deserializeLink(links, rel, linkObject);
+            }
+          } else {
+            deserializeLink(links, rel, object);
+          }
+        });
     return Links.of(links);
   }
 }

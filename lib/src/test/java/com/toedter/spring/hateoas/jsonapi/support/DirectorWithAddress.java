@@ -33,8 +33,7 @@ public class DirectorWithAddress {
   private String id;
   private String name;
 
-  @JsonApiType
-  String myType = "directors";
+  @JsonApiType String myType = "directors";
 
   @JsonApiRelationships("addresses")
   private List<Address> addresses;

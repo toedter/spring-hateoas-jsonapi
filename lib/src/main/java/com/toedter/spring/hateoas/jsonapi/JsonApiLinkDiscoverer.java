@@ -36,14 +36,9 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
 
   private final JsonMapper mapper;
 
-  /**
-   * Constructor for {@link MediaTypes#JSON_API}.
-   */
+  /** Constructor for {@link MediaTypes#JSON_API}. */
   public JsonApiLinkDiscoverer() {
-    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
-      null,
-      null
-    );
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(null, null);
     JsonApiConfiguration jsonApiConfig = new JsonApiConfiguration();
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = config.configureJsonMapper(builder);
@@ -55,14 +50,10 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    * @see org.springframework.hateoas.LinkDiscoverer#findLinkWithRel(org.springframework.hateoas.LinkRelation, java.lang.String)
    */
   @Override
-  public Optional<Link> findLinkWithRel(
-    LinkRelation rel,
-    String representation
-  ) {
-    return getLinks(representation)
-      .stream() //
-      .filter(it -> it.hasRel(rel)) //
-      .findFirst();
+  public Optional<Link> findLinkWithRel(LinkRelation rel, String representation) {
+    return getLinks(representation).stream() //
+        .filter(it -> it.hasRel(rel)) //
+        .findFirst();
   }
 
   /*
@@ -70,14 +61,10 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    * @see org.springframework.hateoas.LinkDiscoverer#findLinkWithRel(org.springframework.hateoas.LinkRelation, java.io.InputStream)
    */
   @Override
-  public Optional<Link> findLinkWithRel(
-    LinkRelation rel,
-    InputStream representation
-  ) {
-    return getLinks(representation)
-      .stream() //
-      .filter(it -> it.hasRel(rel)) //
-      .findFirst();
+  public Optional<Link> findLinkWithRel(LinkRelation rel, InputStream representation) {
+    return getLinks(representation).stream() //
+        .filter(it -> it.hasRel(rel)) //
+        .findFirst();
   }
 
   /*
@@ -86,10 +73,9 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   @Override
   public Links findLinksWithRel(LinkRelation rel, String representation) {
-    return getLinks(representation)
-      .stream() //
-      .filter(it -> it.hasRel(rel)) //
-      .collect(Links.collector());
+    return getLinks(representation).stream() //
+        .filter(it -> it.hasRel(rel)) //
+        .collect(Links.collector());
   }
 
   /*
@@ -98,10 +84,9 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   @Override
   public Links findLinksWithRel(LinkRelation rel, InputStream representation) {
-    return getLinks(representation)
-      .stream() //
-      .filter(it -> it.hasRel(rel)) //
-      .collect(Links.collector());
+    return getLinks(representation).stream() //
+        .filter(it -> it.hasRel(rel)) //
+        .collect(Links.collector());
   }
 
   /*
@@ -121,10 +106,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   private Links getLinks(String json) {
     try {
-      JsonApiDocument jsonApiDocument = this.mapper.readValue(
-        json,
-        JsonApiDocument.class
-      );
+      JsonApiDocument jsonApiDocument = this.mapper.readValue(json, JsonApiDocument.class);
       final Links links = jsonApiDocument.getLinks();
       if (links != null) {
         return links;
@@ -143,20 +125,14 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
    */
   private Links getLinks(InputStream stream) {
     try {
-      JsonApiDocument jsonApiDocument = this.mapper.readValue(
-        stream,
-        JsonApiDocument.class
-      );
+      JsonApiDocument jsonApiDocument = this.mapper.readValue(stream, JsonApiDocument.class);
       final Links links = jsonApiDocument.getLinks();
       if (links != null) {
         return links;
       }
       return Links.NONE;
     } catch (Exception e) {
-      throw new IllegalArgumentException(
-        "Cannot get links from InputStream",
-        e
-      );
+      throw new IllegalArgumentException("Cannot get links from InputStream", e);
     }
   }
 }

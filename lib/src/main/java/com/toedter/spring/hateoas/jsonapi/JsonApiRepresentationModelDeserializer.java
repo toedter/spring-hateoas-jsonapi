@@ -24,29 +24,23 @@ import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 
 class JsonApiRepresentationModelDeserializer
-  extends AbstractJsonApiModelDeserializer<RepresentationModel<?>> {
+    extends AbstractJsonApiModelDeserializer<RepresentationModel<?>> {
 
   public static final String CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL =
-    "Cannot deserialize input to RepresentationModel";
+      "Cannot deserialize input to RepresentationModel";
 
-  public JsonApiRepresentationModelDeserializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  public JsonApiRepresentationModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     super(jsonApiConfiguration);
   }
 
   protected JsonApiRepresentationModelDeserializer(
-    JavaType contentType,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
     super(contentType, jsonApiConfiguration);
   }
 
   @Override
   protected RepresentationModel<?> convertToRepresentationModel(
-    List<Object> resources,
-    JsonApiDocument doc
-  ) {
+      List<Object> resources, JsonApiDocument doc) {
     Assert.notNull(doc, "JsonApiDocument must not be null!");
     Links links = doc.getLinks();
     if (resources.size() == 1) {
@@ -56,22 +50,15 @@ class JsonApiRepresentationModelDeserializer
       } else if (resources.get(0) == null) {
         representationModel = new RepresentationModel<>();
       } else {
-        throw new IllegalArgumentException(
-          CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL
-        );
+        throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
       }
       representationModel.add(links);
       return representationModel;
     }
-    throw new IllegalArgumentException(
-      CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL
-    );
+    throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
   }
 
   protected ValueDeserializer<?> createJsonDeserializer(JavaType type) {
-    return new JsonApiRepresentationModelDeserializer(
-      type,
-      jsonApiConfiguration
-    );
+    return new JsonApiRepresentationModelDeserializer(type, jsonApiConfiguration);
   }
 }

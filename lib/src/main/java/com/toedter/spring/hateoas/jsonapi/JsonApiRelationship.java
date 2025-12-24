@@ -42,8 +42,7 @@ import org.springframework.util.Assert;
  *
  * @author Kai Toedter
  */
-
-@JsonPropertyOrder({ "data", "links", "meta" })
+@JsonPropertyOrder({"data", "links", "meta"})
 @Getter
 class JsonApiRelationship {
 
@@ -62,28 +61,24 @@ class JsonApiRelationship {
   @Nullable
   private final Map<String, Object> meta;
 
-  @JsonIgnore
-  private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
+  @JsonIgnore private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
 
-  @JsonIgnore
-  private final boolean dataExplicitlySet;
+  @JsonIgnore private final boolean dataExplicitlySet;
 
   JsonApiRelationship(
-    @Nullable Object data,
-    @Nullable Links links,
-    @Nullable Map<String, Object> meta,
-    @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers
-  ) {
+      @Nullable Object data,
+      @Nullable Links links,
+      @Nullable Map<String, Object> meta,
+      @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers) {
     this(data, links, meta, metaForResourceIdentifiers, true);
   }
 
   JsonApiRelationship(
-    @Nullable Object data,
-    @Nullable Links links,
-    @Nullable Map<String, Object> meta,
-    @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers,
-    boolean dataExplicitlySet
-  ) {
+      @Nullable Object data,
+      @Nullable Links links,
+      @Nullable Map<String, Object> meta,
+      @Nullable Map<Object, Map<String, Object>> metaForResourceIdentifiers,
+      boolean dataExplicitlySet) {
     this.data = data;
     this.links = links;
     this.meta = meta;
@@ -93,10 +88,9 @@ class JsonApiRelationship {
 
   @JsonCreator
   JsonApiRelationship(
-    @JsonProperty("data") @Nullable Object data,
-    @JsonProperty("links") @Nullable Links links,
-    @JsonProperty("meta") @Nullable Map<String, Object> meta
-  ) {
+      @JsonProperty("data") @Nullable Object data,
+      @JsonProperty("links") @Nullable Links links,
+      @JsonProperty("meta") @Nullable Map<String, Object> meta) {
     this(data, links, meta, null, true);
   }
 
@@ -105,12 +99,8 @@ class JsonApiRelationship {
   }
 
   public JsonApiRelationship addDataObject(
-    @Nullable final Object object,
-    @Nullable Map<String, Object> metaForResourceIdentifier
-  ) {
-    if (
-      metaForResourceIdentifier != null && !metaForResourceIdentifier.isEmpty()
-    ) {
+      @Nullable final Object object, @Nullable Map<String, Object> metaForResourceIdentifier) {
+    if (metaForResourceIdentifier != null && !metaForResourceIdentifier.isEmpty()) {
       if (metaForResourceIdentifiers == null) {
         metaForResourceIdentifiers = new HashMap<>();
       }
@@ -119,12 +109,7 @@ class JsonApiRelationship {
 
     if (this.data == null) {
       return new JsonApiRelationship(
-        object,
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          object, this.links, this.meta, this.metaForResourceIdentifiers, true);
     } else {
       List<Object> dataList = new ArrayList<>();
       if (!(this.data instanceof Collection<?> collection)) {
@@ -134,24 +119,14 @@ class JsonApiRelationship {
       }
       dataList.add(object);
       return new JsonApiRelationship(
-        dataList,
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          dataList, this.links, this.meta, this.metaForResourceIdentifiers, true);
     }
   }
 
   public JsonApiRelationship addDataCollection(final Collection<?> collection) {
     if (this.data == null) {
       return new JsonApiRelationship(
-        collection,
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          collection, this.links, this.meta, this.metaForResourceIdentifiers, true);
     } else {
       List<Object> dataList = new ArrayList<>();
       if (!(this.data instanceof Collection<?>)) {
@@ -161,76 +136,51 @@ class JsonApiRelationship {
       }
       dataList.addAll(collection);
       return new JsonApiRelationship(
-        dataList,
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          dataList, this.links, this.meta, this.metaForResourceIdentifiers, true);
     }
   }
 
   public JsonApiRelationship isAlwaysSerializedWithDataArray() {
     if (this.data == null) {
       return new JsonApiRelationship(
-        Collections.emptyList(),
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          Collections.emptyList(), this.links, this.meta, this.metaForResourceIdentifiers, true);
     } else if (!(this.data instanceof Collection<?>)) {
       return new JsonApiRelationship(
-        Collections.singletonList(this.data),
-        this.links,
-        this.meta,
-        this.metaForResourceIdentifiers,
-        true
-      );
+          Collections.singletonList(this.data),
+          this.links,
+          this.meta,
+          this.metaForResourceIdentifiers,
+          true);
     }
     return this;
   }
 
   /**
-   * Creates a relationship with explicit null data.
-   * This will be serialized as "data": null in JSON:API format,
-   * representing an empty to-one relationship.
+   * Creates a relationship with explicit null data. This will be serialized as "data": null in
+   * JSON:API format, representing an empty to-one relationship.
    *
    * @return a new JsonApiRelationship with null data
    */
   public JsonApiRelationship withNullData() {
     return new JsonApiRelationship(
-      null,
-      this.links,
-      this.meta,
-      this.metaForResourceIdentifiers,
-      true
-    );
+        null, this.links, this.meta, this.metaForResourceIdentifiers, true);
   }
 
   /**
-   * Creates a relationship with explicit empty array data.
-   * This will be serialized as "data": [] in JSON:API format,
-   * representing an empty to-many relationship.
+   * Creates a relationship with explicit empty array data. This will be serialized as "data": [] in
+   * JSON:API format, representing an empty to-many relationship.
    *
    * @return a new JsonApiRelationship with empty array data
    */
   public JsonApiRelationship withEmptyData() {
     return new JsonApiRelationship(
-      Collections.emptyList(),
-      this.links,
-      this.meta,
-      this.metaForResourceIdentifiers,
-      true
-    );
+        Collections.emptyList(), this.links, this.meta, this.metaForResourceIdentifiers, true);
   }
 
   public static JsonApiRelationship of(EntityModel<?> entityModel) {
     Object content = entityModel.getContent();
     Assert.notNull(
-      content,
-      "Cannot create JSON:API relationship of EntityModel with null content."
-    );
+        content, "Cannot create JSON:API relationship of EntityModel with null content.");
     return JsonApiRelationship.of(content);
   }
 
@@ -239,18 +189,9 @@ class JsonApiRelationship {
   }
 
   public static JsonApiRelationship of(
-    @Nullable Object object,
-    @Nullable Map<String, Object> resourceIdentifierMeta
-  ) {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      object,
-      resourceIdentifierMeta
-    );
+      @Nullable Object object, @Nullable Map<String, Object> resourceIdentifierMeta) {
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+    jsonApiRelationship = jsonApiRelationship.addDataObject(object, resourceIdentifierMeta);
     return jsonApiRelationship;
   }
 
@@ -299,9 +240,7 @@ class JsonApiRelationship {
   }
 
   JsonApiResourceIdentifier toJsonApiResource(
-    Object data,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      Object data, JsonApiConfiguration jsonApiConfiguration) {
     Map<String, Object> localMeta = null;
     if (metaForResourceIdentifiers != null) {
       localMeta = metaForResourceIdentifiers.get(data);
@@ -309,41 +248,24 @@ class JsonApiRelationship {
 
     // JsonApiResource.getId and getType will throw IllegalStateExceptions
     // if id or type cannot be retrieved.
-    String id = JsonApiResourceIdentifier.getId(
-      data,
-      jsonApiConfiguration
-    ).value;
-    String type = JsonApiResourceIdentifier.getType(
-      data,
-      jsonApiConfiguration
-    ).value;
+    String id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
+    String type = JsonApiResourceIdentifier.getType(data, jsonApiConfiguration).value;
     return new JsonApiResourceIdentifier(id, type, localMeta);
   }
 
   List<JsonApiResourceIdentifier> toJsonApiResourceCollection(
-    Collection<?> collection,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      Collection<?> collection, JsonApiConfiguration jsonApiConfiguration) {
     List<JsonApiResourceIdentifier> dataList = new ArrayList<>();
 
     // don't add duplicated with same json:api id and type
     HashMap<String, JsonApiResourceIdentifier> values = new HashMap<>();
     for (Object object : collection) {
-      JsonApiResourceIdentifier resourceIdentifier = toJsonApiResource(
-        object,
-        jsonApiConfiguration
-      );
-      if (
-        values.get(
-          resourceIdentifier.getId() + "." + resourceIdentifier.getType()
-        ) ==
-        null
-      ) {
+      JsonApiResourceIdentifier resourceIdentifier =
+          toJsonApiResource(object, jsonApiConfiguration);
+      if (values.get(resourceIdentifier.getId() + "." + resourceIdentifier.getType()) == null) {
         dataList.add(resourceIdentifier);
         values.put(
-          resourceIdentifier.getId() + "." + resourceIdentifier.getType(),
-          resourceIdentifier
-        );
+            resourceIdentifier.getId() + "." + resourceIdentifier.getType(), resourceIdentifier);
       }
     }
     return dataList;

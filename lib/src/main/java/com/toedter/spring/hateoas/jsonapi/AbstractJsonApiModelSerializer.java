@@ -34,23 +34,21 @@ import tools.jackson.databind.json.JsonMapper;
 
 @Log
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
-  extends AbstractJsonApiSerializer<T> {
+    extends AbstractJsonApiSerializer<T> {
 
   private final transient JsonApiConfiguration jsonApiConfiguration;
   private final JsonMapper jsonMapper;
 
-  private static class JsonApiDocumentWithoutSerializedData
-    extends JsonApiDocument {
+  private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {
 
     JsonApiDocumentWithoutSerializedData(JsonApiDocument jsonApiDocument) {
       super(
-        jsonApiDocument.getJsonapi(),
-        null,
-        jsonApiDocument.getMeta(),
-        jsonApiDocument.getErrors(),
-        jsonApiDocument.getLinks(),
-        jsonApiDocument.getIncluded()
-      );
+          jsonApiDocument.getJsonapi(),
+          null,
+          jsonApiDocument.getMeta(),
+          jsonApiDocument.getErrors(),
+          jsonApiDocument.getLinks(),
+          jsonApiDocument.getIncluded());
     }
 
     @Override
@@ -60,10 +58,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     }
   }
 
-  protected AbstractJsonApiModelSerializer(
-    Class<?> t,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  protected AbstractJsonApiModelSerializer(Class<?> t, JsonApiConfiguration jsonApiConfiguration) {
     super(t, false);
     this.jsonApiConfiguration = jsonApiConfiguration;
     this.jsonMapper = jsonApiConfiguration.getJsonMapper();
@@ -71,11 +66,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
 
   @Override
   @SuppressWarnings("deprecation")
-  public void serialize(
-    T value,
-    JsonGenerator gen,
-    SerializationContext provider
-  ) {
+  public void serialize(T value, JsonGenerator gen, SerializationContext provider) {
     CollectionModel<?> collectionModel = null;
     if (value instanceof JsonApiModel jsonApiModel) {
       Object content = jsonApiModel.getContent();
@@ -90,80 +81,57 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     Map<String, Object> embeddedMeta = null;
 
     if (collectionModel != null) {
-      data = JsonApiData.extractCollectionContent(
-        collectionModel,
-        jsonMapper,
-        jsonApiConfiguration,
-        null,
-        false
-      );
+      data =
+          JsonApiData.extractCollectionContent(
+              collectionModel, jsonMapper, jsonApiConfiguration, null, false);
     } else {
-      if (
-        value instanceof JsonApiModel jsonApiModel &&
-        jsonApiModel.getContent() != null &&
-        jsonApiModel.getContent() instanceof JsonApiModel
-      ) {
-        JsonApiModel content =
-          (JsonApiModel) ((JsonApiModel) value).getContent();
+      if (value instanceof JsonApiModel jsonApiModel
+          && jsonApiModel.getContent() != null
+          && jsonApiModel.getContent() instanceof JsonApiModel) {
+        JsonApiModel content = (JsonApiModel) ((JsonApiModel) value).getContent();
         embeddedMeta = Objects.requireNonNull(content).getMetaData();
-        final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(
-          content,
-          true,
-          jsonMapper,
-          jsonApiConfiguration,
-          null
-        );
+        final Optional<JsonApiData> jsonApiData =
+            JsonApiData.extractContent(content, true, jsonMapper, jsonApiConfiguration, null);
         data = jsonApiData.orElse(null);
       } else {
         if (value instanceof JsonApiModel jsonApiModel) {
           embeddedMeta = jsonApiModel.getMetaData();
         }
-        final Optional<JsonApiData> jsonApiData = JsonApiData.extractContent(
-          value,
-          true,
-          jsonMapper,
-          jsonApiConfiguration,
-          null
-        );
+        final Optional<JsonApiData> jsonApiData =
+            JsonApiData.extractContent(value, true, jsonMapper, jsonApiConfiguration, null);
         data = jsonApiData.orElse(null);
       }
     }
 
     // When linksAtResourceLevel is true, don't put links at document level for EntityModel
     Links documentLevelLinks = getLinksOrNull(value);
-    if (
-      jsonApiConfiguration.isLinksAtResourceLevel() &&
-      !(value instanceof CollectionModel) &&
-      !(value instanceof PagedModel)
-    ) {
+    if (jsonApiConfiguration.isLinksAtResourceLevel()
+        && !(value instanceof CollectionModel)
+        && !(value instanceof PagedModel)) {
       // For single resources, links will be at resource level, so don't include at document level
       documentLevelLinks = null;
     }
 
-    JsonApiDocument doc = new JsonApiDocument()
-      .withData(data)
-      .withLinks(documentLevelLinks)
-      .withIncluded(getIncluded(value));
+    JsonApiDocument doc =
+        new JsonApiDocument()
+            .withData(data)
+            .withLinks(documentLevelLinks)
+            .withIncluded(getIncluded(value));
 
     JsonApiObject jsonApiObject = jsonApiConfiguration.getJsonApiObject();
-    if (
-      jsonApiObject != null &&
-      (jsonApiObject.getVersion() != null ||
-        jsonApiObject.getExt() != null ||
-        jsonApiObject.getProfile() != null ||
-        jsonApiObject.getMeta() != null)
-    ) {
+    if (jsonApiObject != null
+        && (jsonApiObject.getVersion() != null
+            || jsonApiObject.getExt() != null
+            || jsonApiObject.getProfile() != null
+            || jsonApiObject.getMeta() != null)) {
       doc = doc.withJsonapi(jsonApiObject);
     }
 
-    if (
-      jsonApiConfiguration.isPageMetaAutomaticallyCreated() &&
-      collectionModel instanceof PagedModel
-    ) {
-      JsonApiModel model = (JsonApiModel) JsonApiModelBuilder.jsonApiModel()
-        .model(collectionModel)
-        .pageMeta()
-        .build();
+    if (jsonApiConfiguration.isPageMetaAutomaticallyCreated()
+        && collectionModel instanceof PagedModel) {
+      JsonApiModel model =
+          (JsonApiModel)
+              JsonApiModelBuilder.jsonApiModel().model(collectionModel).pageMeta().build();
       Map<String, Object> metaData = model.getMetaData();
       doc = doc.withMeta(metaData);
     }
@@ -189,20 +157,16 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     final Map<String, Object> meta = doc.getMeta();
     if (meta != null && !meta.isEmpty() && doc.getData() == null) {
       JsonApiDocumentWithoutSerializedData documentWithoutSerializedData =
-        new JsonApiDocumentWithoutSerializedData(doc);
+          new JsonApiDocumentWithoutSerializedData(doc);
       provider
-        .findValueSerializer(JsonApiDocumentWithoutSerializedData.class)
-        .serialize(documentWithoutSerializedData, gen, provider);
+          .findValueSerializer(JsonApiDocumentWithoutSerializedData.class)
+          .serialize(documentWithoutSerializedData, gen, provider);
     } else {
-      provider
-        .findValueSerializer(JsonApiDocument.class)
-        .serialize(doc, gen, provider);
+      provider.findValueSerializer(JsonApiDocument.class).serialize(doc, gen, provider);
     }
   }
 
-  private @Nullable Links getLinksOrNull(
-    RepresentationModel<?> representationModel
-  ) {
+  private @Nullable Links getLinksOrNull(RepresentationModel<?> representationModel) {
     Links links = representationModel.getLinks();
     if (links.isEmpty()) {
       links = null;
@@ -216,21 +180,17 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     if (jsonApiConfiguration.isJsonApiCompliantLinks() && links != null) {
       Links validJsonApiLinks = Links.NONE;
       for (Link link : links) {
-        if (
-          !validJsonApiLinks.hasLink(link.getRel()) &&
-          (link.hasRel("self") ||
-            link.hasRel("related") ||
-            link.hasRel("describedby") ||
-            link.hasRel("first") ||
-            link.hasRel("last") ||
-            link.hasRel("prev") ||
-            link.hasRel("next"))
-        ) {
+        if (!validJsonApiLinks.hasLink(link.getRel())
+            && (link.hasRel("self")
+                || link.hasRel("related")
+                || link.hasRel("describedby")
+                || link.hasRel("first")
+                || link.hasRel("last")
+                || link.hasRel("prev")
+                || link.hasRel("next"))) {
           validJsonApiLinks = validJsonApiLinks.and(link);
         } else {
-          log.warning(
-            "removed invalid JSON:API top-level link: " + link.getRel()
-          );
+          log.warning("removed invalid JSON:API top-level link: " + link.getRel());
         }
       }
       links = validJsonApiLinks;
@@ -239,21 +199,17 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     return links;
   }
 
-  private @Nullable List<JsonApiData> getIncluded(
-    RepresentationModel<?> representationModel
-  ) {
+  private @Nullable List<JsonApiData> getIncluded(RepresentationModel<?> representationModel) {
     if (representationModel instanceof JsonApiModel jsonApiModel) {
-      final List<RepresentationModel<?>> includedEntities =
-        jsonApiModel.getIncludedEntities();
+      final List<RepresentationModel<?>> includedEntities = jsonApiModel.getIncludedEntities();
       final CollectionModel<RepresentationModel<?>> collectionModel =
-        CollectionModel.of(includedEntities);
+          CollectionModel.of(includedEntities);
       return JsonApiData.extractCollectionContent(
-        collectionModel,
-        jsonMapper,
-        jsonApiConfiguration,
-        jsonApiModel.getSparseFieldsets(),
-        true
-      );
+          collectionModel,
+          jsonMapper,
+          jsonApiConfiguration,
+          jsonApiModel.getSparseFieldsets(),
+          true);
     }
     return null;
   }

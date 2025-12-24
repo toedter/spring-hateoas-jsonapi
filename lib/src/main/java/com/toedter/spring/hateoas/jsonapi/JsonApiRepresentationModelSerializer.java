@@ -19,11 +19,9 @@ package com.toedter.spring.hateoas.jsonapi;
 import org.springframework.hateoas.RepresentationModel;
 
 class JsonApiRepresentationModelSerializer
-  extends AbstractJsonApiModelSerializer<RepresentationModel<?>> {
+    extends AbstractJsonApiModelSerializer<RepresentationModel<?>> {
 
-  public JsonApiRepresentationModelSerializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  public JsonApiRepresentationModelSerializer(JsonApiConfiguration jsonApiConfiguration) {
     super(RepresentationModel.class, jsonApiConfiguration);
   }
 }

@@ -28,6 +28,6 @@ import java.lang.annotation.Target;
  *
  * @author Kai Toedter
  */
-@Target({ METHOD, FIELD })
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface JsonApiType {}

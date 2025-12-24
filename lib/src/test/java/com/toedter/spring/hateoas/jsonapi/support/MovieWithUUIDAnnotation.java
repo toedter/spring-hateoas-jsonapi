@@ -31,8 +31,7 @@ import lombok.With;
 @JsonApiTypeForClass("movies")
 public class MovieWithUUIDAnnotation {
 
-  @JsonApiId
-  private UUID myId;
+  @JsonApiId private UUID myId;
 
   private String title;
 }

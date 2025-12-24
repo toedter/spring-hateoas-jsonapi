@@ -35,9 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Director {
 
-  @Id
-  @GeneratedValue
-  private Long id;
+  @Id @GeneratedValue private Long id;
 
   private String name;
 

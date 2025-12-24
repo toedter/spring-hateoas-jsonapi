@@ -33,8 +33,7 @@ import tools.jackson.databind.json.JsonMapper;
  * @author Kai Toedter
  */
 @Configuration
-public class JsonApiMediaTypeConfiguration
-  implements HypermediaMappingInformation {
+public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
   private final ObjectProvider<JsonApiConfiguration> configuration;
   private final AutowireCapableBeanFactory beanFactory;
@@ -43,12 +42,11 @@ public class JsonApiMediaTypeConfiguration
    * Creates a new {@link JsonApiMediaTypeConfiguration}.
    *
    * @param configuration the {@link JsonApiConfiguration} object provider
-   * @param beanFactory   the Spring bean factory
+   * @param beanFactory the Spring bean factory
    */
   public JsonApiMediaTypeConfiguration(
-    final ObjectProvider<JsonApiConfiguration> configuration,
-    final AutowireCapableBeanFactory beanFactory
-  ) {
+      final ObjectProvider<JsonApiConfiguration> configuration,
+      final AutowireCapableBeanFactory beanFactory) {
     this.configuration = configuration;
     this.beanFactory = beanFactory;
   }
@@ -69,16 +67,16 @@ public class JsonApiMediaTypeConfiguration
    */
   @Override
   public JsonMapper.Builder configureJsonMapper(JsonMapper.Builder builder) {
-    JsonApiConfiguration jsonApiConfiguration = configuration != null
-      ? configuration.getIfAvailable(JsonApiConfiguration::new)
-      : new JsonApiConfiguration();
+    JsonApiConfiguration jsonApiConfiguration =
+        configuration != null
+            ? configuration.getIfAvailable(JsonApiConfiguration::new)
+            : new JsonApiConfiguration();
 
-    builder = builder
-      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-      .handlerInstantiator(
-        new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory)
-      )
-      .addModule(new Jackson2JsonApiModule(jsonApiConfiguration));
+    builder =
+        builder
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .handlerInstantiator(new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory))
+            .addModule(new Jackson2JsonApiModule(jsonApiConfiguration));
 
     return jsonApiConfiguration.customize(builder);
   }

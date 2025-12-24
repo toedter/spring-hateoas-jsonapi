@@ -34,7 +34,6 @@ public class DirectorWithType {
   private String id;
   private String name;
 
-  @JsonApiType
-  private String directorType;
+  @JsonApiType private String directorType;
 }
 // end::director-with-type[]

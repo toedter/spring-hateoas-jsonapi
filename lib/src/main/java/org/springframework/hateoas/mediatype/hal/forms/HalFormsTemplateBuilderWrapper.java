@@ -38,12 +38,11 @@ public class HalFormsTemplateBuilderWrapper {
 
   @Nullable
   public static Object write(Object bean) {
-    HalFormsTemplateBuilder builder = new HalFormsTemplateBuilder(
-      new HalFormsConfiguration(),
-      DefaultOnlyMessageResolver.INSTANCE
-    );
+    HalFormsTemplateBuilder builder =
+        new HalFormsTemplateBuilder(
+            new HalFormsConfiguration(), DefaultOnlyMessageResolver.INSTANCE);
     HalFormsTemplatePropertyWriter halFormsTemplatePropertyWriter =
-      new HalFormsTemplatePropertyWriter(builder);
+        new HalFormsTemplatePropertyWriter(builder);
     try {
       return halFormsTemplatePropertyWriter.value(bean, null, null);
     } catch (Exception e) {

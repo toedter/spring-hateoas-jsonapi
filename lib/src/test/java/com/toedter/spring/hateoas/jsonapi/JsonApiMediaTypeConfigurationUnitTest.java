@@ -45,10 +45,7 @@ class JsonApiMediaTypeConfigurationUnitTest {
 
   @Test
   void should_create_configuration_with_null_parameters() {
-    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
-      null,
-      null
-    );
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(null, null);
     assertThat(config).isNotNull();
     assertThat(config.getMediaTypes()).containsExactly(MediaTypes.JSON_API);
   }
@@ -57,14 +54,9 @@ class JsonApiMediaTypeConfigurationUnitTest {
   @SuppressWarnings("unchecked")
   void should_create_configuration_with_mocked_parameters() {
     ObjectProvider<JsonApiConfiguration> provider = mock(ObjectProvider.class);
-    AutowireCapableBeanFactory beanFactory = mock(
-      AutowireCapableBeanFactory.class
-    );
+    AutowireCapableBeanFactory beanFactory = mock(AutowireCapableBeanFactory.class);
 
-    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
-      provider,
-      beanFactory
-    );
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(provider, beanFactory);
     assertThat(config).isNotNull();
     assertThat(config.getMediaTypes()).containsExactly(MediaTypes.JSON_API);
   }
@@ -82,21 +74,12 @@ class JsonApiMediaTypeConfigurationUnitTest {
   void should_return_configured_object_mapper() {
     JsonMapper.Builder builder = JsonMapper.builder();
     builder = configuration.configureJsonMapper(builder);
-    JsonMapper jsonMapper = new JsonApiConfiguration()
-      .customize(builder)
-      .build();
+    JsonMapper jsonMapper = new JsonApiConfiguration().customize(builder).build();
 
-    assertThat(
-      jsonMapper.isEnabled(
-        SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED
-      )
-    ).isFalse();
-    assertThat(
-      jsonMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    ).isFalse();
-    assertThat(
-      jsonMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-    ).isFalse();
+    assertThat(jsonMapper.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED))
+        .isFalse();
+    assertThat(jsonMapper.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)).isFalse();
+    assertThat(jsonMapper.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)).isFalse();
     // Note: getRegisteredModuleIds() doesn't exist in Jackson 3
   }
 }

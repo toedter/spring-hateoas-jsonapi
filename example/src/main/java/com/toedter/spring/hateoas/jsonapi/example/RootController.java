@@ -41,23 +41,15 @@ public class RootController {
   ResponseEntity<RepresentationModel<?>> root() {
     RepresentationModel<?> resourceSupport = new RepresentationModel<>();
 
-    resourceSupport.add(
-      linkTo(methodOn(RootController.class).root()).withSelfRel()
-    );
+    resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
 
     Link selfLink = linkTo(MovieController.class).slash(MOVIES).withRel(MOVIES);
-    Link templatedLink = Link.of(
-      selfLink.getHref() + "{?page[number],page[size]}"
-    ).withRel(MOVIES);
+    Link templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(MOVIES);
 
     resourceSupport.add(templatedLink);
 
-    selfLink = linkTo(DirectorController.class)
-      .slash(DIRECTORS)
-      .withRel(DIRECTORS);
-    templatedLink = Link.of(
-      selfLink.getHref() + "{?page[number],page[size]}"
-    ).withRel(DIRECTORS);
+    selfLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
+    templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
 
     resourceSupport.add(templatedLink);
 

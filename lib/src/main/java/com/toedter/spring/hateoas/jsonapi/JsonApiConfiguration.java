@@ -39,23 +39,21 @@ import tools.jackson.databind.json.JsonMapper;
 public class JsonApiConfiguration {
 
   /**
-   * The list of possible affordance types.
-   * Those affordance types are used by {@link withAffordancesRenderedAsLinkMeta}.
+   * The list of possible affordance types. Those affordance types are used by {@link
+   * withAffordancesRenderedAsLinkMeta}.
    */
   @SuppressWarnings("JavadocReference")
   public enum AffordanceType {
-    /**
-     * Default, affordances will NOT be rendered as link meta.
-     */
+    /** Default, affordances will NOT be rendered as link meta. */
     NONE,
     /**
-     * Affordances will be rendered as link meta (proprietary format).
-     * The format is close to the internal Spring HATEOAS internal model.
+     * Affordances will be rendered as link meta (proprietary format). The format is close to the
+     * internal Spring HATEOAS internal model.
      */
     SPRING_HATEOAS,
     /**
-     * Affordances will be rendered as link meta (HAL-FORMS format).
-     * See <a href="https://rwcbook.github.io/hal-forms/#templates-element">https://rwcbook.github.io/hal-forms/#templates-element</a>.
+     * Affordances will be rendered as link meta (HAL-FORMS format). See <a
+     * href="https://rwcbook.github.io/hal-forms/#templates-element">https://rwcbook.github.io/hal-forms/#templates-element</a>.
      */
     HAL_FORMS,
   }
@@ -66,9 +64,7 @@ public class JsonApiConfiguration {
    * @param pluralizedTypeRendered The new value of this configuration's pluralizedTypeRendered
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean pluralizedTypeRendered;
+  @With @Getter private final boolean pluralizedTypeRendered;
 
   /**
    * Indicates if the JSON:API type attribute of resource objects is lower-cased.
@@ -76,15 +72,13 @@ public class JsonApiConfiguration {
    * @param lowerCasedTypeRendered The new value of this configuration's lowerCasedTypeRendered
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean lowerCasedTypeRendered;
+  @With @Getter private final boolean lowerCasedTypeRendered;
 
   /**
    * Indicates if the JSON:API object is rendered.
-   * <p>
-   * If set, each rendered JSON:API document will start with a JSON:API object like
-   * </p>
+   *
+   * <p>If set, each rendered JSON:API document will start with a JSON:API object like
+   *
    * <pre>
    * {
    *   "jsonapi": {
@@ -99,56 +93,52 @@ public class JsonApiConfiguration {
    *   }
    * }
    * </pre>
+   *
    * See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.
    *
    * @param jsonApiObject The new value of this configuration's jsonApiObject
    * @return The default is {@literal false}.
    */
-  @With
-  @Getter
-  private final JsonApiObject jsonApiObject;
+  @With @Getter private final JsonApiObject jsonApiObject;
 
   /**
-   * Indicates if page metadata (rendered as top level JSON:API meta)
-   * for a paged model is created automatically.
+   * Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
+   * automatically.
    *
-   * @param pageMetaAutomaticallyCreated The new value of this configuration's pageMetaAutomaticallyCreated
+   * @param pageMetaAutomaticallyCreated The new value of this configuration's
+   *     pageMetaAutomaticallyCreated
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean pageMetaAutomaticallyCreated;
+  @With @Getter private final boolean pageMetaAutomaticallyCreated;
 
   /**
-   * Indicates if the Java class to JSON:API mapping created with {@link JsonApiConfiguration}
-   * is also used during deserialization.
+   * Indicates if the Java class to JSON:API mapping created with {@link JsonApiConfiguration} is
+   * also used during deserialization.
    *
-   * @param typeForClassUsedForDeserialization The new value of this configuration's typeForClassUsedForDeserialization
+   * @param typeForClassUsedForDeserialization The new value of this configuration's
+   *     typeForClassUsedForDeserialization
    * @return The default is {@literal false}.
    */
-  @With
-  @Getter
-  private final boolean typeForClassUsedForDeserialization;
+  @With @Getter private final boolean typeForClassUsedForDeserialization;
 
   /**
-   * Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
-   * This feature is experimental, please don't use it in production yet.
-   * The format of the affordances will probably change. Currently, only a proprietary
-   * format ({@literal SPRING_HATEOAS}) derived from the internal affordance model
-   * and {@literal HAL-FORMS} _templates are supported.
+   * Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta. This feature is
+   * experimental, please don't use it in production yet. The format of the affordances will
+   * probably change. Currently, only a proprietary format ({@literal SPRING_HATEOAS}) derived from
+   * the internal affordance model and {@literal HAL-FORMS} _templates are supported.
    *
-   * @param affordancesRenderedAsLinkMeta The new value of this configuration's affordancesRenderedAsLinkMeta
-   * @return The list of {@link AffordanceType}. The default is NONE, so no affordances will be rendered.
+   * @param affordancesRenderedAsLinkMeta The new value of this configuration's
+   *     affordancesRenderedAsLinkMeta
+   * @return The list of {@link AffordanceType}. The default is NONE, so no affordances will be
+   *     rendered.
    */
-  @With
-  @Getter
-  private final AffordanceType affordancesRenderedAsLinkMeta;
+  @With @Getter private final AffordanceType affordancesRenderedAsLinkMeta;
 
   /**
    * Indicates if empty attributes are serialized as empty object.
-   * <p>
-   * If set to true, empty attributes are serialized as
-   * </p>
+   *
+   * <p>If set to true, empty attributes are serialized as
+   *
    * <pre>
    * {
    *   "data": {
@@ -159,9 +149,9 @@ public class JsonApiConfiguration {
    *   }
    * }
    * </pre>
-   * <p>
-   * If set to false, attributes are not serialized,
-   * </p>
+   *
+   * <p>If set to false, attributes are not serialized,
+   *
    * <pre>
    * {
    *   "data": {
@@ -171,17 +161,17 @@ public class JsonApiConfiguration {
    * }
    * </pre>
    *
-   * @param emptyAttributesObjectSerialized The new value of this configuration's emptyAttributesObjectSerialized
+   * @param emptyAttributesObjectSerialized The new value of this configuration's
+   *     emptyAttributesObjectSerialized
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean emptyAttributesObjectSerialized;
+  @With @Getter private final boolean emptyAttributesObjectSerialized;
 
   /**
-   * If you want to create JSON for a POST request that does not contain the {@literal id} attribute.
-   * For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
-   * the serialized JSON would look like
+   * If you want to create JSON for a POST request that does not contain the {@literal id}
+   * attribute. For example, if you set this property to "doNotSerialize" and initialize a Movie
+   * object with id = "doNotSerialize", the serialized JSON would look like
+   *
    * <pre>
    * {
    *   "data": {
@@ -193,24 +183,22 @@ public class JsonApiConfiguration {
    * }
    * </pre>
    *
-   * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for serialization
+   * @param jsonApiIdNotSerializedForValue The value of the JSON:API resource id that is ignored for
+   *     serialization
    * @return The default is {@literal null}.
    */
-  @With
-  @Getter
-  private final String jsonApiIdNotSerializedForValue;
+  @With @Getter private final String jsonApiIdNotSerializedForValue;
 
   /**
-   * A customizer function that allows modification of the {@link JsonMapper.Builder}
-   * used for JSON:API serialization and deserialization.
-   * <p>
-   * This customizer is applied when calling {@link #customize(JsonMapper.Builder)}
-   * and allows you to configure additional Jackson features, modules, or settings
-   * that are not directly exposed through this configuration class.
-   * </p>
-   * <p>
-   * Example usage:
-   * </p>
+   * A customizer function that allows modification of the {@link JsonMapper.Builder} used for
+   * JSON:API serialization and deserialization.
+   *
+   * <p>This customizer is applied when calling {@link #customize(JsonMapper.Builder)} and allows
+   * you to configure additional Jackson features, modules, or settings that are not directly
+   * exposed through this configuration class.
+   *
+   * <p>Example usage:
+   *
    * <pre>
    * JsonApiConfiguration config = new JsonApiConfiguration()
    *     .withMapperCustomizer(builder -&gt; builder
@@ -218,84 +206,78 @@ public class JsonApiConfiguration {
    *         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
    * </pre>
    *
-   * @param mapperCustomizer A unary operator that takes a {@link JsonMapper.Builder} and returns
-   *                         a modified {@link JsonMapper.Builder}. If {@literal null}, no customization is applied.
+   * @param mapperCustomizer A unary operator that takes a {@link JsonMapper.Builder} and returns a
+   *     modified {@link JsonMapper.Builder}. If {@literal null}, no customization is applied.
    * @return A clone of this object with the updated mapper customizer.
    */
-  @With
-  private final UnaryOperator<JsonMapper.Builder> mapperCustomizer;
+  @With private final UnaryOperator<JsonMapper.Builder> mapperCustomizer;
 
   /**
    * JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
    * see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
-   * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
-   * are now serialized as direct link properties. For the previous version JSON:API v1.0
-   * they were serialized in the meta section.
-   * <p>
-   * The removal from the meta section is a breaking change that could harm existing clients.
-   * But to keep the format backward-compatible to previous versions of this library, title, type, and hreflang
-   * can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
-   * to {@literal false}.
+   * Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1
+   * they are now serialized as direct link properties. For the previous version JSON:API v1.0 they
+   * were serialized in the meta section.
    *
-   * @param jsonApi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's jsonApi11LinkPropertiesRemovedFromLinkMeta
+   * <p>The removal from the meta section is a breaking change that could harm existing clients. But
+   * to keep the format backward-compatible to previous versions of this library, title, type, and
+   * hreflang can still be rendered also in the link's meta section. For backward-compatible
+   * behavior, set this configuration to {@literal false}.
+   *
+   * @param jsonApi11LinkPropertiesRemovedFromLinkMeta The new value of this configuration's
+   *     jsonApi11LinkPropertiesRemovedFromLinkMeta
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean jsonApi11LinkPropertiesRemovedFromLinkMeta;
+  @With @Getter private final boolean jsonApi11LinkPropertiesRemovedFromLinkMeta;
 
   /**
-   * JSON:API is very strict about the allowed link relations, the allowed
-   * <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
-   * self, related, describedBy, next, pre, first and last. The only allowed
-   * <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
-   * <p>
-   * If you set this configuration to {@literal false}, Spring HATEOAS links that are not compliant
-   * with JSON:API would also be serialized.
+   * JSON:API is very strict about the allowed link relations, the allowed <a
+   * href="https://jsonapi.org/format/#document-top-level">top-level links</a> are self, related,
+   * describedBy, next, pre, first and last. The only allowed <a
+   * href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
+   *
+   * <p>If you set this configuration to {@literal false}, Spring HATEOAS links that are not
+   * compliant with JSON:API would also be serialized.
    *
    * @param jsonApiCompliantLinks The new value of this configuration's jsonApiCompliantLinks
    * @return The default is {@literal true}.
    */
-  @With
-  @Getter
-  private final boolean jsonApiCompliantLinks;
+  @With @Getter private final boolean jsonApiCompliantLinks;
 
   /**
    * By default, JSON:API links are serialized as URL encoded.
-   * <p>
-   * If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
-   * This can be useful for instance to avoid double uri encoding when you pass the links to the model already
-   * URL encoded.
+   *
+   * <p>If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
+   * This can be useful for instance to avoid double uri encoding when you pass the links to the
+   * model already URL encoded.
    *
    * @param linksNotUrlEncoded The new value of this configuration's linksNotUrlEncoded
    * @return The default is an empty set.
    */
-  @With
-  @Getter
-  private final Set<LinkRelation> linksNotUrlEncoded;
+  @With @Getter private final Set<LinkRelation> linksNotUrlEncoded;
 
   /**
-   * Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.
-   * <p>
-   * According to the JSON:API specification, links can be placed at:
+   * Controls where links are placed in JSON:API documents for single resource (EntityModel)
+   * serialization.
+   *
+   * <p>According to the JSON:API specification, links can be placed at:
+   *
    * <ul>
-   *   <li>Document level (top-level) - the default behavior</li>
-   *   <li>Resource level (within the resource object in the "data" section)</li>
+   *   <li>Document level (top-level) - the default behavior
+   *   <li>Resource level (within the resource object in the "data" section)
    * </ul>
-   * <p>
-   * When set to {@literal true}, links from EntityModel are placed at the resource level
-   * (inside the resource object). When set to {@literal false}, links are placed at the
-   * document level (top-level).
-   * <p>
-   * Note: This configuration only affects single resource serialization (EntityModel).
+   *
+   * <p>When set to {@literal true}, links from EntityModel are placed at the resource level (inside
+   * the resource object). When set to {@literal false}, links are placed at the document level
+   * (top-level).
+   *
+   * <p>Note: This configuration only affects single resource serialization (EntityModel).
    * Collection resources and relationships are not affected by this setting.
    *
    * @param linksAtResourceLevel The new value of this configuration's linksAtResourceLevel
    * @return The default is {@literal false} (links at document level).
    */
-  @With
-  @Getter
-  private final boolean linksAtResourceLevel;
+  @With @Getter private final boolean linksAtResourceLevel;
 
   @With(AccessLevel.PRIVATE)
   private final Map<Class<?>, String> typeForClass;
@@ -313,10 +295,9 @@ public class JsonApiConfiguration {
 
   /**
    * Returns a configured {@link JsonMapper} instance.
-   * <p>
-   * This method creates a new {@link JsonMapper} with the customizations
-   * applied through the {@link #mapperCustomizer}.
-   * </p>
+   *
+   * <p>This method creates a new {@link JsonMapper} with the customizations applied through the
+   * {@link #mapperCustomizer}.
    *
    * @return A configured {@link JsonMapper} instance.
    */
@@ -325,11 +306,11 @@ public class JsonApiConfiguration {
   }
 
   /**
-   * Creates a mapping for a given class to get the JSON:API resource object {@literal type}
-   * when rendered.
+   * Creates a mapping for a given class to get the JSON:API resource object {@literal type} when
+   * rendered.
    *
    * @param clazz must not be {@literal null}.
-   * @param type  must not be {@literal null}.
+   * @param type must not be {@literal null}.
    * @return a clone of this object, except with this updated property
    */
   public JsonApiConfiguration withTypeForClass(Class<?> clazz, String type) {
@@ -343,8 +324,8 @@ public class JsonApiConfiguration {
   }
 
   /**
-   * Returns the {@literal JSON:API resource object type}
-   * for a given class, when it was added with {@link #withTypeForClass(Class, String)}.
+   * Returns the {@literal JSON:API resource object type} for a given class, when it was added with
+   * {@link #withTypeForClass(Class, String)}.
    *
    * @param clazz must not be {@literal null}.
    * @return can return {@literal null}.
@@ -355,8 +336,8 @@ public class JsonApiConfiguration {
   }
 
   /**
-   * Returns the {@literal class}
-   * for a given type, when the class was added with {@link #withTypeForClass(Class, String)}.
+   * Returns the {@literal class} for a given type, when the class was added with {@link
+   * #withTypeForClass(Class, String)}.
    *
    * @param type must not be {@literal null}.
    * @return can return {@literal null}.
@@ -373,9 +354,7 @@ public class JsonApiConfiguration {
     return null;
   }
 
-  /**
-   * Creates a new default {@link JsonApiConfiguration}.
-   */
+  /** Creates a new default {@link JsonApiConfiguration}. */
   public JsonApiConfiguration() {
     this.pluralizedTypeRendered = true;
     this.lowerCasedTypeRendered = true;

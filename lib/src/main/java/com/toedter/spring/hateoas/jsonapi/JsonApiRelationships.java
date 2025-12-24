@@ -24,15 +24,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Specifies the JSON:API relationships of a resource object.
- * This annotation is only used for deserialization
- * of JSON:API structured JSON to Java objects,
- * and is useful for POST and PATCH requests.
- * For serialization use a {@link JsonApiModelBuilder}.
+ * Specifies the JSON:API relationships of a resource object. This annotation is only used for
+ * deserialization of JSON:API structured JSON to Java objects, and is useful for POST and PATCH
+ * requests. For serialization use a {@link JsonApiModelBuilder}.
  *
  * @author Kai Toedter
  */
-@Target({ METHOD, FIELD })
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface JsonApiRelationships {
   /**

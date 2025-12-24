@@ -25,11 +25,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SuperEChild<T extends Collection<?>> implements SuperEntity<T> {
 
-  @JsonApiId
-  private String id;
+  @JsonApiId private String id;
 
-  @JsonApiType
-  private final String type = null;
+  @JsonApiType private final String type = null;
 
   @Override
   public T getT() {

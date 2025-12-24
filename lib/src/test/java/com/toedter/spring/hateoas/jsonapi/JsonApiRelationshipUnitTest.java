@@ -47,11 +47,7 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_add_data_to_empty_relation() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
     Movie data = (Movie) jsonApiRelationship.getData();
 
@@ -61,9 +57,7 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_of_entity_model() {
-    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(
-      EntityModel.of(movie)
-    );
+    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(EntityModel.of(movie));
     Movie data = (Movie) jsonApiRelationship.getData();
 
     assertThat(data.getId()).isEqualTo("1");
@@ -81,9 +75,8 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_of_object_as_collection() {
-    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(
-      movie
-    ).isAlwaysSerializedWithDataArray();
+    JsonApiRelationship jsonApiRelationship =
+        JsonApiRelationship.of(movie).isAlwaysSerializedWithDataArray();
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
   }
@@ -93,9 +86,7 @@ class JsonApiRelationshipUnitTest {
     List<Movie> collection = new ArrayList<>();
     collection.add(movie);
 
-    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(
-      collection
-    );
+    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(collection);
 
     assertThat(jsonApiRelationship.getData()).isEqualTo(collection);
   }
@@ -104,22 +95,17 @@ class JsonApiRelationshipUnitTest {
   void should_create_of_empty_collection() {
     List<Test> collection = new ArrayList<>();
 
-    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(
-      collection
-    );
+    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(collection);
     //noinspection unchecked
-    List<JsonApiResourceIdentifier> data = (List<
-      JsonApiResourceIdentifier
-    >) jsonApiRelationship.getData();
+    List<JsonApiResourceIdentifier> data =
+        (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
 
   @Test
   void should_create_of_links() {
-    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(
-      Links.NONE
-    );
+    JsonApiRelationship jsonApiRelationship = JsonApiRelationship.of(Links.NONE);
     final Links links = jsonApiRelationship.getLinks();
     assertThat(links).isEqualTo(Links.NONE);
   }
@@ -136,11 +122,7 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_with_data_as_collection_on_first_statement() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
 
@@ -149,11 +131,7 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_with_data_as_collection_on_second_statement() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
     jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
@@ -165,15 +143,9 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_with_data_as_collection_on_third_statement() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new Movie("2", "Test")
-    );
+    jsonApiRelationship = jsonApiRelationship.addDataObject(new Movie("2", "Test"));
     jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
     List<Movie> data = (List<Movie>) jsonApiRelationship.getData();
@@ -184,68 +156,43 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_with_data_as_empty_collection() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.isAlwaysSerializedWithDataArray();
 
-    List<JsonApiResourceIdentifier> data = (List<
-      JsonApiResourceIdentifier
-    >) jsonApiRelationship.getData();
+    List<JsonApiResourceIdentifier> data =
+        (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
 
   @Test
   void should_add_empty_data_collection() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataCollection(
-      Collections.EMPTY_LIST
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+    jsonApiRelationship = jsonApiRelationship.addDataCollection(Collections.EMPTY_LIST);
 
-    List<JsonApiResourceIdentifier> data = (List<
-      JsonApiResourceIdentifier
-    >) jsonApiRelationship.getData();
+    List<JsonApiResourceIdentifier> data =
+        (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
     assertThat(data).isEmpty();
   }
 
   @Test
   void should_add_data_collection_to_existing_single_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
-    jsonApiRelationship = jsonApiRelationship.addDataCollection(
-      Collections.EMPTY_LIST
-    );
+    jsonApiRelationship = jsonApiRelationship.addDataCollection(Collections.EMPTY_LIST);
 
-    List<JsonApiResourceIdentifier> data = (List<
-      JsonApiResourceIdentifier
-    >) jsonApiRelationship.getData();
+    List<JsonApiResourceIdentifier> data =
+        (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
     assertThat(data).hasSize(1);
   }
 
   @Test
   void should_add_data_collection_to_existing_data_colection() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.addDataObject(movie);
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new Movie("2", "Movie 2")
-    );
+    jsonApiRelationship = jsonApiRelationship.addDataObject(new Movie("2", "Movie 2"));
 
     Collection<Movie> movies = new ArrayList<>();
     movies.add(new Movie("3", "Movie 3"));
@@ -253,33 +200,24 @@ class JsonApiRelationshipUnitTest {
 
     jsonApiRelationship = jsonApiRelationship.addDataCollection(movies);
 
-    List<JsonApiResourceIdentifier> data = (List<
-      JsonApiResourceIdentifier
-    >) jsonApiRelationship.getData();
+    List<JsonApiResourceIdentifier> data =
+        (List<JsonApiResourceIdentifier>) jsonApiRelationship.getData();
 
     assertThat(data).hasSize(4);
   }
 
   @Test
   void should_validate_relationship_with_constructor() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movie,
-      Links.of(Link.of("x")),
-      new HashMap<>()
-    );
+    JsonApiRelationship jsonApiRelationship =
+        new JsonApiRelationship(movie, Links.of(Link.of("x")), new HashMap<>());
     assertThat(jsonApiRelationship.isValid()).isTrue();
   }
 
   @Test
   void should_validate_relationship_with_wither() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new JsonApiResourceIdentifier("1", "type", null)
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+    jsonApiRelationship =
+        jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type", null));
     jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
     jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
     assertThat(jsonApiRelationship.isValid()).isTrue();
@@ -287,20 +225,13 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_validate_relationship_with_wither_and_multiple_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new JsonApiResourceIdentifier("1", "type", null)
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new JsonApiResourceIdentifier("2", "type", null)
-    );
-    jsonApiRelationship = jsonApiRelationship.addDataObject(
-      new JsonApiResourceIdentifier("3", "type", null)
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
+    jsonApiRelationship =
+        jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("1", "type", null));
+    jsonApiRelationship =
+        jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("2", "type", null));
+    jsonApiRelationship =
+        jsonApiRelationship.addDataObject(new JsonApiResourceIdentifier("3", "type", null));
     jsonApiRelationship = jsonApiRelationship.withLinks(Links.of(Link.of("x")));
     jsonApiRelationship = jsonApiRelationship.withMeta(new HashMap<>());
     assertThat(jsonApiRelationship.isValid()).isTrue();
@@ -308,61 +239,38 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_validate_invalid_null_relationship() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     assertThat(jsonApiRelationship.isValid()).isTrue();
   }
 
   @Test
   void should_validate_invalid_single_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      new Object(),
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(new Object(), null, null);
     assertThat(jsonApiRelationship.isValid()).isFalse();
   }
 
   @Test
   void should_validate_invalid_collection_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      Collections.singletonList(new Object()),
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship =
+        new JsonApiRelationship(Collections.singletonList(new Object()), null, null);
     assertThat(jsonApiRelationship.isValid()).isFalse();
   }
 
   @Test
   void should_validate_invalid_meta() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      new HashMap<>()
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, new HashMap<>());
     assertThat(jsonApiRelationship.isValid()).isTrue();
   }
 
   @Test
   void should_validate_invalid_links() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      Links.NONE,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, Links.NONE, null);
     assertThat(jsonApiRelationship.isValid()).isFalse();
   }
 
   @Test
   void should_create_relationship_with_explicit_null_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movie,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(movie, null, null);
     jsonApiRelationship = jsonApiRelationship.withNullData();
 
     assertThat(jsonApiRelationship.getData()).isNull();
@@ -370,29 +278,19 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_create_relationship_with_explicit_empty_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movie,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(movie, null, null);
     jsonApiRelationship = jsonApiRelationship.withEmptyData();
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     //noinspection unchecked
-    Collection<Object> data = (Collection<
-      Object
-    >) jsonApiRelationship.getData();
+    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
     assertThat(data).isEmpty();
   }
 
   @Test
   void should_preserve_links_when_setting_null_data() {
     Links links = Links.of(Link.of("http://localhost/test").withSelfRel());
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movie,
-      links,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(movie, links, null);
     jsonApiRelationship = jsonApiRelationship.withNullData();
 
     assertThat(jsonApiRelationship.getData()).isNull();
@@ -403,11 +301,7 @@ class JsonApiRelationshipUnitTest {
   void should_preserve_meta_when_setting_empty_data() {
     Map<String, Object> meta = new HashMap<>();
     meta.put("key", "value");
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movie,
-      null,
-      meta
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(movie, null, meta);
     jsonApiRelationship = jsonApiRelationship.withEmptyData();
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
@@ -420,11 +314,7 @@ class JsonApiRelationshipUnitTest {
     movies.add(movie);
     movies.add(new Movie("2", "Test Movie"));
 
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      movies,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(movies, null, null);
     jsonApiRelationship = jsonApiRelationship.withNullData();
 
     assertThat(jsonApiRelationship.getData()).isNull();
@@ -432,18 +322,12 @@ class JsonApiRelationshipUnitTest {
 
   @Test
   void should_replace_null_with_empty_data() {
-    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(
-      null,
-      null,
-      null
-    );
+    JsonApiRelationship jsonApiRelationship = new JsonApiRelationship(null, null, null);
     jsonApiRelationship = jsonApiRelationship.withEmptyData();
 
     assertThat(jsonApiRelationship.getData()).isInstanceOf(Collection.class);
     //noinspection unchecked
-    Collection<Object> data = (Collection<
-      Object
-    >) jsonApiRelationship.getData();
+    Collection<Object> data = (Collection<Object>) jsonApiRelationship.getData();
     assertThat(data).isEmpty();
   }
 }

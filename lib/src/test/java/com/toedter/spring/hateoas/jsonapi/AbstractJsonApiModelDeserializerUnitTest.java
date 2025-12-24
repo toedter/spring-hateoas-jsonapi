@@ -33,25 +33,20 @@ import tools.jackson.databind.type.TypeFactory;
 @DisplayName("JsonApiConfiguration Unit Test")
 class AbstractJsonApiModelDeserializerUnitTest {
 
-  class TestJsonApiDeserializer
-    extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
+  class TestJsonApiDeserializer extends AbstractJsonApiModelDeserializer<EntityModel<?>> {
 
     public TestJsonApiDeserializer(JsonApiConfiguration jsonApiConfiguration) {
       super(jsonApiConfiguration);
     }
 
     public TestJsonApiDeserializer(
-      JavaType contentType,
-      JsonApiConfiguration jsonApiConfiguration
-    ) {
+        JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
       super(contentType, jsonApiConfiguration);
     }
 
     @Override
     protected EntityModel<?> convertToRepresentationModel(
-      List<Object> resources,
-      JsonApiDocument doc
-    ) {
+        List<Object> resources, JsonApiDocument doc) {
       return null;
     }
 
@@ -65,9 +60,7 @@ class AbstractJsonApiModelDeserializerUnitTest {
 
   @BeforeEach
   void beforeEach() {
-    testJsonApiDeserializer = new TestJsonApiDeserializer(
-      new JsonApiConfiguration()
-    );
+    testJsonApiDeserializer = new TestJsonApiDeserializer(new JsonApiConfiguration());
   }
 
   // Note: getContentType() and getContentDeserializer() no longer exist in Jackson 3
@@ -80,17 +73,13 @@ class AbstractJsonApiModelDeserializerUnitTest {
 
     class TestWitNoConstructor {}
 
-    JavaType javaType = TypeFactory.createDefaultInstance().constructSimpleType(
-      TestWitNoConstructor.class,
-      new JavaType[0]
-    );
-    testJsonApiDeserializer = new TestJsonApiDeserializer(
-      javaType,
-      new JsonApiConfiguration()
-    );
+    JavaType javaType =
+        TypeFactory.createDefaultInstance()
+            .constructSimpleType(TestWitNoConstructor.class, new JavaType[0]);
+    testJsonApiDeserializer = new TestJsonApiDeserializer(javaType, new JsonApiConfiguration());
 
-    Assertions.assertThrows(IllegalStateException.class, () ->
-      testJsonApiDeserializer.convertToResource(data, false, null, null, false)
-    );
+    Assertions.assertThrows(
+        IllegalStateException.class,
+        () -> testJsonApiDeserializer.convertToResource(data, false, null, null, false));
   }
 }

@@ -23,27 +23,20 @@ import org.springframework.hateoas.PagedModel;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 
-class JsonApiPagedModelDeserializer
-  extends AbstractJsonApiModelDeserializer<PagedModel<?>> {
+class JsonApiPagedModelDeserializer extends AbstractJsonApiModelDeserializer<PagedModel<?>> {
 
-  public JsonApiPagedModelDeserializer(
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+  public JsonApiPagedModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     super(jsonApiConfiguration);
   }
 
   protected JsonApiPagedModelDeserializer(
-    JavaType contentType,
-    JsonApiConfiguration jsonApiConfiguration
-  ) {
+      JavaType contentType, JsonApiConfiguration jsonApiConfiguration) {
     super(contentType, jsonApiConfiguration);
   }
 
   @Override
   protected PagedModel<?> convertToRepresentationModel(
-    List<Object> resources,
-    JsonApiDocument doc
-  ) {
+      List<Object> resources, JsonApiDocument doc) {
     Links links = doc.getLinks();
 
     PagedModel.PageMetadata pageMetadata = null;
@@ -51,12 +44,12 @@ class JsonApiPagedModelDeserializer
     if (meta != null) {
       Map<String, Long> pageMeta = (Map<String, Long>) meta.get("page");
       if (pageMeta != null) {
-        pageMetadata = new PagedModel.PageMetadata(
-          ((Number) pageMeta.get("size")).longValue(),
-          ((Number) pageMeta.get("number")).longValue(),
-          ((Number) pageMeta.get("totalElements")).longValue(),
-          ((Number) pageMeta.get("totalPages")).longValue()
-        );
+        pageMetadata =
+            new PagedModel.PageMetadata(
+                ((Number) pageMeta.get("size")).longValue(),
+                ((Number) pageMeta.get("number")).longValue(),
+                ((Number) pageMeta.get("totalElements")).longValue(),
+                ((Number) pageMeta.get("totalPages")).longValue());
       }
     }
 
