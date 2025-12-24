@@ -43,29 +43,29 @@ class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRel
       }
     }
 
-    // Start writing the relationship object
+    // Start writing the relationship object.
     gen.writeStartObject();
 
-    // Handle data field serialization
+    // Handle data field serialization.
     if (value.isDataExplicitlySet()) {
-      // When data is explicitly set (even if null), always serialize it
+      // When data is explicitly set (even if null), always serialize it.
       gen.writeName("data");
       gen.writePOJO(data);
     } else if (data != null) {
-      // When data is not explicitly set but is present, serialize it
+      // When data is not explicitly set but is present, serialize it.
       gen.writeName("data");
       gen.writePOJO(data);
     }
-    // If data is not explicitly set and is null, omit the field entirely
+    // If data is not explicitly set and is null, omit the field entirely.
 
-    // Handle links field serialization
+    // Handle links field serialization.
     Links links = value.getLinks();
     if (links != null && !links.isEmpty()) {
       gen.writeName("links");
       gen.writePOJO(links);
     }
 
-    // Handle meta field serialization
+    // Handle meta field serialization.
     Map<String, Object> meta = value.getMeta();
     if (meta != null && !meta.isEmpty()) {
       gen.writeName("meta");

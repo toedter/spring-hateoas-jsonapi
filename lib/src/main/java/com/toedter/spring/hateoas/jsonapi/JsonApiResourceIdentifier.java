@@ -97,14 +97,14 @@ class JsonApiResourceIdentifier {
       Object object,
       JsonApiConfiguration jsonApiConfiguration) {
     try {
-      // check Class based JSON:API type annotation
+      // Check for class-based JSON:API type annotation.
       if (resourceField == JsonApiResourceField.TYPE
           && object.getClass().isAnnotationPresent(JsonApiTypeForClass.class)) {
         JsonApiTypeForClass annotation = object.getClass().getAnnotation(JsonApiTypeForClass.class);
         return new ResourceField(TYPE_LITERAL, annotation.value());
       }
 
-      // then search for field annotation
+      // Then search for field annotation.
       final Field[] declaredFields = getAllDeclaredFields(object.getClass());
       Field jpaIdField = null;
       for (Field field : declaredFields) {
@@ -125,7 +125,7 @@ class JsonApiResourceIdentifier {
         }
       }
 
-      // then search for method annotation
+      // Then search for method annotation.
       final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
       Method jpaIdMethod = null;
       for (Method method : declaredMethods) {
@@ -147,8 +147,8 @@ class JsonApiResourceIdentifier {
         }
       }
 
-      // JPA @id annotations have lower priority than @JsonApiId annotations,
-      // this is why they are returned later in the game.
+      // JPA @Id annotations have lower priority than @JsonApiId annotations,
+      // which is why they are evaluated later.
       if (jpaIdField != null) {
         return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
       }
@@ -158,7 +158,7 @@ class JsonApiResourceIdentifier {
       }
 
       if (resourceField == JsonApiResourceField.ID) {
-        // then try field "id"
+        // Then try field "id".
         Field field = ReflectionUtils.findField(object.getClass(), ID_LITERAL);
         //noinspection ConstantConditions
         field.setAccessible(true);
@@ -202,7 +202,7 @@ class JsonApiResourceIdentifier {
       Object object, JsonApiResourceField name, String value) {
     final Field[] declaredFields = getAllDeclaredFields(object.getClass());
     try {
-      // first try annotation on fields
+      // First, try annotation on fields.
       for (Field field : declaredFields) {
         field.setAccessible(true);
         final Annotation[] annotations = field.getAnnotations();
@@ -219,7 +219,7 @@ class JsonApiResourceIdentifier {
         }
       }
 
-      // secondly try annotation on methods
+      // Secondly, try annotation on methods.
       final Method[] declaredMethods = getAllDeclaredMethods(object.getClass());
       for (Method method : declaredMethods) {
         final Annotation[] annotations = method.getAnnotations();
@@ -234,8 +234,8 @@ class JsonApiResourceIdentifier {
               && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
             isAnnotatedMethod = true;
           }
-          // if the method is a setter find the corresponding field if there is one,
-          // as heuristic the method should take one parameter
+          // If the method is a setter, find the corresponding field if there is one.
+          // As a heuristic, the method should take one parameter.
           if (isAnnotatedMethod && method.getParameterCount() == 1) {
             if (method.getParameterTypes()[0] == UUID.class) {
               method.invoke(object, UUID.fromString(value));
@@ -247,7 +247,7 @@ class JsonApiResourceIdentifier {
         }
       }
 
-      // then try field directly
+      // Then try field directly.
       if (name == JsonApiResourceField.ID) {
         Field field = findField(object.getClass(), name.name().toLowerCase());
         if (field != null) {

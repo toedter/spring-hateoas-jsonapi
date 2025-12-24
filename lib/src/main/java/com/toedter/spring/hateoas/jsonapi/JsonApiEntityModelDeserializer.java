@@ -84,7 +84,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
             try {
               if (relationship != null) {
                 final Type genericType = field.getGenericType();
-                // expect collections to always be generic, like "List<Director>"
+                // Expect collections to always be generic, like "List<Director>".
                 if (genericType instanceof ParameterizedType parameterizedType) {
                   ParameterizedType type = parameterizedType;
                   if (Collection.class.isAssignableFrom(field.getType())) {
@@ -118,7 +118,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
                     field.set(content, relationshipCollection);
                   }
                 } else {
-                  // we expect a concrete type otherwise, like "Director"
+                  // We expect a concrete type otherwise, like "Director".
                   HashMap<String, Object> data =
                       (HashMap<String, Object>) ((HashMap<?, ?>) relationship).get("data");
                   Object newInstance = createRelationship(doc, genericType, data).getContent();
@@ -132,7 +132,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
         }
       }
 
-      // handling meta deserialization
+      // Handle meta deserialization.
       Object meta = ((HashMap<?, ?>) doc.getData()).get("meta");
       if (meta != null) {
         for (Field field : getAllDeclaredFields(content.getClass())) {
@@ -155,7 +155,7 @@ class JsonApiEntityModelDeserializer extends AbstractJsonApiModelDeserializer<En
           if (method.getAnnotation(JsonApiMeta.class) != null) {
             try {
               method.setAccessible(true);
-              // a setter is expected to return void
+              // A setter is expected to return void.
               if (method.getReturnType() == void.class && meta instanceof Map) {
                 String methodName = method.getName();
                 if (methodName.startsWith("set")) {

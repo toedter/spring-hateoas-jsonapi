@@ -42,7 +42,7 @@ class JsonApiDocument {
   @With(AccessLevel.PACKAGE)
   @JsonProperty("data")
   @Nullable
-  // data can either be a single JsonApiData object or a list of JsonApiData objects
+  // Data can be either a single JsonApiData object or a list of JsonApiData objects.
   private final Object data;
 
   @Getter

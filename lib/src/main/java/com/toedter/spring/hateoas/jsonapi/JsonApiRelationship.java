@@ -234,8 +234,8 @@ class JsonApiRelationship {
       return selfLink.isPresent() || relatedLink.isPresent();
     }
 
-    // we allow null meta and non-null but empty meta
-    // so nothing to check related to meta
+    // We allow null meta and non-null but empty meta,
+    // so there is nothing to check related to meta.
     return true;
   }
 
@@ -246,8 +246,8 @@ class JsonApiRelationship {
       localMeta = metaForResourceIdentifiers.get(data);
     }
 
-    // JsonApiResource.getId and getType will throw IllegalStateExceptions
-    // if id or type cannot be retrieved.
+    // JsonApiResource.getId() and getType() will throw IllegalStateExceptions
+    // if the id or type cannot be retrieved.
     String id = JsonApiResourceIdentifier.getId(data, jsonApiConfiguration).value;
     String type = JsonApiResourceIdentifier.getType(data, jsonApiConfiguration).value;
     return new JsonApiResourceIdentifier(id, type, localMeta);
@@ -257,7 +257,7 @@ class JsonApiRelationship {
       Collection<?> collection, JsonApiConfiguration jsonApiConfiguration) {
     List<JsonApiResourceIdentifier> dataList = new ArrayList<>();
 
-    // don't add duplicated with same json:api id and type
+    // Don't add duplicates with the same JSON:API id and type.
     HashMap<String, JsonApiResourceIdentifier> values = new HashMap<>();
     for (Object object : collection) {
       JsonApiResourceIdentifier resourceIdentifier =
