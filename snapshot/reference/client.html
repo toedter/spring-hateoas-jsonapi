@@ -267,9 +267,8 @@ static class Config {
 
   @Bean
   public JsonApiMediaTypeConfiguration jsonApiMediaTypeConfiguration(
-    ObjectProvider&lt;JsonApiConfiguration&gt; configuration,
-    AutowireCapableBeanFactory beanFactory
-  ) {
+      ObjectProvider&lt;JsonApiConfiguration&gt; configuration,
+      AutowireCapableBeanFactory beanFactory) {
     return new JsonApiMediaTypeConfiguration(configuration, beanFactory);
   }
 }
@@ -302,10 +301,7 @@ that DTOs with this id value should not include the JSON:API id in the resulting
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">  new JsonApiConfiguration().withJsonApiIdNotSerializedForValue(
-    "doNotSerialize"
-  )
-);
+<pre class="highlight"><code class="language-java" data-lang="java">new JsonApiConfiguration().withJsonApiIdNotSerializedForValue("doNotSerialize"));
 </code></pre>
 </div>
 </div>
@@ -366,9 +362,7 @@ is exposed as a Spring bean.</p>
 Links links = linkDiscoverer.findLinksWithRel(SELF, source);
 
 assertThat(links.hasLink("self")).isTrue();
-assertThat(links)
-  .map(Link::getHref)
-  .contains("http://localhost/movies/1");
+assertThat(links).map(Link::getHref).contains("http://localhost/movies/1");
 </code></pre>
 </div>
 </div>
@@ -378,7 +372,7 @@ assertThat(links)
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 12:28:56 UTC
+Last updated 2025-12-24 12:48:30 UTC
 </div>
 </div>
 </div>

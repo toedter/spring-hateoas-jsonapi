@@ -151,13 +151,13 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;?&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClassForType(java.lang.String)" class="member-name-link">getClassForType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the class
- for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+<div class="block">Returns the class for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getJsonApiIdNotSerializedForValue()" class="member-name-link">getJsonApiIdNotSerializedForValue</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+<div class="block">If you want to create JSON for a POST request that does not contain the id
+ attribute.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getJsonApiObject()" class="member-name-link">getJsonApiObject</a>()</code></div>
@@ -177,8 +177,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypeForClass(java.lang.Class)" class="member-name-link">getTypeForClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the JSON:API resource object type
- for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+<div class="block">Returns the JSON:API resource object type for a given class, when it was added with
+ <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmptyAttributesObjectSerialized()" class="member-name-link">isEmptyAttributesObjectSerialized</a>()</code></div>
@@ -194,14 +194,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isJsonApiCompliantLinks()" class="member-name-link">isJsonApiCompliantLinks</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">JSON:API is very strict about the allowed link relations, the allowed
- <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
- self, related, describedBy, next, pre, first and last.</div>
+<div class="block">JSON:API is very strict about the allowed link relations, the allowed <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are self, related,
+ describedBy, next, pre, first and last.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLinksAtResourceLevel()" class="member-name-link">isLinksAtResourceLevel</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.</div>
+<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel)
+ serialization.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLowerCasedTypeRendered()" class="member-name-link">isLowerCasedTypeRendered</a>()</code></div>
@@ -211,8 +211,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPageMetaAutomaticallyCreated()" class="member-name-link">isPageMetaAutomaticallyCreated</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
- for a paged model is created automatically.</div>
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
+ automatically.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPluralizedTypeRendered()" class="member-name-link">isPluralizedTypeRendered</a>()</code></div>
@@ -222,8 +222,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTypeForClassUsedForDeserialization()" class="member-name-link">isTypeForClassUsedForDeserialization</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
- is also used during deserialization.</div>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a> is
+ also used during deserialization.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)" class="member-name-link">withAffordancesRenderedAsLinkMeta</a><wbr>(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</code></div>
@@ -244,14 +244,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiCompliantLinks(boolean)" class="member-name-link">withJsonApiCompliantLinks</a><wbr>(boolean&nbsp;jsonApiCompliantLinks)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">JSON:API is very strict about the allowed link relations, the allowed
- <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
- self, related, describedBy, next, pre, first and last.</div>
+<div class="block">JSON:API is very strict about the allowed link relations, the allowed <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are self, related,
+ describedBy, next, pre, first and last.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiIdNotSerializedForValue(java.lang.String)" class="member-name-link">withJsonApiIdNotSerializedForValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonApiIdNotSerializedForValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.</div>
+<div class="block">If you want to create JSON for a POST request that does not contain the id
+ attribute.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withJsonApiObject(com.toedter.spring.hateoas.jsonapi.JsonApiObject)" class="member-name-link">withJsonApiObject</a><wbr>(<a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a>&nbsp;jsonApiObject)</code></div>
@@ -261,7 +261,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withLinksAtResourceLevel(boolean)" class="member-name-link">withLinksAtResourceLevel</a><wbr>(boolean&nbsp;linksAtResourceLevel)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.</div>
+<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel)
+ serialization.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withLinksNotUrlEncoded(java.util.Set)" class="member-name-link">withLinksNotUrlEncoded</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.springframework.hateoas.LinkRelation&gt;&nbsp;linksNotUrlEncoded)</code></div>
@@ -276,14 +277,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withMapperCustomizer(java.util.function.UnaryOperator)" class="member-name-link">withMapperCustomizer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;tools.jackson.databind.json.JsonMapper.Builder&gt;&nbsp;mapperCustomizer)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">A customizer function that allows modification of the <code>JsonMapper.Builder</code>
- used for JSON:API serialization and deserialization.</div>
+<div class="block">A customizer function that allows modification of the <code>JsonMapper.Builder</code> used for
+ JSON:API serialization and deserialization.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withPageMetaAutomaticallyCreated(boolean)" class="member-name-link">withPageMetaAutomaticallyCreated</a><wbr>(boolean&nbsp;pageMetaAutomaticallyCreated)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
- for a paged model is created automatically.</div>
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
+ automatically.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withPluralizedTypeRendered(boolean)" class="member-name-link">withPluralizedTypeRendered</a><wbr>(boolean&nbsp;pluralizedTypeRendered)</code></div>
@@ -294,14 +295,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTypeForClass(java.lang.Class,java.lang.String)" class="member-name-link">withTypeForClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a mapping for a given class to get the JSON:API resource object type
- when rendered.</div>
+<div class="block">Creates a mapping for a given class to get the JSON:API resource object type when
+ rendered.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTypeForClassUsedForDeserialization(boolean)" class="member-name-link">withTypeForClassUsedForDeserialization</a><wbr>(boolean&nbsp;typeForClassUsedForDeserialization)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
- is also used during deserialization.</div>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a> is
+ also used during deserialization.</div>
 </div>
 </div>
 </div>
@@ -353,10 +354,9 @@ loadScripts(document, 'script');</script>
 <h3>getJsonMapper</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">tools.jackson.databind.json.JsonMapper</span>&nbsp;<span class="element-name">getJsonMapper</span>()</div>
 <div class="block">Returns a configured <code>JsonMapper</code> instance.
- <p>
- This method creates a new <code>JsonMapper</code> with the customizations
- applied through the <code>mapperCustomizer</code>.
- </p></div>
+
+ <p>This method creates a new <code>JsonMapper</code> with the customizations applied through the
+ <code>mapperCustomizer</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A configured <code>JsonMapper</code> instance.</dd>
@@ -368,8 +368,8 @@ loadScripts(document, 'script');</script>
 <h3>withTypeForClass</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withTypeForClass</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
-<div class="block">Creates a mapping for a given class to get the JSON:API resource object type
- when rendered.</div>
+<div class="block">Creates a mapping for a given class to get the JSON:API resource object type when
+ rendered.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>clazz</code> - must not be null.</dd>
@@ -383,8 +383,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getTypeForClass(java.lang.Class)">
 <h3>getTypeForClass</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTypeForClass</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</span></div>
-<div class="block">Returns the JSON:API resource object type
- for a given class, when it was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+<div class="block">Returns the JSON:API resource object type for a given class, when it was added with
+ <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>clazz</code> - must not be null.</dd>
@@ -397,8 +397,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getClassForType(java.lang.String)">
 <h3>getClassForType</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name">getClassForType</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
-<div class="block">Returns the class
- for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
+<div class="block">Returns the class for a given type, when the class was added with <a href="#withTypeForClass(java.lang.Class,java.lang.String)"><code>withTypeForClass(Class, String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>type</code> - must not be null.</dd>
@@ -460,9 +459,9 @@ loadScripts(document, 'script');</script>
 <h3>withJsonApiObject</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApiObject</span><wbr><span class="parameters">(<a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a>&nbsp;jsonApiObject)</span></div>
 <div class="block">Indicates if the JSON:API object is rendered.
- <p>
- If set, each rendered JSON:API document will start with a JSON:API object like
- </p>
+
+ <p>If set, each rendered JSON:API document will start with a JSON:API object like
+
  <pre>
  {
    "jsonapi": {
@@ -477,6 +476,7 @@ loadScripts(document, 'script');</script>
    }
  }
  </pre>
+
  See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -491,9 +491,9 @@ loadScripts(document, 'script');</script>
 <h3>getJsonApiObject</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiObject.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiObject</a></span>&nbsp;<span class="element-name">getJsonApiObject</span>()</div>
 <div class="block">Indicates if the JSON:API object is rendered.
- <p>
- If set, each rendered JSON:API document will start with a JSON:API object like
- </p>
+
+ <p>If set, each rendered JSON:API document will start with a JSON:API object like
+
  <pre>
  {
    "jsonapi": {
@@ -508,6 +508,7 @@ loadScripts(document, 'script');</script>
    }
  }
  </pre>
+
  See also <a href="https://jsonapi.org/format/#document-jsonapi-object">JSON:API Object</a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -519,11 +520,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withPageMetaAutomaticallyCreated(boolean)">
 <h3>withPageMetaAutomaticallyCreated</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withPageMetaAutomaticallyCreated</span><wbr><span class="parameters">(boolean&nbsp;pageMetaAutomaticallyCreated)</span></div>
-<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
- for a paged model is created automatically.</div>
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
+ automatically.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pageMetaAutomaticallyCreated</code> - The new value of this configuration's pageMetaAutomaticallyCreated</dd>
+<dd><code>pageMetaAutomaticallyCreated</code> - The new value of this configuration's
+     pageMetaAutomaticallyCreated</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -533,8 +535,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isPageMetaAutomaticallyCreated()">
 <h3>isPageMetaAutomaticallyCreated</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isPageMetaAutomaticallyCreated</span>()</div>
-<div class="block">Indicates if page metadata (rendered as top level JSON:API meta)
- for a paged model is created automatically.</div>
+<div class="block">Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
+ automatically.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is true.</dd>
@@ -545,11 +547,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withTypeForClassUsedForDeserialization(boolean)">
 <h3>withTypeForClassUsedForDeserialization</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withTypeForClassUsedForDeserialization</span><wbr><span class="parameters">(boolean&nbsp;typeForClassUsedForDeserialization)</span></div>
-<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
- is also used during deserialization.</div>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a> is
+ also used during deserialization.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>typeForClassUsedForDeserialization</code> - The new value of this configuration's typeForClassUsedForDeserialization</dd>
+<dd><code>typeForClassUsedForDeserialization</code> - The new value of this configuration's
+     typeForClassUsedForDeserialization</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -559,8 +562,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isTypeForClassUsedForDeserialization()">
 <h3>isTypeForClassUsedForDeserialization</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isTypeForClassUsedForDeserialization</span>()</div>
-<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a>
- is also used during deserialization.</div>
+<div class="block">Indicates if the Java class to JSON:API mapping created with <a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration</code></a> is
+ also used during deserialization.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is false.</dd>
@@ -571,14 +574,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withAffordancesRenderedAsLinkMeta(com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration.AffordanceType)">
 <h3>withAffordancesRenderedAsLinkMeta</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withAffordancesRenderedAsLinkMeta</span><wbr><span class="parameters">(<a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a>&nbsp;affordancesRenderedAsLinkMeta)</span></div>
-<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
- This feature is experimental, please don't use it in production yet.
- The format of the affordances will probably change. Currently, only a proprietary
- format (SPRING_HATEOAS) derived from the internal affordance model
- and HAL-FORMS _templates are supported.</div>
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta. This feature is
+ experimental, please don't use it in production yet. The format of the affordances will
+ probably change. Currently, only a proprietary format (SPRING_HATEOAS) derived from
+ the internal affordance model and HAL-FORMS _templates are supported.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>affordancesRenderedAsLinkMeta</code> - The new value of this configuration's affordancesRenderedAsLinkMeta</dd>
+<dd><code>affordancesRenderedAsLinkMeta</code> - The new value of this configuration's
+     affordancesRenderedAsLinkMeta</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -588,14 +591,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getAffordancesRenderedAsLinkMeta()">
 <h3>getAffordancesRenderedAsLinkMeta</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration.AffordanceType</a></span>&nbsp;<span class="element-name">getAffordancesRenderedAsLinkMeta</span>()</div>
-<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta.
- This feature is experimental, please don't use it in production yet.
- The format of the affordances will probably change. Currently, only a proprietary
- format (SPRING_HATEOAS) derived from the internal affordance model
- and HAL-FORMS _templates are supported.</div>
+<div class="block">Indicates if Spring HATEOAS affordances are rendered as JSON:API link meta. This feature is
+ experimental, please don't use it in production yet. The format of the affordances will
+ probably change. Currently, only a proprietary format (SPRING_HATEOAS) derived from
+ the internal affordance model and HAL-FORMS _templates are supported.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The list of <a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration.AffordanceType</code></a>. The default is NONE, so no affordances will be rendered.</dd>
+<dd>The list of <a href="JsonApiConfiguration.AffordanceType.html" title="enum class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiConfiguration.AffordanceType</code></a>. The default is NONE, so no affordances will be
+     rendered.</dd>
 </dl>
 </section>
 </li>
@@ -604,9 +607,9 @@ loadScripts(document, 'script');</script>
 <h3>withEmptyAttributesObjectSerialized</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withEmptyAttributesObjectSerialized</span><wbr><span class="parameters">(boolean&nbsp;emptyAttributesObjectSerialized)</span></div>
 <div class="block">Indicates if empty attributes are serialized as empty object.
- <p>
- If set to true, empty attributes are serialized as
- </p>
+
+ <p>If set to true, empty attributes are serialized as
+
  <pre>
  {
    "data": {
@@ -617,9 +620,9 @@ loadScripts(document, 'script');</script>
    }
  }
  </pre>
- <p>
- If set to false, attributes are not serialized,
- </p>
+
+ <p>If set to false, attributes are not serialized,
+
  <pre>
  {
    "data": {
@@ -630,7 +633,8 @@ loadScripts(document, 'script');</script>
  </pre></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>emptyAttributesObjectSerialized</code> - The new value of this configuration's emptyAttributesObjectSerialized</dd>
+<dd><code>emptyAttributesObjectSerialized</code> - The new value of this configuration's
+     emptyAttributesObjectSerialized</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -641,9 +645,9 @@ loadScripts(document, 'script');</script>
 <h3>isEmptyAttributesObjectSerialized</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isEmptyAttributesObjectSerialized</span>()</div>
 <div class="block">Indicates if empty attributes are serialized as empty object.
- <p>
- If set to true, empty attributes are serialized as
- </p>
+
+ <p>If set to true, empty attributes are serialized as
+
  <pre>
  {
    "data": {
@@ -654,9 +658,9 @@ loadScripts(document, 'script');</script>
    }
  }
  </pre>
- <p>
- If set to false, attributes are not serialized,
- </p>
+
+ <p>If set to false, attributes are not serialized,
+
  <pre>
  {
    "data": {
@@ -675,9 +679,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withJsonApiIdNotSerializedForValue(java.lang.String)">
 <h3>withJsonApiIdNotSerializedForValue</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApiIdNotSerializedForValue</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonApiIdNotSerializedForValue)</span></div>
-<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.
- For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
- the serialized JSON would look like
+<div class="block">If you want to create JSON for a POST request that does not contain the id
+ attribute. For example, if you set this property to "doNotSerialize" and initialize a Movie
+ object with id = "doNotSerialize", the serialized JSON would look like
+
  <pre>
  {
    "data": {
@@ -690,7 +695,8 @@ loadScripts(document, 'script');</script>
  </pre></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonApiIdNotSerializedForValue</code> - The value of the JSON:API resource id that is ignored for serialization</dd>
+<dd><code>jsonApiIdNotSerializedForValue</code> - The value of the JSON:API resource id that is ignored for
+     serialization</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -700,9 +706,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getJsonApiIdNotSerializedForValue()">
 <h3>getJsonApiIdNotSerializedForValue</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getJsonApiIdNotSerializedForValue</span>()</div>
-<div class="block">If you want to create JSON for a POST request that does not contain the id attribute.
- For example, if you set this property to "doNotSerialize" and initialize a Movie object with id = "doNotSerialize",
- the serialized JSON would look like
+<div class="block">If you want to create JSON for a POST request that does not contain the id
+ attribute. For example, if you set this property to "doNotSerialize" and initialize a Movie
+ object with id = "doNotSerialize", the serialized JSON would look like
+
  <pre>
  {
    "data": {
@@ -723,16 +730,15 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withMapperCustomizer(java.util.function.UnaryOperator)">
 <h3>withMapperCustomizer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withMapperCustomizer</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;tools.jackson.databind.json.JsonMapper.Builder&gt;&nbsp;mapperCustomizer)</span></div>
-<div class="block">A customizer function that allows modification of the <code>JsonMapper.Builder</code>
- used for JSON:API serialization and deserialization.
- <p>
- This customizer is applied when calling <a href="#customize(tools.jackson.databind.json.JsonMapper.Builder)"><code>customize(JsonMapper.Builder)</code></a>
- and allows you to configure additional Jackson features, modules, or settings
- that are not directly exposed through this configuration class.
- </p>
- <p>
- Example usage:
- </p>
+<div class="block">A customizer function that allows modification of the <code>JsonMapper.Builder</code> used for
+ JSON:API serialization and deserialization.
+
+ <p>This customizer is applied when calling <a href="#customize(tools.jackson.databind.json.JsonMapper.Builder)"><code>customize(JsonMapper.Builder)</code></a> and allows
+ you to configure additional Jackson features, modules, or settings that are not directly
+ exposed through this configuration class.
+
+ <p>Example usage:
+
  <pre>
  JsonApiConfiguration config = new JsonApiConfiguration()
      .withMapperCustomizer(builder -&gt; builder
@@ -741,8 +747,8 @@ loadScripts(document, 'script');</script>
  </pre></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mapperCustomizer</code> - A unary operator that takes a <code>JsonMapper.Builder</code> and returns
-                         a modified <code>JsonMapper.Builder</code>. If null, no customization is applied.</dd>
+<dd><code>mapperCustomizer</code> - A unary operator that takes a <code>JsonMapper.Builder</code> and returns a
+     modified <code>JsonMapper.Builder</code>. If null, no customization is applied.</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -754,17 +760,18 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApi11LinkPropertiesRemovedFromLinkMeta</span><wbr><span class="parameters">(boolean&nbsp;jsonApi11LinkPropertiesRemovedFromLinkMeta)</span></div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
- Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
- are now serialized as direct link properties. For the previous version JSON:API v1.0
- they were serialized in the meta section.
- <p>
- The removal from the meta section is a breaking change that could harm existing clients.
- But to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and hreflang
- can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
- to false.</div>
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1
+ they are now serialized as direct link properties. For the previous version JSON:API v1.0 they
+ were serialized in the meta section.
+
+ <p>The removal from the meta section is a breaking change that could harm existing clients. But
+ to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and
+ hreflang can still be rendered also in the link's meta section. For backward-compatible
+ behavior, set this configuration to false.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>jsonApi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's jsonApi11LinkPropertiesRemovedFromLinkMeta</dd>
+<dd><code>jsonApi11LinkPropertiesRemovedFromLinkMeta</code> - The new value of this configuration's
+     jsonApi11LinkPropertiesRemovedFromLinkMeta</dd>
 <dt>Returns:</dt>
 <dd>a clone of this object, except with this updated property (returns <code>this</code> if an identical value is passed).</dd>
 </dl>
@@ -776,14 +783,14 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonApi11LinkPropertiesRemovedFromLinkMeta</span>()</div>
 <div class="block">JSON:API 1.1 introduced the possible link properties title, type, and hreflang (and some more),
  see <a href="https://jsonapi.org/format/#auto-id--link-objects">JSON:API link objects</a>.
- Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1 they
- are now serialized as direct link properties. For the previous version JSON:API v1.0
- they were serialized in the meta section.
- <p>
- The removal from the meta section is a breaking change that could harm existing clients.
- But to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and hreflang
- can still be rendered also in the link's meta section. For backward-compatible behavior, set this configuration
- to false.</div>
+ Since title, type and hreflang exist also in the Spring HATEOAS link model, for JSON:API 1.1
+ they are now serialized as direct link properties. For the previous version JSON:API v1.0 they
+ were serialized in the meta section.
+
+ <p>The removal from the meta section is a breaking change that could harm existing clients. But
+ to keep the format backward-compatible to previous versions of this JSON:API for Spring HATEOASrary, title, type, and
+ hreflang can still be rendered also in the link's meta section. For backward-compatible
+ behavior, set this configuration to false.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is true.</dd>
@@ -794,13 +801,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withJsonApiCompliantLinks(boolean)">
 <h3>withJsonApiCompliantLinks</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withJsonApiCompliantLinks</span><wbr><span class="parameters">(boolean&nbsp;jsonApiCompliantLinks)</span></div>
-<div class="block">JSON:API is very strict about the allowed link relations, the allowed
- <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
- self, related, describedBy, next, pre, first and last. The only allowed
- <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
- <p>
- If you set this configuration to false, Spring HATEOAS links that are not compliant
- with JSON:API would also be serialized.</div>
+<div class="block">JSON:API is very strict about the allowed link relations, the allowed <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are self, related,
+ describedBy, next, pre, first and last. The only allowed <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
+
+ <p>If you set this configuration to false, Spring HATEOAS links that are not
+ compliant with JSON:API would also be serialized.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>jsonApiCompliantLinks</code> - The new value of this configuration's jsonApiCompliantLinks</dd>
@@ -813,13 +818,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isJsonApiCompliantLinks()">
 <h3>isJsonApiCompliantLinks</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isJsonApiCompliantLinks</span>()</div>
-<div class="block">JSON:API is very strict about the allowed link relations, the allowed
- <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are
- self, related, describedBy, next, pre, first and last. The only allowed
- <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
- <p>
- If you set this configuration to false, Spring HATEOAS links that are not compliant
- with JSON:API would also be serialized.</div>
+<div class="block">JSON:API is very strict about the allowed link relations, the allowed <a href="https://jsonapi.org/format/#document-top-level">top-level links</a> are self, related,
+ describedBy, next, pre, first and last. The only allowed <a href="https://jsonapi.org/format/#document-resource-object-links">resource link</a> is self.
+
+ <p>If you set this configuration to false, Spring HATEOAS links that are not
+ compliant with JSON:API would also be serialized.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is true.</dd>
@@ -831,10 +834,10 @@ loadScripts(document, 'script');</script>
 <h3>withLinksNotUrlEncoded</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withLinksNotUrlEncoded</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.springframework.hateoas.LinkRelation&gt;&nbsp;linksNotUrlEncoded)</span></div>
 <div class="block">By default, JSON:API links are serialized as URL encoded.
- <p>
- If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
- This can be useful for instance to avoid double uri encoding when you pass the links to the model already
- URL encoded.</div>
+
+ <p>If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
+ This can be useful for instance to avoid double uri encoding when you pass the links to the
+ model already URL encoded.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>linksNotUrlEncoded</code> - The new value of this configuration's linksNotUrlEncoded</dd>
@@ -848,10 +851,10 @@ loadScripts(document, 'script');</script>
 <h3>getLinksNotUrlEncoded</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.springframework.hateoas.LinkRelation&gt;</span>&nbsp;<span class="element-name">getLinksNotUrlEncoded</span>()</div>
 <div class="block">By default, JSON:API links are serialized as URL encoded.
- <p>
- If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
- This can be useful for instance to avoid double uri encoding when you pass the links to the model already
- URL encoded.</div>
+
+ <p>If you set this configuration, Spring HATEOAS links with set relations won't be URL encoded.
+ This can be useful for instance to avoid double uri encoding when you pass the links to the
+ model already URL encoded.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The default is an empty set.</dd>
@@ -862,19 +865,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withLinksAtResourceLevel(boolean)">
 <h3>withLinksAtResourceLevel</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a></span>&nbsp;<span class="element-name">withLinksAtResourceLevel</span><wbr><span class="parameters">(boolean&nbsp;linksAtResourceLevel)</span></div>
-<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.
- <p>
- According to the JSON:API specification, links can be placed at:
+<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel)
+ serialization.
+
+ <p>According to the JSON:API specification, links can be placed at:
+
  <ul>
-   <li>Document level (top-level) - the default behavior</li>
-   <li>Resource level (within the resource object in the "data" section)</li>
+   <li>Document level (top-level) - the default behavior
+   <li>Resource level (within the resource object in the "data" section)
  </ul>
- <p>
- When set to true, links from EntityModel are placed at the resource level
- (inside the resource object). When set to false, links are placed at the
- document level (top-level).
- <p>
- Note: This configuration only affects single resource serialization (EntityModel).
+
+ <p>When set to true, links from EntityModel are placed at the resource level (inside
+ the resource object). When set to false, links are placed at the document level
+ (top-level).
+
+ <p>Note: This configuration only affects single resource serialization (EntityModel).
  Collection resources and relationships are not affected by this setting.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -888,19 +893,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isLinksAtResourceLevel()">
 <h3>isLinksAtResourceLevel</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isLinksAtResourceLevel</span>()</div>
-<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization.
- <p>
- According to the JSON:API specification, links can be placed at:
+<div class="block">Controls where links are placed in JSON:API documents for single resource (EntityModel)
+ serialization.
+
+ <p>According to the JSON:API specification, links can be placed at:
+
  <ul>
-   <li>Document level (top-level) - the default behavior</li>
-   <li>Resource level (within the resource object in the "data" section)</li>
+   <li>Document level (top-level) - the default behavior
+   <li>Resource level (within the resource object in the "data" section)
  </ul>
- <p>
- When set to true, links from EntityModel are placed at the resource level
- (inside the resource object). When set to false, links are placed at the
- document level (top-level).
- <p>
- Note: This configuration only affects single resource serialization (EntityModel).
+
+ <p>When set to true, links from EntityModel are placed at the resource level (inside
+ the resource object). When set to false, links are placed at the document level
+ (top-level).
+
+ <p>Note: This configuration only affects single resource serialization (EntityModel).
  Collection resources and relationships are not affected by this setting.</div>
 <dl class="notes">
 <dt>Returns:</dt>

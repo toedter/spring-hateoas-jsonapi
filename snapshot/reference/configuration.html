@@ -154,18 +154,15 @@ when using Tomcat: <code>server.tomcat.relaxed-query-chars= [,]</code>. When thi
 <pre class="highlight"><code class="language-java" data-lang="java">@Bean
 JsonApiConfiguration jsonApiConfiguration() {
   return new JsonApiConfiguration()
-    .withJsonApiObject(new JsonApiObject(true))
-    .withPluralizedTypeRendered(false)
-    .withLowerCasedTypeRendered(false)
-    .withTypeForClass(
-      MovieRepresentationModelWithoutJsonApiType.class,
-      "my-movies"
-    )
-    .withTypeForClassUsedForDeserialization(true)
-    .withEmptyAttributesObjectSerialized(false)
-    .withJsonApiIdNotSerializedForValue("-1")
-    .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
-    .withJsonApiCompliantLinks(false);
+      .withJsonApiObject(new JsonApiObject(true))
+      .withPluralizedTypeRendered(false)
+      .withLowerCasedTypeRendered(false)
+      .withTypeForClass(MovieRepresentationModelWithoutJsonApiType.class, "my-movies")
+      .withTypeForClassUsedForDeserialization(true)
+      .withEmptyAttributesObjectSerialized(false)
+      .withJsonApiIdNotSerializedForValue("-1")
+      .withJsonApi11LinkPropertiesRemovedFromLinkMeta(false)
+      .withJsonApiCompliantLinks(false);
 }
 </code></pre>
 </div>
@@ -363,7 +360,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 12:28:56 UTC
+Last updated 2025-12-24 12:48:30 UTC
 </div>
 </div>
 </div>

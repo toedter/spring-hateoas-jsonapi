@@ -91,8 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">JsonApiError</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Class to build a single JSON:API compliant error.
- This error can be added to <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
+<div class="block">Class to build a single JSON:API compliant error. This error can be added to <a href="JsonApiErrors.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiErrors</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -148,8 +147,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLinks()" class="member-name-link">getLinks</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets a links object containing the following members:
- about: a link that leads to further details about this particular occurrence of the problem.</div>
+<div class="block">Gets a links object containing the following members: about: a link that leads to
+ further details about this particular occurrence of the problem.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMeta()" class="member-name-link">getMeta</a>()</code></div>
@@ -159,10 +158,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSource()" class="member-name-link">getSource</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets an object containing references to the source of the error, optionally including
- any of the following members:
- pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
- [e.g.</div>
+<div class="block">Gets an object containing references to the source of the error, optionally including any of
+ the following members: pointer: a JSON Pointer [RFC6901] to the associated entity in the
+ request document [e.g.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatus()" class="member-name-link">getStatus</a>()</code></div>
@@ -172,8 +170,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTitle()" class="member-name-link">getTitle</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change
- from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change from occurrence to
+ occurrence of the problem, except for purposes of localization.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
@@ -189,22 +187,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withCode(java.lang.String)" class="member-name-link">withCode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets an application-specific error code, expressed as a string value.</div>
+<div class="block">Gets an application-specific error code, expressed as a string value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDetail(java.lang.String)" class="member-name-link">withDetail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets a human-readable explanation specific to this occurrence of the problem.</div>
+<div class="block">Gets a human-readable explanation specific to this occurrence of the problem.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withId(java.lang.String)" class="member-name-link">withId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
+<div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withMeta(java.util.Map)" class="member-name-link">withMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;meta)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets a meta object containing non-standard meta-information about the error.</div>
+<div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withSourceParameter(java.lang.String)" class="member-name-link">withSourceParameter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sourceParameter)</code></div>
@@ -219,13 +217,13 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withStatus(java.lang.String)" class="member-name-link">withStatus</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the HTTP status code applicable to this problem, expressed as a string value.</div>
+<div class="block">Gets the HTTP status code applicable to this problem, expressed as a string value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTitle(java.lang.String)" class="member-name-link">withTitle</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets a short, human-readable summary of the problem that SHOULD NOT change
- from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change from occurrence to
+ occurrence of the problem, except for purposes of localization.</div>
 </div>
 </div>
 </div>
@@ -267,8 +265,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sourcePointer</code> - a JSON Pointer [RFC6901] to the associated entity in the request document
-                      [e.g. "/data" for a primary data object, or "/data/attributes/title"
-                      for a specific attribute].</dd>
+     [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific
+     attribute].</dd>
 <dt>Returns:</dt>
 <dd>will never be null.</dd>
 </dl>
@@ -348,7 +346,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Sets a unique identifier for this
+     particular occurrence of the problem.</dd>
 </dl>
 </section>
 </li>
@@ -356,7 +355,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withId(java.lang.String)">
 <h3>withId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
-<div class="block">Sets a unique identifier for this particular occurrence of the problem.</div>
+<div class="block">Gets a unique identifier for this particular occurrence of the problem.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - the unique identifier of the error.</dd>
@@ -369,8 +368,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getLinks()">
 <h3>getLinks</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getLinks</span>()</div>
-<div class="block">Gets a links object containing the following members:
- about: a link that leads to further details about this particular occurrence of the problem.</div>
+<div class="block">Gets a links object containing the following members: about: a link that leads to
+ further details about this particular occurrence of the problem.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>will never be null.</dd>
@@ -384,7 +383,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the HTTP status code applicable to this problem, expressed as a string value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Adds the HTTP status code applicable to
+     this problem, expressed as a string value.</dd>
 </dl>
 </section>
 </li>
@@ -392,7 +392,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withStatus(java.lang.String)">
 <h3>withStatus</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withStatus</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status)</span></div>
-<div class="block">Adds the HTTP status code applicable to this problem, expressed as a string value.</div>
+<div class="block">Gets the HTTP status code applicable to this problem, expressed as a string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>status</code> - the HTTP status code.</dd>
@@ -408,7 +408,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets an application-specific error code, expressed as a string value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Sets an application-specific error code,
+     expressed as a string value.</dd>
 </dl>
 </section>
 </li>
@@ -416,7 +417,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withCode(java.lang.String)">
 <h3>withCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withCode</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
-<div class="block">Sets an application-specific error code, expressed as a string value.</div>
+<div class="block">Gets an application-specific error code, expressed as a string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>code</code> - code of the error.</dd>
@@ -429,11 +430,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getTitle()">
 <h3>getTitle</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTitle</span>()</div>
-<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change
- from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change from occurrence to
+ occurrence of the problem, except for purposes of localization.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Sets a short, human-readable summary of the
+     problem that SHOULD NOT change from occurrence to occurrence of the problem, except for
+     purposes of localization.</dd>
 </dl>
 </section>
 </li>
@@ -441,8 +444,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withTitle(java.lang.String)">
 <h3>withTitle</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withTitle</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</span></div>
-<div class="block">Sets a short, human-readable summary of the problem that SHOULD NOT change
- from occurrence to occurrence of the problem, except for purposes of localization.</div>
+<div class="block">Gets a short, human-readable summary of the problem that SHOULD NOT change from occurrence to
+ occurrence of the problem, except for purposes of localization.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>title</code> - title of the error.</dd>
@@ -455,11 +458,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getDetail()">
 <h3>getDetail</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getDetail</span>()</div>
-<div class="block">Gets a human-readable explanation specific to this occurrence of the problem.
- Like title, the value can be localized.</div>
+<div class="block">Gets a human-readable explanation specific to this occurrence of the problem. Like title, the
+ value can be localized.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Sets a human-readable explanation specific
+     to this occurrence of the problem. Like title, the value can be localized.</dd>
 </dl>
 </section>
 </li>
@@ -467,8 +471,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withDetail(java.lang.String)">
 <h3>withDetail</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withDetail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</span></div>
-<div class="block">Sets a human-readable explanation specific to this occurrence of the problem.
- Like title, the value can be localized.</div>
+<div class="block">Gets a human-readable explanation specific to this occurrence of the problem. Like title, the
+ value can be localized.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>detail</code> - error detail.</dd>
@@ -481,11 +485,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getSource()">
 <h3>getSource</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getSource</span>()</div>
-<div class="block">Gets an object containing references to the source of the error, optionally including
- any of the following members:
- pointer: a JSON Pointer [RFC6901] to the associated entity in the request document
- [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
- parameter: a string indicating which URI query parameter caused the error.</div>
+<div class="block">Gets an object containing references to the source of the error, optionally including any of
+ the following members: pointer: a JSON Pointer [RFC6901] to the associated entity in the
+ request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a
+ specific attribute]. parameter: a string indicating which URI query parameter caused the error.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>can be null.</dd>
@@ -499,7 +502,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>will never be null.</dd>
+<dd>will never be null. -- WITHER -- Sets a meta object containing non-standard
+     meta-information about the error.</dd>
 </dl>
 </section>
 </li>
@@ -507,7 +511,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withMeta(java.util.Map)">
 <h3>withMeta</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiError.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiError</a></span>&nbsp;<span class="element-name">withMeta</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;meta)</span></div>
-<div class="block">Sets a meta object containing non-standard meta-information about the error.</div>
+<div class="block">Gets a meta object containing non-standard meta-information about the error.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>meta</code> - meta object added to the error.</dd>
