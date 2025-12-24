@@ -27,10 +27,34 @@ import lombok.Value;
 import lombok.With;
 
 /**
- * Class to build a single {@literal JSON:API} compliant error. This error can be added to {@link
- * JsonApiErrors}.
+ * Represents a single JSON:API error object compliant with the JSON:API specification.
+ *
+ * <p>This class provides an immutable representation of an error that can be included in {@link
+ * JsonApiErrors} collections. Each error object can contain:
+ *
+ * <ul>
+ *   <li>A unique identifier for this specific error occurrence
+ *   <li>Links to additional information (e.g., {@code about} link)
+ *   <li>HTTP status code applicable to the error
+ *   <li>Application-specific error code
+ *   <li>Human-readable summary (title)
+ *   <li>Detailed explanation of the error
+ *   <li>Source information (pointer or parameter causing the error)
+ *   <li>Additional meta information
+ * </ul>
+ *
+ * <p>The class uses Lombok's {@code @With} annotation for convenient error building:
+ *
+ * <pre>{@code
+ * JsonApiError error = JsonApiError.create()
+ *   .withStatus("404")
+ *   .withTitle("Resource not found")
+ *   .withDetail("The requested movie does not exist");
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see JsonApiErrors
+ * @see <a href="https://jsonapi.org/format/#errors">JSON:API Error Objects</a>
  */
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)

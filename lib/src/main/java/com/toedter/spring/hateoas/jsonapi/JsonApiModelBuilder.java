@@ -37,10 +37,37 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.util.Assert;
 
 /**
- * Builder API to create complex JSON:API representations exposing a JSON:API idiomatic API. It
- * includes building JSON:API {@literal relationships} and {@literal included}.
+ * Fluent builder API for creating complex JSON:API representations with relationships and included
+ * resources.
+ *
+ * <p>This builder provides a type-safe, idiomatic way to construct JSON:API documents including:
+ *
+ * <ul>
+ *   <li>Primary data (single resources or collections)
+ *   <li>Relationships between resources
+ *   <li>Included resources for compound documents
+ *   <li>Links at document and resource levels
+ *   <li>Meta information
+ *   <li>Sparse fieldsets for attribute filtering
+ *   <li>Pagination metadata
+ * </ul>
+ *
+ * <p>The builder ensures compliance with the JSON:API specification and integrates seamlessly with
+ * Spring HATEOAS representation models.
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * JsonApiModel jsonApiModel = JsonApiModelBuilder.jsonApiModel()
+ *   .model(EntityModel.of(movie))
+ *   .relationship("directors", directors)
+ *   .included(directors)
+ *   .build();
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see JsonApiModel
+ * @see #jsonApiModel()
  */
 @Slf4j
 public class JsonApiModelBuilder {
@@ -65,13 +92,20 @@ public class JsonApiModelBuilder {
   private JsonApiModelBuilder() {}
 
   /**
-   * Sets the {@link RepresentationModel} as the base for the {@literal RepresentationModel} to be
-   * built.
+   * Sets the {@link RepresentationModel} as the primary data for the JSON:API document to be built.
    *
-   * <p>NOTE: If the model is already set, an {@literal IllegalStateException} will be thrown.
+   * <p>The model can be an {@link org.springframework.hateoas.EntityModel}, {@link
+   * org.springframework.hateoas.CollectionModel}, or {@link
+   * org.springframework.hateoas.PagedModel}. This forms the main content of the JSON:API {@code
+   * data} field.
    *
-   * @param model must not be {@literal null}.
-   * @return will never be {@literal null}.
+   * <p><b>Note:</b> If a model is already set, an {@link IllegalStateException} will be thrown to
+   * prevent accidental overwriting.
+   *
+   * @param model the representation model to use as primary data; must not be {@literal null}
+   * @return this builder instance for method chaining; will never be {@literal null}
+   * @throws IllegalArgumentException if {@code model} is {@literal null}
+   * @throws IllegalStateException if a model has already been set on this builder
    */
   public JsonApiModelBuilder model(RepresentationModel<?> model) {
     Assert.notNull(model, "RepresentationModel must not be null!");
@@ -88,26 +122,33 @@ public class JsonApiModelBuilder {
   }
 
   /**
-   * Creates an {@link EntityModel} from the {@literal object} as the base for the {@literal
-   * RepresentationModel} to be built.
+   * Creates an {@link EntityModel} from the given object as the primary data for the JSON:API
+   * document.
    *
-   * <p>NOTE: If the model is already set, an {@literal IllegalStateException} will be thrown.
+   * <p>This is a convenience method that automatically wraps the object in an {@link EntityModel}
+   * before setting it as the model. Equivalent to calling {@code model(EntityModel.of(object))}.
    *
-   * @param object must not be {@literal null}.
-   * @return will never be {@literal null}.
+   * <p><b>Note:</b> If a model is already set, an {@link IllegalStateException} will be thrown.
+   *
+   * @param object the object to wrap in an {@link EntityModel}; must not be {@literal null}
+   * @return this builder instance for method chaining; will never be {@literal null}
+   * @throws IllegalArgumentException if {@code object} is {@literal null}
+   * @throws IllegalStateException if a model has already been set on this builder
    */
   public JsonApiModelBuilder model(Object object) {
     return this.model(EntityModel.of(object));
   }
 
   /**
-   * Adds a {@link Link} to the {@link RepresentationModel} to be built.
+   * Adds a {@link Link} to the top level of the JSON:API document.
    *
-   * <p>NOTE: This adds it to the top level. If you need a link inside the model you added with
-   * {@link #model(RepresentationModel)} method, add it directly to the model.
+   * <p>This link will be rendered in the document-level {@code links} object, not inside the
+   * resource object itself. If you need to add a link to the resource, add it directly to the model
+   * passed to {@link #model(RepresentationModel)}.
    *
-   * @param link must not be {@literal null}.
-   * @return will never be {@literal null}.
+   * @param link the link to add; must not be {@literal null}
+   * @return this builder instance for method chaining; will never be {@literal null}
+   * @throws IllegalArgumentException if {@code link} is {@literal null}
    */
   public JsonApiModelBuilder link(Link link) {
     this.links = links.and(link);
@@ -115,22 +156,26 @@ public class JsonApiModelBuilder {
   }
 
   /**
-   * Adds a {@link Link} with the given href and {@link LinkRelation} to the {@link
-   * RepresentationModel} to be built.
+   * Adds a {@link Link} with the given href and {@link LinkRelation} to the top level of the
+   * JSON:API document.
    *
-   * @param href must not be {@literal null}.
-   * @param relation must not be {@literal null}.
-   * @return will never be {@literal null}.
+   * <p>This is a convenience method equivalent to {@code link(Link.of(href, relation))}.
+   *
+   * @param href the link href; must not be {@literal null}
+   * @param relation the link relation; must not be {@literal null}
+   * @return this builder instance for method chaining; will never be {@literal null}
+   * @throws IllegalArgumentException if {@code href} or {@code relation} is {@literal null}
    */
   public JsonApiModelBuilder link(String href, LinkRelation relation) {
     return link(Link.of(href, relation));
   }
 
   /**
-   * Adds the given {@link Link}s to the {@link RepresentationModel} to be built.
+   * Adds multiple {@link Link}s to the top level of the JSON:API document.
    *
-   * @param links must not be {@literal null}.
-   * @return will never be {@literal null}.
+   * @param links the links to add; must not be {@literal null}
+   * @return this builder instance for method chaining; will never be {@literal null}
+   * @throws IllegalArgumentException if {@code links} is {@literal null}
    */
   public JsonApiModelBuilder links(Iterable<Link> links) {
     this.links = this.links.and(links);

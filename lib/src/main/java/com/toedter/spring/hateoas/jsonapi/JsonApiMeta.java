@@ -24,9 +24,47 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Specifies if this field/method should be serialized to and deserialized from JSON:API meta.
+ * Marks a field or method for inclusion in the JSON:API {@code meta} object.
+ *
+ * <p>Fields or setter/getter methods annotated with {@code @JsonApiMeta} will be serialized to and
+ * deserialized from the {@code meta} member of a JSON:API resource object. The {@code meta} object
+ * can contain any non-standard information about a resource.
+ *
+ * <p>During serialization, the annotated field value becomes a property in the {@code meta} object.
+ * During deserialization, values from the {@code meta} object are mapped back to the annotated
+ * fields.
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * public class Movie {
+ *   private String title;
+ *
+ *   @JsonApiMeta
+ *   private String copyright;
+ *
+ *   @JsonApiMeta
+ *   private int viewCount;
+ * }
+ *
+ * // Results in JSON:API:
+ * {
+ *   "data": {
+ *     "type": "movies",
+ *     "id": "1",
+ *     "attributes": {
+ *       "title": "The Matrix"
+ *     },
+ *     "meta": {
+ *       "copyright": "Warner Bros",
+ *       "viewCount": 1000000
+ *     }
+ *   }
+ * }
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see <a href="https://jsonapi.org/format/#document-meta">JSON:API Meta Information</a>
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)

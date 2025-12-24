@@ -18,14 +18,46 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import org.springframework.http.MediaType;
 
-/** Provides the {@literal JSON:API} media type {@code application/vnd.api+json}. */
+/**
+ * Provides constants for the JSON:API media type.
+ *
+ * <p>This utility class defines the official JSON:API media type {@code application/vnd.api+json}
+ * as specified in the JSON:API specification. These constants can be used for content negotiation,
+ * request/response type declarations, and Spring MVC mapping annotations.
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * @GetMapping(produces = MediaTypes.JSON_API_VALUE)
+ * public EntityModel<Movie> getMovie() {
+ *   // ...
+ * }
+ *
+ * @RequestMapping(consumes = MediaTypes.JSON_API_VALUE)
+ * public void createMovie(@RequestBody Movie movie) {
+ *   // ...
+ * }
+ * }</pre>
+ *
+ * @author Kai Toedter
+ * @see <a href="https://jsonapi.org/format/#content-negotiation">JSON:API Content Negotiation</a>
+ */
 public class MediaTypes {
 
   private MediaTypes() {}
 
-  /** A String equivalent of the JSON:API media type */
+  /**
+   * String representation of the JSON:API media type: {@value}.
+   *
+   * <p>Use this constant with annotations like {@code @RequestMapping}, {@code @GetMapping}, etc.
+   */
   public static final String JSON_API_VALUE = "application/vnd.api+json";
 
-  /** Public constant media type for {@code application/vnd.api+json}. */
+  /**
+   * {@link MediaType} constant for JSON:API: {@code application/vnd.api+json}.
+   *
+   * <p>Use this constant for programmatic media type handling and content negotiation with Spring's
+   * {@link MediaType} API.
+   */
   public static final MediaType JSON_API = MediaType.valueOf(JSON_API_VALUE);
 }

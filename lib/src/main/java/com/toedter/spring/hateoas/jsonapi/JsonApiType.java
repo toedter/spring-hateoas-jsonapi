@@ -24,9 +24,39 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Specifies the JSON:API type of a resource object.
+ * Marks a field or method as the source of the JSON:API resource type.
+ *
+ * <p>This annotation can be applied to fields or getter methods to explicitly specify which
+ * property should be used as the {@code type} member of a JSON:API resource object. The value of
+ * the annotated field or method return value will be serialized as the resource's {@code type}.
+ *
+ * <p>If this annotation is not present, the library will derive the type from:
+ *
+ * <ol>
+ *   <li>The {@link JsonApiTypeForClass} annotation on the class
+ *   <li>The class name (optionally pluralized and/or lowercased based on {@link
+ *       JsonApiConfiguration})
+ * </ol>
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * public class Movie {
+ *   @JsonApiType
+ *   private String resourceType = "films";
+ *   // or on getter:
+ *   @JsonApiType
+ *   public String getResourceType() {
+ *     return "films";
+ *   }
+ * }
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see JsonApiId
+ * @see JsonApiTypeForClass
+ * @see <a href="https://jsonapi.org/format/#document-resource-object-identification">JSON:API
+ *     Resource Identification</a>
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)

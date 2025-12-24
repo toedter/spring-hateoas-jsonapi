@@ -31,7 +31,34 @@ import org.springframework.util.Assert;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
- * JSON:API specific configuration.
+ * Configuration class for customizing JSON:API serialization and deserialization behavior.
+ *
+ * <p>This class provides a fluent API for configuring various aspects of JSON:API processing,
+ * including:
+ *
+ * <ul>
+ *   <li>Type naming conventions (pluralization, case conversion)
+ *   <li>JSON:API object rendering (version, extensions, profiles)
+ *   <li>Page metadata handling for paged models
+ *   <li>Custom type mappings for Java classes
+ *   <li>Link rendering options and affordances
+ *   <li>Jackson mapper customization
+ * </ul>
+ *
+ * <p>All configuration methods return a new instance with the updated setting, following an
+ * immutable builder pattern.
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * @Bean
+ * public JsonApiConfiguration jsonApiConfiguration() {
+ *   return JsonApiConfiguration.create()
+ *     .withPluralizedTypeRendered(true)
+ *     .withLowerCasedTypeRendered(true)
+ *     .withJsonApiObject(new JsonApiObject(true));
+ * }
+ * }</pre>
  *
  * @author Kai Toedter
  */

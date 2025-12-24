@@ -24,9 +24,37 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Specifies the JSON:API id of a resource object.
+ * Marks a field or method as the source of the JSON:API resource identifier.
+ *
+ * <p>This annotation can be applied to fields or getter methods to explicitly specify which
+ * property should be used as the {@code id} member of a JSON:API resource object. The annotated
+ * field or method return value will be serialized as the resource's {@code id}.
+ *
+ * <p>If this annotation is not present, the library will fall back to:
+ *
+ * <ol>
+ *   <li>JPA {@code @Id} annotation (if present)
+ *   <li>A field named "id"
+ * </ol>
+ *
+ * <p><b>Example usage:</b>
+ *
+ * <pre>{@code
+ * public class Movie {
+ *   @JsonApiId
+ *   private String movieIdentifier;
+ *   // or on getter:
+ *   @JsonApiId
+ *   public String getMovieIdentifier() {
+ *     return movieIdentifier;
+ *   }
+ * }
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see JsonApiType
+ * @see <a href="https://jsonapi.org/format/#document-resource-object-identification">JSON:API
+ *     Resource Identification</a>
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)

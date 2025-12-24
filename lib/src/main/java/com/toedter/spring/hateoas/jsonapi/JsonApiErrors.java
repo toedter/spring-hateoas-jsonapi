@@ -22,37 +22,64 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Class to build {@literal JSON:API} compliant error messages.
+ * Collection of JSON:API error objects for building compliant error responses.
+ *
+ * <p>This class represents the top-level {@code errors} member of a JSON:API document, containing
+ * one or more {@link JsonApiError} objects. According to the JSON:API specification, a document
+ * must contain either {@code data}, {@code errors}, or {@code meta} at the top level, and {@code
+ * errors} must not coexist with {@code data}.
+ *
+ * <p><b>Usage example:</b>
+ *
+ * <pre>{@code
+ * JsonApiErrors errors = JsonApiErrors.create()
+ *   .withError(JsonApiError.create()
+ *     .withStatus("404")
+ *     .withTitle("Resource not found"))
+ *   .withError(JsonApiError.create()
+ *     .withStatus("403")
+ *     .withTitle("Forbidden"));
+ * }</pre>
  *
  * @author Kai Toedter
+ * @see JsonApiError
+ * @see <a href="https://jsonapi.org/format/#errors">JSON:API Error Objects</a>
  */
 @ToString
 public class JsonApiErrors {
 
   /**
-   * Gets list of {@link JsonApiError} objects.
+   * Gets the list of {@link JsonApiError} objects contained in this errors collection.
    *
-   * @return list of {@link JsonApiError} objects.
+   * @return an unmodifiable view of the error list; will never be {@literal null}
    */
   @Getter private final List<JsonApiError> errors = new ArrayList<>();
 
-  /** Creates empty {@link JsonApiErrors}. */
+  /**
+   * Creates an empty {@link JsonApiErrors} collection.
+   *
+   * <p>Use {@link #withError(JsonApiError)} to add errors to the collection.
+   */
   public JsonApiErrors() {}
 
   /**
-   * Creates {@literal JsonApiErrors} with initial {@link JsonApiError}.
+   * Creates a {@link JsonApiErrors} collection with an initial error.
    *
-   * @param jsonApiError the initial {@link JsonApiError}
+   * @param jsonApiError the initial error to add; must not be {@literal null}
+   * @throws NullPointerException if {@code jsonApiError} is {@literal null}
    */
   public JsonApiErrors(JsonApiError jsonApiError) {
     errors.add(jsonApiError);
   }
 
   /**
-   * Adds an {@link JsonApiError} to the list.
+   * Adds an error to this collection.
    *
-   * @param jsonApiError the {@link JsonApiError} to be added.
-   * @return this {@link JsonApiErrors} object.
+   * <p>This method returns {@code this} to support fluent method chaining.
+   *
+   * @param jsonApiError the error to add; must not be {@literal null}
+   * @return this {@link JsonApiErrors} instance for method chaining
+   * @throws NullPointerException if {@code jsonApiError} is {@literal null}
    */
   public JsonApiErrors withError(JsonApiError jsonApiError) {
     errors.add(jsonApiError);
@@ -60,9 +87,11 @@ public class JsonApiErrors {
   }
 
   /**
-   * Creates empty {@link JsonApiErrors}.
+   * Creates a new empty {@link JsonApiErrors} collection.
    *
-   * @return A new {@link JsonApiErrors} object.
+   * <p>This factory method is provided for consistency with other builder patterns in the library.
+   *
+   * @return a new empty {@link JsonApiErrors} instance
    */
   public static JsonApiErrors create() {
     return new JsonApiErrors();
