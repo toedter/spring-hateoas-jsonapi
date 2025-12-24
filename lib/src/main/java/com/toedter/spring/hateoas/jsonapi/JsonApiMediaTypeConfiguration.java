@@ -18,7 +18,7 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import java.util.Collections;
 import java.util.List;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ import tools.jackson.databind.json.JsonMapper;
 @Configuration
 public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformation {
 
-  private final ObjectProvider<JsonApiConfiguration> configuration;
+  @Nullable private final ObjectProvider<JsonApiConfiguration> configuration;
   private final AutowireCapableBeanFactory beanFactory;
 
   /**
@@ -45,7 +45,7 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
    * @param beanFactory the Spring bean factory
    */
   public JsonApiMediaTypeConfiguration(
-      final ObjectProvider<JsonApiConfiguration> configuration,
+      @Nullable final ObjectProvider<JsonApiConfiguration> configuration,
       final AutowireCapableBeanFactory beanFactory) {
     this.configuration = configuration;
     this.beanFactory = beanFactory;
@@ -56,7 +56,6 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
    * @see org.springframework.hateoas.config.HypermediaMappingInformation#getMediaTypes()
    */
   @Override
-  @NonNull
   public List<MediaType> getMediaTypes() {
     return Collections.singletonList(MediaTypes.JSON_API);
   }
