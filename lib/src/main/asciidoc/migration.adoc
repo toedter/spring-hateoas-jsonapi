@@ -8,10 +8,11 @@ Version 3.0.0 is the first release based on Spring Boot 4 and Jackson 3. The las
 This section provides guidance for migrating from version 2.x to 3.0.0.
 
 WARNING: Version 3.0.0 **removes all deprecated APIs** from version 2.x.x. Code using deprecated APIs will **not compile**.
-See the <<_removed_deprecated_apis,Removed Deprecated APIs>> section for migration instructions.
+See the <<removed-deprecated-apis,Removed Deprecated APIs>> section for migration instructions.
 
 === Breaking Changes
 
+[[removed-deprecated-apis]]
 ==== Removed Deprecated APIs
 
 Version 3.0.0 **removes** all deprecated APIs from version 2.x.x and also changes the mapper customization. You **must** migrate to the new APIs:
@@ -58,6 +59,7 @@ Jackson 3 uses a new package namespace:
 * **Custom Serializers/Deserializers**: Must extend Jackson 3 base classes from `tools.jackson.*` packages
 * **Module Registration**: Modules must be compatible with Jackson 3
 
+[[jsonapi-version-rendering]]
 ===== JSON:API Version Rendering
 
 **IMPORTANT**: The deprecated `withJsonApiVersionRendered()` API has been **removed** in version 3.0.0.

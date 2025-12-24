@@ -26,7 +26,7 @@ https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` is 
 To allow any link, set this configuration to false. | true
 | JsonApi11LinkPropertiesRemovedFromLinkMeta | Whether Spring HATEOAS complex links should be serialized/deserialized in a backward-compatible (with version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type, and hreflang will be serialized only as top-level link
 properties. These link properties were introduced in JSON:API 1.1,
-see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to `false`. See also <<links>>.
+see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to `false`. See also <<links-configuration>>.
 Note that using the default setting, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (relative to version 1.x.x of this library which only supports JSON:API 1.0),
 as clients might expect properties like title in the meta section. | true
@@ -48,6 +48,7 @@ Here is an example of how you would implement a JSON:API configuration:
 include::{test-dir}/JsonApiWebMvcWithConfigIntegrationTest.java[tags=jsonApiConfig]
 ----
 
+[[link-placement-configuration-example]]
 == Link Placement Configuration Example
 
 To configure links to appear at the resource level instead of the document level:
