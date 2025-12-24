@@ -3,5 +3,5 @@
  *
  * @see <a href="https://jsonapi.org/">https://jsonapi.org/</a>
  */
-@org.springframework.lang.NonNullApi
+@org.jspecify.annotations.NullMarked
 package com.toedter.spring.hateoas.jsonapi;
