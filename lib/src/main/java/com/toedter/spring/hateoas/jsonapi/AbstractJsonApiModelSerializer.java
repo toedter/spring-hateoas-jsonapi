@@ -36,7 +36,7 @@ import tools.jackson.databind.json.JsonMapper;
 abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
     extends AbstractJsonApiSerializer<T> {
 
-  private final transient JsonApiConfiguration jsonApiConfiguration;
+  private final JsonApiConfiguration jsonApiConfiguration;
   private final JsonMapper jsonMapper;
 
   private static class JsonApiDocumentWithoutSerializedData extends JsonApiDocument {

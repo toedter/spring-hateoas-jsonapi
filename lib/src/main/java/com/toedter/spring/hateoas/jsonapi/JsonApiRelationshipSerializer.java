@@ -24,10 +24,10 @@ import tools.jackson.databind.SerializationContext;
 
 class JsonApiRelationshipSerializer extends AbstractJsonApiSerializer<JsonApiRelationship> {
 
-  private final transient JsonApiConfiguration jsonApiConfiguration;
+  private final JsonApiConfiguration jsonApiConfiguration;
 
   public JsonApiRelationshipSerializer(JsonApiConfiguration jsonApiConfiguration) {
-    super(JsonApiRelationship.class, false);
+    super(JsonApiRelationship.class);
     this.jsonApiConfiguration = jsonApiConfiguration;
   }
 

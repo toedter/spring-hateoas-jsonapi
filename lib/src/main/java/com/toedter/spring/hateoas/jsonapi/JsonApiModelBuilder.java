@@ -17,7 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -433,11 +433,11 @@ public class JsonApiModelBuilder {
       relationshipLinks = otherLinks;
     }
 
-    if (selfLink != null && selfLink.trim().length() != 0) {
+    if (selfLink != null && !selfLink.trim().isEmpty()) {
       relationshipLinks = relationshipLinks.and(Link.of(selfLink));
     }
 
-    if (relatedLink != null && relatedLink.trim().length() != 0) {
+    if (relatedLink != null && !relatedLink.trim().isEmpty()) {
       relationshipLinks = relationshipLinks.and(Link.of(relatedLink).withRel(RELATED));
     }
 
@@ -619,12 +619,11 @@ public class JsonApiModelBuilder {
     String paramStart = "?";
 
     try {
-      URL url = new URL(linkBase);
-      String query = url.getQuery();
+      String query = URI.create(linkBase).toURL().getQuery();
       if (query != null) {
         paramStart = "&";
       }
-    } catch (MalformedURLException e) {
+    } catch (MalformedURLException | IllegalArgumentException e) {
       throw new IllegalArgumentException("linkBase parameter must be a valid URL.");
     }
 

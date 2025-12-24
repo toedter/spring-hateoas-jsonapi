@@ -42,7 +42,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
 
   protected final JsonMapper jsonMapper;
   protected final JavaType contentType;
-  protected final transient JsonApiConfiguration jsonApiConfiguration;
+  protected final JsonApiConfiguration jsonApiConfiguration;
 
   private final JsonMapper plainJsonMapper;
 
@@ -166,7 +166,7 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
     if (wrapInEntityModel) {
       Links links = Links.NONE;
       Object linksData = data.get("links");
-      if (linksData != null && linksData instanceof Map) {
+      if (linksData instanceof Map) {
         // Use JsonApiLinksDeserializer to properly deserialize links
         JsonApiLinksDeserializer linksDeserializer = new JsonApiLinksDeserializer();
         links = linksDeserializer.deserialize((Map<String, Object>) linksData);
