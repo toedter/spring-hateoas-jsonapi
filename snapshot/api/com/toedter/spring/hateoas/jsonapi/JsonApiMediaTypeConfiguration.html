@@ -109,7 +109,7 @@ implements org.springframework.hateoas.config.HypermediaMappingInformation</span
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.config.AutowireCapableBeanFactory)" class="member-name-link">JsonApiMediaTypeConfiguration</a><wbr>(org.springframework.beans.factory.ObjectProvider&lt;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&gt;&nbsp;configuration,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.config.AutowireCapableBeanFactory)" class="member-name-link">JsonApiMediaTypeConfiguration</a><wbr>(@Nullable org.springframework.beans.factory.ObjectProvider&lt;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&gt;&nbsp;configuration,
  org.springframework.beans.factory.config.AutowireCapableBeanFactory&nbsp;beanFactory)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new <a href="JsonApiMediaTypeConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiMediaTypeConfiguration</code></a>.</div>
@@ -131,7 +131,7 @@ implements org.springframework.hateoas.config.HypermediaMappingInformation</span
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>tools.jackson.databind.json.JsonMapper.Builder</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#configureJsonMapper(tools.jackson.databind.json.JsonMapper.Builder)" class="member-name-link">configureJsonMapper</a><wbr>(tools.jackson.databind.json.JsonMapper.Builder&nbsp;builder)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;org.springframework.http.MediaType&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;org.springframework.http.MediaType&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMediaTypes()" class="member-name-link">getMediaTypes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -157,7 +157,7 @@ implements org.springframework.hateoas.config.HypermediaMappingInformation</span
 <li>
 <section class="detail" id="&lt;init&gt;(org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.config.AutowireCapableBeanFactory)">
 <h3>JsonApiMediaTypeConfiguration</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JsonApiMediaTypeConfiguration</span><wbr><span class="parameters">(org.springframework.beans.factory.ObjectProvider&lt;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&gt;&nbsp;configuration,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JsonApiMediaTypeConfiguration</span><wbr><span class="parameters">(@Nullable org.springframework.beans.factory.ObjectProvider&lt;<a href="JsonApiConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi">JsonApiConfiguration</a>&gt;&nbsp;configuration,
  org.springframework.beans.factory.config.AutowireCapableBeanFactory&nbsp;beanFactory)</span></div>
 <div class="block">Creates a new <a href="JsonApiMediaTypeConfiguration.html" title="class in com.toedter.spring.hateoas.jsonapi"><code>JsonApiMediaTypeConfiguration</code></a>.</div>
 <dl class="notes">
@@ -178,7 +178,7 @@ implements org.springframework.hateoas.config.HypermediaMappingInformation</span
 <li>
 <section class="detail" id="getMediaTypes()">
 <h3>getMediaTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.springframework.http.MediaType&gt;</span>&nbsp;<span class="element-name">getMediaTypes</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.springframework.http.MediaType&gt;</span>&nbsp;<span class="element-name">getMediaTypes</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getMediaTypes</code>&nbsp;in interface&nbsp;<code>org.springframework.hateoas.config.HypermediaMappingInformation</code></dd>
