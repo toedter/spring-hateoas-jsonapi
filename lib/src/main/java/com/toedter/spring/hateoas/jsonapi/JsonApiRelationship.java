@@ -61,7 +61,7 @@ class JsonApiRelationship {
   @Nullable
   private final Map<String, Object> meta;
 
-  @JsonIgnore private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
+  @JsonIgnore @Nullable private Map<Object, Map<String, Object>> metaForResourceIdentifiers;
 
   @JsonIgnore private final boolean dataExplicitlySet;
 

@@ -31,15 +31,15 @@ import org.springframework.hateoas.RepresentationModel;
 @EqualsAndHashCode(callSuper = true)
 class JsonApiModel extends RepresentationModel<JsonApiModel> {
 
-  private final RepresentationModel<?> entity;
+  @Nullable private final RepresentationModel<?> entity;
 
-  @JsonIgnore @Getter private final Map<String, JsonApiRelationship> relationships;
+  @JsonIgnore @Getter @Nullable private final Map<String, JsonApiRelationship> relationships;
 
-  @JsonIgnore @Getter private final List<RepresentationModel<?>> includedEntities;
+  @JsonIgnore @Getter @Nullable private final List<RepresentationModel<?>> includedEntities;
 
-  @JsonIgnore @Getter private final Map<String, Object> metaData;
+  @JsonIgnore @Getter @Nullable private final Map<String, Object> metaData;
 
-  @JsonIgnore @Getter private final HashMap<String, Collection<String>> sparseFieldsets;
+  @JsonIgnore @Getter @Nullable private final HashMap<String, Collection<String>> sparseFieldsets;
 
   JsonApiModel(
       @Nullable RepresentationModel<?> entity,

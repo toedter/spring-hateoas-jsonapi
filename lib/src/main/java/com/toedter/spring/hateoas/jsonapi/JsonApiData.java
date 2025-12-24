@@ -57,17 +57,17 @@ import tools.jackson.databind.json.JsonMapper;
 @SuppressWarnings("squid:S3011")
 class JsonApiData {
 
-  String id;
-  String type;
-  Map<String, Object> attributes;
+  @Nullable String id;
+  @Nullable String type;
+  @Nullable Map<String, Object> attributes;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  Object relationships;
+  @Nullable Object relationships;
 
-  Links links;
+  @Nullable Links links;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  Map<String, Object> meta;
+  @Nullable Map<String, Object> meta;
 
   @JsonCreator
   public JsonApiData(

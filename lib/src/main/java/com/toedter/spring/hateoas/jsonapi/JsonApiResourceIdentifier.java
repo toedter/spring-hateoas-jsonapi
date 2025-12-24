@@ -58,7 +58,7 @@ class JsonApiResourceIdentifier {
 
   String id;
   String type;
-  Map<String, Object> meta;
+  @Nullable Map<String, Object> meta;
 
   @JsonCreator
   public JsonApiResourceIdentifier(
@@ -71,7 +71,7 @@ class JsonApiResourceIdentifier {
   static class ResourceField {
 
     final String name;
-    final String value;
+    @Nullable final String value;
 
     public ResourceField(String name, @Nullable String value) {
       this.name = name;

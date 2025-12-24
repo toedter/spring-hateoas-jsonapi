@@ -126,7 +126,7 @@ public class JsonApiConfiguration {
    * @param jsonApiObject The new value of this configuration's jsonApiObject
    * @return The default is {@literal false}.
    */
-  @With @Getter private final JsonApiObject jsonApiObject;
+  @With @Getter @Nullable private final JsonApiObject jsonApiObject;
 
   /**
    * Indicates if page metadata (rendered as top level JSON:API meta) for a paged model is created
@@ -214,7 +214,7 @@ public class JsonApiConfiguration {
    *     serialization
    * @return The default is {@literal null}.
    */
-  @With @Getter private final String jsonApiIdNotSerializedForValue;
+  @With @Getter @Nullable private final String jsonApiIdNotSerializedForValue;
 
   /**
    * A customizer function that allows modification of the {@link JsonMapper.Builder} used for

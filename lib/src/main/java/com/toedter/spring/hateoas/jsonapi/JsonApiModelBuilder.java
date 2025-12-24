@@ -86,7 +86,7 @@ public class JsonApiModelBuilder {
   private final List<RepresentationModel<?>> included = new ArrayList<>();
   private final Map<String, Object> meta = new LinkedHashMap<>();
 
-  private RepresentationModel<?> model;
+  @Nullable private RepresentationModel<?> model;
   private Links links = Links.NONE;
 
   private JsonApiModelBuilder() {}
