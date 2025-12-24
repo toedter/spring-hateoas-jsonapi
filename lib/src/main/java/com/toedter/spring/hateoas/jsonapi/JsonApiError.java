@@ -220,7 +220,9 @@ public class JsonApiError {
   }
 
   /**
-   * @return Creates an empty {@link JsonApiError}.
+   * Creates an empty {@link JsonApiError}.
+   *
+   * @return an empty {@link JsonApiError}.
    */
   public static JsonApiError create() {
     return EMPTY;

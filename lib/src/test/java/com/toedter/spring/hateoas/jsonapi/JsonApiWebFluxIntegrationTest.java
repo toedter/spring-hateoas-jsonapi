@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
+
 import com.toedter.spring.hateoas.jsonapi.support.WebFluxMovieController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +40,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.config.EnableWebFlux;
-
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 
 /**
  * @author Kai Toedter

@@ -18,7 +18,6 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import java.util.Collections;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Configuration;
@@ -33,13 +32,26 @@ import tools.jackson.databind.json.JsonMapper;
  *
  * @author Kai Toedter
  */
-@RequiredArgsConstructor
 @Configuration
 public class JsonApiMediaTypeConfiguration
   implements HypermediaMappingInformation {
 
   private final ObjectProvider<JsonApiConfiguration> configuration;
   private final AutowireCapableBeanFactory beanFactory;
+
+  /**
+   * Creates a new {@link JsonApiMediaTypeConfiguration}.
+   *
+   * @param configuration the {@link JsonApiConfiguration} object provider
+   * @param beanFactory   the Spring bean factory
+   */
+  public JsonApiMediaTypeConfiguration(
+    final ObjectProvider<JsonApiConfiguration> configuration,
+    final AutowireCapableBeanFactory beanFactory
+  ) {
+    this.configuration = configuration;
+    this.beanFactory = beanFactory;
+  }
 
   /*
    * (non-Javadoc)

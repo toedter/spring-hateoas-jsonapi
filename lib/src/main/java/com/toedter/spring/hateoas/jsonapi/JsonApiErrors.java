@@ -19,7 +19,6 @@ package com.toedter.spring.hateoas.jsonapi;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -28,7 +27,6 @@ import lombok.ToString;
  * @author Kai Toedter
  */
 @ToString
-@NoArgsConstructor
 public class JsonApiErrors {
 
   /**
@@ -38,6 +36,11 @@ public class JsonApiErrors {
    */
   @Getter
   private final List<JsonApiError> errors = new ArrayList<>();
+
+  /**
+   * Creates empty {@link JsonApiErrors}.
+   */
+  public JsonApiErrors() {}
 
   /**
    * Creates {@literal JsonApiErrors} with initial {@link JsonApiError}.

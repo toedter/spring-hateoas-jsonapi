@@ -37,6 +37,8 @@ import java.lang.annotation.Target;
 public @interface JsonApiRelationships {
   /**
    * The name of the relationship.
+   *
+   * @return the name of the relationship
    */
   String value();
 }

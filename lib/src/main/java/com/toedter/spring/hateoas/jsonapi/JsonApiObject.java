@@ -23,7 +23,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 /**
@@ -33,32 +32,49 @@ import org.springframework.lang.Nullable;
 @Getter(onMethod_ = { @JsonProperty })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@NoArgsConstructor(force = true)
 public class JsonApiObject {
 
   /**
+   * Gets the supported JSON:API version.
+   *
    * @return the supported JSON:API version ("1.1") or null
    */
   @Nullable
   private final String version;
 
   /**
+   * Gets the list of JSON:API extensions.
+   *
    * @return list of JSON:API extensions or null
    */
   @Nullable
   private final List<URI> ext;
 
   /**
+   * Gets the list of JSON:API profiles.
+   *
    * @return list of JSON:API profiles or null
    */
   @Nullable
   private final List<URI> profile;
 
   /**
+   * Gets the JSON:API object meta.
+   *
    * @return the JSON:API object meta or null
    */
   @Nullable
   private final Map<String, Object> meta;
+
+  /**
+   * Creates an empty JSON:API object for deserialization.
+   */
+  public JsonApiObject() {
+    this.version = null;
+    this.ext = null;
+    this.profile = null;
+    this.meta = null;
+  }
 
   /**
    * Creates a JSON:API object compliant to the
