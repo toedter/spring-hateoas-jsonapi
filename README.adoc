@@ -7,16 +7,16 @@ image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", l
 
 = JSON:API for Spring HATEOAS
 
-This is an implementation of the media type `application/vnd.api+json` (JSON:API)
-to be integrated with Spring HATEOAS. The goal is to use the existing Spring HATEOAS
-representation models to serialize/deserialize them according to the JSON:API spec (see https://jsonapi.org/)
+This is an implementation of the `application/vnd.api+json` (JSON:API) media type
+for Spring HATEOAS. The goal is to use existing Spring HATEOAS
+representation models to serialize and deserialize them according to the JSON:API specification (see https://jsonapi.org/).
 
-While an advanced usage example is part of this project,
-you find more examples at https://github.com/toedter/spring-hateoas-jsonapi-examples.
+While an advanced usage example is included in this project,
+you can find more examples at https://github.com/toedter/spring-hateoas-jsonapi-examples.
 
 == Documentation
 
-Here you find the documentation for the releases and the current snapshot:
+The following table contains links to the documentation for each release and the current snapshot:
 |===
 | 3.0.0 | https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/api/[API Documentation]
 | 3.0.1-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
@@ -25,7 +25,9 @@ Here you find the documentation for the releases and the current snapshot:
 |===
 
 == Version Matrix
-If you want to add the library to your app, the first step is to determine the version of the library you should use.
+
+Before adding this library to your application, you need to determine which version to use.
+The following table shows the compatibility matrix:
 
 |===
 | JSON:API for Spring HATEOAS | Java | JSON:API | Spring HATEOAS | Spring Boot | Spring Framework | Jackson
@@ -38,9 +40,9 @@ NOTE: Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. T
 
 WARNING: Version 3.0.0 **removes all deprecated APIs** from version 2.x.x. Specifically, `withJsonApiVersionRendered()` and `withObjectMapperCustomizer()` have been removed and replaced with `withJsonApiObject()` and `withMapperCustomizer()` respectively. See the https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/#migration-3-0-0[Migration Guide] for details.
 
-== Integration with your Backends
+== Integration with Your Backend
 
-To enable the JSON:API media type you just need to add this module as a dependency to your project.
+To enable the JSON:API media type, simply add this module as a dependency to your project.
 
 Gradle:
 [source, groovy]
@@ -55,17 +57,16 @@ Maven:
 </dependency>
 
 The latest published snapshot version is `3.0.1-SNAPSHOT`.
-If you want to try it out,
-please make sure to add `https://central.sonatype.com/repository/maven-snapshots/`
-as a repository to your Maven or Gradle configuration.
+To use it, add `https://central.sonatype.com/repository/maven-snapshots/`
+as a repository in your Maven or Gradle configuration.
 
 == Running the Example
 
-* Make sure Java 17 JDK (or later) is installed
-* Clone this Git repository and cd into `spring-hateoas-jsonapi`
-* Invoke `./gradlew bootrun` (just `gradlew` on Windows)
+* Ensure Java 17 JDK (or later) is installed
+* Clone this Git repository and navigate to the `spring-hateoas-jsonapi` directory
+* Run `./gradlew bootrun` (or `gradlew bootrun` on Windows)
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++]
- in your Web browser. The (pretty-printed) response is:
+ in your web browser. The response (pretty-printed) will be:
 
 [source,json]
 {
@@ -125,7 +126,7 @@ as a repository to your Maven or Gradle configuration.
 }
 
 * Open link:++http://localhost:8080/api/movies/1000[http://localhost:8080/api/movies/1000]
- in your Web browser to get a JSON:API compliant error response:
+ in your web browser to receive a JSON:API compliant error response:
 
 [source,json]
 {
