@@ -5,7 +5,7 @@
 :example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
 
 [[server-side-support]]
-= Server Side support
+= Server-Side Support
 
 [[representation-models]]
 == Representation Models
@@ -24,11 +24,11 @@ An `EntityModel.of(new Movie("1", "Star Wars"))` is then rendered as
 include::{test-resources-dir}/movieEntityModel.json[]
 
 In JSON:API, the `id` field must be of type `String`.
-But in your model you can use any Class and `toString()` is used for conversion.
-So, if the `id` attribute of `Movie` would be of type `long`,
-the rendered JSON:API would be the same.
-The JSON:API `type` is automatically generated of the pluralized, lower case, simple class name.
-This is best practice, since then most likely the type matches the URL (end)
+However, in your model you can use any class, and `toString()` is used for conversion.
+So, if the `id` attribute of `Movie` were of type `long`,
+the rendered JSON:API output would be the same.
+The JSON:API `type` is automatically generated from the pluralized, lowercase, simple class name.
+This is a best practice, as the type will most likely match the URL (endpoint)
 of the corresponding REST collection resource.
 
 NOTE: You can configure if you want to use non-pluralized class names, see <<configuration>>
@@ -36,7 +36,7 @@ NOTE: You can configure if you want to use non-pluralized class names, see <<con
 [[links]]
 == Links
 
-If Spring HATEOAS links only contain a href, the simple JSON:API link is used to render JSON:API links.
+If Spring HATEOAS links contain only an href, the simple JSON:API link format is used for rendering.
 Here is an example of a simple self link:
 
 [source, json]
@@ -44,15 +44,15 @@ Here is an example of a simple self link:
 include::{test-resources-dir}/movieEntityModelWithLinks.json[]
 ----
 
-A complex Link object of Spring HATEOAS can have optional properties like name, type, hreflang, title and others.
-In previous versions of this library, those properties were serialized as JSON:API link meta, e.g.
+A complex Link object in Spring HATEOAS can have optional properties like name, type, hreflang, title, and others.
+In previous versions of this library, those properties were serialized as JSON:API link metadata, e.g.
 
 [source, json]
 ----
 include::{test-resources-dir}/movieEntityModelWithComplexLinkAndJsonapi10Meta.json[]
 ----
 
-JSON:API 1.1 now defines the optional link properties type, title and hreflang, see link:++https://jsonapi.org/format/#auto-id--link-objects++[JSON:API Link Objects].
+JSON:API 1.1 now defines the optional link properties type, title, and hreflang, see link:++https://jsonapi.org/format/#auto-id--link-objects++[JSON:API Link Objects].
 The default rendering of a complex link is now
 
 [source, json]
@@ -60,12 +60,12 @@ The default rendering of a complex link is now
 include::{test-resources-dir}/movieEntityModelWithComplexLink.json[]
 ----
 
-As you see, the properties title, type, and hreflang appear now only as top-level link properties.
-So the new format reflects the new JSON:API 1.1 link structure,
-but is _not_ backward compatible to version 1.x.x of this library.
+As you can see, the properties title, type, and hreflang now appear only as top-level link properties.
+The new format reflects the JSON:API 1.1 link structure,
+but is _not_ backward compatible with version 1.x.x of this library.
 
-If you want to stay backward-compatible and render the link properties type, title and hreflang
-both as top-level link properties _and_ in the meta section, you can configure this behaviour,
+If you want to maintain backward compatibility and render the link properties type, title, and hreflang
+both as top-level link properties _and_ in the meta section, you can configure this behavior
 (see <<links-configuration>>). The rendered result would then look like:
 
 [source, json]
@@ -140,10 +140,10 @@ Both approaches are valid according to the JSON:API specification. Choose the ap
 [[annotations]]
 == Annotations
 
-The goal of this implementation is to automate the mapping from/to JSON:API
-as convenient as possible.
+The goal of this implementation is to automate the mapping to/from JSON:API
+as conveniently as possible.
 
-There are four new annotations provided by this project:
+This project provides four annotations:
 
 * `@JsonApiId` to mark a JSON:API `id`
 * `@JsonApiType` to mark a field or method to provide a JSON:API `type`
@@ -192,7 +192,7 @@ include::{test-resources-dir}/movieEntityModelWithThreeAnnotations.json[]
 == JSON:API Builder
 
 If you want to use JSON:API `relationships` or `included` data, you can use the
-`JsonApiModelBuilder`. The following example shows how to create a JSON::API representation model using the `JsonApiModelBuilder`
+`JsonApiModelBuilder`. The following example shows how to create a JSON:API representation model using the `JsonApiModelBuilder`:
 [source, java]
 ----
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
@@ -224,7 +224,7 @@ The representation model will be rendered as
 include::{test-resources-dir}/movieJsonApiModelWithRelationship.json[]
 ----
 
-If you want the `directors` relationship always being rendered as an array,
+If you want the `directors` relationship to always be rendered as an array,
 even if it is empty or contains only a single data element,
 you can build it like:
 
@@ -240,7 +240,7 @@ include::{test-resources-dir}/movieWithSingleCollectionRelationship.json[]
 ----
 
 You can also pass a Java `Collection` as data for a relationship.
-A collection will always be rendered as JSON array,
+A collection will always be rendered as a JSON array,
 even when it is empty or contains a single element.
 So,
 
@@ -285,7 +285,7 @@ This model will be rendered as
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 ----
 
-=== Explicit Configuration of empty Relationships
+=== Explicit Configuration of Empty Relationships
 
 The JSON:API specification allows empty to-one relationships and empty to-many relationships
 (see link:https://jsonapi.org/format/#document-resource-object-linkage[JSON:API specification]).
@@ -294,7 +294,7 @@ For more explicit control over the serialization of empty relationships, you can
 `relationshipWithNullData()` to create an empty to-one relationship (serialized as `"data": null`)
 or `relationshipWithEmptyData()` to create an empty to-many relationship (serialized as `"data": []`).
 
-An explicit empty to-one relationship can be added like
+An explicit empty to-one relationship can be added like:
 
 [source, java, indent=0]
 ----
@@ -303,7 +303,7 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=explicit-null-r
 
 This will produce `"data": null` in the relationship object, representing an empty to-one relationship.
 
-An explicit empty to-many relationship can be added like
+An explicit empty to-many relationship can be added like:
 
 [source, java, indent=0]
 ----
@@ -312,21 +312,21 @@ include::{test-dir}/JsonApiModelBuilderIntegrationTest.java[tags=explicit-empty-
 
 This will produce `"data": []` in the relationship object, representing an empty to-many relationship.
 
-These methods are particularly useful when you want to replace existing relationship data with null or empty array,
-or when you need to explicitly indicate the type of empty relationship (to-one vs to-many) for your JSON:API consumers.
-The methods also preserve any existing links and meta information in the relationship.
+These methods are particularly useful when you want to replace existing relationship data with null or an empty array,
+or when you need to explicitly indicate the type of empty relationship (to-one vs. to-many) for your JSON:API consumers.
+These methods also preserve any existing links and meta information in the relationship.
 
 [[inclusion]]
-== Inclusion of related Resources
+== Inclusion of Related Resources
 
 There is no direct support for automatically including related resources,
-but a REST controller could provide an optional request parameter like
+but a REST controller can provide an optional request parameter like:
 
 [source, java]
 @RequestParam(value = "include", required = false) String[] include
 
-Then, within the controller implementation, this parameter could be interpreted,
-and the builder could be used for the inclusion, like
+Then, within the controller implementation, this parameter can be interpreted,
+and the builder can be used for the inclusion, like:
 
 [source, java, indent=0]
 ----
@@ -357,8 +357,8 @@ include::{test-resources-dir}/movieWithAllMetaLevels.json[]
 == Sparse Fieldsets
 
 Sparse fieldsets are supported for attributes within `data` and `included`. You can add sparse fieldsets
-by using the `JsonApiBuilder`. The following example illustrates the build, assuming a director would have
-the attributes `name` and `born`, and a movie would have the attributes `title` and `rating`.
+using the `JsonApiBuilder`. The following example illustrates the build, assuming a director has
+the attributes `name` and `born`, and a movie has the attributes `title` and `rating`.
 
 [source, java, indent=0]
 ----
@@ -373,7 +373,7 @@ of a movie would be serialized:
 include::{test-resources-dir}/directorWithSparseFieldsetOnIncluded.json[]
 ----
 
-In a REST controller, a method with HTTP-mapping could provide an optional request attribute for each sparse fieldset
+In a REST controller, a method with HTTP-mapping can provide an optional request parameter for each sparse fieldset
 that should be applied to a specific JSON:API type, like:
 
 [source, java]
@@ -398,21 +398,21 @@ if (fieldsDirectors = null || Arrays.asList(fieldsDirectors).contains("movies"))
 [[affordances]]
 == Spring HATEOAS Affordances
 
-Spring HATEOAS provides a generic, media type independent API for
+Spring HATEOAS provides a generic, media type-independent API for
 {spring-hateoas-version}/reference/html/#server.affordances[affordances].
-Within the JSON:API spec, there is nothing equivalent, but JSON:API allows that links have additional meta
-information. This library provide a new *experimental* configuration to render Spring HATEOAS affordances as
+In the JSON:API specification, there is no equivalent concept, but JSON:API allows links to have additional meta
+information. This library provides a new *experimental* configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
-that can be serialized by Spring HATEOAS out of the box.
+which can be serialized by Spring HATEOAS out of the box.
 
 The following example shows the usage of Spring HATEOAS affordances.
-First you have to enable this experimental feature in the configuration, like
+First, you need to enable this experimental feature in the configuration, like:
 
 [source, Java]
 new JsonApiConfiguration().withAffordancesRenderedAsLinkMeta(
    JsonApiConfiguration.AffordanceType.SPRING_HATEOAS);
 
-Then you could add an affordance (for creating a movie) to a Spring HATEOAS link like
+Then you can add an affordance (for creating a movie) to a Spring HATEOAS link like:
 
 [source, java, , indent=0]
 ----
@@ -465,7 +465,7 @@ The rendered result of the self link would then be
 
 IMPORTANT: This feature is experimental. The JSON structure of the provided affordances might have breaking changes in upcoming releases.
 
-NOTE: If you want to get property information like required, you have to include a dependency to `javax.validation:validation-api` and annotate the required fields with `@NotNull`
+NOTE: To obtain property information such as required fields, you must include a dependency on `javax.validation:validation-api` and annotate the required fields with `@NotNull`.
 
 [[Creating]]
 == Creating Resources with HTTP POST
@@ -480,7 +480,7 @@ include::{test-resources-dir}/postMovie.json[]
 
 will be deserialized to an `EntityModel<Movie>` automatically.
 You can also create REST resources that contain `JSON:API relationships`.
-You just have to annotate the underlying domain model class, with `JsonApiRelationships(<relationship name>)`
+You simply need to annotate the underlying domain model class with `JsonApiRelationships(<relationship name>)`.
 
 For example, a `POST` with the body:
 
@@ -490,8 +490,8 @@ include::{test-resources-dir}/postMovieWithTwoRelationships.json[]
 ----
 
 will be deserialized to an `EntityModel<Movie>` with a filled list of directors,
-where ONLY the id attribute of each director is set.
-The REST controller then has to interpret those relationships and bind the
+where only the id attribute of each director is set.
+The REST controller must then interpret those relationships and bind the
 real director objects to the movie.
 
 Here is an example of a class using the annotation:
@@ -516,7 +516,7 @@ the content will NOT be serialized automatically to `JSON:API relationships`. Th
 please use the `JsonApiModelBuilder` to decide, which relationships and included objects you want to return.
 
 [[server-deserialization]]
-== Deserialization of JSON:API types ==
+== Deserialization of JSON:API Types
 
 If entities contain an explicit `@JsonApiType` field annotation,
 those fields are also filled during deserialization.
@@ -550,11 +550,11 @@ the second `DirectorWithType` object with id = '2' and directorType = "director-
 NOTE: Currently, only `List` and `Set` are supported collection classes.
 
 [[collection-model-deserialization]]
-== Deserialization of PagedModels ==
+== Deserialization of PagedModels
 
 While a server implementation of HTTP POST and PATCH takes single resources as input,
-it is sometimes handy to be able to deserialize collection models and paged models. This is
-useful if a service consumes results of other services that produce JSON:API responses.
+it is sometimes useful to be able to deserialize collection models and paged models. This is
+helpful when a service consumes results from other services that produce JSON:API responses.
 
 Here is an example of a serialized `PagedModel`.
 
@@ -567,7 +567,7 @@ If you deserialize the above JSON to a `PagedModel<EntityModel<Movie>>>`: The pa
 The same mechanism would work also for `CollectionModel<EntityModel<Movie>>>`.
 
 [[uuid]]
-== UUID Deserialization ==
+== UUID Deserialization
 
 UUIDs (`java.util.UUID`) are supported natively for deserialization.
 So a JSON like
@@ -585,11 +585,11 @@ include::{test-dir}/support/MovieWithUUID.java[tags=movie-with-uuid]
 ----
 
 [[polymorphy]]
-== Polymorphic Deserialization ==
+== Polymorphic Deserialization
 
-The easiest way for polymorphic deserialization is to use the JsonApiConfiguration for
-assigning a JSON:API type to a Java class and then also switching on, that the mappings should
-also be used for deserialization, e.g.
+The easiest way for polymorphic deserialization is to use the JsonApiConfiguration to
+assign a JSON:API type to a Java class and then also enable the mappings to be
+used for deserialization, e.g.
 
 [source, Java]
 @Bean
@@ -610,10 +610,10 @@ with JSON like
 include::{test-resources-dir}/postMovieWithCustomType.json[]
 ----
 
-would be deserialized to a Java class of type `MovieSubclass`. Be aware that this mechanism overrides
+would be deserialized to a Java class of type `MovieSubclass`. Note that this mechanism overrides
 the default deserialization to an object of the class given by the REST controller method's signature.
-The deserializer checks if the mapped Java type is assignable to the originally required Java type,
-otherwise an `IllegalArgumentException` is thrown.
+The deserializer checks if the mapped Java type is assignable to the originally required Java type;
+otherwise, an `IllegalArgumentException` is thrown.
 
 The same mechanism can also be used to deserialize polymorphic relationships.
 
@@ -643,11 +643,11 @@ would create 2 directors in the `directors` list, both empty except for the `id`
 But the first director would be an instance of class `Director`,
 while the second director would be an instance of class `DirectorWithEmail`.
 
-=== Jackson Annotations ===
+=== Jackson Annotations
 
 If the above mechanism does not fit your needs,
 you can also configure polymorphic deserialization
-on a 'per class' base, using some Jackson annotations. The following example illustrates this:
+on a per-class basis using Jackson annotations. The following example illustrates this:
 
 Imagine a controller method like
 [source, java]
@@ -682,10 +682,10 @@ NOTE: @-Members were introduced in JSON:API version 1.1, see https://jsonapi.org
 From the JSON:API 1.1 spec:
 ...an @-Member that occurs in an attributes object is not an attribute.
 
-Important: The above mechanism is also used for serialization, so you could set
-the JSON:API `type` attribute (within data) to a more generic type, but still serialize the
+Important: The above mechanism is also used for serialization, so you can set
+the JSON:API `type` attribute (within data) to a more generic type while still serializing the
 `@type` attribute to indicate the specialized type.
-So the JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
+The JSON of the serialized Java object (of class `MovieWithRating`) would then look like:
 
 [source, json]
 ----
@@ -725,8 +725,8 @@ include::{test-resources-dir}/polymorphicRelationships.json[]
 would be deserialized to a `PolymorphicRelationEntity` with 2 relationships,
 the first one of Class `SuperEChild`, the second one of class `SuperEChild2`.
 
-NOTE: Right now there is the restriction, that the type attribute of both
-`SuperEChild` and `SuperEChild2` has to be `type`. E.g. `_type` would not work.
+NOTE: Currently, there is a restriction that the type attribute of both
+`SuperEChild` and `SuperEChild2` must be `type`. For example, `_type` would not work.
 
 [[error-handling]]
 == Error Handling
@@ -749,8 +749,8 @@ include::{test-resources-dir}/errorsMvcExample.json[]
 
 === More Generic Error Handling
 
-If you want to implement a more generic error handling that converts exceptions
-to JSON:API error responses, you could implement a `@ControllerAdvice` like:
+If you want to implement more generic error handling that converts exceptions
+to JSON:API error responses, you can implement a `@ControllerAdvice` like:
 
 [source, java, indent=0]
 ----
@@ -774,7 +774,7 @@ This would then convert exceptions to JSON:API error responses like:
 }
 ----
 
-Furthermore, you could implement a `JsonApiErrorsException` like:
+Furthermore, you can implement a `JsonApiErrorsException` like:
 
 [source, java, indent=0]
 ----
@@ -788,7 +788,7 @@ and provide `CommonErrors` like:
 include::{example-code-dir}/exception/CommonErrors.java[tags=common-errors]
 ----
 
-Now you could throw a `JsonApiErrorsException` like:
+Now you can throw a `JsonApiErrorsException` like:
 
 [source, java, indent=0]
 ----
@@ -797,6 +797,6 @@ include::{example-code-dir}/movie/MovieController.java[tags=throw-common-error-e
 
 which would then be converted to a JSON:API error response.
 
-You find implementations of the `ExceptionControllerAdvice`, `JsonApiErrorsException` and `CommonErrors` in the example code.
+You can find implementations of the `ExceptionControllerAdvice`, `JsonApiErrorsException`, and `CommonErrors` in the example code.
 
 [[configuration]]

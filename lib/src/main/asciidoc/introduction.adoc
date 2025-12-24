@@ -7,21 +7,21 @@
 == Fundamentals
 
 JSON:API for Spring HATEOAS is based on version {spring-hateoas-version} of Spring HATEOAS.
-For further understanding of this document, please be aware of both
+For better understanding of this document, please familiarize yourself with both:
 
 * the {spring-hateoas-url}[Spring HATEOAS documentation]
 * the https://jsonapi.org/format/[JSON:API Specification]
 
-The following documentation assumes that the reader knows the above documents.
-Some parts of the Java code examples are folded, click on the icon in the bottom-right corner
-to expand the unfolded source code.
+This documentation assumes that readers are familiar with the above documents.
+Some parts of the Java code examples are folded; click on the icon in the bottom-right corner
+to expand and view the full source code.
 
 [[jsonapi]]
 == JSON:API
 
-https://jsonapi.org/[JSON:API] is a widely adapted hypermedia format.
+https://jsonapi.org/[JSON:API] is a widely adopted hypermedia format.
 You can find a list of implementations and tools https://jsonapi.org/implementations/[here].
-Answers to a few questions, e.g. related to HAL, you can find
+For answers to frequently asked questions (e.g., related to HAL), see
 https://jsonapi.org/faq/#why-not-use-the-hal-specification[here].
 
 Anytime a client supplies an `Accept` header with `application/vnd.api+json`, you can expect something like this:

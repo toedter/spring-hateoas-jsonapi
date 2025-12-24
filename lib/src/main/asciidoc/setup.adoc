@@ -1,7 +1,7 @@
 [[setup]]
 = Setup
 
-To enable the JSON:API media type you just need to add this module as a dependency to your project.
+To enable the JSON:API media type, simply add this module as a dependency to your project.
 
 [source,groovy,indent=0,role="primary"]
 .Gradle

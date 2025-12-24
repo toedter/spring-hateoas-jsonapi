@@ -1,46 +1,44 @@
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 
 [[configuration]]
-= Configuration =
+= Configuration
 
-There are several options for how to change the output of the JSON:API rendering.
+There are several options for customizing the JSON:API rendering output.
 
 For a specific JSON:API configuration, you can create a Spring bean of type JsonApiConfiguration.
-Currently, you can configure
+Currently, you can configure:
 
 [%autowidth]
 |===
-| *Configuration* | *Descriptions* | *Default*
-| JsonApiObject | Here you can set a JSON:API object do set all https://jsonapi.org/format/#document-jsonapi-object[allowed properties], like version, ext, profile and meta. | not set
-| PluralizedTypeRendered | JSON:API types should be rendered as pluralized or non pluralized class names. | pluralized
-| LowerCasedTypeRendered | JSON:API types should be rendered as lower case or original class names. | lower case
-| PageMetaAutomaticallyCreated | page information of a PagedModel should be rendered automatically as JSON:API meta. | true
-| TypeForClass | If a specific Java class should be rendered with a specific JSON:API type. This is useful when
-representation model classes should get the JSON:API type of the domain model or when derived classes
-should get the JSON:API type of the superclass. | not set
-| TypeForClassUsedForDeserialization | if the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases. | true
-| EmptyAttributesObjectSerialized | Empty attributes should be serialized as an empty JSON object, like `"attributes": {}`. If set to false, no "attributes" key is serialized if attributes are empty. | true
-| JsonApiIdNotSerializedForValue | A marker value that indicates that the JSON:API id should not be serialized. This is useful if you want to create JSON for a POST request. See also <<postWithNoId>>. | not set
-| MapperCustomizer | A lambda expression (`UnaryOperator<JsonMapper.Builder>`) to add additional configuration to the Jackson 3 `JsonMapper.Builder` used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <<mapper-customization>>. | not set
+| *Configuration* | *Description* | *Default*
+| JsonApiObject | Set a JSON:API object with all https://jsonapi.org/format/#document-jsonapi-object[allowed properties], such as version, ext, profile, and meta. | not set
+| PluralizedTypeRendered | Whether JSON:API types should be rendered as pluralized or non-pluralized class names. | pluralized
+| LowerCasedTypeRendered | Whether JSON:API types should be rendered as lowercase or original class names. | lowercase
+| PageMetaAutomaticallyCreated | Whether page information of a PagedModel should be rendered automatically as JSON:API meta. | true
+| TypeForClass | Specify if a specific Java class should be rendered with a specific JSON:API type. This is useful when representation model classes should use the JSON:API type of the domain model or when derived classes should use the JSON:API type of the superclass. | not set
+| TypeForClassUsedForDeserialization | Whether the above "Java class to JSON:API type" mapping should also be used for deserialization. This is very useful for polymorphic use cases. | true
+| EmptyAttributesObjectSerialized | Whether empty attributes should be serialized as an empty JSON object, like `"attributes": {}`. If set to false, no "attributes" key is serialized when attributes are empty. | true
+| JsonApiIdNotSerializedForValue | A marker value that indicates the JSON:API id should not be serialized. This is useful when creating JSON for a POST request. See also <<postWithNoId>>. | not set
+| MapperCustomizer | A lambda expression (`UnaryOperator<JsonMapper.Builder>`) to add additional configuration to the Jackson 3 `JsonMapper.Builder` used for serialization and deserialization. This allows customizing Jackson features, modules, or other settings. See <<json-mapper-customization>>. | not set
 [[links-configuration]]
-| JsonApiCompliantLinks | The following links are JSON:API compliant: `self`, `related`, `describedBy`, `next`, `prev`, `first` and `last`, for
-https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` for https://jsonapi.org/format/#document-resource-object-links[resource links].
+| JsonApiCompliantLinks | The following links are JSON:API compliant: `self`, `related`, `describedBy`, `next`, `prev`, `first`, and `last` for
+https://jsonapi.org/format/#document-top-level[top-level links]. Only `self` is compliant for https://jsonapi.org/format/#document-resource-object-links[resource links].
 To allow any link, set this configuration to false. | true
-| JsonApi11LinkPropertiesRemovedFromLinkMeta | If Spring HATEOAS complex links should be serialized/deserialized in a backward compatible (to version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type and hreflang will then be serialized only as top level link
-properties, those link properties were introduced in JSON:API 1.1,
-see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring HATEOAS properties title, type and hreflang both as top level link properties, as well as in the meta section, set this property to `false`, see also <<links>>.
-Be aware that using the default, Spring HATEOAS complex links are rendered in a backward-incompatible way
-(related to version 1.x.x of this library that only supports JSON:API 1.0),
-since client might expect properties like title in the meta section. | true
-| LinksNotUrlEncoded | Set of link relations which are not URL encoded when serializing. Empty by default. | empty set
+| JsonApi11LinkPropertiesRemovedFromLinkMeta | Whether Spring HATEOAS complex links should be serialized/deserialized in a backward-compatible (with version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type, and hreflang will be serialized only as top-level link
+properties. These link properties were introduced in JSON:API 1.1,
+see https://jsonapi.org/format/#auto-id--link-objects. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to `false`. See also <<links>>.
+Note that using the default setting, Spring HATEOAS complex links are rendered in a backward-incompatible way
+(relative to version 1.x.x of this library which only supports JSON:API 1.0),
+as clients might expect properties like title in the meta section. | true
+| LinksNotUrlEncoded | Set of link relations which are not URL encoded when serializing. | empty set
 [[links-placement-configuration]]
 | LinksAtResourceLevel | Controls where links are placed in JSON:API documents for single resource (EntityModel) serialization. When set to `true`, links are placed at the resource level (inside the resource object in the "data" section). When set to `false`, links are placed at the document level (top-level). See also <<link-placement>>. | false
 |===
 
-TIP: Since the JSON:API recommendation contains square brackets in the request parameter names,
-those brackets are usually URL-encoded to %5B and %5D. If you want your server to also interpret raw `[` and `]`
-characters in the URL, make sure you provide the following configuration in your Spring `application.properties`
-when using Tomcat: `server.tomcat.relaxed-query-chars= [,]`. If this library automatically creates pagination links,
+TIP: Since the JSON:API recommendation uses square brackets in request parameter names,
+those brackets are usually URL-encoded to %5B and %5D. If you want your server to also accept raw `[` and `]`
+characters in the URL, add the following configuration to your Spring `application.properties`
+when using Tomcat: `server.tomcat.relaxed-query-chars= [,]`. When this library automatically creates pagination links,
 `[` and `]` characters are always URL-encoded.
 
 Here is an example of how you would implement a JSON:API configuration:
@@ -68,7 +66,7 @@ public class JsonApiConfig {
 ----
 <1> Enable resource-level links for single resource (EntityModel) serialization
 
-When this configuration is enabled, links from EntityModel will be placed inside the resource object
+When this configuration is enabled, links from EntityModel are placed inside the resource object
 in the "data" section instead of at the document top level. See <<link-placement>> for more details
 and examples.
 

@@ -2,12 +2,12 @@
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 
 [[client-side-support]]
-= Client Side support
+= Client-Side Support
 
 [[deserialization]]
 == Deserialization
 
-Simple JSON:API based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
+Simple JSON:API-based JSON structures can be deserialized, but only the generic Spring HATEOAS representation
 models are supported.
 
 For example, a JSON structured like
@@ -23,10 +23,10 @@ where the `Movie` class looks like
 include::{test-dir}/support/Movie.java[tags=Movie]
 ----
 
-Please be aware that the deserialization mechanism is currently not able to deserialize all types of
-complex JSON:API structures that can be built with JSON:API model builder, but a few things can already be done:
+Note that the deserialization mechanism is currently unable to deserialize all types of
+complex JSON:API structures that can be built with the JSON:API model builder, but several features are already supported:
 
-* Deserialized meta
+* Deserializing meta
 * Deserializing included resources into the relationship DTOs
 
 For example, a JSON like
@@ -34,13 +34,13 @@ For example, a JSON like
 [source, json]
 include::{test-resources-dir}/moviesPagedJsonApiModelWithIncluded.json[]
 
-would be deserialized in a `CollectionModel<EntityModel<MovieWithDirectors>>`, so that all the names
+would be deserialized into a `CollectionModel<EntityModel<MovieWithDirectors>>`, so that all the names
 of the directors are set on the Java side.
 
 NOTE: `CollectionModel<MovieWithDirectors>` would NOT resolve the director names, because deserialization
-of JSON:API specific things like relationships only works with Spring HATEOAS representation models.
+of JSON:API-specific features like relationships only works with Spring HATEOAS representation models.
 
-More examples for deserialization of relationships you find in the section <<server-deserialization>>.
+For more examples of relationship deserialization, see the section <<server-deserialization>>.
 
 [[rest-clients]]
 == REST Clients
@@ -94,15 +94,15 @@ For older Spring Boot versions, you can use RestTemplate with JSON:API configura
 include::{test-dir}/RestTemplateIntegrationTest.java[tags=restTemplateConfig]
 ----
 
-NOTE: `RestTemplate` is in maintenance mode and will be removed in Spring Framework 7.
+NOTE: `RestTemplate` is in maintenance mode and will be removed in a future Spring Framework release.
 For new applications using Spring Boot 4+, use `RestClient` instead.
 
 [[postWithNoId]]
 === Creating POST requests without serialized JSON:API id
 
-If you want to use RestTemplate to do a POST request, often the JSON:API id will be created by the server
-and is not part of the JSON body. The easiest way for doing this is to configure a marker value to indicate
-that DTOs with this id value should not contain the JSON:API id in the resulting JSON.
+If you want to use RestTemplate to make a POST request, the JSON:API id is often created by the server
+and is not included in the JSON body. The easiest way to achieve this is to configure a marker value to indicate
+that DTOs with this id value should not include the JSON:API id in the resulting JSON.
 
 For example, if you specify a configuration like
 [source,java, indent=0]
@@ -121,8 +121,8 @@ include::{test-resources-dir}/movieEntityModelWithoutId.json[]
 [[traverson]]
 == Traverson
 
-The hypermedia type `application/vnd.api+json` is currently not usable with the `Traverson`
-implementation provided through {spring-hateoas-url}[Spring HATEOAS].
+The hypermedia type `application/vnd.api+json` is currently not compatible with the `Traverson`
+implementation provided by {spring-hateoas-url}[Spring HATEOAS].
 
 [[link-discovery]]
 == Link Discovery
@@ -135,7 +135,7 @@ When using this library, an instance supporting this hypermedia type (`applicati
 is exposed as a Spring bean.
 
 Alternatively, you can set up and use an instance as follows
-(`source` is the exact JSON you saw in the <<deserialization>> section):
+(where `source` is the exact JSON you saw in the <<deserialization>> section):
 
 [source,java, indent=0]
 ----
