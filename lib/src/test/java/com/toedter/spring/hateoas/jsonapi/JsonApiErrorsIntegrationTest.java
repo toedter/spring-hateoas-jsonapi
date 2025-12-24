@@ -53,6 +53,28 @@ class JsonApiErrorsIntegrationTest extends JsonApiTestBase {
   }
 
   @Test
+  void should_build_empty_errors_with_create_method() throws Exception {
+    JsonApiErrors jsonApiErrors = JsonApiErrors.create();
+    String errorsJson = mapper.writeValueAsString(jsonApiErrors);
+    assertThat(errorsJson).isEqualTo("{\"errors\":[]}");
+    assertThat(jsonApiErrors.getErrors()).isEmpty();
+  }
+
+  @Test
+  void should_create_empty_error_with_create_method() throws Exception {
+    JsonApiError jsonApiError = JsonApiError.create();
+    assertThat(jsonApiError).isNotNull();
+    assertThat(jsonApiError.getId()).isNull();
+    assertThat(jsonApiError.getStatus()).isNull();
+    assertThat(jsonApiError.getCode()).isNull();
+    assertThat(jsonApiError.getTitle()).isNull();
+    assertThat(jsonApiError.getDetail()).isNull();
+    assertThat(jsonApiError.getSource()).isNull();
+    assertThat(jsonApiError.getMeta()).isNull();
+    assertThat(jsonApiError.getLinks()).isNull();
+  }
+
+  @Test
   void should_build_single_error() throws Exception {
     JsonApiError jsonApiError = new JsonApiError()
       .withId("123")

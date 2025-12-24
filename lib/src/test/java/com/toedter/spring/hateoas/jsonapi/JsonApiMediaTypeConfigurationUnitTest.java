@@ -17,6 +17,7 @@
 package com.toedter.spring.hateoas.jsonapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.http.MediaType;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.SerializationFeature;
@@ -38,6 +41,32 @@ class JsonApiMediaTypeConfigurationUnitTest {
   @BeforeEach
   void setUpModule() {
     configuration = new JsonApiMediaTypeConfiguration(null, null);
+  }
+
+  @Test
+  void should_create_configuration_with_null_parameters() {
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
+      null,
+      null
+    );
+    assertThat(config).isNotNull();
+    assertThat(config.getMediaTypes()).containsExactly(MediaTypes.JSON_API);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void should_create_configuration_with_mocked_parameters() {
+    ObjectProvider<JsonApiConfiguration> provider = mock(ObjectProvider.class);
+    AutowireCapableBeanFactory beanFactory = mock(
+      AutowireCapableBeanFactory.class
+    );
+
+    JsonApiMediaTypeConfiguration config = new JsonApiMediaTypeConfiguration(
+      provider,
+      beanFactory
+    );
+    assertThat(config).isNotNull();
+    assertThat(config.getMediaTypes()).containsExactly(MediaTypes.JSON_API);
   }
 
   @Test
