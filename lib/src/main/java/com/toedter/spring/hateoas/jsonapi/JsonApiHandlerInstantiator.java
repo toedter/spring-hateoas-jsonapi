@@ -18,9 +18,9 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.lang.Nullable;
 import tools.jackson.databind.DeserializationConfig;
 import tools.jackson.databind.KeyDeserializer;
 import tools.jackson.databind.SerializationConfig;

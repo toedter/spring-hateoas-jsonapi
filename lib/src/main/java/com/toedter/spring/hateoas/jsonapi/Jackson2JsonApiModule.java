@@ -16,12 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.lang.Nullable;
 import tools.jackson.core.Version;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;

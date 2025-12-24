@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class represents a JSON:API object compliant to the

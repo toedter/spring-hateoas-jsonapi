@@ -31,10 +31,10 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**

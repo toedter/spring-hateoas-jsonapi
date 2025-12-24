@@ -25,8 +25,8 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.Links;
-import org.springframework.lang.Nullable;
 
 @With
 @JsonPropertyOrder({ "jsonapi", "data", "included", "links", "meta" })

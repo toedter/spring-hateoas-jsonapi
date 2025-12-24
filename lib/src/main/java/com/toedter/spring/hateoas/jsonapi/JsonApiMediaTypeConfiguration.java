@@ -18,12 +18,12 @@ package com.toedter.spring.hateoas.jsonapi;
 
 import java.util.Collections;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaMappingInformation;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNull;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 

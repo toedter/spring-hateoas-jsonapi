@@ -16,9 +16,9 @@
 
 package org.springframework.hateoas.mediatype.hal.forms;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.hateoas.mediatype.MessageResolver;
-import org.springframework.lang.Nullable;
 
 enum DefaultOnlyMessageResolver implements MessageResolver {
   INSTANCE;

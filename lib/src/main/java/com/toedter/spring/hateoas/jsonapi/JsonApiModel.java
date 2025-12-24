@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.lang.Nullable;
 
 @EqualsAndHashCode(callSuper = true)
 class JsonApiModel extends RepresentationModel<JsonApiModel> {

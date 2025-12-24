@@ -25,8 +25,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.LinkRelation;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import tools.jackson.databind.json.JsonMapper;
 

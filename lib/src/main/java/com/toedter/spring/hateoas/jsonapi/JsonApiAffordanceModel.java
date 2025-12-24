@@ -28,10 +28,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.AffordanceModel;
 import org.springframework.hateoas.mediatype.ConfiguredAffordance;
 import org.springframework.http.HttpMethod;
-import org.springframework.lang.Nullable;
 
 @EqualsAndHashCode(callSuper = true)
 class JsonApiAffordanceModel extends AffordanceModel {

@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 import org.atteo.evo.inflector.English;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
