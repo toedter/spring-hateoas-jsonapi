@@ -202,13 +202,13 @@ contains this Copyright Notice, whether distributed in print or electronically.
 <div class="sect2">
 <h3 id="fundamentals"><a class="anchor" href="#fundamentals"></a>1.1. Fundamentals</h3>
 <div class="paragraph">
-<p>JSON:API for Spring HATEOAS is based on version 3.0.0 of Spring HATEOAS.
+<p>JSON:API for Spring HATEOAS is based on version 3.0.1 of Spring HATEOAS.
 For better understanding of this document, please familiarize yourself with both:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS documentation</a></p>
+<p>the <a href="https://docs.spring.io/spring-hateoas/docs/3.0.1/reference/html/">Spring HATEOAS documentation</a></p>
 </li>
 <li>
 <p>the <a href="https://jsonapi.org/format/">JSON:API Specification</a></p>
@@ -1901,7 +1901,7 @@ Relationships have to be added conditionally, like the inclusions, for example:<
 <h3 id="affordances"><a class="anchor" href="#affordances"></a>4.9. Spring HATEOAS Affordances</h3>
 <div class="paragraph">
 <p>Spring HATEOAS provides a generic, media type-independent API for
-3.0.0/reference/html/#server.affordances[affordances].
+3.0.1/reference/html/#server.affordances[affordances].
 In the JSON:API specification, there is no equivalent concept, but JSON:API allows links to have additional meta
 information. This library provides a new <strong>experimental</strong> configuration to render Spring HATEOAS affordances as
 JSON:API link meta. Currently, a proprietary format is supported as well as the HAL-FORMS template format,
@@ -3161,7 +3161,7 @@ that DTOs with this id value should not include the JSON:API id in the resulting
 <h3 id="traverson"><a class="anchor" href="#traverson"></a>5.3. Traverson</h3>
 <div class="paragraph">
 <p>The hypermedia type <code>application/vnd.api+json</code> is currently not compatible with the <code>Traverson</code>
-implementation provided by <a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a>.</p>
+implementation provided by <a href="https://docs.spring.io/spring-hateoas/docs/3.0.1/reference/html/">Spring HATEOAS</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3169,7 +3169,7 @@ implementation provided by <a href="https://docs.spring.io/spring-hateoas/docs/3
 <div class="paragraph">
 <p>When working with hypermedia-enabled representations, a common task is to find a link with a particular relation
 type in it.
-<a href="https://docs.spring.io/spring-hateoas/docs/3.0.0/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
+<a href="https://docs.spring.io/spring-hateoas/docs/3.0.1/reference/html/">Spring HATEOAS</a> provides JsonPath-based implementations of the <code>LinkDiscoverer</code> interface
 for the configured hypermedia types.
 When using this library, an instance supporting this hypermedia type (<code>application/vnd.api+json</code>)
 is exposed as a Spring bean.</p>
@@ -3515,7 +3515,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 14:40:25 UTC
+Last updated 2025-12-24 16:02:40 UTC
 </div>
 </div>
 </div>
