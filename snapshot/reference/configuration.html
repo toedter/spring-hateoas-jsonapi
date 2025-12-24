@@ -111,7 +111,7 @@ To allow any link, set this configuration to false.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JsonApi11LinkPropertiesRemovedFromLinkMeta</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether Spring HATEOAS complex links should be serialized/deserialized in a backward-compatible (with version 1.x.x of this library) way. By default, the Spring HATEOAS properties title, type, and hreflang will be serialized only as top-level link
 properties. These link properties were introduced in JSON:API 1.1,
-see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to <code>false</code>. See also <a href="#links">[links]</a>.
+see <a href="https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects" class="bare">https://jsonapi.org/format/#auto-id&#8212;&#8203;link-objects</a>. To serialize the Spring HATEOAS properties title, type, and hreflang both as top-level link properties and in the meta section, set this property to <code>false</code>. See also <a href="#links-configuration">[links-configuration]</a>.
 Note that using the default setting, Spring HATEOAS complex links are rendered in a backward-incompatible way
 (relative to version 1.x.x of this library which only supports JSON:API 1.0),
 as clients might expect properties like title in the meta section.</p></td>
@@ -170,7 +170,7 @@ JsonApiConfiguration jsonApiConfiguration() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_link_placement_configuration_example"><a class="anchor" href="#_link_placement_configuration_example"></a>Link Placement Configuration Example</h2>
+<h2 id="link-placement-configuration-example"><a class="anchor" href="#link-placement-configuration-example"></a>Link Placement Configuration Example</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To configure links to appear at the resource level instead of the document level:</p>
@@ -360,7 +360,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-24 13:19:31 UTC
+Last updated 2025-12-24 13:26:35 UTC
 </div>
 </div>
 </div>
