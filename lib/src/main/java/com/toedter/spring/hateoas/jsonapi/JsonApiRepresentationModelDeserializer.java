@@ -43,6 +43,14 @@ class JsonApiRepresentationModelDeserializer
       List<Object> resources, JsonApiDocument doc) {
     Assert.notNull(doc, "JsonApiDocument must not be null!");
     Links links = doc.getLinks();
+
+    // Handle empty resources (data was null)
+    if (resources.isEmpty()) {
+      RepresentationModel<?> representationModel = new RepresentationModel<>();
+      representationModel.add(links);
+      return representationModel;
+    }
+
     if (resources.size() == 1) {
       RepresentationModel<?> representationModel;
       if (resources.get(0) instanceof RepresentationModel<?>) {
