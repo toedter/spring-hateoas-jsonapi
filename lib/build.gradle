@@ -263,7 +263,7 @@ echo "Code formatting complete!"
 commit_msg=$(cat "$1")
 
 # Regex for conventional commits
-pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\(.+\\))?: .{1,}$"
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\\\([a-z0-9-]+\\\\))?!?: [a-z].{2,72}$"
 
 if ! echo "$commit_msg" | grep -qE "$pattern"; then
     echo "ERROR: Invalid commit message format!"
