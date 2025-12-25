@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.RepresentationModel;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JsonApiRepresentationModelDeserializer Unit Test")
@@ -38,7 +40,7 @@ class JsonApiRepresentationModelDeserializerUnitTest {
   }
 
   @Test
-  void should_throw_exception_with_null_arguments() {
+  void should_throw_exception_with_null_document() {
     List<Object> list = new ArrayList<>();
     assertThrows(
         IllegalArgumentException.class,
@@ -46,8 +48,19 @@ class JsonApiRepresentationModelDeserializerUnitTest {
   }
 
   @Test
+  void should_handle_empty_list() {
+    List<Object> list = new ArrayList<>();
+    JsonApiDocument jsonApiDocument = new JsonApiDocument();
+    RepresentationModel<?> result =
+        deserializer.convertToRepresentationModel(list, jsonApiDocument);
+    assertNotNull(result);
+  }
+
+  @Test
   void should_throw_exception_with_wrong_list_size() {
     List<Object> list = new ArrayList<>();
+    list.add(new Object());
+    list.add(new Object());
     JsonApiDocument jsonApiDocument = new JsonApiDocument();
     assertThrows(
         IllegalArgumentException.class,

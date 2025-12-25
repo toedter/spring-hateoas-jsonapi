@@ -47,7 +47,9 @@ class JsonApiRepresentationModelDeserializer
     // Handle empty resources (data was null)
     if (resources.isEmpty()) {
       RepresentationModel<?> representationModel = new RepresentationModel<>();
-      representationModel.add(links);
+      if (links != null) {
+        representationModel.add(links);
+      }
       return representationModel;
     }
 
@@ -60,7 +62,9 @@ class JsonApiRepresentationModelDeserializer
       } else {
         throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
       }
-      representationModel.add(links);
+      if (links != null) {
+        representationModel.add(links);
+      }
       return representationModel;
     }
     throw new IllegalArgumentException(CANNOT_DESERIALIZE_INPUT_TO_REPRESENTATION_MODEL);
