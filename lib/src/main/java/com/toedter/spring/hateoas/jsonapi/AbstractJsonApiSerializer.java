@@ -16,6 +16,7 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ser.std.StdSerializer;
 
 abstract class AbstractJsonApiSerializer<T> extends StdSerializer<T> {
@@ -24,7 +25,7 @@ abstract class AbstractJsonApiSerializer<T> extends StdSerializer<T> {
     super(t);
   }
 
-  protected AbstractJsonApiSerializer(Class<?> t, boolean dummy) {
-    super(t, dummy);
+  protected AbstractJsonApiSerializer(JavaType type) {
+    super(type);
   }
 }

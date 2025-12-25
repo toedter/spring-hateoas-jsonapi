@@ -59,7 +59,7 @@ abstract class AbstractJsonApiModelSerializer<T extends RepresentationModel<?>>
   }
 
   protected AbstractJsonApiModelSerializer(Class<?> t, JsonApiConfiguration jsonApiConfiguration) {
-    super(t, false);
+    super(jsonApiConfiguration.getJsonMapper().constructType(t));
     this.jsonApiConfiguration = jsonApiConfiguration;
     this.jsonMapper = jsonApiConfiguration.getJsonMapper();
   }
