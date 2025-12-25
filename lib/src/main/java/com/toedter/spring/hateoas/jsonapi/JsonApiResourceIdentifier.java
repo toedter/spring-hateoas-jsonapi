@@ -225,15 +225,12 @@ class JsonApiResourceIdentifier {
         final Annotation[] annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
           final String annotationName = annotation.annotationType().getCanonicalName();
-          boolean isAnnotatedMethod = false;
-          if (name == JsonApiResourceField.ID
-              && (JPA_ID_ANNOTATION.equals(annotationName)
-                  || JSONAPI_ID_ANNOTATION.equals(annotationName))) {
-            isAnnotatedMethod = true;
-          } else if (name == JsonApiResourceField.TYPE
-              && JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
-            isAnnotatedMethod = true;
-          }
+          boolean isAnnotatedMethod =
+              (name == JsonApiResourceField.ID
+                      && (JPA_ID_ANNOTATION.equals(annotationName)
+                          || JSONAPI_ID_ANNOTATION.equals(annotationName)))
+                  || (name == JsonApiResourceField.TYPE
+                      && JSONAPI_TYPE_ANNOTATION.equals(annotationName));
           // If the method is a setter, find the corresponding field if there is one.
           // As a heuristic, the method should take one parameter.
           if (isAnnotatedMethod && method.getParameterCount() == 1) {
