@@ -63,11 +63,6 @@ public class JacksonJsonApiModule extends SimpleModule {
     }
   }
 
-  /** Creates a new {@literal JacksonJsonApiModule} without {@link JsonApiConfiguration}. */
-  public JacksonJsonApiModule() {
-    this(null);
-  }
-
   // Jackson 3: Mixins with annotations to register custom serializers/deserializers
   @JsonSerialize(using = JsonApiEntityModelSerializer.class)
   @JsonDeserialize(using = JsonApiEntityModelDeserializer.class)
