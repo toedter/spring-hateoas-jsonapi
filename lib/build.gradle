@@ -70,7 +70,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -194,23 +194,10 @@ tasks.withType(JavaCompile).configureEach {
 spotless {
     java {
         target 'src/**/*.java'
-
-        // Use Google Java Format
-        googleJavaFormat('1.33.0')
-
-        // Or use Eclipse formatter (uncomment if preferred)
-        // eclipse()
-
-        // Remove unused imports
+        googleJavaFormat('1.17.0')
         removeUnusedImports()
-
-        // Ensure files end with newline
         endWithNewline()
-
-        // Trim trailing whitespace
         trimTrailingWhitespace()
-
-        // Format license header
         licenseHeaderFile rootProject.file('license-header.txt'), 'package '
     }
 

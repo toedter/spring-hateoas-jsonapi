@@ -47,14 +47,14 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 spotless {
     java {
         target 'src/**/*.java'
-        googleJavaFormat('1.33.0')
+        googleJavaFormat('1.17.0')
         removeUnusedImports()
         endWithNewline()
         trimTrailingWhitespace()
