@@ -16,11 +16,6 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +24,12 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.util.Assert;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 
 /**
  * Configuration class for customizing JSON:API serialization and deserialization behavior.
@@ -66,10 +67,9 @@ import tools.jackson.databind.json.JsonMapper;
 public class JsonApiConfiguration {
 
   /**
-   * The list of possible affordance types. Those affordance types are used by {@link
-   * withAffordancesRenderedAsLinkMeta}.
+   * The list of possible affordance types. Those affordance types are used by the
+   * {@literal affordancesRenderedAsLinkMeta} configuration option.
    */
-  @SuppressWarnings("JavadocReference")
   public enum AffordanceType {
     /** Default, affordances will NOT be rendered as link meta. */
     NONE,
