@@ -16,8 +16,12 @@
 
 package com.toedter.spring.hateoas.jsonapi.example.movie;
 
+import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
+
 import com.toedter.spring.hateoas.jsonapi.example.director.Director;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorRepository;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -25,11 +29,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.MOVIES;
 
 @Component
 @Slf4j
