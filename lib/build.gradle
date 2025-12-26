@@ -275,13 +275,18 @@ fi
 
 // Run installGitHooks after project evaluation
 afterEvaluate {
-    def hooksDir = file("${rootProject.rootDir}/.git/hooks")
-    def preCommitHook = file("${hooksDir}/pre-commit")
+    // Skip git hooks warning in GitHub Actions
+    def isGitHubActions = System.getenv('GITHUB_ACTIONS') != null
 
-    if (!preCommitHook.exists()) {
-        println ""
-        println "⚠️  Git hooks not installed!"
-        println "   Run './gradlew installGitHooks' to set up automatic code formatting"
-        println ""
+    if (!isGitHubActions) {
+        def hooksDir = file("${rootProject.rootDir}/.git/hooks")
+        def preCommitHook = file("${hooksDir}/pre-commit")
+
+        if (!preCommitHook.exists()) {
+            println ""
+            println "⚠️  Git hooks not installed!"
+            println "   Run './gradlew installGitHooks' to set up automatic code formatting and commit linting"
+            println ""
+        }
     }
 }
