@@ -42,7 +42,7 @@ public class JsonApiLinkDiscoverer implements LinkDiscoverer {
     JsonMapper.Builder builder =
         JsonMapper.builder()
             .disable(tools.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .addModule(new Jackson2JsonApiModule(jsonApiConfig));
+            .addModule(new JacksonJsonApiModule(jsonApiConfig));
     this.mapper = jsonApiConfig.customize(builder).build();
   }
 

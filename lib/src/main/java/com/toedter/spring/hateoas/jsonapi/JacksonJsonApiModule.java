@@ -32,14 +32,14 @@ import tools.jackson.databind.module.SimpleModule;
  *
  * @author Kai Toedter
  */
-public class Jackson2JsonApiModule extends SimpleModule {
+public class JacksonJsonApiModule extends SimpleModule {
 
   /**
-   * Creates a new {@literal Jackson2JsonApiModule} with a given {@link JsonApiConfiguration}.
+   * Creates a new {@literal JacksonJsonApiModule} with a given {@link JsonApiConfiguration}.
    *
    * @param jsonApiConfiguration the {@link JsonApiConfiguration}
    */
-  public Jackson2JsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
+  public JacksonJsonApiModule(@Nullable JsonApiConfiguration jsonApiConfiguration) {
     super("json-api-module", new Version(2, 0, 0, null, "com.toedter", "spring-hateoas-jsonapi"));
     setMixInAnnotation(EntityModel.class, EntityModelMixin.class);
     setMixInAnnotation(RepresentationModel.class, RepresentationModelMixin.class);
@@ -63,8 +63,8 @@ public class Jackson2JsonApiModule extends SimpleModule {
     }
   }
 
-  /** Creates a new {@literal Jackson2JsonApiModule} without {@link JsonApiConfiguration}. */
-  public Jackson2JsonApiModule() {
+  /** Creates a new {@literal JacksonJsonApiModule} without {@link JsonApiConfiguration}. */
+  public JacksonJsonApiModule() {
     this(null);
   }
 
