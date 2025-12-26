@@ -22,8 +22,11 @@ import static com.toedter.spring.hateoas.jsonapi.example.MoviesDemoApplication.M
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import com.toedter.spring.hateoas.jsonapi.example.director.DirectorController;
 import com.toedter.spring.hateoas.jsonapi.example.movie.MovieController;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
@@ -39,20 +42,30 @@ public class RootController {
 
   @GetMapping
   ResponseEntity<RepresentationModel<?>> root() {
-    RepresentationModel<?> resourceSupport = new RepresentationModel<>();
+
+    @JsonApiTypeForClass("root-api")
+    record RootApi(String id) {}
+    RootApi rootApi = new RootApi("1");
+
+    RepresentationModel<?> resourceSupport = EntityModel.of(rootApi);
 
     resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
 
-    Link selfLink = linkTo(MovieController.class).slash(MOVIES).withRel(MOVIES);
-    Link templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(MOVIES);
+    // Create templated links for movies and directors as related links
+    Link moviesLink = linkTo(MovieController.class).slash(MOVIES).withRel(MOVIES);
+    String templatedMoviesHref = moviesLink.getHref() + "{?page[number],page[size]}";
 
-    resourceSupport.add(templatedLink);
+    Link directorsLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
+    String templatedDirectorsHref = directorsLink.getHref() + "{?page[number],page[size]}";
 
-    selfLink = linkTo(DirectorController.class).slash(DIRECTORS).withRel(DIRECTORS);
-    templatedLink = Link.of(selfLink.getHref() + "{?page[number],page[size]}").withRel(DIRECTORS);
+    // Create JSON:API relationships for movies and directors using related links only
+    RepresentationModel<?> model =
+        JsonApiModelBuilder.jsonApiModel()
+            .model(resourceSupport)
+            .relationship(MOVIES, (String) null, templatedMoviesHref, null)
+            .relationship(DIRECTORS, (String) null, templatedDirectorsHref, null)
+            .build();
 
-    resourceSupport.add(templatedLink);
-
-    return ResponseEntity.ok(resourceSupport);
+    return ResponseEntity.ok(model);
   }
 }
