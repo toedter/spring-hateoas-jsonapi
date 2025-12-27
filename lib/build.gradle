@@ -233,8 +233,8 @@ tasks.register('installGitHooks') {
 echo "Running Spotless code formatter..."
 ./gradlew spotlessApply --quiet
 
-# Add formatted files back to staging
-git diff --name-only --cached | grep '\\.java\$' | xargs git add
+# Add all formatted files back to staging (not just Java)
+git diff --name-only | xargs -r git add
 
 echo "Code formatting complete!"
 """
@@ -272,6 +272,7 @@ fi
         println "  - commit-msg: Validate conventional commit messages"
     }
 }
+
 
 // Run installGitHooks after project evaluation
 afterEvaluate {
