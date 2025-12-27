@@ -332,5 +332,3 @@ tasks.register('showVersions') {
  """
     }
 }
-
-
