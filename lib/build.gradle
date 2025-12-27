@@ -290,3 +290,47 @@ afterEvaluate {
         }
     }
 }
+
+tasks.register('showVersions') {
+    description = 'Show current and next versions based on conventional commits'
+    group = 'versioning'
+
+    doLast {
+        def currentVersion = project.version.toString()
+        def (major, minor, patch) = currentVersion.replaceAll('-SNAPSHOT', '').tokenize('.').collect { it.toInteger() }
+
+        // Get the last version tag (this is the previous release)
+        def lastTag = "git describe --tags --abbrev=0".execute().text.trim()
+        def previousRelease = lastTag.replaceAll('^v', '')
+
+        // Analyze git commits since last tag (not all commits!)
+        def commits = "git log ${lastTag}..HEAD --pretty=format:%s".execute().text.split('\n').findAll { it.trim() }
+
+        // Determine version bump based on commits since last tag
+        def bump = 'patch'
+        if (commits.any { it =~ /^[^:]+!:|\bBREAKING CHANGE\b/ }) {
+            bump = 'major'
+        } else if (commits.any { it =~ /^feat[:(]/ }) {
+            bump = 'minor'
+        }
+
+
+        def nextRelease = "${major}.${minor}.${patch}"
+        def nextSnapshot = "${major}.${minor}.${patch + 1}-SNAPSHOT"
+
+        println """
+ ╔════════════════════════════════════════════════════════════════
+ ║ VERSION INFORMATION
+ ╠════════════════════════════════════════════════════════════════
+ ║ Previous Release:  ${previousRelease}
+ ║ Current Snapshot:  ${currentVersion}
+ ║ Next Release:      ${nextRelease}
+ ║ Next Snapshot:     ${nextSnapshot}
+ ║
+ ║ Version Bump:      ${bump.toUpperCase()} (${commits.size()} commits since ${lastTag})
+ ╚════════════════════════════════════════════════════════════════
+ """
+    }
+}
+
+
