@@ -36,9 +36,9 @@ The following table shows the compatibility matrix:
 | 3.x.x | 17 | 1.1 | 3.x.x | 4.x.x | 7.x.x | 3.x
 |===
 
-NOTE: Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. This includes breaking changes from the Jackson 2 to Jackson 3 migration. The last version supporting Spring Boot 3 is 2.2.0.
+NOTE: Version 3 is the first version based on Spring Boot 4 and Jackson 3. This includes breaking changes from the Jackson 2 to Jackson 3 migration. The last version supporting Spring Boot 3 is 2.2.0.
 
-WARNING: Version 3.0.0 **removes all deprecated APIs** from version 2.x.x. Specifically, `withJsonApiVersionRendered()` and `withObjectMapperCustomizer()` have been removed and replaced with `withJsonApiObject()` and `withMapperCustomizer()` respectively. See the https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/#migration-3-0-0[Migration Guide] for details.
+WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Specifically, `withJsonApiVersionRendered()` and `withObjectMapperCustomizer()` have been removed and replaced with `withJsonApiObject()` and `withMapperCustomizer()` respectively. See the https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/#migration-3[Migration Guide] for details.
 
 == Integration with Your Backend
 

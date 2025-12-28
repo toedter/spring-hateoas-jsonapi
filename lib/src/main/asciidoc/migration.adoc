@@ -1,13 +1,13 @@
 [[migration]]
 = Migration Guide
 
-[[migration-3-0-0]]
-== Migrating to Version 3.0.0
+[[migration-3]]
+== Migrating to Version 3
 
-Version 3.0.0 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+Version 3 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
 This section provides guidance for migrating from version 2.x to 3.0.0.
 
-WARNING: Version 3.0.0 **removes all deprecated APIs** from version 2.x.x. Code using deprecated APIs will **not compile**.
+WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Code using deprecated APIs will **not compile**.
 See the <<removed-deprecated-apis,Removed Deprecated APIs>> section for migration instructions.
 
 === Breaking Changes
@@ -15,7 +15,7 @@ See the <<removed-deprecated-apis,Removed Deprecated APIs>> section for migratio
 [[removed-deprecated-apis]]
 ==== Removed Deprecated APIs
 
-Version 3.0.0 **removes** all deprecated APIs from version 2.x.x and also changes the mapper customization. You **must** migrate to the new APIs:
+Version 3 **removes** all deprecated APIs from version 2.x.x and also changes the mapper customization. You **must** migrate to the new APIs:
 
 [%autowidth]
 |===
@@ -25,12 +25,12 @@ Version 3.0.0 **removes** all deprecated APIs from version 2.x.x and also change
 | `withObjectMapperCustomizer(Function<ObjectMapper, ObjectMapper>)` | `withMapperCustomizer(UnaryOperator<JsonMapper.Builder>)` | <<json-mapper-customization,JSON Mapper Customization>>
 |===
 
-**Action Required**: If your code uses any of the removed APIs listed above, it will **not compile** with version 3.0.0.
+**Action Required**: If your code uses any of the removed APIs listed above, it will **not compile** with version 3.
 You must update to use the new replacement APIs before upgrading.
 
 ==== Spring Boot 4 and Spring Framework 7
 
-Version 3.0.0 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:
+Version 3 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:
 
 * **Minimum Java version**: Java 17 (unchanged from 2.1.x)
 * **Jakarta EE namespace**: Uses `jakarta.*` packages instead of `javax.*`
@@ -62,7 +62,7 @@ Jackson 3 uses a new package namespace:
 [[jsonapi-version-rendering]]
 ===== JSON:API Version Rendering
 
-**IMPORTANT**: The deprecated `withJsonApiVersionRendered()` API has been **removed** in version 3.0.0.
+**IMPORTANT**: The deprecated `withJsonApiVersionRendered()` API has been **removed** in version 3.
 You **must** migrate to the new `withJsonApiObject()` API.
 
 If you were using the `jsonApiVersionRendered` configuration:
@@ -76,9 +76,9 @@ public JsonApiConfiguration jsonApiConfiguration() {
         .withJsonApiVersionRendered(true);  // <1>
 }
 ----
-<1> **REMOVED** in version 3.0.0 - this will no longer compile
+<1> **REMOVED** in version 3 - this will no longer compile
 
-.After (Version 3.0.0 - Spring Boot 4) - **REQUIRED**
+.After (Version 3.x.x - Spring Boot 4) - **REQUIRED**
 [source,java]
 ----
 @Bean
@@ -115,7 +115,7 @@ public JsonApiConfiguration jsonApiConfiguration() {
 
 ===== Mapper Customization
 
-**IMPORTANT**: The deprecated `withObjectMapperCustomizer()` API has been **removed** in version 3.0.0.
+**IMPORTANT**: The deprecated `withObjectMapperCustomizer()` API has been **removed** in version 3.
 You **must** migrate to the new `withMapperCustomizer()` API.
 
 If you were using the `ObjectMapperCustomizer` configuration:
@@ -132,9 +132,9 @@ public JsonApiConfiguration jsonApiConfiguration() {
         });
 }
 ----
-<1> **REMOVED** in version 3.0.0 - this will no longer compile
+<1> **REMOVED** in version 3 - this will no longer compile
 
-.After (Version 3.0.0 - Spring Boot 4) - **REQUIRED**
+.After (Version 3.x.x - Spring Boot 4) - **REQUIRED**
 [source,java]
 ----
 @Bean
@@ -240,7 +240,7 @@ JsonMapper mapper = config.getJsonMapper();  // <1>
 
 === Compatibility
 
-Version 3.0.0 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
+Version 3 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
 The main breaking changes are:
 
 * **Removed deprecated APIs**: All deprecated APIs from version 2.x.x have been removed - you must migrate to the new APIs:
@@ -251,7 +251,7 @@ The main breaking changes are:
 * Spring Boot 4 testing API changes (`@AutoConfigureMockMvc`, `RestTemplate`)
 
 **Migration Required**: If you were using any of the deprecated APIs (`withJsonApiVersionRendered()` or
-`withObjectMapperCustomizer()`), your code will not compile with version 3.0.0. You must update your code to use the
+`withObjectMapperCustomizer()`), your code will not compile with version 3. You must update your code to use the
 new APIs (`withJsonApiObject()` and `withMapperCustomizer()`) before upgrading.
 
 If you don't use the removed deprecated APIs or custom Jackson code, and don't directly interact with Spring Boot

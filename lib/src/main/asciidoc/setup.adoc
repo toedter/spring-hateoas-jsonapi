@@ -31,7 +31,7 @@ This library requires:
 
 [NOTE]
 ====
-Version 3.0.0 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+Version 3 is the first version based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
 
 This is a breaking change if you:
 
@@ -41,6 +41,6 @@ This is a breaking change if you:
 
 The Jackson 3 API uses the `tools.jackson.*` package namespace instead of `com.fasterxml.jackson.*`.
 
-See the <<migration-3-0-0,Migration Guide>> for detailed migration instructions.
+See the <<migration-3,Migration Guide>> for detailed migration instructions.
 ====
 
