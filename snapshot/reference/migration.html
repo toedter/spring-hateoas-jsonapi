@@ -34,10 +34,10 @@
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="migration-3-0-0"><a class="anchor" href="#migration-3-0-0"></a>Migrating to Version 3.0.0</h2>
+<h2 id="migration-3"><a class="anchor" href="#migration-3"></a>Migrating to Version 3</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Version 3.0.0 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
+<p>Version 3 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
 This section provides guidance for migrating from version 2.x to 3.0.0.</p>
 </div>
 <div class="admonitionblock warning">
@@ -47,7 +47,7 @@ This section provides guidance for migrating from version 2.x to 3.0.0.</p>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Version 3.0.0 <strong>removes all deprecated APIs</strong> from version 2.x.x. Code using deprecated APIs will <strong>not compile</strong>.
+Version 3 <strong>removes all deprecated APIs</strong> from version 2.x.x. Code using deprecated APIs will <strong>not compile</strong>.
 See the <a href="#removed-deprecated-apis">Removed Deprecated APIs</a> section for migration instructions.
 </td>
 </tr>
@@ -58,7 +58,7 @@ See the <a href="#removed-deprecated-apis">Removed Deprecated APIs</a> section f
 <div class="sect3">
 <h4 id="removed-deprecated-apis"><a class="anchor" href="#removed-deprecated-apis"></a>Removed Deprecated APIs</h4>
 <div class="paragraph">
-<p>Version 3.0.0 <strong>removes</strong> all deprecated APIs from version 2.x.x and also changes the mapper customization. You <strong>must</strong> migrate to the new APIs:</p>
+<p>Version 3 <strong>removes</strong> all deprecated APIs from version 2.x.x and also changes the mapper customization. You <strong>must</strong> migrate to the new APIs:</p>
 </div>
 <table class="tableblock frame-all grid-all fit-content">
 <colgroup>
@@ -87,14 +87,14 @@ See the <a href="#removed-deprecated-apis">Removed Deprecated APIs</a> section f
 </tbody>
 </table>
 <div class="paragraph">
-<p><strong>Action Required</strong>: If your code uses any of the removed APIs listed above, it will <strong>not compile</strong> with version 3.0.0.
+<p><strong>Action Required</strong>: If your code uses any of the removed APIs listed above, it will <strong>not compile</strong> with version 3.
 You must update to use the new replacement APIs before upgrading.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_spring_boot_4_and_spring_framework_7"><a class="anchor" href="#_spring_boot_4_and_spring_framework_7"></a>Spring Boot 4 and Spring Framework 7</h4>
 <div class="paragraph">
-<p>Version 3.0.0 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:</p>
+<p>Version 3 requires Spring Boot 4.x and Spring Framework 7.x. Key changes include:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -166,7 +166,7 @@ You must update to use the new replacement APIs before upgrading.</p>
 <div class="sect4">
 <h5 id="jsonapi-version-rendering"><a class="anchor" href="#jsonapi-version-rendering"></a>JSON:API Version Rendering</h5>
 <div class="paragraph">
-<p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.0.0.
+<p><strong>IMPORTANT</strong>: The deprecated <code>withJsonApiVersionRendered()</code> API has been <strong>removed</strong> in version 3.
 You <strong>must</strong> migrate to the new <code>withJsonApiObject()</code> API.</p>
 </div>
 <div class="paragraph">
@@ -187,12 +187,12 @@ public JsonApiConfiguration jsonApiConfiguration() {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+<td><strong>REMOVED</strong> in version 3 - this will no longer compile</td>
 </tr>
 </table>
 </div>
 <div class="listingblock">
-<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="title">After (Version 3.x.x - Spring Boot 4) - <strong>REQUIRED</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@Bean
 public JsonApiConfiguration jsonApiConfiguration() {
@@ -251,7 +251,7 @@ public JsonApiConfiguration jsonApiConfiguration() {
 <div class="sect4">
 <h5 id="_mapper_customization"><a class="anchor" href="#_mapper_customization"></a>Mapper Customization</h5>
 <div class="paragraph">
-<p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.0.0.
+<p><strong>IMPORTANT</strong>: The deprecated <code>withObjectMapperCustomizer()</code> API has been <strong>removed</strong> in version 3.
 You <strong>must</strong> migrate to the new <code>withMapperCustomizer()</code> API.</p>
 </div>
 <div class="paragraph">
@@ -275,12 +275,12 @@ public JsonApiConfiguration jsonApiConfiguration() {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><strong>REMOVED</strong> in version 3.0.0 - this will no longer compile</td>
+<td><strong>REMOVED</strong> in version 3 - this will no longer compile</td>
 </tr>
 </table>
 </div>
 <div class="listingblock">
-<div class="title">After (Version 3.0.0 - Spring Boot 4) - <strong>REQUIRED</strong></div>
+<div class="title">After (Version 3.x.x - Spring Boot 4) - <strong>REQUIRED</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">@Bean
 public JsonApiConfiguration jsonApiConfiguration() {
@@ -435,7 +435,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div class="sect2">
 <h3 id="_compatibility"><a class="anchor" href="#_compatibility"></a>Compatibility</h3>
 <div class="paragraph">
-<p>Version 3.0.0 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
+<p>Version 3 is a major version release due to the Spring Boot 4 and Jackson 3 migration.
 The main breaking changes are:</p>
 </div>
 <div class="ulist">
@@ -466,7 +466,7 @@ The main breaking changes are:</p>
 </div>
 <div class="paragraph">
 <p><strong>Migration Required</strong>: If you were using any of the deprecated APIs (<code>withJsonApiVersionRendered()</code> or
-<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3.0.0. You must update your code to use the
+<code>withObjectMapperCustomizer()</code>), your code will not compile with version 3. You must update your code to use the
 new APIs (<code>withJsonApiObject()</code> and <code>withMapperCustomizer()</code>) before upgrading.</p>
 </div>
 <div class="paragraph">
@@ -480,7 +480,7 @@ testing internals, migration should be straightforward - mainly requiring update
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2025-12-28 08:26:31 UTC
+Last updated 2025-12-28 11:39:17 UTC
 </div>
 </div>
 </div>
