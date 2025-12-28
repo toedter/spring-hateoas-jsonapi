@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.toedter'
-version = '3.0.1-SNAPSHOT'
+version = '3.0.1'
 
 repositories {
     mavenCentral()
@@ -26,10 +26,10 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
 
     // if you want to use the SNAPSHOT version from maven central
-    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1-SNAPSHOT'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.2-SNAPSHOT'
 
     // if you want to use the released version from maven central
-    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
+    // implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1'
 
     // if you want to use local version, use
     implementation project(':lib')

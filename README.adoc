@@ -2,7 +2,7 @@
 image:https://github.com/toedter/spring-hateoas-jsonapi/workflows/Build/badge.svg["build", link="https://github.com/toedter/spring-hateoas-jsonapi/actions"]
 image:https://sonarcloud.io/api/project_badges/measure?project=toedter_spring-hateoas-jsonapi&metric=alert_status["Quality Gate Status", link="https://sonarcloud.io/project/overview?id=toedter_spring-hateoas-jsonapi"]
 image:https://codecov.io/gh/toedter/spring-hateoas-jsonapi/branch/main/graph/badge.svg["coverage", link="https://codecov.io/gh/toedter/spring-hateoas-jsonapi"]
-image:https://img.shields.io/maven-central/v/com.toedter/spring-hateoas-jsonapi?color=green["maven-central", link="https://central.sonatype.com/artifact/com.toedter/spring-hateoas-jsonapi/3.0.0/versions"]
+image:https://img.shields.io/maven-central/v/com.toedter/spring-hateoas-jsonapi?color=green["maven-central", link="https://central.sonatype.com/artifact/com.toedter/spring-hateoas-jsonapi/3.0.1/versions"]
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["Apache 2.0", link="https://opensource.org/licenses/Apache-2.0"]
 
 = JSON:API for Spring HATEOAS
@@ -18,8 +18,8 @@ you can find more examples at https://github.com/toedter/spring-hateoas-jsonapi-
 
 The following table contains links to the documentation for each release and the current snapshot:
 |===
-| 3.0.0 | https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/api/[API Documentation]
-| 3.0.1-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
+| 3.0.1 | https://toedter.github.io/spring-hateoas-jsonapi/3.0.1/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/3.0.1/api/[API Documentation]
+| 3.0.2-SNAPSHOT | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/snapshot/api/[API Documentation]
 | 2.2.0 | https://toedter.github.io/spring-hateoas-jsonapi/2.2.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/2.2.0/api/[API Documentation]
 | 1.6.0 | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/reference/[Reference Documentation] | https://toedter.github.io/spring-hateoas-jsonapi/1.6.0/api/[API Documentation]
 |===
@@ -38,7 +38,7 @@ The following table shows the compatibility matrix:
 
 NOTE: Version 3 is the first version based on Spring Boot 4 and Jackson 3. This includes breaking changes from the Jackson 2 to Jackson 3 migration. The last version supporting Spring Boot 3 is 2.2.0.
 
-WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Specifically, `withJsonApiVersionRendered()` and `withObjectMapperCustomizer()` have been removed and replaced with `withJsonApiObject()` and `withMapperCustomizer()` respectively. See the https://toedter.github.io/spring-hateoas-jsonapi/3.0.0/reference/#migration-3[Migration Guide] for details.
+WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Specifically, `withJsonApiVersionRendered()` and `withObjectMapperCustomizer()` have been removed and replaced with `withJsonApiObject()` and `withMapperCustomizer()` respectively. See the https://toedter.github.io/spring-hateoas-jsonapi/3.0.1/reference/#migration-3[Migration Guide] for details.
 
 == Integration with Your Backend
 
@@ -46,17 +46,17 @@ To enable the JSON:API media type, simply add this module as a dependency to you
 
 Gradle:
 [source, groovy]
-implementation 'com.toedter:spring-hateoas-jsonapi:3.0.0'
+implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1'
 
 Maven:
 [source,xml]
 <dependency>
     <groupId>com.toedter</groupId>
     <artifactId>spring-hateoas-jsonapi</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 
-The latest published snapshot version is `3.0.1-SNAPSHOT`.
+The latest published snapshot version is `3.0.2-SNAPSHOT`.
 To use it, add `https://central.sonatype.com/repository/maven-snapshots/`
 as a repository in your Maven or Gradle configuration.
 
