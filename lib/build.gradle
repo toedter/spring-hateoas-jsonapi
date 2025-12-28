@@ -109,15 +109,38 @@ tasks.register('doc') {
     dependsOn javadoc
 
     doLast {
+        def currentVersion = project.version.toString()
+        def isSnapshot = currentVersion.contains('-SNAPSHOT')
+        def versionDir = isSnapshot ? 'snapshot' : 'release'
+
+        println "Generating documentation for ${currentVersion} in ${versionDir} directory"
+
+        // Copy to snapshot or release directory
         copy {
             from "$buildDir/docs/javadoc"
-            into "$buildDir/docs/gh-pages/snapshot/api"
+            into "$buildDir/docs/gh-pages/${versionDir}/api"
             filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
         }
 
         copy {
             from "$buildDir/docs/asciidoc"
-            into "$buildDir/docs/gh-pages/snapshot/reference"
+            into "$buildDir/docs/gh-pages/${versionDir}/reference"
+        }
+
+        // For release versions, also copy to version-specific directory
+        if (!isSnapshot) {
+            println "Also copying release documentation to version-specific directory: ${currentVersion}"
+
+            copy {
+                from "$buildDir/docs/javadoc"
+                into "$buildDir/docs/gh-pages/${currentVersion}/api"
+                filter { line -> line.replaceAll('lib', 'JSON:API for Spring HATEOAS') }
+            }
+
+            copy {
+                from "$buildDir/docs/asciidoc"
+                into "$buildDir/docs/gh-pages/${currentVersion}/reference"
+            }
         }
     }
 }
@@ -233,6 +256,7 @@ tasks.register('installGitHooks') {
 echo "Running Spotless code formatter..."
 ./gradlew spotlessApply --quiet
 
+# Add all formatted files back to staging (not just Java)
 # Add all formatted files back to staging (not just Java)
 git diff --name-only | xargs -r git add
 
