@@ -1,6 +1,8 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 import java.text.SimpleDateFormat
+import java.util.regex.Pattern
+import java.util.regex.Matcher
 
 plugins {
     id 'java'
@@ -353,6 +355,113 @@ tasks.register('showVersions') {
  ║ Next Snapshot:     ${nextSnapshot}
  ║
  ║ Version Bump:      ${bump.toUpperCase()} (${commits.size()} commits since ${lastTag})
+ ╚════════════════════════════════════════════════════════════════
+ """
+    }
+}
+
+tasks.register('prepareRelease') {
+    description = 'Prepare for a new release by updating all version references'
+    group = 'versioning'
+
+    doLast {
+        def currentVersion = project.version.toString()
+        def (major, minor, patch) = currentVersion.replaceAll('-SNAPSHOT', '').tokenize('.').collect { it.toInteger() }
+
+        // Get the last version tag (this is the previous release)
+        def lastTag = "git describe --tags --abbrev=0".execute().text.trim()
+        def previousRelease = lastTag.replaceAll('^v', '')
+
+        def nextRelease = "${major}.${minor}.${patch}"
+        def nextSnapshot = "${major}.${minor}.${patch + 1}-SNAPSHOT"
+
+        println """
+ ╔════════════════════════════════════════════════════════════════
+ ║ PREPARING RELEASE
+ ╠════════════════════════════════════════════════════════════════
+ ║ Previous Release:  ${previousRelease}
+ ║ Current Snapshot:  ${currentVersion}
+ ║ → Next Release:    ${nextRelease}
+ ║ → Next Snapshot:   ${nextSnapshot}
+ ╠════════════════════════════════════════════════════════════════
+ """
+
+        def filesUpdated = 0
+        def replacements = 0
+
+        // Define files to update with version references
+        def filesToUpdate = [
+            'README.adoc',
+            'lib/build.gradle',
+            'lib/src/main/asciidoc/setup.adoc',
+            'lib/src/main/asciidoc/migration.adoc',
+            'lib/src/main/asciidoc/configuration.adoc',
+            'example/build.gradle'
+        ]
+
+        filesToUpdate.each { relativePath ->
+            def file = rootProject.file(relativePath)
+            if (!file.exists()) {
+                println " ║ ⚠️  File not found: ${relativePath}"
+                return
+            }
+
+            def originalContent = file.text
+            def updatedContent = originalContent
+
+            // Replace current snapshot with next snapshot
+            updatedContent = updatedContent.replaceAll(
+                Pattern.quote(currentVersion),
+                Matcher.quoteReplacement(nextSnapshot)
+            )
+
+            // Replace previous release with next release
+            updatedContent = updatedContent.replaceAll(
+                Pattern.quote(previousRelease),
+                Matcher.quoteReplacement(nextRelease)
+            )
+
+            if (updatedContent != originalContent) {
+                file.text = updatedContent
+                filesUpdated++
+                println " ║ ✓ Updated: ${relativePath}"
+            }
+        }
+
+        // Now update version in build.gradle files to next release (not snapshot)
+        ['lib/build.gradle', 'example/build.gradle'].each { relativePath ->
+            def file = rootProject.file(relativePath)
+            if (!file.exists()) {
+                println " ║ ⚠️  File not found: ${relativePath}"
+                return
+            }
+
+            def originalContent = file.text
+            def updatedContent = originalContent
+
+            // Replace version = '<next snapshot>' with version = '<next release>'
+            updatedContent = updatedContent.replaceAll(
+                ~/version = ['"]${Pattern.quote(nextSnapshot)}['"]/,
+                "version = '${nextRelease}'"
+            )
+
+            if (updatedContent != originalContent) {
+                file.text = updatedContent
+                replacements++
+                println " ║ ✓ Set release version in: ${relativePath}"
+            }
+        }
+
+        println """
+ ╠════════════════════════════════════════════════════════════════
+ ║ ✓ Updated ${filesUpdated} file(s)
+ ║ ✓ Set release version in ${replacements} build.gradle file(s)
+ ║
+ ║ Next steps:
+ ║   1. Review changes: git diff
+ ║   2. Commit: git commit -am "chore: prepare release ${nextRelease}"
+ ║   3. Tag: git tag -a v${nextRelease} -m "Release ${nextRelease}"
+ ║   4. Push: git push && git push --tags
  ╚════════════════════════════════════════════════════════════════
  """
     }

@@ -5,7 +5,7 @@
 == Migrating to Version 3
 
 Version 3 is the first release based on Spring Boot 4 and Jackson 3. The last version supporting Spring Boot 3 is 2.2.0.
-This section provides guidance for migrating from version 2.x to 3.0.0.
+This section provides guidance for migrating from version 2.x.x to 3.x.x.
 
 WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Code using deprecated APIs will **not compile**.
 See the <<removed-deprecated-apis,Removed Deprecated APIs>> section for migration instructions.
@@ -221,7 +221,7 @@ String response = restClient.get()
     .getResponseBody();
 ----
 
-=== New Features in 3.0.0
+=== New Features in Version 3
 
 ==== Improved Mapper Access
 
