@@ -110,6 +110,9 @@ tasks.register('doc') {
     dependsOn asciidoctor
     dependsOn javadoc
 
+    description = 'creates reference docs and JavaDoc for gh-pages'
+    group = 'documentation'
+
     doLast {
         def currentVersion = project.version.toString()
         def isSnapshot = currentVersion.contains('-SNAPSHOT')
