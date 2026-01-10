@@ -16,6 +16,8 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toedter.spring.hateoas.jsonapi.support.Address;
@@ -54,6 +56,21 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEChild2;
 import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Id;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -74,24 +91,6 @@ import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("JacksonJsonApi Integration Test")
@@ -137,8 +136,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     @Getter
     class Movie {
 
-      @EmbeddedId
-      private final String myId = "1";
+      @EmbeddedId private final String myId = "1";
 
       private final String title = "Star Wars";
     }

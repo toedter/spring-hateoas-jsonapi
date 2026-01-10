@@ -16,10 +16,20 @@
 
 package com.toedter.spring.hateoas.jsonapi;
 
+import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
+import static org.springframework.util.ReflectionUtils.findField;
+import static org.springframework.util.ReflectionUtils.getAllDeclaredMethods;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
@@ -28,17 +38,6 @@ import org.atteo.evo.inflector.English;
 import org.jspecify.annotations.Nullable;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.UUID;
-
-import static com.toedter.spring.hateoas.jsonapi.ReflectionUtils.getAllDeclaredFields;
-import static org.springframework.util.ReflectionUtils.findField;
-import static org.springframework.util.ReflectionUtils.getAllDeclaredMethods;
 
 @Value
 @Getter(onMethod_ = {@JsonProperty})
@@ -115,7 +114,8 @@ class JsonApiResourceIdentifier {
         for (Annotation annotation : annotations) {
           final String annotationName = annotation.annotationType().getCanonicalName();
           if (resourceField == JsonApiResourceField.ID) {
-            if (JPA_ID_ANNOTATION.equals(annotationName) || JPA_EMBEDDED_ID_ANNOTATION.equals(annotationName)) {
+            if (JPA_ID_ANNOTATION.equals(annotationName)
+                || JPA_EMBEDDED_ID_ANNOTATION.equals(annotationName)) {
               jpaIdField = field;
             }
             if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
@@ -135,7 +135,8 @@ class JsonApiResourceIdentifier {
         for (Annotation annotation : annotations) {
           final String annotationName = annotation.annotationType().getCanonicalName();
           if (resourceField == JsonApiResourceField.ID) {
-            if (JPA_ID_ANNOTATION.equals(annotationName) || JPA_EMBEDDED_ID_ANNOTATION.equals(annotationName)) {
+            if (JPA_ID_ANNOTATION.equals(annotationName)
+                || JPA_EMBEDDED_ID_ANNOTATION.equals(annotationName)) {
               jpaIdMethod = method;
             }
             if (JSONAPI_ID_ANNOTATION.equals(annotationName)
