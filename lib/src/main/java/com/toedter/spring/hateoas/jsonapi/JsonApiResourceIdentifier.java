@@ -38,6 +38,8 @@ import org.atteo.evo.inflector.English;
 import org.jspecify.annotations.Nullable;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Value
 @Getter(onMethod_ = {@JsonProperty})
@@ -105,6 +107,8 @@ class JsonApiResourceIdentifier {
         return new ResourceField(TYPE_LITERAL, annotation.value());
       }
 
+      JsonMapper jsonMapper = jsonApiConfiguration.getJsonMapper();
+
       // Then search for field annotation.
       final Field[] declaredFields = getAllDeclaredFields(object.getClass());
       Field jpaIdField = null;
@@ -119,10 +123,12 @@ class JsonApiResourceIdentifier {
               jpaIdField = field;
             }
             if (JSONAPI_ID_ANNOTATION.equals(annotationName)) {
-              return new ResourceField(field.getName(), field.get(object).toString());
+              return new ResourceField(
+                  field.getName(), getObjAsString(jsonMapper, field.get(object)));
             }
           } else if (JSONAPI_TYPE_ANNOTATION.equals(annotationName)) {
-            return new ResourceField(field.getName(), field.get(object).toString());
+            return new ResourceField(
+                field.getName(), getObjAsString(jsonMapper, field.get(object)));
           }
         }
       }
@@ -153,7 +159,8 @@ class JsonApiResourceIdentifier {
       // JPA @Id annotations have lower priority than @JsonApiId annotations,
       // which is why they are evaluated later.
       if (jpaIdField != null) {
-        return new ResourceField(jpaIdField.getName(), jpaIdField.get(object).toString());
+        return new ResourceField(
+            jpaIdField.getName(), getObjAsString(jsonMapper, jpaIdField.get(object)));
       }
 
       if (jpaIdMethod != null) {
@@ -280,6 +287,17 @@ class JsonApiResourceIdentifier {
       }
     } else {
       field.set(object, value);
+    }
+  }
+
+  private static String getObjAsString(JsonMapper jsonMapper, Object obj) {
+    String json = jsonMapper.writeValueAsString(obj);
+    // Parse it back to determine the JSON type
+    JsonNode node = jsonMapper.readTree(json);
+    if (node.isString()) {
+      return node.asString();
+    } else {
+      return obj.toString();
     }
   }
 }

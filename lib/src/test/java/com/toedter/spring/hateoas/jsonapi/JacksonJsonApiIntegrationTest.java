@@ -57,7 +57,6 @@ import com.toedter.spring.hateoas.jsonapi.support.polymorphism.SuperEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Id;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -72,6 +71,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
+import org.jmolecules.ddd.annotation.ValueObject;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.jackson3.JMoleculesModule;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,7 +101,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
   private JsonMapper mapper;
 
   @BeforeEach
-  void setUpModule() throws IOException {
+  void setUpModule() {
     mapper =
         createJsonMapper(
             new JsonApiConfiguration()
@@ -287,6 +289,41 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     String movieJson = mapper.writeValueAsString(entityModel);
 
     compareWithFile(movieJson, "movieEntityModelWithLinks.json");
+  }
+
+  @Test
+  void should_serialize_movie_with_jmolecules_identifier_and_value_object() throws Exception {
+
+    @ValueObject
+    record MovieTitle(String value) {}
+
+    record MovieId(UUID id) implements Identifier {}
+
+    @JsonApiTypeForClass("movies")
+    @Getter
+    class MovieWithJMolecules {
+      @EmbeddedId final MovieId id;
+      private final MovieTitle title;
+
+      public MovieWithJMolecules(UUID id, String title) {
+        this.id = new MovieId(id);
+        this.title = new MovieTitle(title);
+      }
+    }
+
+    MovieWithJMolecules movie =
+        new MovieWithJMolecules(
+            UUID.fromString("00000000-0001-e240-0000-00002f08ba38"), "Star Wars");
+    EntityModel<MovieWithJMolecules> entityModel = EntityModel.of(movie);
+
+    mapper =
+        createJsonMapper(
+            new JsonApiConfiguration()
+                .withMapperCustomizer(builder -> builder.addModule(new JMoleculesModule())));
+
+    String movieJson = mapper.writeValueAsString(entityModel);
+
+    compareWithFile(movieJson, "movieWithUUID.json");
   }
 
   @Test
