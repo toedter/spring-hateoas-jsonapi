@@ -74,6 +74,7 @@ public class JsonApiMediaTypeConfiguration implements HypermediaMappingInformati
     builder =
         builder
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
             .handlerInstantiator(new JsonApiHandlerInstantiator(jsonApiConfiguration, beanFactory))
             .addModule(new JacksonJsonApiModule(jsonApiConfiguration));
 

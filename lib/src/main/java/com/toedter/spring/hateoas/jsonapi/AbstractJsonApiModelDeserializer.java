@@ -30,7 +30,6 @@ import org.springframework.util.Assert;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.DeserializationContext;
-import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.deser.std.StdDeserializer;
@@ -43,8 +42,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
   protected final JsonMapper jsonMapper;
   protected final JavaType contentType;
   protected final JsonApiConfiguration jsonApiConfiguration;
-
-  private final JsonMapper plainJsonMapper;
 
   AbstractJsonApiModelDeserializer(JsonApiConfiguration jsonApiConfiguration) {
     this(
@@ -59,9 +56,6 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
     this.contentType = contentType;
     this.jsonApiConfiguration = jsonApiConfiguration;
     this.jsonMapper = jsonApiConfiguration.getJsonMapper();
-
-    plainJsonMapper =
-        JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES).build();
   }
 
   @Override
@@ -173,8 +167,8 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
       JavaType rootType,
       boolean useDataForCreation) {
     if (attributes != null) {
-      // we have to use the plain json mapper to not get in conflict with links deserialization
-      return plainJsonMapper.convertValue(attributes, rootType);
+      // use the json mapper to support custom deserializers (e.g., JMoleculesModule)
+      return jsonMapper.convertValue(attributes, rootType);
     }
 
     if (useDataForCreation) {
@@ -199,11 +193,13 @@ abstract class AbstractJsonApiModelDeserializer<T> extends StdDeserializer<T> {
     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
         objectFromProperties,
         JsonApiResourceIdentifier.JsonApiResourceField.ID,
-        (String) data.get("id"));
+        (String) data.get("id"),
+        jsonMapper);
     JsonApiResourceIdentifier.setJsonApiResourceFieldAttributeForObject(
         objectFromProperties,
         JsonApiResourceIdentifier.JsonApiResourceField.TYPE,
-        (String) data.get("type"));
+        (String) data.get("type"),
+        jsonMapper);
   }
 
   private Object wrapInEntityModel(

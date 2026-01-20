@@ -209,7 +209,7 @@ class JsonApiResourceIdentifier {
   }
 
   static void setJsonApiResourceFieldAttributeForObject(
-      Object object, JsonApiResourceField name, String value) {
+      Object object, JsonApiResourceField name, String value, JsonMapper jsonMapper) {
     final Field[] declaredFields = getAllDeclaredFields(object.getClass());
     try {
       // First, try annotation on fields.
@@ -223,7 +223,7 @@ class JsonApiResourceIdentifier {
                       || JSONAPI_ID_ANNOTATION.equals(annotationName)))
               || (name == JsonApiResourceField.TYPE
                   && JSONAPI_TYPE_ANNOTATION.equals(annotationName))) {
-            setFieldValue(object, value, field);
+            setFieldValue(object, value, field, jsonMapper);
             return;
           }
         }
@@ -259,7 +259,7 @@ class JsonApiResourceIdentifier {
         Field field = findField(object.getClass(), name.name().toLowerCase());
         if (field != null) {
           field.setAccessible(true);
-          setFieldValue(object, value, field);
+          setFieldValue(object, value, field, jsonMapper);
         } else {
           throw new RuntimeException();
         }
@@ -273,21 +273,23 @@ class JsonApiResourceIdentifier {
     }
   }
 
-  private static void setFieldValue(Object object, @Nullable String value, Field field)
+  private static void setFieldValue(
+      Object object, @Nullable String value, Field field, JsonMapper jsonMapper)
       throws IllegalAccessException {
     Class<?> type = field.getType();
 
-    if (type != String.class && value != null) {
-      if (type == Long.TYPE || type == Long.class) {
-        field.set(object, Long.parseLong(value));
-      } else if (type == Integer.TYPE || type == Integer.class) {
-        field.set(object, Integer.parseInt(value));
-      } else if (type == UUID.class) {
-        field.set(object, UUID.fromString(value));
+    if (value == null) {
+      // Can't set null on primitive types, skip setting (field will retain default value)
+      if (!type.isPrimitive()) {
+        field.set(object, null);
       }
-    } else {
-      field.set(object, value);
+      return;
     }
+
+    // Use Jackson to convert the string value to the target type
+    // This allows custom deserializers (like JMoleculesModule) to handle the conversion
+    Object convertedValue = jsonMapper.convertValue(value, type);
+    field.set(object, convertedValue);
   }
 
   private static String getObjAsString(JsonMapper jsonMapper, Object obj) {

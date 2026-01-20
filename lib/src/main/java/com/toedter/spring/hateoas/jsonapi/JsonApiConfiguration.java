@@ -28,6 +28,7 @@ import lombok.With;
 import org.jspecify.annotations.Nullable;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.util.Assert;
+import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -323,12 +324,15 @@ public class JsonApiConfiguration {
    * Returns a configured {@link JsonMapper} instance.
    *
    * <p>This method creates a new {@link JsonMapper} with the customizations applied through the
-   * {@link #mapperCustomizer}.
+   * {@link #mapperCustomizer} and with FAIL_ON_NULL_FOR_PRIMITIVES disabled to allow missing
+   * primitive fields to use default values.
    *
    * @return A configured {@link JsonMapper} instance.
    */
   public JsonMapper getJsonMapper() {
-    return customize(JsonMapper.builder()).build();
+    return customize(JsonMapper.builder())
+        .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+        .build();
   }
 
   /**
