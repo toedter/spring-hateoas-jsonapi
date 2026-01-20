@@ -383,7 +383,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a configured <code>JsonMapper</code> instance.
 
  <p>This method creates a new <code>JsonMapper</code> with the customizations applied through the
- <code>mapperCustomizer</code>.</div>
+ <code>mapperCustomizer</code> and with FAIL_ON_NULL_FOR_PRIMITIVES disabled to allow missing
+ primitive fields to use default values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A configured <code>JsonMapper</code> instance.</dd>
