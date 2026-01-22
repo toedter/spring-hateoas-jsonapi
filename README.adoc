@@ -44,9 +44,13 @@ WARNING: Version 3 **removes all deprecated APIs** from version 2.x.x. Specifica
 
 To enable the JSON:API media type, simply add this module as a dependency to your project.
 
-Gradle:
+Gradle (Groovy):
 [source, groovy]
 implementation 'com.toedter:spring-hateoas-jsonapi:3.0.1'
+
+Gradle (Kotlin):
+[source, kotlin]
+implementation("com.toedter:spring-hateoas-jsonapi:3.0.1")
 
 Maven:
 [source,xml]

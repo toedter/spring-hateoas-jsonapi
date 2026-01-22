@@ -124,7 +124,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
   @NoArgsConstructor
   @AllArgsConstructor
   static class MovieWithJMolecules {
-    @EmbeddedId MovieId id;
+    MovieId id;
     private MovieTitle title;
   }
 
