@@ -20,8 +20,8 @@ Kai Tödter
 :test-dir: ../../../src/test/java/com/toedter/spring/hateoas/jsonapi
 :test-resources-dir: ../../../src/test/resources/com/toedter/spring/hateoas/jsonapi
 :example-code-dir: ../../../../example/src/main/java/com/toedter/spring/hateoas/jsonapi/example
-:spring-hateoas-version: 3.0.1
-:spring-hateoas-url: https://docs.spring.io/spring-hateoas/docs/3.0.1/reference/html/
+:spring-hateoas-version: 3.0.2
+:spring-hateoas-url: https://docs.spring.io/spring-hateoas/docs/3.0.2/reference/html/
 
 This project provides JSON:API media type support for Spring HATEOAS.
 
