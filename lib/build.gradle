@@ -11,7 +11,7 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '4.0.5'
     id 'signing'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '4.0.1' apply false
+    id 'org.springframework.boot' version '4.0.2' apply false
     id 'org.sonarqube' version '7.2.2.6593'
     id "com.vanniktech.maven.publish" version "0.36.0"
     id 'com.diffplug.spotless' version '8.1.0'
