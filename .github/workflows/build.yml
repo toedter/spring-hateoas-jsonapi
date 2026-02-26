@@ -64,7 +64,7 @@ jobs:
         run: ./gradlew publishToMavenCentral
       - name: Archive reports (for lib only)
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: reports
           path: ./lib/build/reports
