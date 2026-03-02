@@ -44,6 +44,7 @@ import com.toedter.spring.hateoas.jsonapi.support.MovieWithMethodMetaAnnotation;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithPlaytime;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithRating;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithSingleTypedDirector;
+import com.toedter.spring.hateoas.jsonapi.support.MovieWithStaticId;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectorSet;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithTypedDirectors;
 import com.toedter.spring.hateoas.jsonapi.support.MovieWithUUID;
@@ -570,6 +571,19 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     Links links = movieEntityModel.getLinks();
     assertThat(links.hasSingleLink()).isTrue();
     assertThat(links.getLink("self").get().getHref()).isEqualTo("http://localhost/movies/1");
+  }
+
+  @Test
+  void should_deserialize_single_movie_entity_model_with_static_id() throws Exception {
+    JavaType movieEntityModelType =
+        mapper.getTypeFactory().constructParametricType(EntityModel.class, MovieWithStaticId.class);
+    File file = new ClassPathResource("movieEntityModelWithoutId.json", getClass()).getFile();
+    EntityModel<MovieWithStaticId> movieEntityModel = mapper.readValue(file, movieEntityModelType);
+
+    MovieWithStaticId movie = movieEntityModel.getContent();
+
+    assertThat(movie.getId()).isEqualTo("static-id");
+    assertThat(movie.getTitle()).isEqualTo("Star Wars");
   }
 
   @Test

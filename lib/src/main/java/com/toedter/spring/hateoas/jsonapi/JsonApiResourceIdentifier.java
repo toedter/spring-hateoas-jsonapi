@@ -279,10 +279,7 @@ class JsonApiResourceIdentifier {
     Class<?> type = field.getType();
 
     if (value == null) {
-      // Can't set null on primitive types, skip setting (field will retain default value)
-      if (!type.isPrimitive()) {
-        field.set(object, null);
-      }
+      // Skip setting null values to preserve default field values
       return;
     }
 
