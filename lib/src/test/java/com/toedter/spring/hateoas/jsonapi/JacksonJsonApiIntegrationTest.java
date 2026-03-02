@@ -359,7 +359,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithJMolecules movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId().id()).hasToString("00000000-0001-e240-0000-00002f08ba38");
     assertThat(movie.getTitle().value()).isEqualTo("Star Wars");
   }
@@ -563,7 +563,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<Movie> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     Movie movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isEqualTo("1");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
 
@@ -580,7 +580,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<MovieWithPlaytime> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     MovieWithPlaytime movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isEqualTo("1");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
     assertThat(movie.getPlaytime()).isEqualTo(42);
@@ -596,7 +596,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     MovieWithDirectors movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -615,7 +615,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     MovieWithDirectors movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -637,7 +637,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithTypedDirectors movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -661,7 +661,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithTypedDirectorSet movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -686,7 +686,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithSingleTypedDirector movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -710,7 +710,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithTypedDirectors movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -732,7 +732,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<MovieWithDirectors> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     MovieWithDirectors movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getId()).isNull();
     assertThat(movie.getTitle()).isEqualTo("New Movie");
 
@@ -753,7 +753,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithAnnotations movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getMyId()).isEqualTo("1");
     assertThat(movie.getType()).isEqualTo("movies");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
@@ -775,7 +775,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithAnnotations movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getMyId()).isEqualTo("1");
     assertThat(movie.getType()).isEqualTo("movies");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
@@ -799,7 +799,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
         mapper.readValue(file, movieEntityModelType);
 
     MovieWithAnnotationsDerived movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getMyId()).isEqualTo("1");
     assertThat(movie.getType()).isEqualTo("movies");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
@@ -817,7 +817,7 @@ class JacksonJsonApiIntegrationTest extends JsonApiTestBase {
     EntityModel<MovieWithGetters> movieEntityModel = mapper.readValue(file, movieEntityModelType);
 
     MovieWithGetters movie = movieEntityModel.getContent();
-    assert movie != null;
+
     assertThat(movie.getMyId()).isEqualTo("1");
     assertThat(movie.getMyType()).isEqualTo("movies");
     assertThat(movie.getTitle()).isEqualTo("Star Wars");
