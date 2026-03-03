@@ -206,6 +206,7 @@ tasks.register('prepareRelease') {
         // Define files to update with version references
         def filesToUpdate = [
             'README.adoc',
+            'build.gradle',
             'lib/build.gradle',
             'lib/src/main/asciidoc/setup.adoc',
             'lib/src/main/asciidoc/migration.adoc',
@@ -243,7 +244,7 @@ tasks.register('prepareRelease') {
         }
 
         // Now update version in build.gradle files to next release (not snapshot)
-        ['lib/build.gradle', 'example/build.gradle'].each { relativePath ->
+        ['build.gradle', 'lib/build.gradle', 'example/build.gradle'].each { relativePath ->
             def file = rootProject.file(relativePath)
             if (!file.exists()) {
                 println " ║ ⚠️  File not found: ${relativePath}"
