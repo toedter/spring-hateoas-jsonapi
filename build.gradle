@@ -154,6 +154,22 @@ def computeVersionInfo() {
             info.bump = 'minor'
         }
 
+        // Apply the version bump
+        switch (info.bump) {
+            case 'major':
+                major++
+                minor = 0
+                patch = 0
+                break
+            case 'minor':
+                minor++
+                patch = 0
+                break
+            case 'patch':
+                patch++
+                break
+        }
+
         info.nextRelease = "${major}.${minor}.${patch}"
         info.nextSnapshot = "${major}.${minor}.${patch + 1}-SNAPSHOT"
 
