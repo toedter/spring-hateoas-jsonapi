@@ -16,4 +16,3 @@ rootProject.children.each { project ->
     project.projectDir = new File(settingsDir, projectDirName)
     assert project.projectDir.isDirectory()
 }
-
