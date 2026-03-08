@@ -47,6 +47,12 @@
 <li><a href="#setup">2. Setup</a>
 <ul class="sectlevel2">
 <li><a href="#version-requirements">2.1. Version Requirements</a></li>
+<li><a href="#running-the-example">2.2. Running the Example</a>
+<ul class="sectlevel3">
+<li><a href="#using-docker-compose">2.2.1. Using Docker Compose</a></li>
+<li><a href="#using-gradle">2.2.2. Using Gradle</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#migration">3. Migration Guide</a>
@@ -386,6 +392,56 @@ library. So the URL decoded next link would look like: http://localhost:8080/api
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="running-the-example"><a class="anchor" href="#running-the-example"></a>2.2. Running the Example</h3>
+<div class="sect3">
+<h4 id="using-docker-compose"><a class="anchor" href="#using-docker-compose"></a>2.2.1. Using Docker Compose</h4>
+<div class="paragraph">
+<p>The quickest way to try out this library is using the included example with Docker Compose:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">docker-compose up -d</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will pull and run the pre-built example image from GitHub Container Registry.
+The application will be available at <a href="http://localhost:8080" class="bare">localhost:8080</a>.</p>
+</div>
+<div class="paragraph">
+<p>Example requests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Movies list: <a href="http://localhost:8080/api/movies" class="bare">localhost:8080/api/movies</a></p>
+</li>
+<li>
+<p>Movies with pagination and includes: <a href="http://localhost:8080/api/movies?page">number</a>=0&amp;page[size]=1&amp;include=directors</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To stop the container:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">docker-compose down</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-gradle"><a class="anchor" href="#using-gradle"></a>2.2.2. Using Gradle</h4>
+<div class="paragraph">
+<p>Alternatively, you can run the example locally with Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">./gradlew bootrun</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3515,7 +3571,7 @@ JsonMapper mapper = config.getJsonMapper();  <i class="conum" data-value="1"></i
 <div id="footer">
 <div id="footer-text">
 Version 3.1.1-SNAPSHOT<br>
-Last updated 2026-03-08 11:34:14 UTC
+Last updated 2026-03-08 11:47:47 UTC
 </div>
 </div>
 </div>
