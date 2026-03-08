@@ -102,7 +102,7 @@ jobs:
             type=sha,prefix={{branch}}-
       - name: Build and push Docker image
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./example
           file: ./example/Dockerfile
