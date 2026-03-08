@@ -1,5 +1,5 @@
 # Stage 1: Extract layers from pre-built JAR
-FROM eclipse-temurin:21.0.10_7-jre-alpine AS builder
+FROM eclipse-temurin:25.0.2_10-jre-alpine AS builder
 
 WORKDIR /workspace
 
@@ -10,7 +10,7 @@ COPY build/libs/*.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
 # Stage 2: Runtime
-FROM eclipse-temurin:21.0.10_7-jre-alpine
+FROM eclipse-temurin:25.0.2_10-jre-alpine
 
 WORKDIR /app
 
