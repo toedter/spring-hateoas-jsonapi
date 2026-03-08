@@ -44,3 +44,38 @@ The Jackson 3 API uses the `tools.jackson.*` package namespace instead of `com.f
 See the <<migration-3,Migration Guide>> for detailed migration instructions.
 ====
 
+== Running the Example
+
+=== Using Docker Compose
+
+The quickest way to try out this library is using the included example with Docker Compose:
+
+[source,bash]
+----
+docker-compose up -d
+----
+
+This will pull and run the pre-built example image from GitHub Container Registry.
+The application will be available at http://localhost:8080.
+
+Example requests:
+
+* Movies list: http://localhost:8080/api/movies
+* Movies with pagination and includes: http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors
+
+To stop the container:
+
+[source,bash]
+----
+docker-compose down
+----
+
+=== Using Gradle
+
+Alternatively, you can run the example locally with Gradle:
+
+[source,bash]
+----
+./gradlew bootrun
+----
+

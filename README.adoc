@@ -66,9 +66,25 @@ as a repository in your Maven or Gradle configuration.
 
 == Running the Example
 
+=== Option 1: Using Docker Compose (Recommended)
+
+The easiest way to run the example is using Docker Compose with the pre-built image from GitHub Container Registry:
+
+[source,bash]
+----
+docker-compose up -d
+----
+
+This will pull and start the latest image.
+
+=== Option 2: Using Gradle
+
 * Ensure Java 17 JDK (or later) is installed
 * Clone this Git repository and navigate to the `spring-hateoas-jsonapi` directory
 * Run `./gradlew bootrun` (or `gradlew bootrun` on Windows)
+
+=== Testing the Example
+
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++]
  in your web browser. The response (pretty-printed) will be:
 

@@ -1,0 +1,22 @@
+# Docker Compose for Spring HATEOAS JSON:API Example
+#
+# Usage:
+#   docker-compose up -d     # Start in background
+#   docker-compose logs -f   # View logs
+#   docker-compose down      # Stop and remove
+#
+# The image is pulled from GitHub Container Registry.
+# Set GITHUB_REPOSITORY env var to use your fork:
+#   export GITHUB_REPOSITORY=your-username/spring-hateoas-jsonapi
+
+version: '3.8'
+
+services:
+  movie-demo:
+    image: ghcr.io/${GITHUB_REPOSITORY:-toedter/spring-hateoas-jsonapi}/example:latest
+    container_name: movie-demo
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: unless-stopped
