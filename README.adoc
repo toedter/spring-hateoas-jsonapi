@@ -88,7 +88,7 @@ This will pull and start the latest image.
 * Clone this Git repository and navigate to the `spring-hateoas-jsonapi` directory
 * Run `./gradlew bootrun` (or `gradlew bootrun` on Windows)
 
-=== Running the Example locally (Options 1 and 2)
+=== Running the Example locally (Options 2 and 3)
 
 * Open link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++]
  in your web browser. The response (pretty-printed) will be:
