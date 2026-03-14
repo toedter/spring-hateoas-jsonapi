@@ -121,9 +121,16 @@
 <h2 id="_running_the_example"><a class="anchor" href="#_running_the_example"></a>Running the Example</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_running_directly_from_the_cloud"><a class="anchor" href="#_running_directly_from_the_cloud"></a>Running directly from the Cloud</h3>
+<div class="paragraph">
+<p>The easiest way to run the example is running it directly from the cloud. Just open <a href="https://nexus.toedter.com/api/jsonapi/movies?page[number]=0&amp;page[size]=1&amp;include=directors&amp;fields[movies]=title,year,rating,directors">nexus.toedter.com/api/jsonapi/movies?page[number]=0&amp;page[size]=1&amp;include=directors&amp;fields[movies]=title,year,rating,directors</a>
+ in your web browser.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_using_docker_compose"><a class="anchor" href="#_using_docker_compose"></a>Using Docker Compose</h3>
 <div class="paragraph">
-<p>The quickest way to try out this library is using the included example with Docker Compose:</p>
+<p>The quickest way to try out this library locally is using the included example with Docker Compose:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -143,7 +150,7 @@ The application will be available at <a href="http://localhost:8080" class="bare
 <p>Movies list: <a href="http://localhost:8080/api/movies" class="bare">http://localhost:8080/api/movies</a></p>
 </li>
 <li>
-<p>Movies with pagination and includes: <a href="http://localhost:8080/api/movies?page">number</a>=0&amp;page[size]=1&amp;include=directors</p>
+<p>Movies with pagination and includes: <a href="http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1&amp;include=directors">http://localhost:8080/api/movies?page[number]=0&amp;page[size]=1&amp;include=directors</a></p>
 </li>
 </ul>
 </div>
@@ -173,7 +180,7 @@ The application will be available at <a href="http://localhost:8080" class="bare
 <div id="footer">
 <div id="footer-text">
 Version 3.1.1-SNAPSHOT<br>
-Last updated 2026-03-08 12:55:01 UTC
+Last updated 2026-03-14 16:39:38 UTC
 </div>
 </div>
 </div>
