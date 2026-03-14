@@ -46,9 +46,14 @@ See the <<migration-3,Migration Guide>> for detailed migration instructions.
 
 == Running the Example
 
+=== Running directly from the Cloud
+
+The easiest way to run the example is running it directly from the cloud. Just open link:++https://nexus.toedter.com/api/jsonapi/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++[++nexus.toedter.com/api/jsonapi/movies?page[number]=0&page[size]=1&include=directors&fields[movies]=title,year,rating,directors++]
+ in your web browser.
+
 === Using Docker Compose
 
-The quickest way to try out this library is using the included example with Docker Compose:
+The quickest way to try out this library locally is using the included example with Docker Compose:
 
 [source,bash]
 ----
@@ -61,7 +66,7 @@ The application will be available at http://localhost:8080.
 Example requests:
 
 * Movies list: http://localhost:8080/api/movies
-* Movies with pagination and includes: http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors
+* Movies with pagination and includes: link:++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors++[++http://localhost:8080/api/movies?page[number]=0&page[size]=1&include=directors++]
 
 To stop the container:
 
