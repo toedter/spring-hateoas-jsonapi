@@ -88,6 +88,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Compile classes for Sonar
+        run: ./gradlew classes testClasses
       - name: Static code analysis (Sonar)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
