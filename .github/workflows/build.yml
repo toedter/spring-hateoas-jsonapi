@@ -50,6 +50,12 @@ jobs:
         with:
           name: gh-pages-docs
           path: ./lib/build/docs/gh-pages
+      - name: Upload example libs artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v7
+        with:
+          name: example-libs
+          path: ./example/build/libs
 
   sonar:
     runs-on: ubuntu-latest
@@ -147,6 +153,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Download example libs artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: example-libs
+          path: ./example/build/libs
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
       - name: Log in to GitHub Container Registry
