@@ -40,7 +40,7 @@ jobs:
           name: reports
           path: ./lib/build/reports
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./lib/build
