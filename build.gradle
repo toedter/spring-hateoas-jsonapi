@@ -2,7 +2,7 @@ import java.util.regex.Pattern
 import java.util.regex.Matcher
 
 plugins {
-    id 'com.diffplug.spotless' version '8.10.3'
+    id 'com.diffplug.spotless' version '8.10.4'
 }
 
 group = 'com.toedter'
